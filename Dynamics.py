@@ -1,4 +1,3 @@
-
 def obj_update_obj1(obj, world):
     obj['v_x'] = 10
     obj['v_y'] -= 1
@@ -11,3 +10,14 @@ def obj_update_obj1(obj, world):
     elif obj['y'] < world['frameHeight'] - 100:
         obj['v_y'] = -8
     obj['pitch'] = abs(obj['v_y']) * 5
+
+
+class Artifact:
+    acc = 0.5
+    max_speed = 10
+
+    def pitch_up(self):
+        pass
+
+    def pitch_down(self):
+        pass
