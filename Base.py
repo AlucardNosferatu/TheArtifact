@@ -1,18 +1,16 @@
+import uuid
+
+
 class Base:
-    cost_dict = None
     tech_tree = None
     warehouse_cap = None
     warehouse_basic = None
     hr_cap = None
     hr_basic = None
     buildings = None
+    time_passed_tasks = None
 
     def __init__(self):
-        self.cost_dict = {
-            'command_center': {'wood': 10, 'time': 0},
-            'warehouse': {'wood': 10, 'time': 0},
-
-        }
         self.tech_tree = {
             'command_center': [],
             'warehouse': ['command_center']
@@ -39,6 +37,7 @@ class Base:
             'scientist': 0
         }
         self.buildings = [None, None, None]
+        self.time_passed_tasks = []
 
     def next_building_slot(self):
         for i in range(len(self.buildings)):
@@ -60,38 +59,59 @@ class Base:
 class Building:
     health_point = 0
     slot = 0
-    refund = 0
     level = 0
     type_str = ''
     stat = ''
     base_ptr = None
 
-    def __init__(self, hp, slot, lv, refund, ts, stat, b_ptr):
+    def __init__(self, hp, slot, lv, ts, stat, b_ptr: Base):
         self.level = lv
         self.health_point = hp
         self.slot = slot
-        self.refund = refund
         self.type_str = ts
         self.stat = stat
         self.base_ptr = b_ptr
 
 
 class ConstructionCrane(Building):
-    progress_record = None
+    progress_record = {}
+    cost_dict = None
+    class_dict = None
 
-    def __init__(self, base_inst):
-        super().__init__(2000, 0, 1, 0, 'construction_crane', 'normal', base_inst)
+    def __init__(self, slot, base_inst):
+        super().__init__(2000, slot, 1, 'construction_crane', 'normal', base_inst)
         self.progress_record = {}
+        self.cost_dict = {
+            'command_center': {'wood': 10, 'time': 0},
+            'warehouse': {'wood': 10, 'time': 0},
+
+        }
+        self.class_dict = {
+            'command_center': CommandCenter
+        }
 
     def query_cost(self, building_type):
-        pass
+        print(self.cost_dict[building_type])
 
     def build_new(self, slot, building_type):
-        pass
+        if building_type not in self.class_dict:
+            print('不可建造或建筑类型代码错误！')
+        else:
+            if 0 <= slot < len(self.base_ptr.buildings):
+                if self.base_ptr.buildings[slot] is not None:
+                    print('这个位置有建筑了！')
+                else:
+                    new_b_id = str(uuid.uuid4())
+                    self.base_ptr.buildings[slot] = new_b_id
+                    self.progress_record.__setitem__(new_b_id, self.class_dict[building_type]())
+
+            else:
+                print('基地里没有空地可供建造新建筑')
 
 
 class CommandCenter(Building):
-    pass
+    def __init__(self, slot, b_ptr: Base):
+        super().__init__(2000, slot, 1, 'command_center', 'normal', b_ptr)
 
 
 if __name__ == '__main__':
