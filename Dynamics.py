@@ -32,10 +32,10 @@ class Specs:
     max_ang_spd = 4
 
     def __init__(self):
-        self.max_acc = 3
-        self.max_spd = 12
+        self.max_acc = 6
+        self.max_spd = 7
         self.max_ang_acc = 3
-        self.max_ang_spd = 5
+        self.max_ang_spd = 6
 
 
 class Stats:
@@ -54,14 +54,15 @@ class Stats:
 
     def update_ang(self, pit_sig, max_ang_acc, max_ang_spd, drag):
         self.ang_speed += pit_sig * max_ang_acc
-        if self.ang_speed > 1:
-            self.ang_speed -= math.sqrt(0.5 * drag)
-        elif self.ang_speed < -1:
-            self.ang_speed += math.sqrt(0.5 * drag)
         if self.ang_speed > max_ang_spd:
             self.ang_speed = max_ang_spd
         elif -self.ang_speed > max_ang_spd:
             self.ang_speed = -max_ang_spd
+
+        if self.ang_speed > 0.1:
+            self.ang_speed -= 0.1 * drag
+        elif self.ang_speed < -0.1:
+            self.ang_speed += 0.1 * drag
 
         self.ang += self.ang_speed
 
@@ -92,6 +93,8 @@ class Stats:
         print('speed', self.speed)
         if self.location[1] < 0:
             self.location[1] = 0
+        elif self.location[1] > 767:
+            self.location[1] = 767
         if self.location[0] < 0:
             self.location[0] = 0
         elif self.location[0] > 1023:
