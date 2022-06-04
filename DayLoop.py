@@ -17,10 +17,38 @@ def build_module(base_inst: Base):
         crane_no = input('输入塔吊编号')
         if crane_no.isdigit() and 0 <= int(crane_no) < len(crane_list):
             selected_crane: ConstructionCrane = crane_list[int(crane_no)]
-            # for test
-            selected_crane.build_new(0, 'c')
-            selected_crane.build_new(0, 'command_center')
-            selected_crane.build_new(1, 'command_center')
+            flag = True
+            while flag:
+                building_com = input('0.显示所有建筑 1.建造新建筑 2.拆除旧建筑 3.返回')
+                if building_com == '0':
+                    print(base_inst.buildings)
+                elif building_com == '1':
+                    slot_index = base_inst.next_building_slot()
+                    building_type = input('请输入建筑类型代号')
+                    selected_crane.build_new(slot_index, building_type)
+                elif building_com == '2':
+                    slot_index = input('请输入建筑槽位编号')
+                    if slot_index.isdigit():
+                        selected_crane.remove_old(int(slot_index))
+                    else:
+                        print('输入有误！')
+                        continue
+                elif building_com == '3':
+                    break
+                else:
+                    print('输入有误！')
+                    continue
+                building_com = '-1'
+                while building_com not in ['0', '1']:
+                    building_com = input('0.继续 1.返回')
+                    if building_com == '0':
+                        flag = True
+                        break
+                    elif building_com == '1':
+                        flag = False
+                        break
+                    else:
+                        print('输入有误！')
         else:
             print('输入有误！')
 
