@@ -64,7 +64,7 @@ while True:
     if throttle_down:
         the_artifact.ThisInput.throttle_down()
 
-    the_artifact.update_stats(drag=1, gravity=0.5)
+    the_artifact.update_stats(drag=2, gravity=0.5)
     core = (the_artifact.ThisStats.location[0], 768-the_artifact.ThisStats.location[1])
     screen.fill('white')
     icon_rotated = pygame.transform.rotate(the_artifact_icon, -the_artifact.ThisStats.ang)
