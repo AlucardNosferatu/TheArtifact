@@ -76,8 +76,8 @@ class Stats:
         dv_x = self.acc * math.cos(self.ang * 3.14 / 180)
         dv_y = self.acc * -math.sin(self.ang * 3.14 / 180)
         print(self.acc, math.cos(self.ang * 3.14 / 180), math.sin(self.ang * 3.14 / 180))
-        if self.location[1] > 0:
-            dv_y -= gravity
+        # if self.location[1] > 0:
+        #     dv_y -= gravity
         self.speed[0] += dv_x
         self.speed[1] += dv_y
         spd_mag = math.sqrt(self.speed[0] ** 2 + self.speed[1] ** 2)
