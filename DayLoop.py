@@ -1,7 +1,8 @@
+import pickle
 import random
+import os
 import sys
 import threading
-import time
 import uuid
 
 import pygame
@@ -165,7 +166,7 @@ def refresh_gui(r_queue):
             new_img = pygame.image.load(img_path)
             new_rect = new_img.get_rect()
             new_rect.center = tuple(img_pos)
-            img_dict[img_id] = [new_img, new_rect]
+            img_dict[img_id] = [new_img, new_rect, img_path]
         elif task_type == 'move_old':
             img_dict[img_id][1] = tuple(img_pos)
         elif task_type == 'delete_old':
@@ -176,17 +177,14 @@ def refresh_gui(r_queue):
 
 def map_events_update(map_events, r_queue):
     # todo
-
     x = random.randint(0, 2028)
     y = random.randint(0, 1223)
     new_event = ResourceSite(x, y, 'wood', 5000)
     icon_id = str(uuid.uuid4())
     new_event.set_icon_id(icon_id)
     map_events.append(new_event)
-
     r_task_1 = ['load_new', new_event.get_icon_id(), 'wood.png', new_event.get_screen_pos()]
     r_queue.append(r_task_1)
-
     if len(map_events) > 10:
         removed_event: MapEvent = map_events.pop(0)
         r_task_2 = ['delete_old', removed_event.icon_id, None, None]
@@ -248,12 +246,32 @@ def pygame_refresh():
         pygame.display.update()
 
 
+def img_dict_2_pickle(s_img_dict):
+    p_dict = {}
+    for img_id in s_img_dict:
+        rect = s_img_dict[img_id][1].center
+        path = s_img_dict[img_id][2]
+        p_list = [rect, path]
+        p_dict.__setitem__(img_id, p_list)
+    return p_dict
+
+
+def pickle_2_img_dict(p_dict):
+    s_img_dict = {}
+    for img_id in p_dict:
+        rect_center = p_dict[img_id][0]
+        path = p_dict[img_id][1]
+        surface = pygame.image.load(path)
+        rect = surface.get_rect(center=rect_center)
+        s_img_dict.__setitem__(img_id, [surface, rect, path])
+    return s_img_dict
+
+
 if __name__ == '__main__':
     day_count = 0
     NewBase = None
     global_events = []
     render_queue = []
-
     pygame_thread = threading.Thread(target=pygame_refresh)
     pygame_thread.start()
     while True:
@@ -261,10 +279,31 @@ if __name__ == '__main__':
             print()
             sys.exit('Pygame Thread Stopped.')
         if day_count == 0:
-            render_queue, NewBase = first_day(
-                render_queue
-            )
-            day_count += 1
+            com = None
+            while com not in ['0', '1']:
+                com = input('0.新游戏 1.继续游戏')
+                if com == '0':
+                    render_queue, NewBase = first_day(render_queue)
+                    day_count += 1
+                    break
+                elif com == '1':
+                    has_base_save = os.path.exists('base.bin')
+                    has_img_save = os.path.exists('img_dict.bin')
+                    has_day_save = os.path.exists('day_count.bin')
+                    if has_base_save and has_img_save and has_day_save:
+                        with open('base.bin', 'rb') as f:
+                            NewBase = pickle.load(f)
+                        with open('img_dict.bin', 'rb') as f:
+                            p_img_dict = pickle.load(f)
+                            img_dict = pickle_2_img_dict(p_img_dict)
+                        with open('day_count.bin', 'rb') as f:
+                            day_count = pickle.load(f)
+                        print('存档读取完毕。')
+                    else:
+                        print('没有存档文件或存档文件不完整')
+                        com = None
+                else:
+                    print('指令错误！')
         else:
             print('今天是第' + str(day_count + 1) + '天')
             com = input('输入指令')
@@ -286,5 +325,48 @@ if __name__ == '__main__':
                     tasks_module(NewBase)
                 elif com == 'factory':
                     factory_module(NewBase)
+                elif com == 'save':
+                    has_base_save = os.path.exists('base.bin')
+                    has_img_save = os.path.exists('img_dict.bin')
+                    has_day_save = os.path.exists('day_count.bin')
+                    if has_base_save and has_img_save and has_day_save:
+                        com = input('0.覆盖存档 1.取消保存')
+                        if com == '0':
+                            with open('base.bin', 'wb') as f:
+                                pickle.dump(NewBase, f)
+                            with open('img_dict.bin', 'wb') as f:
+                                p_img_dict = img_dict_2_pickle(img_dict)
+                                pickle.dump(p_img_dict, f)
+                            with open('day_count.bin', 'wb') as f:
+                                pickle.dump(day_count, f)
+                            print('存档保存完毕。')
+                        elif com == '1':
+                            print('存档作业已中止。')
+                        else:
+                            print('指令错误，存档作业已中止。')
+                    else:
+                        with open('base.bin', 'wb') as f:
+                            pickle.dump(NewBase, f)
+                        with open('img_dict.bin', 'wb') as f:
+                            p_img_dict = img_dict_2_pickle(img_dict)
+                            pickle.dump(p_img_dict, f)
+                        with open('day_count.bin', 'wb') as f:
+                            pickle.dump(day_count, f)
+                        print('存档保存完毕。')
+                elif com == 'load':
+                    has_base_save = os.path.exists('base.bin')
+                    has_img_save = os.path.exists('img_dict.bin')
+                    has_day_save = os.path.exists('day_count.bin')
+                    if has_base_save and has_img_save and has_day_save:
+                        with open('base.bin', 'rb') as f:
+                            NewBase = pickle.load(f)
+                        with open('img_dict.bin', 'rb') as f:
+                            p_img_dict = pickle.load(f)
+                            img_dict = pickle_2_img_dict(p_img_dict)
+                        with open('day_count.bin', 'rb') as f:
+                            day_count = pickle.load(f)
+                        print('存档读取完毕。')
+                    else:
+                        print('没有存档文件或存档文件不完整，读档作业已中止')
                 else:
                     print('指令错误')
