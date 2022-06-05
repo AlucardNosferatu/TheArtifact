@@ -1,4 +1,15 @@
-from Base import Base, ConstructionCrane, Laboratory
+import random
+import sys
+import threading
+import time
+import uuid
+
+import pygame
+
+from Base import ConstructionCrane, Laboratory
+from Map import MapEvent, Base, ResourceSite
+
+img_dict = {}
 
 
 def display_stat(base_inst: Base):
@@ -110,9 +121,11 @@ def design_module(base_inst: Base):
                         print('输入有误！')
                         continue
                 elif research_com == '5':
-                    print('设计中心暂不可用')
+                    selected_lab.compose_new_design()
                 elif research_com == '6':
-                    print('设计中心暂不可用')
+                    print(base_inst.loaded_designs.keys())
+                    name = input('输入要删除的设计名称')
+                    selected_lab.delete_old_design(design_name=name)
                 elif research_com == '7':
                     break
                 else:
@@ -141,12 +154,65 @@ def factory_module(base_inst: Base):
     pass
 
 
-def after_1_day(base_inst: Base):
+def refresh_gui(r_queue):
+    global img_dict
+    for render_task in r_queue:
+        task_type = render_task[0]
+        img_id = render_task[1]
+        img_path = render_task[2]
+        img_pos = render_task[3]
+        if task_type == 'load_new':
+            new_img = pygame.image.load(img_path)
+            new_rect = new_img.get_rect()
+            new_rect.center = tuple(img_pos)
+            img_dict[img_id] = [new_img, new_rect]
+        elif task_type == 'move_old':
+            img_dict[img_id][1] = tuple(img_pos)
+        elif task_type == 'delete_old':
+            del img_dict[img_id]
+    r_queue.clear()
+    return r_queue
+
+
+def map_events_update(map_events, r_queue):
+    # todo
+
+    x = random.randint(0, 2028)
+    y = random.randint(0, 1223)
+    new_event = ResourceSite(x, y, 'wood', 5000)
+    icon_id = str(uuid.uuid4())
+    new_event.set_icon_id(icon_id)
+    map_events.append(new_event)
+
+    r_task_1 = ['load_new', new_event.get_icon_id(), 'wood.png', new_event.get_screen_pos()]
+    r_queue.append(r_task_1)
+
+    if len(map_events) > 10:
+        removed_event: MapEvent = map_events.pop(0)
+        r_task_2 = ['delete_old', removed_event.icon_id, None, None]
+        r_queue.append(r_task_2)
+        del removed_event
+    return map_events, r_queue
+
+
+def after_1_day(base_inst: Base, map_events, r_queue):
     for obj in base_inst.time_passed_tasks:
         obj.tomorrow()
+    map_events, r_queue = map_events_update(map_events, r_queue)
+    r_queue = refresh_gui(r_queue)
+    return map_events, r_queue
 
 
-def first_day(base_inst: Base):
+def first_day(r_queue):
+    base_inst = Base(1014, 612)
+    # task_type = render_task[0]
+    # img_id = render_task[1]
+    # img_path = render_task[2]
+    # img_pos = render_task[3]
+    base_inst.set_icon_id(str(uuid.uuid4()))
+    r_task = ['load_new', base_inst.get_icon_id(), 'base.png', base_inst.get_screen_pos()]
+    r_queue.append(r_task)
+    r_queue = refresh_gui(r_queue)
     print('今天是第1天')
     input('按任意键继续')
     print('送你一个塔吊，不然你啥都建不了')
@@ -157,21 +223,58 @@ def first_day(base_inst: Base):
     base_inst.add_resource('wood', 100)
     base_inst.add_resource('concrete', 101)
     input('按任意键继续')
+    return r_queue, base_inst
+
+
+def pygame_refresh():
+    global img_dict
+    pygame.init()
+    screen = pygame.display.set_mode((1024, 768))
+    pygame.display.set_caption("The Artifact")
+    clock = pygame.time.Clock()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # 卸载所有模块
+                pygame.quit()
+                # 终止程序，确保退出程序
+                sys.exit()
+        clock.tick(60)
+        screen.fill('white')
+        for img_id in img_dict:
+            img_obj: pygame.Surface = img_dict[img_id][0]
+            img_rect: pygame.Rect = img_dict[img_id][1]
+            screen.blit(img_obj, img_rect)
+        pygame.display.update()
 
 
 if __name__ == '__main__':
     day_count = 0
-    NewBase = Base()
+    NewBase = None
+    global_events = []
+    render_queue = []
+
+    pygame_thread = threading.Thread(target=pygame_refresh)
+    pygame_thread.start()
     while True:
+        if not pygame_thread.is_alive():
+            print()
+            sys.exit('Pygame Thread Stopped.')
         if day_count == 0:
-            first_day(NewBase)
+            render_queue, NewBase = first_day(
+                render_queue
+            )
             day_count += 1
         else:
             print('今天是第' + str(day_count + 1) + '天')
             com = input('输入指令')
             if com == 'tomorrow':
+                global_events, render_queue = after_1_day(
+                    NewBase,
+                    global_events,
+                    render_queue
+                )
                 day_count += 1
-                after_1_day(NewBase)
             else:
                 if com == 'stats':
                     display_stat(NewBase)

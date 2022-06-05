@@ -2,77 +2,8 @@ import random
 import uuid
 
 from Avionics import *
-from Designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part
-
-
-class Base:
-    tech_tree = None
-    warehouse_cap = None
-    warehouse_basic = None
-    hr_cap = None
-    hr_basic = None
-    buildings = None
-    time_passed_tasks = None
-    unlocked_parts = None
-    loaded_designs = None
-
-    def __init__(self):
-        self.tech_tree = {
-            'command_center': [],
-            'warehouse': ['command_center']
-        }
-        self.warehouse_cap = 100
-        self.warehouse_basic = {
-            'wood': 0,
-            'concrete': 0,
-            'ore': 0,
-            'steel': 0,
-            'ti': 0,
-            'fuel': 0,
-            'silicon': 0,
-            'gun_p': 0,
-            'barrel': 0,
-            'e-device': 0
-        }
-        self.hr_cap = 100
-        self.hr_basic = {
-            'army': 0,
-            'logistic_worker': 0,
-            'pilot': 0,
-            'engineer': 0,
-            'scientist': 0
-        }
-        self.buildings = [None, None, None]
-        self.time_passed_tasks = []
-        self.unlocked_parts = {
-            'chs': [],
-            'eng': [],
-            'wpn': [],
-            'whd': [],
-            'loc': [],
-            'avi': []
-        }
-        self.loaded_designs = {}
-
-    def next_building_slot(self):
-        for i in range(len(self.buildings)):
-            if self.buildings[i] is None:
-                return i
-        return -1
-
-    def expand_building_slot(self):
-        self.buildings.append(None)
-
-    def add_resource(self, res_type: str, value: int):
-        print('得到了', value, '个', res_type)
-        self.warehouse_basic[res_type] += value
-        if self.warehouse_basic[res_type] > self.warehouse_cap:
-            print('仓库放不下，丢失', self.warehouse_basic[res_type] - self.warehouse_cap, '件', res_type)
-            self.warehouse_basic[res_type] = self.warehouse_cap
-
-    def consume_resource(self, res_type: str, value: int):
-        print('消耗了', value, '个', res_type)
-        self.warehouse_basic[res_type] -= value
+from Designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part, Design
+from Map import Base, MapEvent
 
 
 class Building:
@@ -93,8 +24,21 @@ class Building:
 
 
 class CommandCenter(Building):
+    map_event_detected = []
+    radar_radius = 0
+
     def __init__(self, slot, b_ptr: Base):
         super().__init__(2000, slot, 1, 'command_center', 'normal', b_ptr)
+        self.radar_radius = 750
+
+    def scan_events(self, global_events: list[MapEvent]):
+        self.map_event_detected.clear()
+        for event in global_events:
+            if event.get_distance(self.base_ptr.coordinate) < self.radar_radius:
+                self.map_event_detected.append(event)
+
+    def deploy_task_force(self):
+        raise NotImplementedError('未授予部队指挥权！')
 
 
 class Laboratory(Building):
@@ -180,9 +124,9 @@ class Laboratory(Building):
                         slots_count.__setitem__(
                             pt2,
                             [
-                                random.randint(1, 5),
-                                random.randint(1, 4),
-                                random.randint(1, 3)
+                                random.randint(1, 2),
+                                random.randint(0, 2),
+                                random.randint(0, 1)
                             ]
                         )
                 extra_params.append(slots_count)
@@ -273,6 +217,98 @@ class Laboratory(Building):
                 print('已中止第', work_index, '实验室的研究')
         else:
             print('参数错误！')
+
+    def compose_new_design(self):
+        if len(self.base_ptr.unlocked_parts['chs']) <= 0:
+            print('必须有至少一款载具骨架才能设计！')
+            return
+        name: None | str = None
+        while name is None:
+            name = input('设计命名（或输入ABORT中止设计）：')
+            if name == 'ABORT':
+                return
+            elif name in self.base_ptr.loaded_designs:
+                print('同名设计已存在！')
+                name = None
+
+        chs_selected_index = 0
+        while True:
+            print('第一阶段：选择', self.parts_names['chs'])
+            chs_selected = self.base_ptr.unlocked_parts['chs'][chs_selected_index]
+            attrs = [item for item in dir(chs_selected) if not item.startswith('__')]
+            for attr in attrs:
+                attr_val = getattr(chs_selected, attr)
+                if not hasattr(attr_val, '__call__'):
+                    print(attr, attr_val)
+            print()
+            print('当前款号：', chs_selected_index)
+            choice = input('0.上一款 1.下一款 2.选中 3.中止设计')
+            if choice == '0':
+                chs_selected_index -= 1
+                chs_selected_index += len(self.base_ptr.unlocked_parts['chs'])
+                chs_selected_index %= len(self.base_ptr.unlocked_parts['chs'])
+            elif choice == '1':
+                chs_selected_index += 1
+                chs_selected_index += len(self.base_ptr.unlocked_parts['chs'])
+                chs_selected_index %= len(self.base_ptr.unlocked_parts['chs'])
+            elif choice == '2':
+                break
+            elif choice == '3':
+                return
+            else:
+                print('无效输入！')
+                continue
+
+        new_design = Design(name=name, chassis=chs_selected)
+        for pt in new_design.slots:
+            for i in range(3):
+                # small medium large
+                for j in range(len(new_design.slots[pt][i])):
+                    # multiple slots with same size
+                    pt_selected_index = 0
+                    pt_selected: Part | None = None
+                    while len(self.base_ptr.unlocked_parts[pt]) > 0:
+                        print('第二阶段：选择', self.parts_names[pt], '插槽尺寸：', i)
+                        pt_selected = self.base_ptr.unlocked_parts[pt][pt_selected_index]
+                        attrs = [item for item in dir(pt_selected) if not item.startswith('__')]
+                        for attr in attrs:
+                            attr_val = getattr(pt_selected, attr)
+                            if not hasattr(attr_val, '__call__'):
+                                print(attr, attr_val)
+                        print()
+                        print('当前款号：', pt_selected_index)
+                        choice = input('0.上一款 1.下一款 2.选中 3.留空（油箱） 4.中止设计')
+                        if choice == '0':
+                            pt_selected_index -= 1
+                            pt_selected_index += len(self.base_ptr.unlocked_parts[pt])
+                            pt_selected_index %= len(self.base_ptr.unlocked_parts[pt])
+                        elif choice == '1':
+                            pt_selected_index += 1
+                            pt_selected_index += len(self.base_ptr.unlocked_parts[pt])
+                            pt_selected_index %= len(self.base_ptr.unlocked_parts[pt])
+                        elif choice == '2':
+                            if pt_selected.size != i:
+                                print('插槽大小不匹配！请重新选择！')
+                                continue
+                            else:
+                                break
+                        elif choice == '3':
+                            pt_selected = None
+                            break
+                        elif choice == '4':
+                            return
+                        else:
+                            print('无效输入！')
+                            continue
+                    new_design.slots[pt][i][j] = pt_selected
+        print(new_design.name, '设计完成！')
+        self.base_ptr.loaded_designs.__setitem__(new_design.name, new_design)
+
+    def delete_old_design(self, design_name):
+        if design_name in self.base_ptr.loaded_designs:
+            del self.base_ptr.loaded_designs[design_name]
+        else:
+            print('没有这个名称的设计！')
 
     def tomorrow(self):
         finished = []

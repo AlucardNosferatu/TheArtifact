@@ -111,9 +111,10 @@ class Avionics(Part):
 class Design:
     chassis_in_use = None
     slots = None
+    name = None
 
-    def __init__(self, chassis: Chassis):
-
+    def __init__(self, name, chassis: Chassis):
+        self.name = name
         self.slots = {}
         self.chassis_in_use = chassis
         for slot_usage in self.chassis_in_use.slot_count:
