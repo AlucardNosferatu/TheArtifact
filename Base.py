@@ -1,9 +1,9 @@
 import random
 import uuid
 
-from Avionics import *
-from Designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part, Design
-from Map import Base, MapEvent
+from avionics import *
+from designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part, Design
+from map import Base, MapEvent
 
 
 class Building:

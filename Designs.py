@@ -128,4 +128,4 @@ class Design:
 if __name__ == '__main__':
     slot_c = {'eng': [3, 2, 1], 'wpn': [0, 0, 0], 'loc': [2, 1, 0]}
     ch = Chassis(hp=100, bc={'wood': 10}, size=-1, extra_params=[slot_c, 1.0])
-    design_1 = Design(ch)
+    design_1 = Design('ABORT', ch)

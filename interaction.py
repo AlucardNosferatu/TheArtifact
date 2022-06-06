@@ -1,16 +1,60 @@
+import os
 import pickle
 import random
-import os
-import sys
-import threading
 import uuid
 
 import pygame
 
-from Base import ConstructionCrane, Laboratory
-from Map import MapEvent, Base, ResourceSite
+from base import ConstructionCrane, Laboratory
+from map import Base, ResourceSite, MapEvent
 
-img_dict = {}
+
+def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
+    if dc == 0:
+        com = None
+        while com not in ['0', '1']:
+            com = input('0.新游戏 1.继续游戏')
+            if com == '0':
+                r_queue, base_inst, surface_img_dict = first_day(r_queue, surface_img_dict)
+                dc += 1
+                break
+            elif com == '1':
+                loaded = load_game()
+                if None in loaded:
+                    com = None
+                else:
+                    base_inst, img_dict, dc = loaded
+            else:
+                print('指令错误！')
+    else:
+        print('今天是第' + str(dc + 1) + '天')
+        com = input('输入指令')
+        if com == 'tomorrow':
+            map_events, r_queue, surface_img_dict = after_1_day(
+                base_inst,
+                map_events,
+                r_queue,
+                surface_img_dict
+            )
+            dc += 1
+        else:
+            if com == 'stats':
+                display_stat(base_inst)
+            elif com == 'build':
+                build_module(base_inst)
+            elif com == 'design':
+                design_module(base_inst)
+            elif com == 'tasks':
+                tasks_module(base_inst)
+            elif com == 'factory':
+                factory_module(base_inst)
+            elif com == 'save':
+                save_game(base_inst, surface_img_dict, dc)
+            elif com == 'load':
+                load_game()
+            else:
+                print('指令错误')
+    return r_queue, base_inst, dc, map_events, surface_img_dict
 
 
 def display_stat(base_inst: Base):
@@ -155,26 +199,6 @@ def factory_module(base_inst: Base):
     pass
 
 
-def refresh_gui(r_queue):
-    global img_dict
-    for render_task in r_queue:
-        task_type = render_task[0]
-        img_id = render_task[1]
-        img_path = render_task[2]
-        img_pos = render_task[3]
-        if task_type == 'load_new':
-            new_img = pygame.image.load(img_path)
-            new_rect = new_img.get_rect()
-            new_rect.center = tuple(img_pos)
-            img_dict[img_id] = [new_img, new_rect, img_path]
-        elif task_type == 'move_old':
-            img_dict[img_id][1] = tuple(img_pos)
-        elif task_type == 'delete_old':
-            del img_dict[img_id]
-    r_queue.clear()
-    return r_queue
-
-
 def map_events_update(map_events, r_queue):
     # todo
     x = random.randint(0, 2028)
@@ -193,24 +217,20 @@ def map_events_update(map_events, r_queue):
     return map_events, r_queue
 
 
-def after_1_day(base_inst: Base, map_events, r_queue):
+def after_1_day(base_inst: Base, map_events, r_queue, surface_img_dict):
     for obj in base_inst.time_passed_tasks:
         obj.tomorrow()
     map_events, r_queue = map_events_update(map_events, r_queue)
-    r_queue = refresh_gui(r_queue)
-    return map_events, r_queue
+    r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
+    return map_events, r_queue, surface_img_dict
 
 
-def first_day(r_queue):
+def first_day(r_queue, surface_img_dict):
     base_inst = Base(1014, 612)
-    # task_type = render_task[0]
-    # img_id = render_task[1]
-    # img_path = render_task[2]
-    # img_pos = render_task[3]
     base_inst.set_icon_id(str(uuid.uuid4()))
     r_task = ['load_new', base_inst.get_icon_id(), 'base.png', base_inst.get_screen_pos()]
     r_queue.append(r_task)
-    r_queue = refresh_gui(r_queue)
+    r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
     print('今天是第1天')
     input('按任意键继续')
     print('送你一个塔吊，不然你啥都建不了')
@@ -221,29 +241,7 @@ def first_day(r_queue):
     base_inst.add_resource('wood', 100)
     base_inst.add_resource('concrete', 101)
     input('按任意键继续')
-    return r_queue, base_inst
-
-
-def pygame_refresh():
-    global img_dict
-    pygame.init()
-    screen = pygame.display.set_mode((1024, 768))
-    pygame.display.set_caption("The Artifact")
-    clock = pygame.time.Clock()
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                # 卸载所有模块
-                pygame.quit()
-                # 终止程序，确保退出程序
-                sys.exit()
-        clock.tick(60)
-        screen.fill('white')
-        for img_id in img_dict:
-            img_obj: pygame.Surface = img_dict[img_id][0]
-            img_rect: pygame.Rect = img_dict[img_id][1]
-            screen.blit(img_obj, img_rect)
-        pygame.display.update()
+    return r_queue, base_inst, surface_img_dict
 
 
 def img_dict_2_pickle(s_img_dict):
@@ -267,106 +265,69 @@ def pickle_2_img_dict(p_dict):
     return s_img_dict
 
 
-if __name__ == '__main__':
-    day_count = 0
-    NewBase = None
-    global_events = []
-    render_queue = []
-    pygame_thread = threading.Thread(target=pygame_refresh)
-    pygame_thread.start()
-    while True:
-        if not pygame_thread.is_alive():
-            print()
-            sys.exit('Pygame Thread Stopped.')
-        if day_count == 0:
-            com = None
-            while com not in ['0', '1']:
-                com = input('0.新游戏 1.继续游戏')
-                if com == '0':
-                    render_queue, NewBase = first_day(render_queue)
-                    day_count += 1
-                    break
-                elif com == '1':
-                    has_base_save = os.path.exists('base.bin')
-                    has_img_save = os.path.exists('img_dict.bin')
-                    has_day_save = os.path.exists('day_count.bin')
-                    if has_base_save and has_img_save and has_day_save:
-                        with open('base.bin', 'rb') as f:
-                            NewBase = pickle.load(f)
-                        with open('img_dict.bin', 'rb') as f:
-                            p_img_dict = pickle.load(f)
-                            img_dict = pickle_2_img_dict(p_img_dict)
-                        with open('day_count.bin', 'rb') as f:
-                            day_count = pickle.load(f)
-                        print('存档读取完毕。')
-                    else:
-                        print('没有存档文件或存档文件不完整')
-                        com = None
-                else:
-                    print('指令错误！')
+def save_game(base_inst: Base, surface_img_dict, dc):
+    hbs = os.path.exists('base.bin')
+    his = os.path.exists('img_dict.bin')
+    hds = os.path.exists('day_count.bin')
+    if hbs and his and hds:
+        save_com = input('0.覆盖存档 1.取消保存')
+        if save_com == '0':
+            with open('base.bin', 'wb') as f:
+                pickle.dump(base_inst, f)
+            with open('img_dict.bin', 'wb') as f:
+                pickle_img_dict = img_dict_2_pickle(surface_img_dict)
+                pickle.dump(pickle_img_dict, f)
+            with open('day_count.bin', 'wb') as f:
+                pickle.dump(dc, f)
+            print('存档保存完毕。')
+        elif save_com == '1':
+            print('存档作业已中止。')
         else:
-            print('今天是第' + str(day_count + 1) + '天')
-            com = input('输入指令')
-            if com == 'tomorrow':
-                global_events, render_queue = after_1_day(
-                    NewBase,
-                    global_events,
-                    render_queue
-                )
-                day_count += 1
-            else:
-                if com == 'stats':
-                    display_stat(NewBase)
-                elif com == 'build':
-                    build_module(NewBase)
-                elif com == 'design':
-                    design_module(NewBase)
-                elif com == 'tasks':
-                    tasks_module(NewBase)
-                elif com == 'factory':
-                    factory_module(NewBase)
-                elif com == 'save':
-                    has_base_save = os.path.exists('base.bin')
-                    has_img_save = os.path.exists('img_dict.bin')
-                    has_day_save = os.path.exists('day_count.bin')
-                    if has_base_save and has_img_save and has_day_save:
-                        com = input('0.覆盖存档 1.取消保存')
-                        if com == '0':
-                            with open('base.bin', 'wb') as f:
-                                pickle.dump(NewBase, f)
-                            with open('img_dict.bin', 'wb') as f:
-                                p_img_dict = img_dict_2_pickle(img_dict)
-                                pickle.dump(p_img_dict, f)
-                            with open('day_count.bin', 'wb') as f:
-                                pickle.dump(day_count, f)
-                            print('存档保存完毕。')
-                        elif com == '1':
-                            print('存档作业已中止。')
-                        else:
-                            print('指令错误，存档作业已中止。')
-                    else:
-                        with open('base.bin', 'wb') as f:
-                            pickle.dump(NewBase, f)
-                        with open('img_dict.bin', 'wb') as f:
-                            p_img_dict = img_dict_2_pickle(img_dict)
-                            pickle.dump(p_img_dict, f)
-                        with open('day_count.bin', 'wb') as f:
-                            pickle.dump(day_count, f)
-                        print('存档保存完毕。')
-                elif com == 'load':
-                    has_base_save = os.path.exists('base.bin')
-                    has_img_save = os.path.exists('img_dict.bin')
-                    has_day_save = os.path.exists('day_count.bin')
-                    if has_base_save and has_img_save and has_day_save:
-                        with open('base.bin', 'rb') as f:
-                            NewBase = pickle.load(f)
-                        with open('img_dict.bin', 'rb') as f:
-                            p_img_dict = pickle.load(f)
-                            img_dict = pickle_2_img_dict(p_img_dict)
-                        with open('day_count.bin', 'rb') as f:
-                            day_count = pickle.load(f)
-                        print('存档读取完毕。')
-                    else:
-                        print('没有存档文件或存档文件不完整，读档作业已中止')
-                else:
-                    print('指令错误')
+            print('指令错误，存档作业已中止。')
+    else:
+        with open('base.bin', 'wb') as f:
+            pickle.dump(base_inst, f)
+        with open('img_dict.bin', 'wb') as f:
+            pickle_img_dict = img_dict_2_pickle(surface_img_dict)
+            pickle.dump(pickle_img_dict, f)
+        with open('day_count.bin', 'wb') as f:
+            pickle.dump(dc, f)
+        print('存档保存完毕。')
+
+
+def load_game():
+    hbs = os.path.exists('base.bin')
+    his = os.path.exists('img_dict.bin')
+    hds = os.path.exists('day_count.bin')
+    if hbs and his and hds:
+        with open('base.bin', 'rb') as f:
+            base_inst = pickle.load(f)
+        with open('img_dict.bin', 'rb') as f:
+            pickle_img_dict = pickle.load(f)
+            surface_img_dict = pickle_2_img_dict(pickle_img_dict)
+        with open('day_count.bin', 'rb') as f:
+            dc = pickle.load(f)
+        print('存档读取完毕。')
+        return base_inst, surface_img_dict, dc
+    else:
+        print('没有存档文件或存档文件不完整，读档作业已中止')
+        return None, None, None
+
+
+def surfaces_render_queue(r_queue, surface_img_dict):
+    for render_task in r_queue:
+        task_type = render_task[0]
+        img_id = render_task[1]
+        img_path = render_task[2]
+        img_pos = render_task[3]
+        if task_type == 'load_new':
+            new_img = pygame.image.load(img_path)
+            new_rect = new_img.get_rect()
+            new_rect.center = tuple(img_pos)
+            surface_img_dict[img_id] = [new_img, new_rect, img_path]
+        elif task_type == 'move_old':
+            surface_img_dict[img_id][1] = tuple(img_pos)
+        elif task_type == 'delete_old':
+            del surface_img_dict[img_id]
+    r_queue.clear()
+    return r_queue, surface_img_dict
