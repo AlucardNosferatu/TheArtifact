@@ -392,7 +392,7 @@ class Pipeline:
 
 
 if __name__ == '__main__':
-    pipe = read_pipeline_from_xls('pipeline.xls')
+    pipe = read_pipeline_from_xls('Save/pipeline.xls')
     pipe.pipeline_area()
 
     slot_c = {'eng': [2, 0, 0]}
