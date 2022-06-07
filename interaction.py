@@ -5,7 +5,7 @@ import uuid
 
 import pygame
 
-from base import ConstructionCrane, Laboratory
+from base import ConstructionCrane, Laboratory, Factory
 from map import Base, ResourceSite, MapEvent
 
 
@@ -176,13 +176,13 @@ def design_module(base_inst: Base):
                 else:
                     print('输入有误！')
                     continue
-                building_com = '-1'
-                while building_com not in ['0', '1']:
-                    building_com = input('0.继续 1.返回')
-                    if building_com == '0':
+                research_com = '-1'
+                while research_com not in ['0', '1']:
+                    research_com = input('0.继续 1.返回')
+                    if research_com == '0':
                         flag = True
                         break
-                    elif building_com == '1':
+                    elif research_com == '1':
                         flag = False
                         break
                     else:
@@ -196,7 +196,57 @@ def tasks_module(base_inst: Base):
 
 
 def factory_module(base_inst: Base):
-    pass
+    factory_list = []
+    for i in range(len(base_inst.buildings)):
+        if type(base_inst.buildings[i]) is Factory:
+            factory_list.append(base_inst.buildings[i])
+    if len(factory_list) <= 0:
+        print('基地里没有工厂！')
+    else:
+        print(factory_list)
+        fac_no = input('输入工厂编号')
+        if fac_no.isdigit() and 0 <= int(fac_no) < len(factory_list):
+            selected_fac: Factory = factory_list[int(fac_no)]
+            flag = True
+            while flag:
+                produce_com = input('0.开始生产 1.产线规划导入 2.产品设计导入 3.生产流程测试 4.返回')
+                if produce_com == '0':
+                    amount_str = input('请输入计划生产的产品个数：')
+                    if amount_str.isdigit():
+                        selected_fac.produce(int(amount_str))
+                    else:
+                        print('输入有误！')
+                        continue
+                elif produce_com == '1':
+                    xls_filepath = input('请输入产线图纸的文件名称：')
+                    if os.path.exists(xls_filepath):
+                        selected_fac.set_pipeline_from_file(xls_filepath)
+                    else:
+                        print('文件', xls_filepath, '不存在！')
+                        continue
+                elif produce_com == '2':
+                    design_name = input('请输入记录在案的设计名称：')
+                    selected_fac.set_design_from_base(design_name)
+                elif produce_com == '3':
+                    selected_fac.production_test()
+                elif produce_com == '4':
+                    break
+                else:
+                    print('输入有误！')
+                    continue
+                produce_com = '-1'
+                while produce_com not in ['0', '1']:
+                    produce_com = input('0.继续 1.返回')
+                    if produce_com == '0':
+                        flag = True
+                        break
+                    elif produce_com == '1':
+                        flag = False
+                        break
+                    else:
+                        print('输入有误！')
+        else:
+            print('输入有误！')
 
 
 def map_events_update(map_events, r_queue):
@@ -239,7 +289,8 @@ def first_day(r_queue, surface_img_dict):
     input('按任意键继续')
     print('再给你一些物资')
     base_inst.add_resource('wood', 100)
-    base_inst.add_resource('concrete', 101)
+    base_inst.add_resource('steel', 100)
+    base_inst.add_resource('e-device', 100)
     input('按任意键继续')
     return r_queue, base_inst, surface_img_dict
 

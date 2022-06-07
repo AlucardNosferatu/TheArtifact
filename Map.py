@@ -60,6 +60,7 @@ class Base(MapEvent):
     time_passed_tasks = None
     unlocked_parts = None
     loaded_designs = None
+    is_able_to_build_miner = False
 
     def __init__(self, x, y):
         super().__init__(x, y)
@@ -67,6 +68,7 @@ class Base(MapEvent):
             'command_center': [],
             'warehouse': ['command_center']
         }
+        self.is_able_to_build_miner = False
         self.hangar_cap = 4
         self.hangar_basic = []
         self.warehouse_cap = 100

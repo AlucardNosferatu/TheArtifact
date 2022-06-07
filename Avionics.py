@@ -8,3 +8,7 @@ def jammer():
 
 def irst_scan():
     pass
+
+
+def miner_drone():
+    pass

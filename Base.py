@@ -56,11 +56,11 @@ class Laboratory(Building):
         'eng': ['steel'],
         'wpn': ['barrel'],
         'whd': ['gun_p', 'steel'],
-        'loc': ['wood', 'ti'],
+        'loc': ['wood'],
         'avi': ['e-device']
     }
     experience_modifier = 0.0
-    avi_function = [radar_scan, jammer, irst_scan]
+    avi_function = [miner_drone, radar_scan, jammer, irst_scan]
     parts_names = {
         'chs': '载具骨架',
         'eng': '引擎',
@@ -117,7 +117,7 @@ class Laboratory(Building):
                     build_cost.__setitem__(res, random.randint(40, 60))
             return build_cost
 
-        def gen_ep(sz, pt):
+        def gen_ep(sz, pt, base_ptr: Base):
             extra_params = []
             if pt == 'chs':
                 slots_count = {}
@@ -170,7 +170,11 @@ class Laboratory(Building):
                 extra_params.append(spd)
                 extra_params.append(ang_spd)
             elif pt == 'avi':
-                func1 = random.choice(Laboratory.avi_function)
+                if base_ptr.is_able_to_build_miner:
+                    func1 = random.choice(Laboratory.avi_function)
+                else:
+                    func1 = Laboratory.avi_function[0]
+                    base_ptr.is_able_to_build_miner = True
                 func2 = random.choice([None, func1])
                 if func2 is not None:
                     while func2 == func1:
@@ -197,7 +201,7 @@ class Laboratory(Building):
         bc = gen_bc(size, part_type)
 
         if part_type in ['chs', 'wpn', 'whd', 'avi', 'loc', 'eng']:
-            ep = gen_ep(size, part_type)
+            ep = gen_ep(size, part_type, self.base_ptr)
             new_part = Laboratory.part_class_dict[part_type](hp=hp, bc=bc, size=size, extra_params=ep)
         else:
             new_part = Laboratory.part_class_dict[part_type](hp=hp, bc=bc, size=size)
@@ -333,16 +337,122 @@ class Laboratory(Building):
             self.current_work[fin] = None
 
 
+class Factory(Building):
+    pipeline: None | Pipeline = None
+    pipeline_set = None
+    design_set = None
+    pt_passed = None
+    quality_modifier = None
+    qm_lower_bound = 0.5
+    production_per_day = None
+    bc_per_artifact = None
+    need_to_produce = None
+
+    def __init__(self, slot, b_ptr: Base):
+        super().__init__(1000, slot, 1, 'factory', 'normal', b_ptr)
+        self.need_to_produce = 0
+        self.pipeline = None
+        self.pipeline_set = False
+        self.design_set = False
+        self.pt_passed = False
+        self.quality_modifier = 0
+        self.production_per_day = 0
+
+    def set_pipeline_from_file(self, filename):
+        self.pipeline = read_pipeline_from_xls(filename)
+        used_area = self.pipeline.pipeline_area()
+        if used_area == 0:
+            self.pipeline_set = False
+            self.design_set = False
+            self.pt_passed = False
+            self.quality_modifier = 0
+            self.production_per_day = 0
+            print('未检测到任何流水线模块！请重新设计流水线并导入！')
+        else:
+            self.pipeline_set = True
+            self.design_set = False
+            self.pt_passed = False
+            self.quality_modifier = 0
+            self.production_per_day = 0
+            print('流水线已导入，占地面积：', used_area)
+
+    def set_design_from_base(self, design_name):
+        if self.pipeline_set:
+            if design_name in self.base_ptr.loaded_designs:
+                design = self.base_ptr.loaded_designs[design_name]
+                resource_types = []
+                part_type_count = 0
+                self.pipeline.set_requirement(design)
+                self.bc_per_artifact = {}
+                for part_id in self.pipeline.req:
+                    part_type_count += 1
+                    for res_type in self.pipeline.req[part_id][0]:
+                        res_per_pt = self.pipeline.req[part_id][0][res_type] * self.pipeline.req[part_id][1]
+                        if res_type not in self.bc_per_artifact:
+                            self.bc_per_artifact.__setitem__(
+                                res_type,
+                                res_per_pt
+                            )
+                        else:
+                            self.bc_per_artifact.__setitem__(
+                                res_type,
+                                self.bc_per_artifact[res_type] + res_per_pt
+                            )
+                        if res_type not in resource_types:
+                            resource_types.append(res_type)
+                resource_type_count = len(resource_types)
+                std_area = (part_type_count + resource_type_count) * 10
+                used_area = self.pipeline.pipeline_area()
+                assert used_area != 0
+                diff_area = 2 * std_area - used_area
+                self.pipeline_set = True
+                self.design_set = True
+                self.pt_passed = False
+                self.quality_modifier = max(Factory.qm_lower_bound, diff_area / std_area)
+                self.production_per_day = 0
+                print('设计"', design_name, '"已导入流水线，产线复杂度：', self.quality_modifier)
+            else:
+                print('找不到名为', design_name, '的设计！')
+        else:
+            print('流水线未导入！')
+
+    def production_test(self):
+        if self.pipeline_set and self.design_set:
+            self.production_per_day = self.pipeline.performance_test()
+            if self.production_per_day > 0:
+                self.pt_passed = True
+                print('生产测试已通过，日产量：', self.production_per_day)
+            else:
+                self.pt_passed = False
+                print('生产测试未通过！无法在一天时间内产出至少一件产品！')
+        else:
+            self.pt_passed = False
+            print('流水线未导入或载具设计未指定！')
+
+    def produce(self, amount):
+        if self.pipeline_set and self.design_set and self.pt_passed:
+            self.need_to_produce += amount
+            if self not in self.base_ptr.time_passed_tasks:
+                self.base_ptr.time_passed_tasks.append(self)
+        else:
+            print('产线不可用，可能原因：')
+            print('1.产线规划未设置 2.产品设计未导入 3.流程测试未通过')
+
+    def tomorrow(self):
+        pass
+
+
 class ConstructionCrane(Building):
     progress_record = {}
     cost_dict = {
-        'command_center': {'wood': 10, 'time': 2},
-        'laboratory': {'wood': 10, 'time': 2},
-
+        'command_center': {'wood': 10, 'time': 1},
+        'laboratory': {'wood': 10, 'time': 1},
+        'factory': {'wood': 10, 'time': 1}
     }
     class_dict = {
         'command_center': CommandCenter,
-        'laboratory': Laboratory
+        'laboratory': Laboratory,
+        'factory': Factory
     }
 
     def __init__(self, slot, base_inst):
@@ -398,6 +508,8 @@ class ConstructionCrane(Building):
                         del self.progress_record[removed_building]
                     else:
                         building_type = removed_building.type_str
+                        if removed_building in self.base_ptr.time_passed_tasks:
+                            self.base_ptr.time_passed_tasks.remove(removed_building)
                     for res in ConstructionCrane.cost_dict[building_type]:
                         if res != 'time':
                             self.base_ptr.add_resource(res, ConstructionCrane.cost_dict[building_type][res])
@@ -424,87 +536,21 @@ class ConstructionCrane(Building):
             del self.progress_record[fin]
 
 
-class Factory(Building):
-    pipeline: None | Pipeline = None
-    pipeline_set = None
-    design_set = None
-    pt_passed = None
-    quality_modifier = None
-    qm_lower_bound = 0.5
-    production_per_day = None
-    build_cost_per_artifact = None
-
-    def __init__(self, hp, slot, lv, ts, stat, b_ptr: Base):
-        super().__init__(hp, slot, lv, ts, stat, b_ptr)
-        self.pipeline = None
-        self.pipeline_set = False
-        self.design_set = False
-        self.pt_passed = False
-        self.quality_modifier = 0
-        self.production_per_day = 0
-
-    def set_pipeline_from_file(self, filename='pipeline.xls'):
-        self.pipeline = read_pipeline_from_xls(filename)
-        used_area = self.pipeline.pipeline_area()
-        if used_area == 0:
-            self.pipeline_set = False
-            self.design_set = False
-            self.pt_passed = False
-            self.quality_modifier = 0
-            self.production_per_day = 0
-            print('未检测到任何流水线模块！请重新设计流水线并导入！')
-        else:
-            self.pipeline_set = True
-            self.design_set = False
-            self.pt_passed = False
-            self.quality_modifier = 0
-            self.production_per_day = 0
-            print('流水线已导入，占地面积：', used_area)
-
-    def set_design_from_base(self, design_name):
-        if self.pipeline_set:
-            if design_name in self.base_ptr.loaded_designs:
-                design = self.base_ptr.loaded_designs[design_name]
-                resource_types = []
-                part_type_count = 0
-                self.pipeline.set_requirement(design)
-                for part_id in self.pipeline.requirement:
-                    part_type_count += 1
-                    for res_type in self.pipeline.requirement[part_id][0]:
-                        if res_type not in resource_types:
-                            resource_types.append(res_type)
-                resource_type_count = len(resource_types)
-                std_area = (part_type_count + resource_type_count) * 10
-                used_area = self.pipeline.pipeline_area()
-                assert used_area != 0
-                diff_area = 2 * std_area - used_area
-                self.pipeline_set = True
-                self.design_set = True
-                self.pt_passed = False
-                self.quality_modifier = max(Factory.qm_lower_bound, diff_area / std_area)
-                self.production_per_day = 0
-                print('设计“', design_name, '”已导入流水线，产线复杂度：', self.quality_modifier)
-            else:
-                print('找不到名为', design_name, '的设计！')
-        else:
-            print('流水线未导入！')
-
-    def production_test(self):
-        if self.pipeline_set and self.design_set:
-            self.production_per_day = self.pipeline.performance_test()
-            if self.production_per_day > 0:
-                self.pt_passed = True
-                print('生产测试已通过，日产量：', self.production_per_day)
-            else:
-                self.pt_passed = False
-                print('生产测试未通过！无法在一天时间内产出至少一件产品！')
-        else:
-            self.pt_passed = False
-            print('流水线未导入或载具设计未指定！')
-
-    def produce(self,amount):
-        pass
-
-
 if __name__ == '__main__':
+    b = Base(1, 1)
+    f = Factory(0, b)
+
+    slot_c = {'eng': [2, 0, 0]}
+    chs = Chassis(hp=100, bc={'wood': 10}, size=-1, extra_params=[slot_c, 1.0])
+    des = Design('test', chs)
+    eng = Engine(10, {'wood': 10, 'steel': 10}, 0, [10, 10])
+    des.slots['eng'][0][0] = eng
+    des.slots['eng'][0][1] = eng
+
+    b.loaded_designs.__setitem__('test', des)
+
+    f.set_pipeline_from_file('pipeline.xls')
+    f.set_design_from_base('test')
+    f.production_test()
+
     print('Done')

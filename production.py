@@ -58,7 +58,7 @@ class Pipeline:
     height = None
     matrix = None
     matrix_res = None
-    requirement = None
+    req = None
     design = None
     conv_dict = {
         '↑': [lower_cell, upper_cell],
@@ -120,13 +120,13 @@ class Pipeline:
         self.design = design
         req_list = []
         id_list = []
-        self.requirement = {}
+        self.req = {}
 
         design_chs = self.design.chassis_in_use
         req_list.append(design_chs)
         part_id = str(uuid.uuid4())
         id_list.append(part_id)
-        self.requirement.__setitem__(part_id, [design_chs.build_cost, 1])
+        self.req.__setitem__(part_id, [design_chs.build_cost, 1])
 
         for pt in design.slots:
             for size in range(3):
@@ -135,19 +135,19 @@ class Pipeline:
                         req_list.append(part)
                         part_id = str(uuid.uuid4())
                         id_list.append(part_id)
-                        self.requirement.__setitem__(part_id, [part.build_cost, 1])
+                        self.req.__setitem__(part_id, [part.build_cost, 1])
                     else:
                         req_list_index = req_list.index(part)
                         part_id = id_list[req_list_index]
                         req_list.append(part)
                         id_list.append(part_id)
                         parts_count = id_list.count(part_id)
-                        self.requirement.__setitem__(part_id, [part.build_cost, parts_count])
+                        self.req.__setitem__(part_id, [part.build_cost, parts_count])
         for fin_asm in self.fin_asm_list:
             block_dict, x, y = fin_asm
             need_dict: dict[str, None | dict] = {'out': None}
-            for part_id in self.requirement:
-                parts_count = self.requirement[part_id][1]
+            for part_id in self.req:
+                parts_count = self.req[part_id][1]
                 need_dict.__setitem__(part_id, {'need': parts_count, 'have': 0})
             self.set_block_res(x, y, need_dict)
         for asm_index, part_asm in enumerate(self.part_asm_list):
@@ -168,7 +168,7 @@ class Pipeline:
             self.set_block(x, y, block_dict)
             part_asm = [block_dict, x, y]
             self.part_asm_list[asm_index] = part_asm
-            build_cost: dict[str, int] = self.requirement[part_id][0]
+            build_cost: dict[str, int] = self.req[part_id][0]
             for res in build_cost:
                 need_dict.__setitem__(res, {'need': build_cost[res], 'have': 0})
             self.set_block_res(x, y, need_dict)
@@ -371,7 +371,7 @@ class Pipeline:
             dx = right - left
             dy = lower - upper
             s = dx * dy
-            print('占地面积：', s)
+            # print('占地面积：', s)
             return s
         else:
             print('占地面积计算错误！')
@@ -386,7 +386,7 @@ class Pipeline:
             production_per_day = 0
         else:
             production_per_day = round(1440 / self.upt)
-        print('production_per_day:', production_per_day)
+        # print('production_per_day:', production_per_day)
         return production_per_day
 
 
