@@ -502,6 +502,9 @@ class Factory(Building):
             self.pt_passed = False
             print('流水线未导入或载具设计未指定！')
 
+    def produce(self,amount):
+        pass
+
 
 if __name__ == '__main__':
     print('Done')
