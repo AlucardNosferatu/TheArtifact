@@ -382,9 +382,12 @@ class Pipeline:
         self.reset_produced()
         while self.timer < 1440:
             self.flow_1_second()
-        day_production = round(1440 / self.upt)
-        print('day_production', day_production)
-        return day_production
+        if self.upt == 0:
+            production_per_day = 0
+        else:
+            production_per_day = round(1440 / self.upt)
+        print('production_per_day:', production_per_day)
+        return production_per_day
 
 
 if __name__ == '__main__':

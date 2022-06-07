@@ -50,6 +50,8 @@ class MapEvent:
 
 class Base(MapEvent):
     tech_tree = None
+    hangar_cap = None
+    hangar_basic = None
     warehouse_cap = None
     warehouse_basic = None
     hr_cap = None
@@ -65,6 +67,8 @@ class Base(MapEvent):
             'command_center': [],
             'warehouse': ['command_center']
         }
+        self.hangar_cap = 4
+        self.hangar_basic = []
         self.warehouse_cap = 100
         self.warehouse_basic = {
             'wood': 0,

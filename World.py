@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from dynamics import Artifact
+from artifacts import Artifact
 
 pygame.init()
 screen = pygame.display.set_mode((1024, 768))
