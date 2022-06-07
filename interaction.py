@@ -123,8 +123,8 @@ def design_module(base_inst: Base):
             selected_lab: Laboratory = lab_list[int(lab_no)]
             flag = True
             while flag:
-                print('0.显示所有零件 1.显示所有设计 2.研究新零件 3.销毁旧零件')
-                research_com = input('4.中止研究 5.创建新设计 6.销毁旧设计 7.返回')
+                print('0.显示所有零件 1.显示所有设计 2.研究新零件 3.销毁旧零件 4.中止研究')
+                research_com = input('5.创建新设计 6.销毁旧设计 7.从文件读取设计 8.保存设计到文件 9.返回')
                 if research_com == '0':
                     print(base_inst.unlocked_parts)
                 elif research_com == '1':
@@ -172,6 +172,13 @@ def design_module(base_inst: Base):
                     name = input('输入要删除的设计名称')
                     selected_lab.delete_old_design(design_name=name)
                 elif research_com == '7':
+                    bin_filepath = input('请输入设计图纸的文件名称：')
+                    selected_lab.load_design_from_file(bin_filepath)
+                elif research_com == '8':
+                    print(base_inst.loaded_designs.keys())
+                    name = input('输入要保存的设计名称')
+                    selected_lab.save_design_to_file(name)
+                elif research_com == '9':
                     break
                 else:
                     print('输入有误！')
