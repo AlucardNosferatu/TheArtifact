@@ -347,6 +347,7 @@ class Factory(Building):
     production_per_day = None
     bc_per_artifact = None
     need_to_produce = None
+    produced_today = None
 
     def __init__(self, slot, b_ptr: Base):
         super().__init__(1000, slot, 1, 'factory', 'normal', b_ptr)
@@ -438,8 +439,30 @@ class Factory(Building):
             print('产线不可用，可能原因：')
             print('1.产线规划未设置 2.产品设计未导入 3.流程测试未通过')
 
+    def able_to_produce_one_more(self):
+        able = False
+        if self.need_to_produce > 0:
+            if self.produced_today <= self.production_per_day:
+                if len(self.base_ptr.hangar_basic) < self.base_ptr.hangar_cap:
+                    able = True
+                    for res_type in self.bc_per_artifact:
+                        if self.bc_per_artifact[res_type] > self.base_ptr.warehouse_basic[res_type]:
+                            print(res_type, '不足！')
+                            able = False
+                            break
+                else:
+                    print('机库空间不足！')
+            else:
+                print('已达当日日产量上限')
+        else:
+            print('计划产量为0')
+        return able
+
     def tomorrow(self):
-        pass
+        self.produced_today = 0
+        while self.able_to_produce_one_more():
+            self.produced_today += 1
+            self.need_to_produce -= 1
 
 
 class ConstructionCrane(Building):
