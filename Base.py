@@ -86,7 +86,8 @@ class Laboratory(Building):
             if pt == 'chs':
                 sz = -1
             else:
-                sz = random.choice([0, 1, 2])
+                # sz = random.choice([0, 1, 2])
+                sz = 0
             return sz
 
         def gen_hp(sz, pt):
@@ -125,8 +126,8 @@ class Laboratory(Building):
                             pt2,
                             [
                                 random.randint(1, 2),
-                                random.randint(0, 2),
-                                random.randint(0, 1)
+                                random.randint(0, 0),
+                                random.randint(0, 0)
                             ]
                         )
                 extra_params.append(slots_count)
