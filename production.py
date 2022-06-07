@@ -1,5 +1,4 @@
 import random
-import time
 import uuid
 from types import NoneType
 
@@ -310,7 +309,7 @@ class Pipeline:
                             res_dict['out'] = None
                             self.produced += 1
                             self.upt = self.timer / self.produced
-                            print('time:', self.timer, 'produced:', self.produced, 'UPT:', self.upt)
+                            # print('time:', self.timer, 'produced:', self.produced, 'UPT:', self.upt)
                         else:
                             res_dict['out'] = params[3]
                 # endregion
@@ -331,19 +330,73 @@ class Pipeline:
         self.timer += 1
         # print('time:', self.timer)
 
+    def layout_upper_bound(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                cell = self.get_block(j, i)
+                if cell is not None:
+                    return i
+        return -1
+
+    def layout_lower_bound(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                cell = self.get_block(j, self.height - i - 1)
+                if cell is not None:
+                    return self.height - i - 1
+        return -1
+
+    def layout_left_bound(self):
+        for i in range(self.width):
+            for j in range(self.height):
+                cell = self.get_block(i, j)
+                if cell is not None:
+                    return i
+        return -1
+
+    def layout_right_bound(self):
+        for i in range(self.width):
+            for j in range(self.height):
+                cell = self.get_block(self.width - i - 1, j)
+                if cell is not None:
+                    return self.width - i - 1
+        return -1
+
+    def pipeline_area(self):
+        upper = self.layout_upper_bound()
+        lower = self.layout_lower_bound()
+        left = self.layout_left_bound()
+        right = self.layout_right_bound()
+        if -1 not in [upper, lower, left, right]:
+            dx = right - left
+            dy = lower - upper
+            s = dx * dy
+            print('占地面积：', s)
+            return s
+        else:
+            print('占地面积计算错误！')
+            return 0
+
+    def performance_test(self):
+        self.reset_timer()
+        self.reset_produced()
+        while self.timer < 1440:
+            self.flow_1_second()
+        day_production = round(1440 / self.upt)
+        print('day_production', day_production)
+        return day_production
+
 
 if __name__ == '__main__':
     pipe = read_pipeline_from_xls('pipeline.xls')
+    pipe.pipeline_area()
+
     slot_c = {'eng': [2, 0, 0]}
     chs = Chassis(hp=100, bc={'wood': 10}, size=-1, extra_params=[slot_c, 1.0])
     des = Design('test', chs)
     eng = Engine(10, {'wood': 10, 'steel': 10}, 0, [10, 10])
     des.slots['eng'][0][0] = eng
     des.slots['eng'][0][1] = eng
+
     pipe.set_requirement(des)
-    pipe.reset_timer()
-    pipe.reset_produced()
-    while pipe.timer < 1440:
-        pipe.flow_1_second()
-    day_production = round(1440 / pipe.upt)
-    print('day_production', day_production)
+    pipe.performance_test()
