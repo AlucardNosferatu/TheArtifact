@@ -1,4 +1,5 @@
 import random
+import time
 import uuid
 from types import NoneType
 
@@ -87,6 +88,7 @@ class Pipeline:
     produced = None
     timer = None
     upt = None
+    wasted_part = None
 
     def __init__(self, w, h):
         self.width = w
@@ -106,9 +108,11 @@ class Pipeline:
         self.produced = 0
         self.timer = 0
         self.upt = 0
+        self.wasted_part = 0
 
     def reset_produced(self):
         self.produced = 0
+        self.wasted_part = 0
 
     def reset_timer(self):
         self.timer = 0
@@ -189,6 +193,8 @@ class Pipeline:
         return self.matrix_res[y][x]
 
     def recurse_cell(self, block_dict, x, y, visited):
+        # noinspection PyUnusedLocal
+        res_type = None
         if [x, y] in visited:
             pass
         else:
@@ -253,6 +259,7 @@ class Pipeline:
                 # endregion
                 res_dict = self.get_block_res(x, y)
                 # region fill_req
+                still_need_after_loading = []
                 for res_str in res_dict:
                     if res_str != 'out':
                         for x_prev, y_prev in joined_src:
@@ -267,6 +274,22 @@ class Pipeline:
                                     self.set_block_res(x_prev, y_prev, prev_res)
                             else:
                                 break
+                        if res_dict[res_str]['need'] > res_dict[res_str]['have']:
+                            still_need_after_loading.append(res_str)
+                # endregion
+                # region clear jammed resources
+                for x_prev, y_prev in joined_src:
+                    prev_res = self.get_block_res(x_prev, y_prev)
+                    if prev_res is not None:
+                        if type(prev_res) is str:
+                            if prev_res not in still_need_after_loading:
+                                self.set_block_res(x_prev, y_prev, None)
+                                self.wasted_part += 1
+                        elif type(prev_res) is dict:
+                            if prev_res['out'] not in still_need_after_loading:
+                                prev_res['out'] = None
+                                self.set_block_res(x_prev, y_prev, prev_res)
+                                self.wasted_part += 1
                 # endregion
                 # region release product
                 if res_dict['out'] is None:
@@ -282,44 +305,45 @@ class Pipeline:
                         for res_str in res_dict:
                             if res_str != 'out':
                                 res_dict[res_str]['have'] = 0
-                        params = self.get_block(x, y)['params']
+                        params = block_dict['params']
                         if params[0] == 'fin':
                             res_dict['out'] = None
                             self.produced += 1
                             self.upt = self.timer / self.produced
+                            print('time:', self.timer, 'produced:', self.produced, 'UPT:', self.upt)
                         else:
                             res_dict['out'] = params[3]
                 # endregion
                 self.set_block_res(x, y, res_dict)
             elif block_dict['type'] == 'R':
-                res_type = block_dict['params'][0]
                 if self.get_block_res(x, y) is None:
+                    res_type = block_dict['params'][0]
                     self.set_block_res(x, y, res_type)
-                return
             for x, y in recurse_list:
                 prev_block_dict = self.get_block(x, y)
                 self.recurse_cell(prev_block_dict, x, y, visited)
 
     def flow_1_second(self):
-        if self.timer == 13:
-            print('bp3')
         for fin_asm in self.fin_asm_list:
             block_dict, x, y = fin_asm
             visited = []
             self.recurse_cell(block_dict, x, y, visited)
         self.timer += 1
-        print('time:', self.timer)
+        # print('time:', self.timer)
 
 
 if __name__ == '__main__':
     pipe = read_pipeline_from_xls('pipeline.xls')
-    slot_c = {'eng': [1, 0, 0]}
+    slot_c = {'eng': [2, 0, 0]}
     chs = Chassis(hp=100, bc={'wood': 10}, size=-1, extra_params=[slot_c, 1.0])
     des = Design('test', chs)
     eng = Engine(10, {'wood': 10, 'steel': 10}, 0, [10, 10])
     des.slots['eng'][0][0] = eng
+    des.slots['eng'][0][1] = eng
     pipe.set_requirement(des)
     pipe.reset_timer()
     pipe.reset_produced()
-    while True:
+    while pipe.timer < 1440:
         pipe.flow_1_second()
+    day_production = round(1440 / pipe.upt)
+    print('day_production', day_production)
