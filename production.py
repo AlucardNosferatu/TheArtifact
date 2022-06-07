@@ -131,18 +131,19 @@ class Pipeline:
         for pt in design.slots:
             for size in range(3):
                 for part in design.slots[pt][size]:
-                    if part not in req_list:
-                        req_list.append(part)
-                        part_id = str(uuid.uuid4())
-                        id_list.append(part_id)
-                        self.req.__setitem__(part_id, [part.build_cost, 1])
-                    else:
-                        req_list_index = req_list.index(part)
-                        part_id = id_list[req_list_index]
-                        req_list.append(part)
-                        id_list.append(part_id)
-                        parts_count = id_list.count(part_id)
-                        self.req.__setitem__(part_id, [part.build_cost, parts_count])
+                    if part is not None:
+                        if part not in req_list:
+                            req_list.append(part)
+                            part_id = str(uuid.uuid4())
+                            id_list.append(part_id)
+                            self.req.__setitem__(part_id, [part.build_cost, 1])
+                        else:
+                            req_list_index = req_list.index(part)
+                            part_id = id_list[req_list_index]
+                            req_list.append(part)
+                            id_list.append(part_id)
+                            parts_count = id_list.count(part_id)
+                            self.req.__setitem__(part_id, [part.build_cost, parts_count])
         for fin_asm in self.fin_asm_list:
             block_dict, x, y = fin_asm
             need_dict: dict[str, None | dict] = {'out': None}
@@ -400,6 +401,7 @@ if __name__ == '__main__':
     eng = Engine(10, {'wood': 10, 'steel': 10}, 0, [10, 10])
     des.slots['eng'][0][0] = eng
     des.slots['eng'][0][1] = eng
+
 
     pipe.set_requirement(des)
     pipe.performance_test()

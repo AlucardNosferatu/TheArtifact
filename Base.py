@@ -1,6 +1,7 @@
 import random
 import uuid
 
+from artifacts import Artifact
 from avionics import *
 from designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part, Design
 from map import Base, MapEvent
@@ -458,11 +459,24 @@ class Factory(Building):
             print('计划产量为0')
         return able
 
+    def design2artifact(self):
+        # todo
+        art = Artifact()
+        art.ThisSpecs.max_spd *= self.quality_modifier
+        art.ThisSpecs.max_acc *= self.quality_modifier
+        art.ThisSpecs.max_ang_acc *= self.quality_modifier
+        art.ThisSpecs.max_ang_spd *= self.quality_modifier
+        return art
+
     def tomorrow(self):
         self.produced_today = 0
         while self.able_to_produce_one_more():
+            art = self.design2artifact()
+            self.base_ptr.hangar_basic.append(art)
             self.produced_today += 1
             self.need_to_produce -= 1
+        print('生产了', self.produced_today, '个产品！')
+        self.produced_today = 0
 
 
 class ConstructionCrane(Building):
@@ -563,12 +577,18 @@ if __name__ == '__main__':
     b = Base(1, 1)
     f = Factory(0, b)
 
-    slot_c = {'eng': [2, 0, 0]}
+    slot_c = {'eng': [9, 0, 0]}
     chs = Chassis(hp=100, bc={'wood': 10}, size=-1, extra_params=[slot_c, 1.0])
     des = Design('test', chs)
     eng = Engine(10, {'wood': 10, 'steel': 10}, 0, [10, 10])
     des.slots['eng'][0][0] = eng
     des.slots['eng'][0][1] = eng
+    des.slots['eng'][0][2] = eng
+    des.slots['eng'][0][3] = eng
+    des.slots['eng'][0][4] = eng
+    des.slots['eng'][0][5] = eng
+    des.slots['eng'][0][6] = eng
+    des.slots['eng'][0][7] = eng
 
     b.loaded_designs.__setitem__('test', des)
 
