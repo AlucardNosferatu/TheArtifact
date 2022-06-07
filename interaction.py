@@ -46,7 +46,7 @@ def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
                 design_module(base_inst)
             elif com == 'tasks':
                 tasks_module(base_inst)
-            elif com == 'factory':
+            elif com == 'produce':
                 factory_module(base_inst)
             elif com == 'save':
                 save_game(base_inst, surface_img_dict, dc)

@@ -1,7 +1,4 @@
 import math
-import sys
-
-import pygame
 
 
 class MapEvent:

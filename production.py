@@ -402,6 +402,5 @@ if __name__ == '__main__':
     des.slots['eng'][0][0] = eng
     des.slots['eng'][0][1] = eng
 
-
     pipe.set_requirement(des)
     pipe.performance_test()
