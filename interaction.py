@@ -23,7 +23,7 @@ def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
                 if None in loaded:
                     com = None
                 else:
-                    base_inst, img_dict, dc = loaded
+                    base_inst, surface_img_dict, dc = loaded
             else:
                 print('指令错误！')
     else:
@@ -264,7 +264,7 @@ def map_events_update(map_events, r_queue):
     icon_id = str(uuid.uuid4())
     new_event.set_icon_id(icon_id)
     map_events.append(new_event)
-    r_task_1 = ['load_new', new_event.get_icon_id(), 'wood.png', new_event.get_screen_pos()]
+    r_task_1 = ['load_new', new_event.get_icon_id(), 'Img/wood.png', new_event.get_screen_pos()]
     r_queue.append(r_task_1)
     if len(map_events) > 10:
         removed_event: MapEvent = map_events.pop(0)
@@ -285,7 +285,7 @@ def after_1_day(base_inst: Base, map_events, r_queue, surface_img_dict):
 def first_day(r_queue, surface_img_dict):
     base_inst = Base(1014, 612)
     base_inst.set_icon_id(str(uuid.uuid4()))
-    r_task = ['load_new', base_inst.get_icon_id(), 'base.png', base_inst.get_screen_pos()]
+    r_task = ['load_new', base_inst.get_icon_id(), 'Img/base.png', base_inst.get_screen_pos()]
     r_queue.append(r_task)
     r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
     print('今天是第1天')
@@ -324,18 +324,18 @@ def pickle_2_img_dict(p_dict):
 
 
 def save_game(base_inst: Base, surface_img_dict, dc):
-    hbs = os.path.exists('base.bin')
-    his = os.path.exists('img_dict.bin')
-    hds = os.path.exists('day_count.bin')
+    hbs = os.path.exists('Save/base.bin')
+    his = os.path.exists('Save/img_dict.bin')
+    hds = os.path.exists('Save/day_count.bin')
     if hbs and his and hds:
         save_com = input('0.覆盖存档 1.取消保存')
         if save_com == '0':
-            with open('base.bin', 'wb') as f:
+            with open('Save/base.bin', 'wb') as f:
                 pickle.dump(base_inst, f)
-            with open('img_dict.bin', 'wb') as f:
+            with open('Save/img_dict.bin', 'wb') as f:
                 pickle_img_dict = img_dict_2_pickle(surface_img_dict)
                 pickle.dump(pickle_img_dict, f)
-            with open('day_count.bin', 'wb') as f:
+            with open('Save/day_count.bin', 'wb') as f:
                 pickle.dump(dc, f)
             print('存档保存完毕。')
         elif save_com == '1':
@@ -343,27 +343,27 @@ def save_game(base_inst: Base, surface_img_dict, dc):
         else:
             print('指令错误，存档作业已中止。')
     else:
-        with open('base.bin', 'wb') as f:
+        with open('Save/base.bin', 'wb') as f:
             pickle.dump(base_inst, f)
-        with open('img_dict.bin', 'wb') as f:
+        with open('Save/img_dict.bin', 'wb') as f:
             pickle_img_dict = img_dict_2_pickle(surface_img_dict)
             pickle.dump(pickle_img_dict, f)
-        with open('day_count.bin', 'wb') as f:
+        with open('Save/day_count.bin', 'wb') as f:
             pickle.dump(dc, f)
         print('存档保存完毕。')
 
 
 def load_game():
-    hbs = os.path.exists('base.bin')
-    his = os.path.exists('img_dict.bin')
-    hds = os.path.exists('day_count.bin')
+    hbs = os.path.exists('Save/base.bin')
+    his = os.path.exists('Save/img_dict.bin')
+    hds = os.path.exists('Save/day_count.bin')
     if hbs and his and hds:
-        with open('base.bin', 'rb') as f:
+        with open('Save/base.bin', 'rb') as f:
             base_inst = pickle.load(f)
-        with open('img_dict.bin', 'rb') as f:
+        with open('Save/img_dict.bin', 'rb') as f:
             pickle_img_dict = pickle.load(f)
             surface_img_dict = pickle_2_img_dict(pickle_img_dict)
-        with open('day_count.bin', 'rb') as f:
+        with open('Save/day_count.bin', 'rb') as f:
             dc = pickle.load(f)
         print('存档读取完毕。')
         return base_inst, surface_img_dict, dc
