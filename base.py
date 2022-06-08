@@ -16,7 +16,7 @@ class Building:
     level = 0
     type_str = ''
     stat = ''
-    base_ptr = None
+    base = None
 
     def __init__(self, hp, slot, lv, ts, stat, b_ptr: Base):
         self.level = lv
@@ -24,7 +24,7 @@ class Building:
         self.slot = slot
         self.type_str = ts
         self.stat = stat
-        self.base_ptr = b_ptr
+        self.base = b_ptr
 
 
 class CommandCenter(Building):
@@ -38,7 +38,7 @@ class CommandCenter(Building):
     def scan_events(self, global_events: list[MapEvent]):
         self.map_event_detected.clear()
         for event in global_events:
-            if event.get_distance(self.base_ptr.coordinate) < self.radar_radius:
+            if event.get_distance(self.base.coordinate) < self.radar_radius:
                 self.map_event_detected.append(event)
 
     def deploy_task_force(self):
@@ -204,18 +204,18 @@ class Laboratory(Building):
         bc = gen_bc(size, part_type)
 
         if part_type in ['chs', 'wpn', 'whd', 'avi', 'loc', 'eng']:
-            ep = gen_ep(size, part_type, self.base_ptr)
+            ep = gen_ep(size, part_type, self.base)
             new_part = Laboratory.part_class_dict[part_type](hp=hp, bc=bc, size=size, extra_params=ep)
         else:
             new_part = Laboratory.part_class_dict[part_type](hp=hp, bc=bc, size=size)
 
         work_slot_index = self.current_work.index(None)
         self.current_work[work_slot_index] = [new_part, self.need_days]
-        if self not in self.base_ptr.time_passed_tasks:
-            self.base_ptr.time_passed_tasks.append(self)
+        if self not in self.base.time_passed_tasks:
+            self.base.time_passed_tasks.append(self)
 
     def dispose_old_part(self, part_type, part_index):
-        self.base_ptr.unlocked_parts[part_type].pop(part_index)
+        self.base.unlocked_parts[part_type].pop(part_index)
 
     def terminate_ongoing_res(self, work_index):
         if 0 <= work_index < len(self.current_work):
@@ -228,7 +228,7 @@ class Laboratory(Building):
             print('参数错误！')
 
     def compose_new_design(self):
-        if len(self.base_ptr.unlocked_parts['chs']) <= 0:
+        if len(self.base.unlocked_parts['chs']) <= 0:
             print('必须有至少一款载具骨架才能设计！')
             return
         name: None | str = None
@@ -236,14 +236,14 @@ class Laboratory(Building):
             name = input('设计命名（或输入ABORT中止设计）：')
             if name == 'ABORT':
                 return
-            elif name in self.base_ptr.loaded_designs:
+            elif name in self.base.designs:
                 print('同名设计已存在！')
                 name = None
 
         chs_selected_index = 0
         while True:
             print('第一阶段：选择', self.parts_names['chs'])
-            chs_selected = self.base_ptr.unlocked_parts['chs'][chs_selected_index]
+            chs_selected = self.base.unlocked_parts['chs'][chs_selected_index]
             attrs = [item for item in dir(chs_selected) if not item.startswith('__')]
             for attr in attrs:
                 attr_val = getattr(chs_selected, attr)
@@ -254,12 +254,12 @@ class Laboratory(Building):
             choice = input('0.上一款 1.下一款 2.选中 3.中止设计')
             if choice == '0':
                 chs_selected_index -= 1
-                chs_selected_index += len(self.base_ptr.unlocked_parts['chs'])
-                chs_selected_index %= len(self.base_ptr.unlocked_parts['chs'])
+                chs_selected_index += len(self.base.unlocked_parts['chs'])
+                chs_selected_index %= len(self.base.unlocked_parts['chs'])
             elif choice == '1':
                 chs_selected_index += 1
-                chs_selected_index += len(self.base_ptr.unlocked_parts['chs'])
-                chs_selected_index %= len(self.base_ptr.unlocked_parts['chs'])
+                chs_selected_index += len(self.base.unlocked_parts['chs'])
+                chs_selected_index %= len(self.base.unlocked_parts['chs'])
             elif choice == '2':
                 break
             elif choice == '3':
@@ -276,9 +276,9 @@ class Laboratory(Building):
                     # multiple slots with same size
                     pt_selected_index = 0
                     pt_selected: Part | None = None
-                    while len(self.base_ptr.unlocked_parts[pt]) > 0:
+                    while len(self.base.unlocked_parts[pt]) > 0:
                         print('第二阶段：选择', self.parts_names[pt], '插槽尺寸：', i)
-                        pt_selected = self.base_ptr.unlocked_parts[pt][pt_selected_index]
+                        pt_selected = self.base.unlocked_parts[pt][pt_selected_index]
                         attrs = [item for item in dir(pt_selected) if not item.startswith('__')]
                         for attr in attrs:
                             attr_val = getattr(pt_selected, attr)
@@ -289,12 +289,12 @@ class Laboratory(Building):
                         choice = input('0.上一款 1.下一款 2.选中 3.留空（油箱） 4.中止设计')
                         if choice == '0':
                             pt_selected_index -= 1
-                            pt_selected_index += len(self.base_ptr.unlocked_parts[pt])
-                            pt_selected_index %= len(self.base_ptr.unlocked_parts[pt])
+                            pt_selected_index += len(self.base.unlocked_parts[pt])
+                            pt_selected_index %= len(self.base.unlocked_parts[pt])
                         elif choice == '1':
                             pt_selected_index += 1
-                            pt_selected_index += len(self.base_ptr.unlocked_parts[pt])
-                            pt_selected_index %= len(self.base_ptr.unlocked_parts[pt])
+                            pt_selected_index += len(self.base.unlocked_parts[pt])
+                            pt_selected_index %= len(self.base.unlocked_parts[pt])
                         elif choice == '2':
                             if pt_selected.size != i:
                                 print('插槽大小不匹配！请重新选择！')
@@ -311,40 +311,66 @@ class Laboratory(Building):
                             continue
                     new_design.slots[pt][i][j] = pt_selected
         print(new_design.name, '设计完成！')
-        self.base_ptr.loaded_designs.__setitem__(new_design.name, new_design)
+        self.base.designs.__setitem__(new_design.name, new_design)
 
     def delete_old_design(self, design_name):
-        if design_name in self.base_ptr.loaded_designs:
-            del self.base_ptr.loaded_designs[design_name]
+        if design_name in self.base.designs:
+            del self.base.designs[design_name]
         else:
             print('没有这个名称的设计！')
+
+    def part_not_in(self, part, part_type):
+        for part_index, loaded_part in enumerate(self.base.unlocked_parts[part_type]):
+            same_part = True
+            attrs = [item for item in dir(loaded_part) if not item.startswith('__')]
+            for attr in attrs:
+                attr_val = getattr(loaded_part, attr)
+                if not hasattr(attr_val, '__call__'):
+                    if attr_val != getattr(part, attr):
+                        same_part = False
+                        break
+            if same_part:
+                return part_index
+        return -1
+
+    def replace_part_obj(self, name, pt, size, p_index, loaded_p_index):
+        if pt == 'chs':
+            self.base.designs[name].chassis_in_use = self.base.unlocked_parts[pt][loaded_p_index]
+        else:
+            self.base.designs[name].slots[pt][size][p_index] = self.base.unlocked_parts[pt][loaded_p_index]
 
     def load_design_from_file(self, bin_filepath):
         if os.path.exists(bin_filepath):
             with open(bin_filepath, 'rb') as f:
                 design = pickle.load(f)
-                if design.name in self.base_ptr.loaded_designs:
+                if design.name in self.base.designs:
                     print('已有重名设计，覆盖？')
                     load_com = input('0.覆盖 1.重命名新设计')
                     if load_com == '1':
                         new_name = input('输入新名称')
                         design.name = new_name
-                self.base_ptr.loaded_designs.__setitem__(design.name, design)
-                if design.chassis_in_use not in self.base_ptr.unlocked_parts['chs']:
-                    self.base_ptr.unlocked_parts['chs'].append(design.chassis_in_use)
+                self.base.designs.__setitem__(design.name, design)
+                same_part_index = self.part_not_in(design.chassis_in_use, 'chs')
+                if same_part_index == -1:
+                    self.base.unlocked_parts['chs'].append(design.chassis_in_use)
+                else:
+                    self.replace_part_obj(design.name, 'chs', -1, 0, same_part_index)
                 for part_type in design.slots:
                     for size in range(3):
-                        for part in design.slots[part_type][size]:
+                        for p_index, part in enumerate(design.slots[part_type][size]):
                             if part is not None:
-                                if part not in self.base_ptr.unlocked_parts[part_type]:
-                                    self.base_ptr.unlocked_parts[part_type].append(part)
+                                same_part_index = self.part_not_in(part, part_type)
+                                if same_part_index == -1:
+                                    self.base.unlocked_parts[part_type].append(part)
+                                else:
+                                    self.replace_part_obj(design.name, part_type, size, p_index, same_part_index)
         else:
             print('文件', bin_filepath, '不存在！')
 
     def save_design_to_file(self, design_name):
-        if design_name in self.base_ptr.loaded_designs:
+        if design_name in self.base.designs:
             with open(design_name + '.bin', 'wb') as f:
-                pickle.dump(self.base_ptr.loaded_designs[design_name], f)
+                pickle.dump(self.base.designs[design_name], f)
         else:
             print('没有这个名称的设计！')
 
@@ -358,7 +384,7 @@ class Laboratory(Building):
                     finished.append(index)
                     new_part: Part = unfinished[0]
                     part_type = new_part.type_str
-                    self.base_ptr.unlocked_parts[part_type].append(new_part)
+                    self.base.unlocked_parts[part_type].append(new_part)
                     print('你获得了新', Laboratory.parts_names[part_type], '！属性如下：')
                     attrs = [item for item in dir(new_part) if not item.startswith('__')]
                     for attr in attrs:
@@ -380,6 +406,7 @@ class Factory(Building):
     bc_per_artifact = None
     need_to_produce = None
     produced_today = None
+    level_modifier = {1: 0.25, 2: 0.5, 3: 0.75, 4: 1}
 
     def __init__(self, slot, b_ptr: Base):
         super().__init__(1000, slot, 1, 'factory', 'normal', b_ptr)
@@ -412,9 +439,9 @@ class Factory(Building):
 
     def set_design_from_base(self, design_name):
         if self.pipeline_set:
-            if design_name in self.base_ptr.loaded_designs:
+            if design_name in self.base.designs:
                 self.need_to_produce = 0
-                design = self.base_ptr.loaded_designs[design_name]
+                design = self.base.designs[design_name]
                 resource_types = []
                 part_type_count = 0
                 self.pipeline.set_requirement(design)
@@ -454,7 +481,7 @@ class Factory(Building):
     def production_test(self):
         if self.pipeline_set and self.design_set:
             self.need_to_produce = 0
-            self.production_per_day = self.pipeline.performance_test()
+            self.production_per_day = round(Factory.level_modifier[self.level] * self.pipeline.performance_test())
             if self.production_per_day > 0:
                 self.pt_passed = True
                 print('生产测试已通过，日产量：', self.production_per_day)
@@ -468,8 +495,8 @@ class Factory(Building):
     def produce(self, amount):
         if self.pipeline_set and self.design_set and self.pt_passed:
             self.need_to_produce += amount
-            if self not in self.base_ptr.time_passed_tasks:
-                self.base_ptr.time_passed_tasks.append(self)
+            if self not in self.base.time_passed_tasks:
+                self.base.time_passed_tasks.append(self)
         else:
             print('产线不可用，可能原因：')
             print('1.产线规划未设置 2.产品设计未导入 3.流程测试未通过')
@@ -478,10 +505,10 @@ class Factory(Building):
         able = False
         if self.need_to_produce > 0:
             if self.produced_today <= self.production_per_day:
-                if len(self.base_ptr.hangar_basic) < self.base_ptr.hangar_cap:
+                if len(self.base.hangar_basic) < self.base.hangar_cap:
                     able = True
                     for res_type in self.bc_per_artifact:
-                        if self.bc_per_artifact[res_type] > self.base_ptr.warehouse_basic[res_type]:
+                        if self.bc_per_artifact[res_type] > self.base.warehouse_basic[res_type]:
                             print(res_type, '不足！')
                             able = False
                             break
@@ -505,8 +532,10 @@ class Factory(Building):
     def tomorrow(self):
         self.produced_today = 0
         while self.able_to_produce_one_more():
+            for res_type in self.bc_per_artifact:
+                self.base.consume_resource(res_type, self.bc_per_artifact[res_type])
             art = self.design2artifact()
-            self.base_ptr.hangar_basic.append(art)
+            self.base.hangar_basic.append(art)
             self.produced_today += 1
             self.need_to_produce -= 1
         print('生产了', self.produced_today, '个产品！')
@@ -533,26 +562,26 @@ class ConstructionCrane(Building):
     def query_cost(self, building_type):
         print(ConstructionCrane.cost_dict[building_type])
         print()
-        print(self.base_ptr.warehouse_basic)
+        print(self.base.warehouse_basic)
 
     def build_new(self, slot, building_type):
         if building_type not in ConstructionCrane.class_dict:
             print('不可建造或建筑类型代码错误！')
         else:
-            if 0 <= slot < len(self.base_ptr.buildings):
-                if self.base_ptr.buildings[slot] is not None:
+            if 0 <= slot < len(self.base.buildings):
+                if self.base.buildings[slot] is not None:
                     print('这个位置有建筑了！')
                 else:
                     for res in ConstructionCrane.cost_dict[building_type]:
                         if res != 'time':
-                            if ConstructionCrane.cost_dict[building_type][res] > self.base_ptr.warehouse_basic[res]:
+                            if ConstructionCrane.cost_dict[building_type][res] > self.base.warehouse_basic[res]:
                                 print('资源不足，无法建造！')
                                 return
                     for res in ConstructionCrane.cost_dict[building_type]:
                         if res != 'time':
-                            self.base_ptr.consume_resource(res, ConstructionCrane.cost_dict[building_type][res])
+                            self.base.consume_resource(res, ConstructionCrane.cost_dict[building_type][res])
                     new_b_id = str(uuid.uuid4())
-                    self.base_ptr.buildings[slot] = new_b_id
+                    self.base.buildings[slot] = new_b_id
                     self.progress_record.__setitem__(
                         new_b_id,
                         [
@@ -560,17 +589,17 @@ class ConstructionCrane(Building):
                             ConstructionCrane.cost_dict[building_type]['time']
                         ]
                     )
-                    if self not in self.base_ptr.time_passed_tasks:
-                        self.base_ptr.time_passed_tasks.append(self)
+                    if self not in self.base.time_passed_tasks:
+                        self.base.time_passed_tasks.append(self)
             else:
                 print('基地里没有空地可供建造新建筑')
 
     def remove_old(self, slot):
-        if 0 <= slot < len(self.base_ptr.buildings):
-            if self.base_ptr.buildings[slot] is None:
+        if 0 <= slot < len(self.base.buildings):
+            if self.base.buildings[slot] is None:
                 print('这个位置没有建筑！')
             else:
-                removed_building: Building | None | str = self.base_ptr.buildings[slot]
+                removed_building: Building | None | str = self.base.buildings[slot]
                 if removed_building is self:
                     print('塔吊不能拆除自己！')
                 else:
@@ -579,12 +608,12 @@ class ConstructionCrane(Building):
                         del self.progress_record[removed_building]
                     else:
                         building_type = removed_building.type_str
-                        if removed_building in self.base_ptr.time_passed_tasks:
-                            self.base_ptr.time_passed_tasks.remove(removed_building)
+                        if removed_building in self.base.time_passed_tasks:
+                            self.base.time_passed_tasks.remove(removed_building)
                     for res in ConstructionCrane.cost_dict[building_type]:
                         if res != 'time':
-                            self.base_ptr.add_resource(res, ConstructionCrane.cost_dict[building_type][res])
-                    self.base_ptr.buildings[slot] = None
+                            self.base.add_resource(res, ConstructionCrane.cost_dict[building_type][res])
+                    self.base.buildings[slot] = None
                     del removed_building
         else:
             print('空地编号超出有效范围！')
@@ -596,10 +625,10 @@ class ConstructionCrane(Building):
             unf_building[1] -= 1
             if unf_building[1] <= 0:
                 building_type = unf_building[0]
-                slot = self.base_ptr.buildings.index(unfinished)
-                self.base_ptr.buildings[slot] = ConstructionCrane.class_dict[building_type](
+                slot = self.base.buildings.index(unfinished)
+                self.base.buildings[slot] = ConstructionCrane.class_dict[building_type](
                     slot=slot,
-                    b_ptr=self.base_ptr
+                    b_ptr=self.base
                 )
                 finished.append(unfinished)
                 print('新的', building_type, '在空地', slot, '完工了！')
@@ -608,26 +637,12 @@ class ConstructionCrane(Building):
 
 
 if __name__ == '__main__':
-    b = Base(1, 1)
-    fac = Factory(0, b)
-
     slot_c = {'eng': [9, 0, 0]}
     chs = Chassis(hp=100, bc={'wood': 10}, size=-1, extra_params=[slot_c, 1.0])
     des = Design('test', chs)
     eng = Engine(10, {'wood': 10, 'steel': 10}, 0, [10, 10])
     des.slots['eng'][0][0] = eng
     des.slots['eng'][0][1] = eng
-    des.slots['eng'][0][2] = eng
-    des.slots['eng'][0][3] = eng
-    des.slots['eng'][0][4] = eng
-    des.slots['eng'][0][5] = eng
-    des.slots['eng'][0][6] = eng
-    des.slots['eng'][0][7] = eng
-
-    b.loaded_designs.__setitem__('test', des)
-
-    fac.set_pipeline_from_file('pipeline.xls')
-    fac.set_design_from_base('test')
-    fac.production_test()
-
+    with open('Save/test_art.bin', 'wb') as df:
+        pickle.dump(des, df)
     print('Done')

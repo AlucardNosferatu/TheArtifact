@@ -56,7 +56,7 @@ class Base(MapEvent):
     buildings = None
     time_passed_tasks = None
     unlocked_parts = None
-    loaded_designs = None
+    designs = None
     is_able_to_build_miner = False
 
     def __init__(self, x, y):
@@ -99,7 +99,7 @@ class Base(MapEvent):
             'loc': [],
             'avi': []
         }
-        self.loaded_designs = {}
+        self.designs = {}
 
     def next_building_slot(self):
         for i in range(len(self.buildings)):

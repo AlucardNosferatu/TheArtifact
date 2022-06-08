@@ -128,7 +128,7 @@ def design_module(base_inst: Base):
                 if research_com == '0':
                     print(base_inst.unlocked_parts)
                 elif research_com == '1':
-                    print(base_inst.loaded_designs)
+                    print(base_inst.designs)
                 elif research_com == '2':
                     part_type = input('请输入零件类型代号')
                     if part_type in selected_lab.part_class_dict:
@@ -168,14 +168,14 @@ def design_module(base_inst: Base):
                 elif research_com == '5':
                     selected_lab.compose_new_design()
                 elif research_com == '6':
-                    print(base_inst.loaded_designs.keys())
+                    print(base_inst.designs.keys())
                     name = input('输入要删除的设计名称')
                     selected_lab.delete_old_design(design_name=name)
                 elif research_com == '7':
                     bin_filepath = input('请输入设计图纸的文件名称：')
                     selected_lab.load_design_from_file(bin_filepath)
                 elif research_com == '8':
-                    print(base_inst.loaded_designs.keys())
+                    print(base_inst.designs.keys())
                     name = input('输入要保存的设计名称')
                     selected_lab.save_design_to_file(name)
                 elif research_com == '9':
