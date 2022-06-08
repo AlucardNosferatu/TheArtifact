@@ -12,3 +12,6 @@ def irst_scan():
 
 def miner_drone():
     pass
+
+
+use_in_map = [miner_drone, radar_scan, jammer]

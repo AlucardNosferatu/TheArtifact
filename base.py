@@ -521,8 +521,6 @@ class Factory(Building):
         return able
 
     def design2artifact(self):
-        # todo
-
         # region basic params
         def health_weight_and_fuel(design: Design):
             fuel_cap = 0
@@ -563,29 +561,32 @@ class Factory(Building):
             return maneuver, drag
 
         def sp_function(design: Design):
-            # todo
             funcs = []
-            sizes=[]
+            extra_fuel_cap = 0
+            # use redundant slot for same function as extra energy source
             for size in range(3):
                 for part in design.slots['avi'][size]:
                     if part is not None:
                         part: Avionics
                         if part.main_function not in funcs:
                             funcs.append(part.main_function)
-                            sizes.append(size)
                         else:
-                            if
+                            extra_fuel_cap += (size * 10)
                         if part.sub_function is not None:
                             if part.sub_function not in funcs:
                                 funcs.append(part.sub_function)
-            return funcs
+                            else:
+                                extra_fuel_cap += (size * 10)
+            return funcs, extra_fuel_cap
 
         # endregion
 
         # region quality_modifier
+        spf, efc = sp_function(self.pipeline.design)
         hp, bw, fc = health_weight_and_fuel(self.pipeline.design)
         hp *= self.quality_modifier
         bw *= (2 - self.quality_modifier)
+        fc += efc
         fc *= self.quality_modifier
         t, c = thrust_and_consumption(self.pipeline.design)
         t *= self.quality_modifier
@@ -593,7 +594,7 @@ class Factory(Building):
         m, d = maneuver_and_drag(self.pipeline.design)
         m *= self.quality_modifier
         d *= (2 - self.quality_modifier)
-        spf = sp_function(self.pipeline.design)
+
         # endregion
 
         params = {
