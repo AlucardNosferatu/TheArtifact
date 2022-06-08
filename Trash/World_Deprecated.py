@@ -1,86 +1,72 @@
-import cv2
-import numpy
+import sys
 
-world = {'frameWidth': 1024, 'frameHeight': 768}
-obj_list = []
+import pygame
 
-pic = cv2.imread('../mark.png')
-r, c = pic.shape[:2]
+from Trash.artifacts_Deprecated import Artifact
 
+pygame.init()
+screen = pygame.display.set_mode((1024, 768))
+pygame.display.set_caption("The Artifact")
 
-def obj_update_obj1(obj, world):
-    obj['v_x'] = 10
-    obj['v_y'] -= 1
-    if obj['v_y'] < -10:
-        obj['v_y'] = -10
-    if obj['y'] < world['frameHeight'] - 300:
-        obj['v_y'] = 0
-    elif obj['y'] < world['frameHeight'] - 200:
-        obj['v_y'] = -4
-    elif obj['y'] < world['frameHeight'] - 100:
-        obj['v_y'] = -8
-    obj['pitch'] = abs(obj['v_y']) * 5
-
-
-obj_1 = {
-    'x_c': 0 + round(c / 2),
-    'y_c': world['frameHeight'] - round(r / 2),
-    'pic': pic,
-    'cols': c,
-    'rows': r,
-    'v_x': 0,
-    'v_y': 0,
-    'pitch': 0,
-    'update_phy': obj_update_obj1
-}
-obj_1.__setitem__('x', obj_1['x_c'] - round(obj_1['cols'] / 2))
-obj_1.__setitem__('y', obj_1['y_c'] - round(obj_1['rows'] / 2))
-
-obj_list.append(obj_1)
-
-
-def rotate_image(image, angle):
-    image_center = tuple(numpy.array(image.shape[1::-1]) / 2)
-    rot_mat = cv2.getRotationMatrix2D(image_center, angle, 1.0)
-    result = cv2.warpAffine(image, rot_mat, image.shape[1::-1], flags=cv2.INTER_LINEAR)
-    return result
-
-
-def physics_frame():
-    global obj_list
-    for obj in obj_list:
-        obj['update_phy'](obj, world)
-        # dx = random.randint(-10, 20)
-        # dy = random.randint(-10, 20)
-        dx = obj['v_x']
-        dy = obj['v_y']
-        obj['x_c'] = max(round(obj['cols'] / 2), min(obj['x_c'] + dx, world['frameWidth'] - round(obj['cols'] / 2)))
-        obj['y_c'] = max(round(obj['rows'] / 2), min(obj['y_c'] + dy, world['frameHeight'] - round(obj['rows'] / 2)))
-        obj.__setitem__('x', obj['x_c'] - round(obj['cols'] / 2))
-        obj.__setitem__('y', obj['y_c'] - round(obj['rows'] / 2))
-
-
-def draw_frame():
-    global obj_list
-    canvas = numpy.ones([world['frameHeight'], world['frameWidth'], 3], dtype=numpy.uint8) * 255
-    for obj in obj_list:
-        y1 = obj['y']
-        y2 = obj['y'] + obj['rows']
-        x1 = obj['x']
-        x2 = obj['x'] + obj['cols']
-        r_pic = rotate_image(obj['pic'], obj['pitch'])
-        canvas[y1:y2, x1:x2] = r_pic
-    cv2.imshow("Title", canvas)
-    cv2.waitKey(1)
-
-
-f_count = 0
+the_artifact = Artifact()
+the_artifact_icon = pygame.image.load('mark.png')
+world_width = 1024
+world_height = 768
+ax = 512
+ay = 384
+w = the_artifact_icon.get_width()
+h = the_artifact_icon.get_height()
+ax_canvas = round(ax * 1024 / world_width) - round(w / 2)
+ay_canvas = 768 - round(ay * 768 / world_height) - round(h / 2)
+current_pitch = 0.0
+clock = pygame.time.Clock()
+pitch_up = False
+pitch_down = False
+throttle_up = False
+throttle_down = False
 while True:
-    if f_count >= 10:
-        f_count = 0
-        physics_frame()
-    draw_frame()
-    f_count += 1
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            # 卸载所有模块
+            pygame.quit()
+            # 终止程序，确保退出程序
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                pitch_up = True
+                the_artifact.ThisInput.pitch_neutral()
+            elif event.key == pygame.K_s:
+                pitch_down = True
+                the_artifact.ThisInput.pitch_neutral()
+            elif event.key == pygame.K_UP:
+                throttle_up = True
+            elif event.key == pygame.K_DOWN:
+                throttle_down = True
+        elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_w:
+                pitch_up = False
+                the_artifact.ThisInput.pitch_neutral()
+            elif event.key == pygame.K_s:
+                pitch_down = False
+                the_artifact.ThisInput.pitch_neutral()
+            elif event.key == pygame.K_UP:
+                throttle_up = False
+            elif event.key == pygame.K_DOWN:
+                throttle_down = False
 
-cap.release()
-cv2.destroyAllWindows()
+    if pitch_up:
+        the_artifact.ThisInput.pitch_up()
+    if pitch_down:
+        the_artifact.ThisInput.pitch_down()
+    if throttle_up:
+        the_artifact.ThisInput.throttle_up()
+    if throttle_down:
+        the_artifact.ThisInput.throttle_down()
+
+    the_artifact.update_stats(drag=2, gravity=0.5)
+    core = (the_artifact.ThisStats.location[0], 768-the_artifact.ThisStats.location[1])
+    screen.fill('white')
+    icon_rotated = pygame.transform.rotate(the_artifact_icon, -the_artifact.ThisStats.ang)
+    screen.blit(icon_rotated, icon_rotated.get_rect(center=tuple(core)))
+    pygame.display.update()

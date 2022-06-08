@@ -3,7 +3,7 @@ import pickle
 import random
 import uuid
 
-from artifacts import Artifact
+from artifacts import Artifact, Specs, Stats, Input
 from avionics import *
 from designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part, Design
 from map import Base, MapEvent
@@ -522,11 +522,92 @@ class Factory(Building):
 
     def design2artifact(self):
         # todo
-        art = Artifact()
-        art.ThisSpecs.max_spd *= self.quality_modifier
-        art.ThisSpecs.max_acc *= self.quality_modifier
-        art.ThisSpecs.max_ang_acc *= self.quality_modifier
-        art.ThisSpecs.max_ang_spd *= self.quality_modifier
+
+        # region basic params
+        def health_weight_and_fuel(design: Design):
+            fuel_cap = 0
+            health = design.chassis_in_use.health_points
+            weight_modifier = design.chassis_in_use.bare_weight_modifier
+            bare_weight = 0
+            for part_type in design.slots:
+                for size in range(3):
+                    for part in design.slots[part_type][size]:
+                        if part is not None:
+                            health += part.health_points
+                            bare_weight += (size + 1) * 10
+                        else:
+                            fuel_cap += (size + 1) * 10
+            bare_weight *= weight_modifier
+            return health, bare_weight, fuel_cap
+
+        def thrust_and_consumption(design: Design):
+            thrust = 0
+            consumption = 0
+            for size in range(3):
+                for part in design.slots['eng'][size]:
+                    if part is not None:
+                        part: Engine
+                        thrust += part.max_thrust
+                        consumption += part.fuel_consumption
+            return thrust, consumption
+
+        def maneuver_and_drag(design: Design):
+            maneuver = 0
+            drag = 0
+            for size in range(3):
+                for part in design.slots['loc'][size]:
+                    if part is not None:
+                        part: Locomotive
+                        maneuver += part.maneuverability
+                        drag += part.drag
+            return maneuver, drag
+
+        def sp_function(design: Design):
+            # todo
+            funcs = []
+            sizes=[]
+            for size in range(3):
+                for part in design.slots['avi'][size]:
+                    if part is not None:
+                        part: Avionics
+                        if part.main_function not in funcs:
+                            funcs.append(part.main_function)
+                            sizes.append(size)
+                        else:
+                            if
+                        if part.sub_function is not None:
+                            if part.sub_function not in funcs:
+                                funcs.append(part.sub_function)
+            return funcs
+
+        # endregion
+
+        # region quality_modifier
+        hp, bw, fc = health_weight_and_fuel(self.pipeline.design)
+        hp *= self.quality_modifier
+        bw *= (2 - self.quality_modifier)
+        fc *= self.quality_modifier
+        t, c = thrust_and_consumption(self.pipeline.design)
+        t *= self.quality_modifier
+        c *= (2 - self.quality_modifier)
+        m, d = maneuver_and_drag(self.pipeline.design)
+        m *= self.quality_modifier
+        d *= (2 - self.quality_modifier)
+        spf = sp_function(self.pipeline.design)
+        # endregion
+
+        params = {
+            'health_points': hp,
+            'bare_weight': bw,
+            'fuel_capacity': fc,
+            'thrust': t,
+            'consumption': c,
+            'maneuver': m,
+            'drag': d,
+            'special_functions': spf
+        }
+        spc = Specs(params=params)
+        art = Artifact(this_specs=spc)
         return art
 
     def tomorrow(self):
