@@ -91,6 +91,7 @@ class CommandCenter(Building):
         pass
 
     def tomorrow(self, map_events, r_queue):
+        r_queue = self.scan_events(global_events=map_events, r_queue=r_queue)
         return map_events, r_queue
 
 

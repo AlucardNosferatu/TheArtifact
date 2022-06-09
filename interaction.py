@@ -231,7 +231,7 @@ def module_tasks(base_inst: Base, r_queue, map_events, surface_img_dict):
                     r_queue = selected_cc.scan_events(global_events=map_events, r_queue=r_queue)
                     r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
                 elif strategy_com == '1':
-                    pass
+                    selected_cc.toggle_continuous_scan()
                 elif strategy_com == '2':
                     pass
                 elif strategy_com == '3':
