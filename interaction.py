@@ -271,18 +271,12 @@ def map_events_update(map_events):
 
 
 def after_1_day(map_events, r_queue, surface_img_dict):
-    concurrent_objs = []
-    for event in map_events:
-        event: MapEvent
-        for obj in event.time_passed_tasks:
-            if hasattr(obj, 'tomorrow_by_min'):
-                concurrent_objs.append(obj)
-            else:
-                obj.tomorrow()
     # todo
     for i in range(1440):
-        for obj in concurrent_objs:
-            obj.tomorrow_by_min()
+        for event in map_events:
+            event: MapEvent
+            for obj in event.time_passed_tasks:
+                obj.tomorrow()
     map_events = map_events_update(map_events)
     r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
     return map_events, r_queue, surface_img_dict

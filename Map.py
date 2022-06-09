@@ -248,7 +248,7 @@ class TaskForce(MapEvent):
                 c_speed = u_speed
         return c_speed
 
-    def tomorrow_by_min(self):
+    def tomorrow(self):
         if self.dst[0] != self.coordinate[0] or self.dst[1] != self.coordinate[1]:
             # todo: interact nearby MapEvent
             # region move order
@@ -299,6 +299,6 @@ if __name__ == '__main__':
         tf2.move_order(random.randint(0, 2028), random.randint(0, 1223))
         for i in range(1440):
             for obj in concurrent_objs:
-                obj.tomorrow_by_min()
+                obj.tomorrow()
 
                 render_queue, img_dict_test = surfaces_render_queue(render_queue, img_dict_test)

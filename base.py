@@ -112,13 +112,17 @@ class Laboratory(Building):
         'avi': '电子设备'
     }
     current_work: list[None | list[Part | int]] = None
-    need_days = 0
+    research_speed = {
+        1: 5760,
+        2: 4320,
+        3: 2880,
+        4: 1440
+    }
 
     def __init__(self, slot, b_ptr: Base):
         super().__init__(2000, slot, 1, 'laboratory', 'normal', b_ptr)
         self.experience_modifier = 1.0
         self.current_work = [None, None, None]
-        self.need_days = 7
 
     def research_new_part(self, part_type):
         if None not in self.current_work:
@@ -249,7 +253,7 @@ class Laboratory(Building):
             new_part = Laboratory.part_class_dict[part_type](hp=hp, bc=bc, size=size)
 
         work_slot_index = self.current_work.index(None)
-        self.current_work[work_slot_index] = [new_part, self.need_days]
+        self.current_work[work_slot_index] = [new_part, Laboratory.research_speed[self.level]]
         if self not in self.base.time_passed_tasks:
             self.base.time_passed_tasks.append(self)
 
@@ -441,21 +445,22 @@ class Factory(Building):
     pt_passed = None
     quality_modifier = None
     qm_lower_bound = 0.5
-    production_per_day = None
     bc_per_artifact = None
     need_to_produce = None
-    produced_today = None
-    level_modifier = {1: 0.25, 2: 0.5, 3: 0.75, 4: 1}
+    level_modifier = {1: 1, 2: 0.75, 3: 0.5, 4: 0.25}
+    min_per_product = None
+    countdown = 0
 
     def __init__(self, slot, b_ptr: Base):
         super().__init__(1000, slot, 1, 'factory', 'normal', b_ptr)
+        self.countdown = 0
+        self.min_per_product = None
         self.need_to_produce = 0
         self.pipeline = None
         self.pipeline_set = False
         self.design_set = False
         self.pt_passed = False
         self.quality_modifier = 0
-        self.production_per_day = 0
 
     def set_pipeline_from_file(self, filename):
         self.need_to_produce = 0
@@ -466,14 +471,12 @@ class Factory(Building):
             self.design_set = False
             self.pt_passed = False
             self.quality_modifier = 0
-            self.production_per_day = 0
             print('未检测到任何流水线模块！请重新设计流水线并导入！')
         else:
             self.pipeline_set = True
             self.design_set = False
             self.pt_passed = False
             self.quality_modifier = 0
-            self.production_per_day = 0
             print('流水线已导入，占地面积：', used_area)
 
     def set_design_from_base(self, design_name):
@@ -510,7 +513,7 @@ class Factory(Building):
                 self.design_set = True
                 self.pt_passed = False
                 self.quality_modifier = max(Factory.qm_lower_bound, diff_area / std_area)
-                self.production_per_day = 0
+
                 print('设计"', design_name, '"已导入流水线，产线复杂度：', self.quality_modifier)
             else:
                 print('找不到名为', design_name, '的设计！')
@@ -520,22 +523,31 @@ class Factory(Building):
     def production_test(self):
         if self.pipeline_set and self.design_set:
             self.need_to_produce = 0
-            self.production_per_day = round(Factory.level_modifier[self.level] * self.pipeline.performance_test())
-            if self.production_per_day > 0:
-                self.pt_passed = True
-                print('生产测试已通过，日产量：', self.production_per_day)
-            else:
-                self.pt_passed = False
-                print('生产测试未通过！无法在一天时间内产出至少一件产品！')
+            self.min_per_product = round(Factory.level_modifier[self.level] * self.pipeline.performance_test())
+            self.pt_passed = True
+            print('生产测试已通过，单位产品生产耗时（分钟）：', self.min_per_product)
+
         else:
             self.pt_passed = False
             print('流水线未导入或载具设计未指定！')
 
-    def produce(self, amount):
+    def produce(self, extra_amount):
         if self.pipeline_set and self.design_set and self.pt_passed:
-            self.need_to_produce += amount
-            if self not in self.base.time_passed_tasks:
-                self.base.time_passed_tasks.append(self)
+            if extra_amount > 0:
+                planned_amount = self.need_to_produce + extra_amount
+                for res_type in self.bc_per_artifact:
+                    if planned_amount * self.bc_per_artifact[res_type] > self.base.warehouse_basic[res_type]:
+                        print(res_type, '不足！')
+                        return
+                for res_type in self.bc_per_artifact:
+                    self.base.consume_resource(res_type, self.bc_per_artifact[res_type] * extra_amount)
+                self.need_to_produce += extra_amount
+                if self not in self.base.time_passed_tasks:
+                    self.base.time_passed_tasks.append(self)
+            else:
+                print('负的新生产计划将清空目前的生产计划，已经消耗的资源将不会归还，继续？')
+                if input('0.继续 1.取消') == '0':
+                    self.need_to_produce = 0
         else:
             print('产线不可用，可能原因：')
             print('1.产线规划未设置 2.产品设计未导入 3.流程测试未通过')
@@ -543,18 +555,16 @@ class Factory(Building):
     def able_to_produce_one_more(self):
         able = False
         if self.need_to_produce > 0:
-            if self.produced_today <= self.production_per_day:
-                if len(self.base.hangar_basic) < self.base.hangar_cap:
+            if len(self.base.hangar_basic) < self.base.hangar_cap:
+                if self.countdown >= self.min_per_product:
+                    self.countdown = 0
                     able = True
-                    for res_type in self.bc_per_artifact:
-                        if self.bc_per_artifact[res_type] > self.base.warehouse_basic[res_type]:
-                            print(res_type, '不足！')
-                            able = False
-                            break
+                    print('产生一件新产品！')
                 else:
-                    print('机库空间不足！')
+                    self.countdown += 1
+                    print('生产进行中')
             else:
-                print('已达当日日产量上限')
+                print('机库空间不足！')
         else:
             print('计划产量为0')
         return able
@@ -651,24 +661,18 @@ class Factory(Building):
         return art
 
     def tomorrow(self):
-        self.produced_today = 0
-        while self.able_to_produce_one_more():
-            for res_type in self.bc_per_artifact:
-                self.base.consume_resource(res_type, self.bc_per_artifact[res_type])
+        if self.able_to_produce_one_more():
             art = self.design2artifact()
             self.base.hangar_basic.append(art)
-            self.produced_today += 1
             self.need_to_produce -= 1
-        print('生产了', self.produced_today, '个产品！')
-        self.produced_today = 0
 
 
 class ConstructionCrane(Building):
     progress_record = {}
     cost_dict = {
-        'command_center': {'wood': 10, 'time': 1},
-        'laboratory': {'wood': 10, 'time': 1},
-        'factory': {'wood': 10, 'time': 1}
+        'command_center': {'wood': 10, 'time': 1440},
+        'laboratory': {'wood': 10, 'time': 1440},
+        'factory': {'wood': 10, 'time': 1440}
     }
     class_dict = {
         'command_center': CommandCenter,
