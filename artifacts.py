@@ -20,17 +20,25 @@ class Specs:
 
 
 class Stats:
-    location = [0.0, 0.0]
-    speed = [0.0, 0.0]
-    acc = [0.0, 0.0]
-    ang = 0.0
-    ang_speed = 0.0
+    total_mass = None
+    fuel_stored = None
+    speed = None
+    acc = None
+
+    def __init__(self, bare_weight):
+        self.total_mass = bare_weight
+        self.fuel_stored = 0
+        self.speed = 0
+        self.acc = 0
 
 
 class Input:
-    throttle = 0
-    pitch_sig = 0
-    artifact_instance = None
+    throttle = None
+    yaw_sig = None
+
+    def __init__(self):
+        self.throttle = 0
+        self.yaw_sig = 0
 
 
 class Artifact:
@@ -40,5 +48,5 @@ class Artifact:
 
     def __init__(self, this_specs: Specs):
         self.ThisSpecs = this_specs
-        self.ThisStats = Stats()
+        self.ThisStats = Stats(bare_weight=self.ThisSpecs.bare_weight)
         self.ThisInput = Input()

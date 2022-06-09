@@ -1,7 +1,6 @@
 import os
 import pickle
 import random
-import uuid
 
 import pygame
 
@@ -15,7 +14,7 @@ def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
         while com not in ['0', '1']:
             com = input('0.新游戏 1.继续游戏')
             if com == '0':
-                r_queue, base_inst, surface_img_dict = first_day(r_queue, surface_img_dict)
+                r_queue, base_inst, map_events = first_day(r_queue, map_events)
                 dc += 1
                 break
             elif com == '1':
@@ -31,7 +30,6 @@ def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
         com = input('输入指令')
         if com == 'tomorrow':
             map_events, r_queue, surface_img_dict = after_1_day(
-                base_inst,
                 map_events,
                 r_queue,
                 surface_img_dict
@@ -58,7 +56,10 @@ def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
 
 
 def display_stat(base_inst: Base):
-    pass
+    print('基地物资：')
+    print(base_inst.warehouse_basic)
+    print('物资存储上限：')
+    print(base_inst.warehouse_cap)
 
 
 def build_module(base_inst: Base):
@@ -199,6 +200,7 @@ def design_module(base_inst: Base):
 
 
 def tasks_module(base_inst: Base):
+    # todo
     pass
 
 
@@ -256,38 +258,39 @@ def factory_module(base_inst: Base):
             print('输入有误！')
 
 
-def map_events_update(map_events, r_queue):
+def map_events_update(map_events):
     # todo
     x = random.randint(0, 2028)
     y = random.randint(0, 1223)
     new_event = ResourceSite(x, y, 'wood', 5000)
-    icon_id = str(uuid.uuid4())
-    new_event.set_icon_id(icon_id)
     map_events.append(new_event)
-    r_task_1 = ['load_new', new_event.get_icon_id(), 'Img/wood.png', new_event.get_screen_pos()]
-    r_queue.append(r_task_1)
+
     if len(map_events) > 10:
-        removed_event: MapEvent = map_events.pop(0)
-        r_task_2 = ['delete_old', removed_event.icon_id, None, None]
-        r_queue.append(r_task_2)
-        del removed_event
-    return map_events, r_queue
+        del map_events[0]
+    return map_events
 
 
-def after_1_day(base_inst: Base, map_events, r_queue, surface_img_dict):
-    for obj in base_inst.time_passed_tasks:
-        obj.tomorrow()
-    map_events, r_queue = map_events_update(map_events, r_queue)
+def after_1_day(map_events, r_queue, surface_img_dict):
+    concurrent_objs = []
+    for event in map_events:
+        event: MapEvent
+        for obj in event.time_passed_tasks:
+            if hasattr(obj, 'tomorrow_by_min'):
+                concurrent_objs.append(obj)
+            else:
+                obj.tomorrow()
+    # todo
+    for i in range(1440):
+        for obj in concurrent_objs:
+            obj.tomorrow_by_min()
+    map_events = map_events_update(map_events)
     r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
     return map_events, r_queue, surface_img_dict
 
 
-def first_day(r_queue, surface_img_dict):
+def first_day(r_queue, map_events):
     base_inst = Base(1014, 612)
-    base_inst.set_icon_id(str(uuid.uuid4()))
-    r_task = ['load_new', base_inst.get_icon_id(), 'Img/base.png', base_inst.get_screen_pos()]
-    r_queue.append(r_task)
-    r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
+    map_events.append(base_inst)
     print('今天是第1天')
     input('按任意键继续')
     print('送你一个塔吊，不然你啥都建不了')
@@ -299,7 +302,7 @@ def first_day(r_queue, surface_img_dict):
     base_inst.add_resource('steel', 100)
     base_inst.add_resource('e-device', 100)
     input('按任意键继续')
-    return r_queue, base_inst, surface_img_dict
+    return r_queue, base_inst, map_events
 
 
 def img_dict_2_pickle(s_img_dict):

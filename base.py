@@ -3,7 +3,7 @@ import pickle
 import random
 import uuid
 
-from artifacts import Artifact, Specs, Stats, Input
+from artifacts import Artifact, Specs
 from avionics import *
 from designs import Engine, Warhead, Locomotive, Avionics, Weapon, Chassis, Part, Design
 from map import Base, MapEvent
@@ -30,19 +30,58 @@ class Building:
 class CommandCenter(Building):
     map_event_detected = []
     radar_radius = 0
+    rwr_radius = 0
+    radar_radius_dict = {
+        1: 250,
+        2: 500,
+        3: 750,
+        4: 1000
+    }
+    rwr_radius_ratio = {
+        1: 2,
+        2: 1.5,
+        3: 1,
+        4: 0.5
+    }
+    continuous = None
 
     def __init__(self, slot, b_ptr: Base):
         super().__init__(2000, slot, 1, 'command_center', 'normal', b_ptr)
-        self.radar_radius = 750
+        self.radar_radius = CommandCenter.radar_radius_dict[self.level]
+        self.rwr_radius = CommandCenter.rwr_radius_ratio[self.level] * self.radar_radius
+        self.continuous = False
 
-    def scan_events(self, global_events: list[MapEvent]):
+    def scan_events(self, global_events: list[MapEvent], r_queue):
+        for event in self.map_event_detected:
+            event: MapEvent
+            r_task = ['delete_old', event.get_icon_id(), None, None]
+            r_queue.append(r_task)
         self.map_event_detected.clear()
         for event in global_events:
             if event.get_distance(self.base.coordinate) < self.radar_radius:
                 self.map_event_detected.append(event)
+                r_task = ['load_new', event.get_icon_id(), MapEvent.icon_path[event.event_type], event.get_screen_pos()]
+                r_queue.append(r_task)
+        return r_queue
+
+    def toggle_continuous_scan(self):
+        if self.continuous:
+            if self in self.base.time_passed_tasks:
+                self.base.time_passed_tasks.remove(self)
+            self.continuous = False
+            if self in self.base.radiation_src:
+                self.base.radiation_src.remove(self)
+            print('连续扫描已关闭')
+        else:
+            if self not in self.base.time_passed_tasks:
+                self.base.time_passed_tasks.append(self)
+            self.continuous = True
+            if self not in self.base.radiation_src:
+                self.base.radiation_src.append(self)
+            print('连续扫描已启动')
 
     def deploy_task_force(self):
-        raise NotImplementedError('未授予部队指挥权！')
+        pass
 
 
 class Laboratory(Building):
