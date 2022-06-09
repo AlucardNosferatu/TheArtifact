@@ -1,32 +1,33 @@
 import os
 import pickle
 import random
+import time
 
 import pygame
 
-from base import ConstructionCrane, Laboratory, Factory
+from base import ConstructionCrane, Laboratory, Factory, CommandCenter
 from map import Base, ResourceSite, MapEvent
 
 
-def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
-    if dc == 0:
+def interaction_everyday(r_queue, map_events, day_count, surface_img_dict):
+    if day_count == 0:
         com = None
         while com not in ['0', '1']:
             com = input('0.新游戏 1.继续游戏')
             if com == '0':
-                r_queue, base_inst, map_events = first_day(r_queue, map_events)
-                dc += 1
+                map_events = interaction_first_day(map_events)
+                day_count += 1
                 break
             elif com == '1':
-                loaded = load_game()
+                loaded = game_load()
                 if None in loaded:
                     com = None
                 else:
-                    base_inst, surface_img_dict, dc = loaded
+                    map_events, surface_img_dict, day_count, r_queue = loaded
             else:
                 print('指令错误！')
     else:
-        print('今天是第' + str(dc + 1) + '天')
+        print('今天是第' + str(day_count + 1) + '天')
         com = input('输入指令')
         if com == 'tomorrow':
             map_events, r_queue, surface_img_dict = after_1_day(
@@ -34,25 +35,37 @@ def everyday_interaction(r_queue, base_inst, dc, map_events, surface_img_dict):
                 r_queue,
                 surface_img_dict
             )
-            dc += 1
+            day_count += 1
         else:
+            base_inst = map_events[0]
+            assert type(base_inst) is Base
             if com == 'stats':
                 display_stat(base_inst)
             elif com == 'build':
-                build_module(base_inst)
+                module_build(base_inst)
             elif com == 'design':
-                design_module(base_inst)
+                module_design(base_inst)
             elif com == 'tasks':
-                tasks_module(base_inst)
+                r_queue, surface_img_dict = module_tasks(
+                    base_inst,
+                    r_queue,
+                    map_events,
+                    surface_img_dict
+                )
             elif com == 'produce':
-                factory_module(base_inst)
+                module_factory(base_inst)
             elif com == 'save':
-                save_game(base_inst, surface_img_dict, dc)
+                game_save(map_events, surface_img_dict, day_count, r_queue)
             elif com == 'load':
-                load_game()
+                loaded = game_load()
+                if None in loaded:
+                    print('读档发生错误！')
+                else:
+                    map_events, surface_img_dict, day_count, r_queue = loaded
+                    return r_queue, map_events, day_count, surface_img_dict
             else:
                 print('指令错误')
-    return r_queue, base_inst, dc, map_events, surface_img_dict
+    return r_queue, map_events, day_count, surface_img_dict
 
 
 def display_stat(base_inst: Base):
@@ -62,7 +75,7 @@ def display_stat(base_inst: Base):
     print(base_inst.warehouse_cap)
 
 
-def build_module(base_inst: Base):
+def module_build(base_inst: Base):
     crane_list = []
     for i in range(len(base_inst.buildings)):
         if type(base_inst.buildings[i]) is ConstructionCrane:
@@ -110,7 +123,7 @@ def build_module(base_inst: Base):
             print('输入有误！')
 
 
-def design_module(base_inst: Base):
+def module_design(base_inst: Base):
     lab_list = []
     for i in range(len(base_inst.buildings)):
         if type(base_inst.buildings[i]) is Laboratory:
@@ -199,12 +212,51 @@ def design_module(base_inst: Base):
             print('输入有误！')
 
 
-def tasks_module(base_inst: Base):
-    # todo
-    pass
+def module_tasks(base_inst: Base, r_queue, map_events, surface_img_dict):
+    cc_list = []
+    for i in range(len(base_inst.buildings)):
+        if type(base_inst.buildings[i]) is CommandCenter:
+            cc_list.append(base_inst.buildings[i])
+    if len(cc_list) <= 0:
+        print('基地里没有指挥中心！')
+    else:
+        print(cc_list)
+        cc_no = input('输入指挥中心编号')
+        if cc_no.isdigit() and 0 <= int(cc_no) < len(cc_list):
+            selected_cc: CommandCenter = cc_list[int(cc_no)]
+            flag = True
+            while flag:
+                strategy_com = input('0.立刻扫描一次 1.开关持续扫描 2.组建战术群 3.返回')
+                if strategy_com == '0':
+                    r_queue = selected_cc.scan_events(global_events=map_events, r_queue=r_queue)
+                    r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
+                elif strategy_com == '1':
+                    pass
+                elif strategy_com == '2':
+                    pass
+                elif strategy_com == '3':
+                    break
+                else:
+                    print('输入有误！')
+                    continue
+                strategy_com = '-1'
+                while strategy_com not in ['0', '1']:
+                    strategy_com = input('0.继续 1.返回')
+                    if strategy_com == '0':
+                        flag = True
+                        break
+                    elif strategy_com == '1':
+                        flag = False
+                        break
+                    else:
+                        print('输入有误！')
+            r_queue = selected_cc.clear_scanned(r_queue)
+        else:
+            print('输入有误！')
+    return r_queue, surface_img_dict
 
 
-def factory_module(base_inst: Base):
+def module_factory(base_inst: Base):
     factory_list = []
     for i in range(len(base_inst.buildings)):
         if type(base_inst.buildings[i]) is Factory:
@@ -266,25 +318,28 @@ def map_events_update(map_events):
     map_events.append(new_event)
 
     if len(map_events) > 10:
-        del map_events[0]
+        del map_events[1]
     return map_events
 
 
 def after_1_day(map_events, r_queue, surface_img_dict):
-    # todo
     for i in range(1440):
+        time.sleep(0.01)
+        h = int(i / 60)
+        m = i % 60
+        if m % 10 == 0:
+            map_events = map_events_update(map_events)
+            print('时间：', h, '点', m, '分')
+        r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
         for event in map_events:
             event: MapEvent
             for obj in event.time_passed_tasks:
-                obj.tomorrow()
-    map_events = map_events_update(map_events)
-    r_queue, surface_img_dict = surfaces_render_queue(r_queue, surface_img_dict)
+                map_events, r_queue = obj.tomorrow(map_events, r_queue)
     return map_events, r_queue, surface_img_dict
 
 
-def first_day(r_queue, map_events):
+def interaction_first_day(map_events):
     base_inst = Base(1014, 612)
-    map_events.append(base_inst)
     print('今天是第1天')
     input('按任意键继续')
     print('送你一个塔吊，不然你啥都建不了')
@@ -296,10 +351,11 @@ def first_day(r_queue, map_events):
     base_inst.add_resource('steel', 100)
     base_inst.add_resource('e-device', 100)
     input('按任意键继续')
-    return r_queue, base_inst, map_events
+    map_events.append(base_inst)
+    return map_events
 
 
-def img_dict_2_pickle(s_img_dict):
+def img_dict_conv_d2p(s_img_dict):
     p_dict = {}
     for img_id in s_img_dict:
         rect = s_img_dict[img_id][1].center
@@ -309,7 +365,7 @@ def img_dict_2_pickle(s_img_dict):
     return p_dict
 
 
-def pickle_2_img_dict(p_dict):
+def img_dict_conv_p2d(p_dict):
     s_img_dict = {}
     for img_id in p_dict:
         rect_center = p_dict[img_id][0]
@@ -320,53 +376,61 @@ def pickle_2_img_dict(p_dict):
     return s_img_dict
 
 
-def save_game(base_inst: Base, surface_img_dict, dc):
-    hbs = os.path.exists('Save/base.bin')
+def game_save(map_events: list[MapEvent], surface_img_dict, dc, r_queue):
+    hms = os.path.exists('Save/map_events.bin')
     his = os.path.exists('Save/img_dict.bin')
     hds = os.path.exists('Save/day_count.bin')
-    if hbs and his and hds:
+    hrs = os.path.exists('Save/r_queue.bin')
+    if hms and his and hds and hrs:
         save_com = input('0.覆盖存档 1.取消保存')
         if save_com == '0':
-            with open('Save/base.bin', 'wb') as f:
-                pickle.dump(base_inst, f)
+            with open('Save/map_events.bin', 'wb') as f:
+                pickle.dump(map_events, f)
             with open('Save/img_dict.bin', 'wb') as f:
-                pickle_img_dict = img_dict_2_pickle(surface_img_dict)
+                pickle_img_dict = img_dict_conv_d2p(surface_img_dict)
                 pickle.dump(pickle_img_dict, f)
             with open('Save/day_count.bin', 'wb') as f:
                 pickle.dump(dc, f)
+            with open('Save/r_queue.bin', 'wb') as f:
+                pickle.dump(r_queue, f)
             print('存档保存完毕。')
         elif save_com == '1':
             print('存档作业已中止。')
         else:
             print('指令错误，存档作业已中止。')
     else:
-        with open('Save/base.bin', 'wb') as f:
-            pickle.dump(base_inst, f)
+        with open('Save/map_events.bin', 'wb') as f:
+            pickle.dump(map_events, f)
         with open('Save/img_dict.bin', 'wb') as f:
-            pickle_img_dict = img_dict_2_pickle(surface_img_dict)
+            pickle_img_dict = img_dict_conv_d2p(surface_img_dict)
             pickle.dump(pickle_img_dict, f)
         with open('Save/day_count.bin', 'wb') as f:
             pickle.dump(dc, f)
+        with open('Save/r_queue.bin', 'wb') as f:
+            pickle.dump(r_queue, f)
         print('存档保存完毕。')
 
 
-def load_game():
-    hbs = os.path.exists('Save/base.bin')
+def game_load():
+    hms = os.path.exists('Save/map_events.bin')
     his = os.path.exists('Save/img_dict.bin')
     hds = os.path.exists('Save/day_count.bin')
-    if hbs and his and hds:
-        with open('Save/base.bin', 'rb') as f:
-            base_inst = pickle.load(f)
+    hrs = os.path.exists('Save/r_queue.bin')
+    if hms and his and hds and hrs:
+        with open('Save/map_events.bin', 'rb') as f:
+            map_events = pickle.load(f)
         with open('Save/img_dict.bin', 'rb') as f:
             pickle_img_dict = pickle.load(f)
-            surface_img_dict = pickle_2_img_dict(pickle_img_dict)
+            surface_img_dict = img_dict_conv_p2d(pickle_img_dict)
         with open('Save/day_count.bin', 'rb') as f:
             dc = pickle.load(f)
+        with open('Save/r_queue.bin', 'rb') as f:
+            r_queue = pickle.load(f)
         print('存档读取完毕。')
-        return base_inst, surface_img_dict, dc
+        return map_events, surface_img_dict, dc, r_queue
     else:
         print('没有存档文件或存档文件不完整，读档作业已中止')
-        return None, None, None
+        return None, None, None, None
 
 
 def surfaces_render_queue(r_queue, surface_img_dict):

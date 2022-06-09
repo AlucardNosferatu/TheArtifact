@@ -1,13 +1,11 @@
 import math
 import random
 import sys
-import threading
 import uuid
 
 import pygame
 
 from artifacts import Artifact
-from interaction import surfaces_render_queue
 
 img_dict_test = {}
 
@@ -24,6 +22,9 @@ class MapEvent:
     }
     radiation_src = None
     time_passed_tasks = None
+
+    def tomorrow(self, map_events, r_queue):
+        return map_events, r_queue
 
     def __init__(self, x, y, et: str):
         self.coordinate = [x, y]
@@ -248,9 +249,11 @@ class TaskForce(MapEvent):
                 c_speed = u_speed
         return c_speed
 
-    def tomorrow(self):
+    def tomorrow(self, map_events, r_queue):
         if self.dst[0] != self.coordinate[0] or self.dst[1] != self.coordinate[1]:
             # todo: interact nearby MapEvent
+            pass
+        else:
             # region move order
             speed = self.get_tf_speed()
             self.heading = self.get_heading(self.dst)
@@ -258,7 +261,10 @@ class TaskForce(MapEvent):
             dy_min = speed * math.sin(self.heading * 3.14 / 180)
             self.coordinate[0] += dx_min
             self.coordinate[1] += dy_min
+            r_task = ['move_old', self.icon_id, None, self.get_screen_pos()]
+            r_queue.append(r_task)
             # endregion
+        return map_events, r_queue
 
 
 def pygame_refresh_test():
@@ -284,21 +290,4 @@ def pygame_refresh_test():
 
 
 if __name__ == '__main__':
-    tf1 = TaskForce(1, 1)
-    tf2 = TaskForce(2027, 1222)
-    # todo:assemble 2 TFs
-    concurrent_objs = [tf1, tf2]
-
-    render_queue = []
-    pygame_thread = threading.Thread(target=pygame_refresh_test)
-    pygame_thread.start()
-    while True:
-        if not pygame_thread.is_alive():
-            print()
-        tf1.move_order(random.randint(0, 2028), random.randint(0, 1223))
-        tf2.move_order(random.randint(0, 2028), random.randint(0, 1223))
-        for i in range(1440):
-            for obj in concurrent_objs:
-                obj.tomorrow()
-
-                render_queue, img_dict_test = surfaces_render_queue(render_queue, img_dict_test)
+    pass

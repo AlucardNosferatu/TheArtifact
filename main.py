@@ -3,7 +3,7 @@ import threading
 
 import pygame
 
-from interaction import everyday_interaction
+from interaction import interaction_everyday
 
 img_dict = {}
 
@@ -41,10 +41,9 @@ if __name__ == '__main__':
         if not pygame_thread.is_alive():
             print()
             sys.exit('Pygame Thread Stopped.')
-        render_queue, NewBase, day_count, global_events, img_dict = everyday_interaction(
+        render_queue, global_events, day_count, img_dict = interaction_everyday(
             render_queue,
-            NewBase,
-            day_count,
             global_events,
+            day_count,
             img_dict
         )

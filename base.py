@@ -18,6 +18,9 @@ class Building:
     stat = ''
     base = None
 
+    def tomorrow(self, map_events: list[MapEvent], r_queue: list[list]):
+        return map_events, r_queue
+
     def __init__(self, hp, slot, lv, ts, stat, b_ptr: Base):
         self.level = lv
         self.health_point = hp
@@ -52,16 +55,20 @@ class CommandCenter(Building):
         self.continuous = False
 
     def scan_events(self, global_events: list[MapEvent], r_queue):
-        for event in self.map_event_detected:
-            event: MapEvent
-            r_task = ['delete_old', event.get_icon_id(), None, None]
-            r_queue.append(r_task)
-        self.map_event_detected.clear()
+        r_queue = self.clear_scanned(r_queue)
         for event in global_events:
             if event.get_distance(self.base.coordinate) < self.radar_radius:
                 self.map_event_detected.append(event)
                 r_task = ['load_new', event.get_icon_id(), MapEvent.icon_path[event.event_type], event.get_screen_pos()]
                 r_queue.append(r_task)
+        return r_queue
+
+    def clear_scanned(self, r_queue):
+        for event in self.map_event_detected:
+            event: MapEvent
+            r_task = ['delete_old', event.get_icon_id(), None, None]
+            r_queue.append(r_task)
+        self.map_event_detected.clear()
         return r_queue
 
     def toggle_continuous_scan(self):
@@ -82,6 +89,9 @@ class CommandCenter(Building):
 
     def deploy_task_force(self):
         pass
+
+    def tomorrow(self, map_events, r_queue):
+        return map_events, r_queue
 
 
 class Laboratory(Building):
@@ -417,7 +427,7 @@ class Laboratory(Building):
         else:
             print('没有这个名称的设计！')
 
-    def tomorrow(self):
+    def tomorrow(self, map_events, r_queue):
         finished = []
         unfinished: list
         for index, unfinished in enumerate(self.current_work):
@@ -436,6 +446,7 @@ class Laboratory(Building):
                             print(attr, attr_val)
         for fin in finished:
             self.current_work[fin] = None
+        return map_events, r_queue
 
 
 class Factory(Building):
@@ -660,11 +671,12 @@ class Factory(Building):
         art = Artifact(this_specs=spc)
         return art
 
-    def tomorrow(self):
+    def tomorrow(self, map_events, r_queue):
         if self.able_to_produce_one_more():
             art = self.design2artifact()
             self.base.hangar_basic.append(art)
             self.need_to_produce -= 1
+        return map_events, r_queue
 
 
 class ConstructionCrane(Building):
@@ -743,7 +755,7 @@ class ConstructionCrane(Building):
         else:
             print('空地编号超出有效范围！')
 
-    def tomorrow(self):
+    def tomorrow(self, map_events, r_queue):
         finished = []
         for unfinished in self.progress_record:
             unf_building = self.progress_record[unfinished]
@@ -759,6 +771,7 @@ class ConstructionCrane(Building):
                 print('新的', building_type, '在空地', slot, '完工了！')
         for fin in finished:
             del self.progress_record[fin]
+        return map_events, r_queue
 
 
 if __name__ == '__main__':
