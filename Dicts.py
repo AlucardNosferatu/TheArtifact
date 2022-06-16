@@ -8,7 +8,7 @@ contain_dict = {
 part_bonus_neighbor = {
     'crane': ['lab', 'factory'],
     'lab': ['command', 'factory'],
-    'factory': ['warehouse', 'hangar']
+    'factory': ['warehouse', 'airport']
 }
 
 part_bonus_radius = {

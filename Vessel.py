@@ -22,10 +22,30 @@ class NomadCity(Vessel):
     def __init__(self):
         super().__init__('huge')
 
+    def select_building(self, index):
+        if index >= len(self.p_list) or index < 0:
+            return
+        selected_building: Building | None = self.p_list[index]
+        if selected_building is None:
+            return
+        for index, func in enumerate(selected_building.function_list):
+            print(index, func)
+        # todo
+
 
 class CraftCarrier(Vessel):
     def __init__(self):
         super().__init__('large')
+
+    def select_room(self, index):
+        if index >= len(self.p_list) or index < 0:
+            return
+        selected_room: Room | None = self.p_list[index]
+        if selected_room is None:
+            return
+        for index, func in enumerate(selected_room.function_list):
+            print(index, func)
+        # todo
 
 
 class Craft(Vessel):

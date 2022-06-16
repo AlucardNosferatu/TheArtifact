@@ -29,13 +29,21 @@ class Part:
 
 
 class Building(Part):
+    # 以列表的形式列出该建筑所有功能统一传入城市对象
+    function_list = None
+
     def __init__(self, type_str):
         super().__init__('huge', type_str)
+        self.function_list = []
 
 
 class Room(Part):
+    # 以列表的形式列出该舱室所有功能统一传入航母对象
+    function_list = None
+
     def __init__(self, type_str):
         super().__init__('large', type_str)
+        self.function_list = []
 
 
 class Equipment(Part):
