@@ -120,6 +120,7 @@ class Part:
 
     def engage(self, enemy_tf):
         pass
+        # todo
 
     def can_collect(self, res_type):
         if res_type in self.scavenger:

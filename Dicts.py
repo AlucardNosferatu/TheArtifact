@@ -39,8 +39,9 @@ scavenger_perf = {
     'saw': [200, 2],
     'pump': [200, 10]
 }
+
 initial_garrison = {'dorm': 100, 'cabin': 10}
-garrison_firepower = {'dorm': 100, 'cabin': 10}
+garrison_firepower = {'dorm': 10, 'cabin': 10}
 container_list = ['bay', 'hangar']
 connector_list = ['dock', 'slide_mount']
 

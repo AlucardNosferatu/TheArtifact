@@ -26,7 +26,6 @@ class CtrlSurface(Equipment):
 
 
 class Drill(Equipment):
-
     def __init__(self):
         super().__init__('drill')
 
