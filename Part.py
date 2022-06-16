@@ -3,6 +3,7 @@ from Dicts import *
 
 
 class Part:
+
     # 部件所属载机对象指针，用于数据交互
     v_ptr = None
     size = None
