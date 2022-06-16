@@ -10,14 +10,25 @@ class Vessel:
     p_cap: None | int = None
     uid_str: None | str = None
 
+    hp = None
+    mass = None
+    armor = None
     lift = None
     thrust = None
     yaw_spd = None
+    fuel_have = None
+    fuel_cap = None
 
     def __init__(self, size):
+        self.hp = 0
+        self.mass = 0
+        self.armor = 0
         self.lift = 0
         self.thrust = 0
         self.yaw_spd = 0
+        self.fuel_cap = 0
+        self.fuel_have = 0
+
         self.size = size
         self.p_cap = 5
         self.uid_str = str(uuid.uuid4())
@@ -26,7 +37,7 @@ class Vessel:
             self.p_list.append(None)
 
     def can_move(self):
-        if self.lift > 0 and self.thrust > 0 and self.yaw_spd > 0:
+        if self.lift > self.mass and self.thrust > 0 and self.yaw_spd > 0:
             return True
         else:
             return False
@@ -45,12 +56,15 @@ class Vessel:
                     return True
         return False
 
-    def can_occupy(self, req_personnel):
+    def can_occupy(self, enemy_firepower=None):
+        vessel_firepower = 0
         for part in self.p_list:
             if part is not None:
-                if part.can_occupy(req_personnel):
-                    return True
-        return False
+                vessel_firepower += part.can_occupy()
+        if enemy_firepower is None:
+            return vessel_firepower
+        else:
+            return vessel_firepower > enemy_firepower
 
     def install_part(self, part, index):
         if None in self.p_list:
@@ -58,26 +72,52 @@ class Vessel:
                 self.p_list[index] = part
                 self.p_list[index].set_v_ptr(self)
                 # todo:bonus_neighbor
+                if hasattr(part, 'hp'):
+                    self.hp += part.hp
+                if hasattr(part, 'mass'):
+                    self.mass += part.mass
+                total_armor = 0
+                for p in self.p_list:
+                    if hasattr(p, 'armor'):
+                        total_armor += p.armor
+                eff_p_count = len(self.p_list) - self.p_list.count(None)
+                self.armor = total_armor / eff_p_count
                 if hasattr(part, 'lift'):
                     self.lift += part.lift
                 if hasattr(part, 'thrust'):
                     self.thrust += part.thrust
                 if hasattr(part, 'yaw_spd'):
                     self.yaw_spd += part.yaw_spd
+                if hasattr(part, 'fuel_cap'):
+                    self.fuel_cap += part.fuel_cap
                 # todo:attr_update, include armor fuel_cap etc.
 
     def uninstall_part(self, index):
         if 0 <= index < self.p_cap and self.p_list[index] is not None:
             part = self.p_list[index]
+            self.p_list[index] = None
             # todo:bonus_neighbor
+            if hasattr(part, 'hp'):
+                self.hp -= part.hp
+            if hasattr(part, 'mass'):
+                self.mass -= part.mass
+            total_armor = 0
+            for p in self.p_list:
+                if hasattr(p, 'armor'):
+                    total_armor += p.armor
+            eff_p_count = len(self.p_list) - self.p_list.count(None)
+            self.armor = total_armor / eff_p_count
             if hasattr(part, 'lift'):
                 self.lift -= part.lift
             if hasattr(part, 'thrust'):
                 self.thrust -= part.thrust
             if hasattr(part, 'yaw_spd'):
                 self.yaw_spd -= part.yaw_spd
+            if hasattr(part, 'fuel_cap'):
+                self.fuel_cap -= part.fuel_cap
+                if self.fuel_have > self.fuel_cap:
+                    self.fuel_have = self.fuel_cap
             # todo:attr_update, include armor fuel_cap etc.
-            self.p_list[index] = None
 
 
 class NomadCity(Vessel, MapEvent):

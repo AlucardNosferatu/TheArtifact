@@ -64,11 +64,14 @@ class TaskForce(MapEvent):
                 return True
         return False
 
-    def can_occupy(self, req_personnel):
+    def can_occupy(self, enemy_firepower):
+        tf_firepower = 0
         for unit in self.units:
-            if unit.can_occupy(req_personnel):
-                return True
-        return False
+            tf_firepower += unit.can_occupy()
+        if tf_firepower > enemy_firepower:
+            return True
+        else:
+            return False
 
     def move_on_map(self, heading):
         if self.can_move():

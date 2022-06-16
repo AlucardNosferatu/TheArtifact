@@ -22,42 +22,91 @@ class Part:
     con_target = None
     # 组件重量
     mass: None | float = None
+    hp = None
+
     armed = None
+    max_range = None
+    rof = None
+    damage = None
+    acc = None
+
     scavenger = None
-    extra_personnel = None
+    res_store = None
+    res_cap = None
+    collect_spd = None
+
+    garrison = None
+    garrison_firepower = None
+    # 以列表的形式列出该组件特有功能统一传入载具对象
+    function_list = None
 
     def set_v_ptr(self, vessel_ptr):
         self.v_ptr = vessel_ptr
 
-    def __init__(self, size, type_str):
+    def set_engage_perf(self):
+        self.armed = self.type_str in armed_list
+        if self.armed:
+            self.max_range = max_range[self.type_str]
+            self.rof = rof[self.type_str]
+            self.damage = damage[self.type_str]
+            self.acc = acc[self.type_str]
+        else:
+            self.max_range = 0
+            self.rof = 0
+            self.damage = 0
+            self.acc = 0
 
-        self.size = size
-        self.type_str = type_str
-        self.uid_str = str(uuid.uuid4())
-        if type_str in part_bonus_neighbor:
-            self.bonus_neighbor = part_bonus_neighbor[type_str]
+    def set_collect_perf(self):
+        if self.type_str in scavenger_dict:
+            self.scavenger = scavenger_dict[self.type_str]
+            self.res_store = 0
+            self.res_cap = scavenger_perf[self.type_str][0]
+            self.collect_spd = scavenger_perf[self.type_str][1]
         else:
-            self.bonus_neighbor = []
-        if type_str in part_bonus_radius:
-            self.bonus_radius = part_bonus_radius[type_str]
+            self.scavenger = []
+            self.res_store = 0
+            self.res_cap = 0
+            self.collect_spd = 0
+
+    def set_occupy_perf(self):
+        if self.type_str in initial_garrison:
+            self.garrison = initial_garrison[self.type_str]
+            self.garrison_firepower = garrison_firepower[self.type_str]
         else:
-            self.bonus_radius = 0
-        if type_str in connector_list:
+            self.garrison = 0
+            self.garrison_firepower = 0
+
+    def set_con_perf(self):
+        if self.type_str in connector_list:
             self.con = 'conn'
-        elif type_str in container_list:
+        elif self.type_str in container_list:
             self.con = 'cont'
         else:
             self.con = None
         self.con_target = None
-        self.armed = type_str in armed_list
-        if type_str in scavenger_dict:
-            self.scavenger = scavenger_dict[type_str]
+
+    def set_bonus_neighbor(self):
+        if self.type_str in part_bonus_neighbor:
+            self.bonus_neighbor = part_bonus_neighbor[self.type_str]
         else:
-            self.scavenger = []
-        if type_str in initial_personnel:
-            self.extra_personnel = initial_personnel[type_str]
+            self.bonus_neighbor = []
+        if self.type_str in part_bonus_radius:
+            self.bonus_radius = part_bonus_radius[self.type_str]
         else:
-            self.extra_personnel = 0
+            self.bonus_radius = 0
+
+    def __init__(self, size, type_str):
+        self.size = size
+        self.type_str = type_str
+        self.hp = hp[self.type_str]
+        self.mass = mass[self.type_str]
+        self.uid_str = str(uuid.uuid4())
+        self.set_bonus_neighbor()
+        self.set_con_perf()
+        self.set_engage_perf()
+        self.set_collect_perf()
+        self.set_occupy_perf()
+        self.function_list = []
 
     def can_engage(self):
         if self.armed:
@@ -68,6 +117,9 @@ class Part:
             else:
                 return False
 
+    def engage(self, enemy_tf):
+        pass
+
     def can_collect(self, res_type):
         if res_type in self.scavenger:
             return True
@@ -77,35 +129,43 @@ class Part:
             else:
                 return False
 
-    def can_occupy(self, req_personnel):
-        if self.extra_personnel >= req_personnel:
-            return True
-        elif self.con is not None and self.con_target is not None:
-            if self.con_target.can_occupy(req_personnel):
-                return True
-            else:
-                return False
+    def collect(self, res_site):
+        if self.type_str in scavenger_dict:
+            if res_site.res_type in scavenger_dict[self.type_str]:
+                if self.res_store + self.collect_spd <= self.res_cap:
+                    res_site.output_res(self.collect_spd)
+                    self.res_store += self.collect_spd
+
+    def can_occupy(self):
+        part_firepower = self.garrison * self.garrison_firepower
+        if self.con is not None and self.con_target is not None:
+            part_firepower += self.con_target.can_occupy()
+        return part_firepower
+
+    def occupy(self, cv_or_nc):
+        if cv_or_nc.size == 'huge':
+            print(self)
+            # todo:City Occupation
+        elif cv_or_nc.size == 'large':
+            pass
+            # todo:Boarding Action
 
     def neighbor_buff(self, n_count):
         pass
 
+    def destroyed(self):
+        index = self.v_ptr.p_list.index(self)
+        self.v_ptr.uninstall_part(index)
+
 
 class Building(Part):
-    # 以列表的形式列出该建筑所有功能统一传入城市对象
-    function_list = None
-
     def __init__(self, type_str):
         super().__init__('huge', type_str)
-        self.function_list = []
 
 
 class Room(Part):
-    # 以列表的形式列出该舱室所有功能统一传入航母对象
-    function_list = None
-
     def __init__(self, type_str):
         super().__init__('large', type_str)
-        self.function_list = []
 
 
 class Equipment(Part):

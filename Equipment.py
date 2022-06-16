@@ -23,3 +23,12 @@ class CtrlSurface(Equipment):
     def __init__(self, yaw_spd):
         super().__init__('ctrl_surface')
         self.yaw_spd = yaw_spd
+
+
+class Drill(Equipment):
+
+    def __init__(self):
+        super().__init__('drill')
+
+
+
