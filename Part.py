@@ -67,17 +67,13 @@ class Device(Part):
         super().__init__('small', type_str)
 
 
-def raise_parasite_countdown(para_unit):
-    para_unit.v_ptr.para_target.para_cd += 1
-    if para_unit.v_ptr.para_target.para_cd >= para_unit.v_ptr.para_target.para_to:
-        para_unit.v_ptr.para_target.para_cd = 0
-        index = para_unit.v_ptr.para_target.belonged.units.index(
-            para_unit.v_ptr.para_target)
-        para_unit.v_ptr.para_target.belonged.remove_unit(index)
-        para_unit.v_ptr.belonged.add_unit(para_unit.v_ptr.para_target)
-        para_unit.v_ptr.para_target.belonged = para_unit.v_ptr.belonged
+def board(steer_part,target):
+    parasite_v=steer_part.v_ptr
+    if parasite_v not in target.para_in:
+        target.para_in.append(parasite_v)
+    parasite_v.para_target=target
 
 
-def attack(attack_unit, target, part_index):
+def attack(weapon, target, part_index):
     # todo
     pass

@@ -14,7 +14,14 @@ class Elevator(Device):
 
 
 class SteerMotor(Device):
-    pass
+    yaw_spd = None
+
+    def __init__(self, yaw_spd):
+        super().__init__('steer_motor')
+        self.yaw_spd = yaw_spd
+
+    def board(self, target):
+        board(self, target)
 
 
 class Harpoon(Device):

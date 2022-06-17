@@ -63,7 +63,8 @@ class TaskForce(MapEvent):
             super().move_on_map(heading)
 
     def engage(self, enemy_task_force):
-        battle_rounds(self, enemy_task_force)
+        res = battle_rounds(self, enemy_task_force)
+        print(res)
 
     def acted(self):
         for unit in self.units:

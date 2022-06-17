@@ -24,6 +24,9 @@ class CtrlSurface(Equipment):
         super().__init__('ctrl_surface')
         self.yaw_spd = yaw_spd
 
+    def board(self, target):
+        board(self, target)
+
 
 class Drill(Equipment):
     def __init__(self):
@@ -41,12 +44,6 @@ class Drill(Equipment):
 class TransformHinge(Equipment):
     def __init__(self):
         super().__init__('trans_hinge')
-        self.function_list.append(self.raise_parasite_countdown)
-        self.params_list.append([])
-
-    # noinspection PyUnusedLocal
-    def raise_parasite_countdown(self, params):
-        raise_parasite_countdown(self)
 
     def on_install(self):
         self.v_ptr.can_para.append('large')
@@ -58,12 +55,6 @@ class TransformHinge(Equipment):
 class SalvageMagnet(Equipment):
     def __init__(self):
         super().__init__('salvage_magnet')
-        self.function_list.append(self.raise_parasite_countdown)
-        self.params_list.append([])
-
-    # noinspection PyUnusedLocal
-    def raise_parasite_countdown(self, params):
-        raise_parasite_countdown(self)
 
     def on_install(self):
         self.v_ptr.can_para.append('large')

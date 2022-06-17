@@ -27,8 +27,10 @@ class Vessel:
     para_cd = None
     para_to = None
     belonged = None
+    para_in = None
 
     acted = None
+    tactic_pos = None
 
     def __init__(self, size):
         self.hp = 0
@@ -57,10 +59,15 @@ class Vessel:
 
         self.belonged = None
         self.para_cd = 0
-        self.para_to = {'huge': 100, 'large': 50, 'medium': 25, 'small': 12}[
-            self.size]
-
+        self.para_to = {
+            'huge': 100,
+            'large': 50,
+            'medium': 25,
+            'small': 12
+        }[self.size]
+        self.para_in = []
         self.acted = False
+        self.tactic_pos = 0
 
     def can_move(self):
         if self.lift > self.mass and self.thrust > 0 and self.yaw_spd > 0:

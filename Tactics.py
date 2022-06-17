@@ -7,19 +7,35 @@ def battle_end(offensive, defensive):
 
 
 def battle_result(offensive, defensive):
-    # todo
-    return {
+    offensive.confront = None
+    defensive.confront = None
+    for unit in offensive.units:
+        unit.tactic_pos = 0
+    for unit in defensive.units:
+        unit.tactic_pos = 0
+    result = {
         'conclude': 'draw',
         'offensive': [],
         'defensive': []
     }
+    return offensive, defensive, result
+
+
+def battle_init(offensive, defensive):
+    dist = offensive.dist_to_me(defensive)
+    offensive.confront = defensive
+    defensive.confront = offensive
+    for unit in offensive.units:
+        unit.tactic_pos = 0
+    for unit in defensive.units:
+        unit.tactic_pos = dist
+    return offensive, defensive
 
 
 def battle_rounds(offensive, defensive):
     print('战斗开始！')
     flag = True
-    offensive.confront = defensive
-    defensive.confront = offensive
+    offensive, defensive = battle_init(offensive, defensive)
     while flag:
         while not offensive.acted():
             print('进攻方回合：')
@@ -45,7 +61,5 @@ def battle_rounds(offensive, defensive):
                 defensive.units[int(u_index)].select_part(p_index)
         if battle_end(offensive, defensive):
             flag = False
-    offensive.confront = None
-    defensive.confront = None
-    result = battle_result(offensive, defensive)
+    offensive, defensive, result = battle_result(offensive, defensive)
     return result
