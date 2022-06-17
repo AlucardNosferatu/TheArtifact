@@ -22,6 +22,7 @@ class Part:
 
     # 以列表的形式列出该组件特有功能统一传入载具对象
     function_list = None
+    params_list = None
 
     def set_v_ptr(self, vessel_ptr):
         self.v_ptr = vessel_ptr
@@ -33,10 +34,17 @@ class Part:
         self.mass = mass[self.type_str]
         self.uid_str = str(uuid.uuid4())
         self.function_list = []
+        self.params_list = []
 
     def destroyed(self):
         index = self.v_ptr.p_list.index(self)
         self.v_ptr.uninstall_part(index)
+
+    def on_install(self):
+        pass
+
+    def on_uninstall(self):
+        pass
 
 
 class Building(Part):
@@ -57,3 +65,19 @@ class Equipment(Part):
 class Device(Part):
     def __init__(self, type_str):
         super().__init__('small', type_str)
+
+
+def raise_parasite_countdown(para_unit):
+    para_unit.v_ptr.para_target.para_cd += 1
+    if para_unit.v_ptr.para_target.para_cd >= para_unit.v_ptr.para_target.para_to:
+        para_unit.v_ptr.para_target.para_cd = 0
+        index = para_unit.v_ptr.para_target.belonged.units.index(
+            para_unit.v_ptr.para_target)
+        para_unit.v_ptr.para_target.belonged.remove_unit(index)
+        para_unit.v_ptr.belonged.add_unit(para_unit.v_ptr.para_target)
+        para_unit.v_ptr.para_target.belonged = para_unit.v_ptr.belonged
+
+
+def attack(attack_unit, target, part_index):
+    # todo
+    pass

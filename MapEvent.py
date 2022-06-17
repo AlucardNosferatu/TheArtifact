@@ -1,4 +1,5 @@
 import math
+from Tactics import battle_rounds
 
 
 class MapEvent:
@@ -31,10 +32,14 @@ class MapEvent:
 
 class TaskForce(MapEvent):
     units = None
+    confront = None
+    ai_controlled = None
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, ai_controlled=False):
         super().__init__(x, y)
+        self.ai_controlled = ai_controlled
         self.units = []
+        self.confront = None
 
     def add_unit(self, unit):
         self.units.append(unit)
@@ -56,6 +61,15 @@ class TaskForce(MapEvent):
     def move_on_map(self, heading):
         if self.can_move():
             super().move_on_map(heading)
+
+    def engage(self, enemy_task_force):
+        battle_rounds(self, enemy_task_force)
+
+    def acted(self):
+        for unit in self.units:
+            if not unit.acted:
+                return False
+        return True
 
 
 class ResourceSite(MapEvent):
