@@ -71,9 +71,9 @@ def get_task_force():
     tf2 = nc.p_list[0].tf_ptr[1]
     x = nc.coordinate['x']
     y = nc.coordinate['y']
-    tf1.set_coordinate(x + 50, y + 50)
-    tf2.set_coordinate(x - 50, y - 50)
-    tf1.engage(tf2)
+    tf1.set_coordinate(x + 10, y + 10)
+    tf2.set_coordinate(x - 10, y - 10)
+    tf2.engage(tf1)
     print('Done')
 
 
