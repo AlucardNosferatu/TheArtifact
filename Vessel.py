@@ -42,36 +42,12 @@ class Vessel:
         else:
             return False
 
-    def can_engage(self):
-        for part in self.p_list:
-            if part is not None:
-                if part.can_engage():
-                    return True
-        return False
-
-    def can_collect(self, res_type):
-        for part in self.p_list:
-            if part is not None:
-                if part.can_collect(res_type):
-                    return True
-        return False
-
-    def can_occupy(self, enemy_firepower=None):
-        vessel_firepower = 0
-        for part in self.p_list:
-            if part is not None:
-                vessel_firepower += part.can_occupy()
-        if enemy_firepower is None:
-            return vessel_firepower
-        else:
-            return vessel_firepower > enemy_firepower
-
     def install_part(self, part, index):
         if None in self.p_list:
             if self.p_list[index] is None:
                 self.p_list[index] = part
                 self.p_list[index].set_v_ptr(self)
-                # todo:bonus_neighbor
+
                 if hasattr(part, 'hp'):
                     self.hp += part.hp
                 if hasattr(part, 'mass'):
@@ -96,7 +72,7 @@ class Vessel:
         if 0 <= index < self.p_cap and self.p_list[index] is not None:
             part = self.p_list[index]
             self.p_list[index] = None
-            # todo:bonus_neighbor
+
             if hasattr(part, 'hp'):
                 self.hp -= part.hp
             if hasattr(part, 'mass'):
@@ -119,6 +95,16 @@ class Vessel:
                     self.fuel_have = self.fuel_cap
             # todo:attr_update, include armor fuel_cap etc.
 
+    def select_part(self, index):
+        if index >= len(self.p_list) or index < 0:
+            return
+        selected_part: Part | None = self.p_list[index]
+        if selected_part is None:
+            return
+        for index, func in enumerate(selected_part.function_list):
+            print(index, func)
+        # todo
+
 
 class NomadCity(Vessel, MapEvent):
     wh_basic = None
@@ -138,16 +124,6 @@ class NomadCity(Vessel, MapEvent):
         for i in range(self.ap_cap):
             self.ap_basic.append(None)
 
-    def select_building(self, index):
-        if index >= len(self.p_list) or index < 0:
-            return
-        selected_building: Building | None = self.p_list[index]
-        if selected_building is None:
-            return
-        for index, func in enumerate(selected_building.function_list):
-            print(index, func)
-        # todo
-
     def move_on_map(self, heading):
         if self.can_move():
             super().move_on_map(heading)
@@ -156,16 +132,6 @@ class NomadCity(Vessel, MapEvent):
 class CraftCarrier(Vessel):
     def __init__(self):
         super().__init__('large')
-
-    def select_room(self, index):
-        if index >= len(self.p_list) or index < 0:
-            return
-        selected_room: Room | None = self.p_list[index]
-        if selected_room is None:
-            return
-        for index, func in enumerate(selected_room.function_list):
-            print(index, func)
-        # todo
 
 
 class Craft(Vessel):

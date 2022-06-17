@@ -49,29 +49,9 @@ class TaskForce(MapEvent):
                 return False
             else:
                 spd.append(unit.thrust)
+                # todo:use speed instead of thrust
         self.set_cruise_spd(min(spd))
         return True
-
-    def can_engage(self):
-        for unit in self.units:
-            if unit.can_engage():
-                return True
-        return False
-
-    def can_collect(self, res_type):
-        for unit in self.units:
-            if unit.can_collect(res_type):
-                return True
-        return False
-
-    def can_occupy(self, enemy_firepower):
-        tf_firepower = 0
-        for unit in self.units:
-            tf_firepower += unit.can_occupy()
-        if tf_firepower > enemy_firepower:
-            return True
-        else:
-            return False
 
     def move_on_map(self, heading):
         if self.can_move():
