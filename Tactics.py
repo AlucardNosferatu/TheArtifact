@@ -39,22 +39,38 @@ def round_start(task_force):
         unit.acted = False
         if len(unit.para_in) > 0:
             has_hostile_para = False
+            controlled = False
             for para in unit.para_in:
                 if para.belonged != unit.belonged:
                     has_hostile_para = True
-                    unit.para_cd += 1
+                    unit.para_cd += 10
+                    if not controlled:
+                        print('由于跳帮入侵，载具', unit, '的控制权正在丧失！')
                     if unit.para_cd >= unit.para_to:
-                        unit.para_cd = 0
-                        changed.append(unit)
+                        if not controlled:
+                            print('载具', unit, '被跳帮单位控制！')
+                        controlled = True
+                        if unit not in changed:
+                            changed.append(unit)
                 else:
                     unit.para_cd -= 1
+                    if unit.para_cd > 0:
+                        print('由于驻军支援，载具', unit, '的控制权正在夺回！')
                     if unit.para_cd < 0:
                         unit.para_cd = 0
             if not has_hostile_para:
                 unit.para_cd = 0
+            elif not controlled:
+                print(
+                    '载具',
+                    unit,
+                    '损失的控制权',
+                    str(round(100 * unit.para_cd / unit.para_to)) + '%'
+                )
         else:
             unit.para_cd = 0
     for unit in changed:
+        unit.para_cd = 0
         task_force.remove_unit(unit, False)
         task_force.confront.add_unit(unit)
         unit.belonged = task_force.confront
@@ -73,15 +89,33 @@ def task_force_action(task_force, tf_side):
             unit_acted = True
             u_index = ''
             while unit_acted:
-                print(task_force.units)
+                display_status(task_force)
+                print('输入接收命令的载具编号：')
                 u_index = input()
                 unit_acted = task_force.units[int(u_index)].acted
                 if unit_acted:
                     print('这个载具本回合已经行动过了')
             print(task_force.units[int(u_index)].p_list)
             p_index = input()
-            task_force.units[int(u_index)].select_part(int(p_index))
+            if p_index == '':
+                print('这个载具本回合待机')
+                task_force.units[int(u_index)].acted = True
+            else:
+                task_force.units[int(u_index)].select_part(int(p_index))
     return task_force
+
+
+def display_status(task_force):
+    print('打击群单位：')
+    print(task_force.units)
+    dist = [unit.tactic_pos for unit in task_force.units]
+    print('所处位置：')
+    print(dist)
+    print('敌对方单位：')
+    print(task_force.confront.units)
+    dist = [unit.tactic_pos for unit in task_force.confront.units]
+    print('所处位置：')
+    print(dist)
 
 
 def battle_rounds(offensive, defensive):

@@ -108,15 +108,22 @@ def disembark(steer_part):
 
 def move_to_tac_pos(thrust_part, dst_tac_pos):
     vessel = thrust_part.v_ptr
-    if abs(dst_tac_pos - vessel.tactic_pos) <= vessel.thrust:
-        vessel.tactic_pos = dst_tac_pos
-    else:
-        if dst_tac_pos > vessel.tactic_pos:
-            vessel.tactic_pos += vessel.thrust
+    if vessel.para_target is None:
+        if abs(dst_tac_pos - vessel.tactic_pos) <= vessel.thrust:
+            vessel.tactic_pos = dst_tac_pos
         else:
-            vessel.tactic_pos -= vessel.thrust
-    print('移动到了：', vessel.tactic_pos)
-    return True
+            if dst_tac_pos > vessel.tactic_pos:
+                vessel.tactic_pos += vessel.thrust
+            else:
+                vessel.tactic_pos -= vessel.thrust
+        for para_unit in vessel.para_in:
+            para_unit.tactic_pos = vessel.tactic_pos
+        print('移动到了：', vessel.tactic_pos)
+        return True
+    else:
+        print('跳帮中无法自由移动！')
+        return False
+
 
 
 def attack(weapon, target, part_index):
