@@ -1,6 +1,8 @@
 from Vessel import *
 from Building import *
+from Room import *
 from Equipment import *
+from Device import *
 
 
 def get_city():
@@ -8,11 +10,22 @@ def get_city():
     nc = NomadCity(1014, 612)
     # 在浮空城的0号建筑槽位搭建一个指挥中心
     nc.install_part(Command(), 0)
-    for i in range(4):
-        craft_0 = get_craft()
+    for i in range(2):
+        cv_0 = get_cv()
+        drone_0 = get_drone()
         # 把战机放进浮空城基础格纳库的i号停机坪
-        nc.ap_basic[i] = craft_0
+        nc.ap_basic[i] = cv_0
+        nc.ap_basic[i + 2] = drone_0
     return nc
+
+
+def get_cv():
+    cv_0 = CraftCarrier()
+    pro_0 = Propulsion(30)
+    le_0 = LiftEngine(100)
+    cv_0.install_part(pro_0, 0)
+    cv_0.install_part(le_0, 1)
+    return cv_0
 
 
 def get_craft():
@@ -37,14 +50,29 @@ def get_craft():
     return craft_0
 
 
+def get_drone():
+    drone_0 = Drone()
+    acc_0 = Accelerator(30)
+    elevator_0 = Elevator(100)
+    sm_0 = SteerMotor(10)
+    st_0 = Stabilizer()
+    drone_0.install_part(acc_0, 0)
+    drone_0.install_part(elevator_0, 1)
+    drone_0.install_part(sm_0, 2)
+    drone_0.install_part(st_0, 3)
+    return drone_0
+
+
 def get_task_force():
     nc = get_city()
-    nc.select_part(0)
-    nc.acted = False
-    nc.select_part(0)
+    nc.p_list[0].create_task_force([[0, 1]])
+    nc.p_list[0].create_task_force([[2, 3]])
     tf1 = nc.p_list[0].tf_ptr[0]
     tf2 = nc.p_list[0].tf_ptr[1]
-    tf2.ai_controlled = True
+    x = nc.coordinate['x']
+    y = nc.coordinate['y']
+    tf1.set_coordinate(x + 50, y + 50)
+    tf2.set_coordinate(x - 50, y - 50)
     tf1.engage(tf2)
     print('Done')
 

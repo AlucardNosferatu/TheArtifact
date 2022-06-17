@@ -15,6 +15,12 @@ class Thruster(Equipment):
     def __init__(self, thrust):
         super().__init__('thruster')
         self.thrust = thrust
+        self.function_list.append(self.move_to_tac_pos)
+        self.params_list.append(['dst_tac_pos'])
+
+    def move_to_tac_pos(self, params):
+        dst_tac_pos = params[0]
+        return move_to_tac_pos(self, dst_tac_pos)
 
 
 class CtrlSurface(Equipment):
@@ -23,9 +29,18 @@ class CtrlSurface(Equipment):
     def __init__(self, yaw_spd):
         super().__init__('ctrl_surface')
         self.yaw_spd = yaw_spd
+        self.function_list.append(self.embark)
+        self.params_list.append(['target_index'])
+        self.function_list.append(self.disembark)
+        self.params_list.append([])
 
-    def board(self, target):
-        board(self, target)
+    def embark(self, params):
+        target_index = params[0]
+        target = self.v_ptr.belonged.confront.units[target_index]
+        return embark(self, target)
+
+    def disembark(self, params):
+        return disembark(self)
 
 
 class Drill(Equipment):
@@ -38,7 +53,7 @@ class Drill(Equipment):
         target_index = params[0]
         part_index = params[1]
         target = self.v_ptr.belonged.confront.units[target_index]
-        attack(self, target, part_index)
+        return attack(self, target, part_index)
 
 
 class TransformHinge(Equipment):

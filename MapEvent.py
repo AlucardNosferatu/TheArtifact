@@ -44,8 +44,12 @@ class TaskForce(MapEvent):
     def add_unit(self, unit):
         self.units.append(unit)
 
-    def remove_unit(self, index):
-        return self.units.pop(index)
+    def remove_unit(self, index, give_index=True):
+        if give_index:
+            return self.units.pop(index)
+        else:
+            self.units.remove(index)
+            return index
 
     def can_move(self):
         spd = []
