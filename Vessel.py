@@ -108,7 +108,7 @@ class Vessel:
             if part.size == self.size:
                 part.set_v_ptr(self)
                 self.p_list_dis[index] = part
-                print(part, '已安装在', index, '号槽位。')
+                print(part.type_str, '已安装在', index, '号槽位。')
                 return True
             else:
                 print('零件尺寸与载具尺寸不匹配！')
@@ -123,7 +123,7 @@ class Vessel:
             part = self.p_list_dis[index]
             part.set_v_ptr(None)
             self.p_list_dis[index] = None
-            print(part, '从', index, '号槽位拆除完毕。')
+            print(part.type_str, '从', index, '号槽位拆除完毕。')
             return True
         else:
             print('槽位编号错误！')
@@ -159,7 +159,7 @@ class Vessel:
             self.p_list: list[Part]
 
             self.p_list[index].on_install()
-            print(index, '号槽位的部件', part, '已激活！')
+            print(index, '号槽位的部件', part.type_str, '已激活！')
             return True
         else:
             print('槽位编号错误！')
@@ -195,7 +195,7 @@ class Vessel:
                 self.fuel_cap -= part.fuel_cap
                 if self.fuel_have > self.fuel_cap:
                     self.fuel_have = self.fuel_cap
-            print(index, '号槽位的部件', part, '已失效！')
+            print(index, '号槽位的部件', part.type_str, '已失效！')
             return True
         else:
             print('槽位编号错误！')
