@@ -29,10 +29,10 @@ def battle_init(offensive, defensive):
     defensive.confront = offensive
     for unit in offensive.units:
         unit.tactic_pos = 0
-        unit.tactic_ang = 0
+        unit.tactic_ang = 180
     for unit in defensive.units:
         unit.tactic_pos = dist
-        unit.tactic_ang = 180
+        unit.tactic_ang = 0
     return offensive, defensive
 
 

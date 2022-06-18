@@ -18,12 +18,15 @@ def get_city():
 
 def get_cv():
     cv_0 = Vessel('large')
-    pro_0 = Propulsion(30)
+    pro_0 = Propulsion(30, 30)
     le_0 = LiftEngine(100)
+    sg_0 = SentryGun(45)
     cv_0.install_part(pro_0, 0)
     cv_0.enable_part(0)
     cv_0.install_part(le_0, 1)
     cv_0.enable_part(1)
+    cv_0.install_part(sg_0, 2)
+    cv_0.enable_part(2)
     return cv_0
 
 
@@ -58,6 +61,7 @@ def get_drone():
     elevator_0 = Elevator(100)
     sm_0 = SteerMotor(10)
     st_0 = Stabilizer()
+    gun12d7_0 = Gun12d7(50, 45, 20)
     drone_0.install_part(acc_0, 0)
     drone_0.enable_part(0)
     drone_0.install_part(elevator_0, 1)
@@ -66,6 +70,8 @@ def get_drone():
     drone_0.enable_part(2)
     drone_0.install_part(st_0, 3)
     drone_0.enable_part(3)
+    drone_0.install_part(gun12d7_0, 4)
+    drone_0.enable_part(4)
     return drone_0
 
 

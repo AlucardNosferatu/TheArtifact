@@ -125,21 +125,25 @@ def attack(weapon, target, part_index):
     def locate(w, t, p_i):
         def aiming(w0, t0, p_i0, f2, dist):
             def fire(w1, t1, p_i1):
-                print(
-                    '嘣！',
-                    w1.type_str,
-                    '打中了',
-                    t1.size,
-                    '的',
-                    t1.p_list[p_i1].type_str
-                )
-                # todo:disable parts with 0 hp
-                return True
+                if t1.p_list[p_i1] is not None:
+                    print(
+                        '嘣！',
+                        w1.type_str,
+                        '打中了',
+                        t1.size,
+                        '的',
+                        t1.p_list[p_i1].type_str
+                    )
+                    # todo:disable parts with 0 hp
+                    return True
+                else:
+                    print('没有打中瞄准的位置，攻击从空槽的位置擦过目标！')
+                    return True
 
             # 武器的基准精度（最远射程的精度，距离为0时精度为100）
             lowest_acc = w0.acc
             # 武器的最远射程，超出该射程的目标无法攻击
-            max_range = w0.range
+            max_range = w0.max_range
             if dist > max_range:
                 print('目标超出武器最大射程！')
                 return False
@@ -180,7 +184,7 @@ def attack(weapon, target, part_index):
                         else:
                             acc_0 -= d_acc
                             new_p_i0 += next_part_i_inc
-                    print('火控故障！')
+                    print('火控故障！武器精度数据在计算过程中发生变化！（？？？）')
                     return False
 
         a_pos = w.v_ptr.tactic_pos
@@ -247,7 +251,7 @@ def attack(weapon, target, part_index):
             return False
 
 
-# Buildings
+# region Buildings
 class Crane(Part):
     def __init__(self):
         s = building_params['size']
@@ -373,7 +377,9 @@ class NuclearMobileSystem(Part):
         return move_to_tac_pos(self, dst_tac_pos)
 
 
-# Rooms
+# endregion
+
+# region Rooms
 class LiftEngine(Part):
     lift = None
 
@@ -412,13 +418,15 @@ class Propulsion(Part):
 
 class SentryGun(Part):
     anti_embark = None
+    damage = None
 
-    def __init__(self):
+    def __init__(self, damage):
         s = room_params['size']
         m = room_params['mass']
         h = room_params['hp']
         super().__init__(type_str='sentry_gun', size=s, mass=m, hp=h)
         self.anti_embark = True
+        self.damage = damage
         self.function_list.append(self.attack)
         self.params_list.append(['target_index', 'p_index'])
 
@@ -429,7 +437,9 @@ class SentryGun(Part):
         return attack(self, target, p_index)
 
 
-# Equipments
+# endregion
+
+# region Equipments
 class Wing(Part):
     lift = None
 
@@ -538,7 +548,9 @@ class SalvageMagnet(Part):
         self.v_ptr.can_para.remove('medium')
 
 
-# Devices
+# endregion
+
+# region Devices
 class Stabilizer(Part):
     def __init__(self):
         s = device_params['size']
@@ -614,6 +626,29 @@ class SteerMotor(Part):
         return disembark(self)
 
 
+class Gun12d7(Part):
+    acc = None
+    max_range = None
+    damage = None
+
+    def __init__(self, acc, max_range, damage):
+        s = device_params['size']
+        m = device_params['mass']
+        h = device_params['hp']
+        super().__init__(type_str='gun_12.7mm', size=s, mass=m, hp=h)
+        self.acc = acc
+        self.max_range = max_range
+        self.damage = damage
+        self.function_list.append(self.attack)
+        self.params_list.append(['target_index', 'p_index'])
+
+    def attack(self, params):
+        target_index = params[0]
+        p_index = params[1]
+        target = self.v_ptr.belonged.confront.units[target_index]
+        return attack(self, target, p_index)
+
+
 class Harpoon(Part):
     def __init__(self):
         s = device_params['size']
@@ -642,3 +677,4 @@ class HackerInterface(Part):
     def on_uninstall(self):
         self.v_ptr.can_para.remove('medium')
         self.v_ptr.can_para.remove('small')
+# endregion
