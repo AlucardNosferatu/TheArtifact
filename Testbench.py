@@ -1,13 +1,9 @@
 from Vessel import *
-from Building import *
-from Room import *
-from Equipment import *
-from Device import *
 
 
 def get_city():
     # 在地图坐标x=1014,y=612的地方生成一个浮空城
-    nc = NomadCity(1014, 612)
+    nc = Vessel('huge', 1014, 612)
     # 在浮空城的0号建筑槽位搭建一个指挥中心
     nc.install_part(Command(), 0)
     for i in range(2):
@@ -20,7 +16,7 @@ def get_city():
 
 
 def get_cv():
-    cv_0 = CraftCarrier()
+    cv_0 = Vessel('large')
     pro_0 = Propulsion(30)
     le_0 = LiftEngine(100)
     cv_0.install_part(pro_0, 0)
@@ -30,7 +26,7 @@ def get_cv():
 
 def get_craft():
     # 创建一个新战机对象c0
-    craft_0 = Craft()
+    craft_0 = Vessel('medium')
     # 创建一个30单位推力的推进器
     thruster_0 = Thruster(30)
     # 创建一个100单位升力的机翼
@@ -51,7 +47,7 @@ def get_craft():
 
 
 def get_drone():
-    drone_0 = Drone()
+    drone_0 = Vessel('small')
     acc_0 = Accelerator(30)
     elevator_0 = Elevator(100)
     sm_0 = SteerMotor(10)
@@ -65,12 +61,12 @@ def get_drone():
 
 def get_task_force():
     nc = get_city()
-    nc.p_list[0].create_task_force([[0, 1]])
-    nc.p_list[0].create_task_force([[2, 3]])
+    nc.p_list[0].create_task_force([[0, 2]])
+    nc.p_list[0].create_task_force([[1, 3]])
     tf1 = nc.p_list[0].tf_ptr[0]
     tf2 = nc.p_list[0].tf_ptr[1]
-    x = nc.coordinate['x']
-    y = nc.coordinate['y']
+    x = nc.guard_force.coordinate['x']
+    y = nc.guard_force.coordinate['y']
     tf1.set_coordinate(x + 10, y + 10)
     tf2.set_coordinate(x - 10, y - 10)
     tf2.engage(tf1)

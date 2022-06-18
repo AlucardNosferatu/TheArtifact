@@ -43,9 +43,9 @@ def round_start(task_force):
             for para in unit.para_in:
                 if para.belonged != unit.belonged:
                     has_hostile_para = True
-                    unit.para_cd += 10
                     if not controlled:
                         print('由于跳帮入侵，载具', unit, '的控制权正在丧失！')
+                    unit.para_cd += 1
                     if unit.para_cd >= unit.para_to:
                         if not controlled:
                             print('载具', unit, '被跳帮单位控制！')
@@ -53,9 +53,10 @@ def round_start(task_force):
                         if unit not in changed:
                             changed.append(unit)
                 else:
-                    unit.para_cd -= 1
                     if unit.para_cd > 0:
                         print('由于驻军支援，载具', unit, '的控制权正在夺回！')
+                    unit.para_cd -= 1
+
                     if unit.para_cd < 0:
                         unit.para_cd = 0
             if not has_hostile_para:
@@ -89,7 +90,7 @@ def task_force_action(task_force, tf_side):
             unit_acted = True
             u_index = ''
             while unit_acted:
-                display_status(task_force)
+                battle_awareness(task_force)
                 print('输入接收命令的载具编号：')
                 u_index = input()
                 unit_acted = task_force.units[int(u_index)].acted
@@ -105,14 +106,16 @@ def task_force_action(task_force, tf_side):
     return task_force
 
 
-def display_status(task_force):
+def battle_awareness(task_force):
     print('打击群单位：')
-    print(task_force.units)
+    size = [unit.size for unit in task_force.units]
+    print(size)
     dist = [unit.tactic_pos for unit in task_force.units]
     print('所处位置：')
     print(dist)
     print('敌对方单位：')
-    print(task_force.confront.units)
+    size = [unit.size for unit in task_force.confront.units]
+    print(size)
     dist = [unit.tactic_pos for unit in task_force.confront.units]
     print('所处位置：')
     print(dist)
