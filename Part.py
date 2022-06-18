@@ -37,10 +37,6 @@ class Part:
         self.function_list = []
         self.params_list = []
 
-    def destroyed(self):
-        index = self.v_ptr.p_list.index(self)
-        self.v_ptr.uninstall_part(index)
-
     def on_install(self):
         pass
 

@@ -5,7 +5,7 @@ def get_city():
     # 在地图坐标x=1014,y=612的地方生成一个浮空城
     nc = Vessel('huge', 1014, 612)
     # 在浮空城的0号建筑槽位搭建一个指挥中心
-    nc.install_part(Command(), 0)
+    nc.enable_part(Command(), 0)
     for i in range(2):
         cv_0 = get_cv()
         drone_0 = get_drone()
@@ -19,8 +19,8 @@ def get_cv():
     cv_0 = Vessel('large')
     pro_0 = Propulsion(30)
     le_0 = LiftEngine(100)
-    cv_0.install_part(pro_0, 0)
-    cv_0.install_part(le_0, 1)
+    cv_0.enable_part(pro_0, 0)
+    cv_0.enable_part(le_0, 1)
     return cv_0
 
 
@@ -34,11 +34,11 @@ def get_craft():
     # 创建一个最大偏航力矩为10的控制面
     ctrl_s_0 = CtrlSurface(10)
     # 安装推进器到战机c0的0号零件槽位上
-    craft_0.install_part(thruster_0, 0)
+    craft_0.enable_part(thruster_0, 0)
     # 安装控制面到战机c0的1号零件槽位上
-    craft_0.install_part(ctrl_s_0, 1)
+    craft_0.enable_part(ctrl_s_0, 1)
     # 安装机翼到战机c0的2号零件槽位上
-    craft_0.install_part(wing_0, 2)
+    craft_0.enable_part(wing_0, 2)
     # # 创建一个钻头（用于开采矿石）
     # drill_0 = Drill()
     # # 安装钻头到战机c0的3号零件槽位上
@@ -52,10 +52,10 @@ def get_drone():
     elevator_0 = Elevator(100)
     sm_0 = SteerMotor(10)
     st_0 = Stabilizer()
-    drone_0.install_part(acc_0, 0)
-    drone_0.install_part(elevator_0, 1)
-    drone_0.install_part(sm_0, 2)
-    drone_0.install_part(st_0, 3)
+    drone_0.enable_part(acc_0, 0)
+    drone_0.enable_part(elevator_0, 1)
+    drone_0.enable_part(sm_0, 2)
+    drone_0.enable_part(st_0, 3)
     return drone_0
 
 

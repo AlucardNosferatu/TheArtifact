@@ -84,7 +84,7 @@ def task_force_action(task_force, tf_side):
         if task_force.ai_controlled:
             print('AI行动中：')
             unit = random.choice(task_force.units)
-            unit.select_part(random.randint(0, len(unit.p_list) - 1), True)
+            unit.use_part(random.randint(0, len(unit.p_list) - 1), True)
         else:
             print('玩家行动：')
             unit_acted = True
@@ -102,7 +102,7 @@ def task_force_action(task_force, tf_side):
                 print('这个载具本回合待机')
                 task_force.units[int(u_index)].acted = True
             else:
-                task_force.units[int(u_index)].select_part(int(p_index))
+                task_force.units[int(u_index)].use_part(int(p_index))
     return task_force
 
 
