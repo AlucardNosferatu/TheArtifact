@@ -121,7 +121,21 @@ def move_to_tac_pos(thrust_part, dst_tac_pos):
 
 def attack(weapon, target, part_index):
     # todo:filter parasite unit
-    return True
+    attacker = weapon.v_ptr
+    if hasattr(weapon, 'anti_embark'):
+        if target.para_target == attacker:
+            # todo:damage process
+            return True
+        else:
+            print('内部防卫武器无法用于攻击外部目标！')
+            return False
+    else:
+        if target.para_target == attacker.para_target:
+            # todo:damage process
+            return True
+        else:
+            print('攻击者和目标不同处战场或相同载具中（跳帮）！')
+            return False
 
 
 # Buildings
@@ -250,6 +264,25 @@ class Propulsion(Part):
     def move_to_tac_pos(self, params):
         dst_tac_pos = params[0]
         return move_to_tac_pos(self, dst_tac_pos)
+
+
+class SentryGun(Part):
+    anti_embark = None
+
+    def __init__(self):
+        s = room_params['size']
+        m = room_params['mass']
+        h = room_params['hp']
+        super().__init__(type_str='sentry_gun', size=s, mass=m, hp=h)
+        self.anti_embark = True
+        self.function_list.append(self.attack)
+        self.params_list.append(['target_index', 'p_index'])
+
+    def attack(self, params):
+        target_index = params[0]
+        p_index = params[1]
+        target = self.v_ptr.belonged.confront.units[target_index]
+        return attack(self, target, p_index)
 
 
 # Equipments
