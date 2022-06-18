@@ -11,8 +11,10 @@ def battle_result(offensive, defensive):
     defensive.confront = None
     for unit in offensive.units:
         unit.tactic_pos = 0
+        unit.tactic_ang = 0
     for unit in defensive.units:
         unit.tactic_pos = 0
+        unit.tactic_ang = 0
     result = {
         'conclude': 'draw',
         'offensive': [],
@@ -27,8 +29,10 @@ def battle_init(offensive, defensive):
     defensive.confront = offensive
     for unit in offensive.units:
         unit.tactic_pos = 0
+        unit.tactic_ang = 0
     for unit in defensive.units:
         unit.tactic_pos = dist
+        unit.tactic_ang = 180
     return offensive, defensive
 
 

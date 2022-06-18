@@ -115,6 +115,11 @@ def move_to_tac_pos(thrust_part, dst_tac_pos):
         return False
 
 
+def rotate_to_tac_ang(steer_part, dst_tac_ang):
+    # todo
+    pass
+
+
 def attack(weapon, target, part_index):
     # todo:filter parasite unit
     attacker = weapon.v_ptr

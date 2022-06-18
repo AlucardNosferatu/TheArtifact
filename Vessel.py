@@ -76,6 +76,7 @@ class Vessel:
         self.para_in = []
         self.acted = False
         self.tactic_pos = 0
+        self.tactic_ang = 0
         if self.size == 'huge':
             assert x is not None
             assert y is not None
@@ -132,6 +133,7 @@ class Vessel:
     def enable_part(self, index):
         if 0 <= index < self.p_cap and self.p_list_dis[index] is not None:
             self.p_list: list[Part | None]
+            self.p_list_dis: list[Part | None]
 
             part = self.p_list_dis[index]
             self.p_list[index] = part
@@ -145,7 +147,6 @@ class Vessel:
             for p in self.p_list:
                 if hasattr(p, 'armor'):
                     total_armor += p.armor
-            self.p_list: list[None]
             eff_p_count = len(self.p_list) - self.p_list.count(None)
             self.armor = total_armor / eff_p_count
             if hasattr(part, 'lift'):
@@ -156,9 +157,9 @@ class Vessel:
                 self.yaw_spd += part.yaw_spd
             if hasattr(part, 'fuel_cap'):
                 self.fuel_cap += part.fuel_cap
-            self.p_list: list[Part]
 
             self.p_list[index].on_install()
+
             print(index, '号槽位的部件', part.type_str, '已激活！')
             return True
         else:
@@ -168,6 +169,7 @@ class Vessel:
     def disable_part(self, index):
         if 0 <= index < self.p_cap and self.p_list[index] is not None:
             self.p_list: list[Part | None]
+            self.p_list_dis: list[Part | None]
 
             self.p_list[index].on_uninstall()
 
@@ -195,6 +197,7 @@ class Vessel:
                 self.fuel_cap -= part.fuel_cap
                 if self.fuel_have > self.fuel_cap:
                     self.fuel_have = self.fuel_cap
+
             print(index, '号槽位的部件', part.type_str, '已失效！')
             return True
         else:
