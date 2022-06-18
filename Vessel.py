@@ -1,5 +1,3 @@
-import random
-
 from AI import generate_f_param
 from Part import *
 
