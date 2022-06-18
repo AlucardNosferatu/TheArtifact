@@ -222,11 +222,7 @@ class Vessel:
                 f_index = [random.randint(0, len(selected_part.function_list) - 1)]
                 for param in selected_part.params_list[f_index[0]]:
                     f_index.append(generate_f_param(param))
-            try:
-                self.acted = selected_part.function_list[f_index[0]](f_index[1:])
-            except Exception as e:
-                print(e)
-                self.acted = False
+            self.acted = selected_part.function_list[f_index[0]](f_index[1:])
         else:
             print('该载具这个回合已经行动过了。')
 

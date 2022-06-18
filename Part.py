@@ -131,7 +131,7 @@ def attack(weapon, target, part_index):
                         w1.type_str,
                         '打中了',
                         t1.size,
-                        '的',
+                        '型载具的',
                         t1.p_list[p_i1].type_str
                     )
                     # todo:disable parts with 0 hp
@@ -141,7 +141,7 @@ def attack(weapon, target, part_index):
                     return True
 
             # 武器的基准精度（最远射程的精度，距离为0时精度为100）
-            lowest_acc = w0.acc
+            lowest_acc = w0.acc + random.randint(0, 10)
             # 武器的最远射程，超出该射程的目标无法攻击
             max_range = w0.max_range
             if dist > max_range:
@@ -187,54 +187,57 @@ def attack(weapon, target, part_index):
                     print('火控故障！武器精度数据在计算过程中发生变化！（？？？）')
                     return False
 
-        a_pos = w.v_ptr.tactic_pos
-        t_pos = t.tactic_pos
-        distance = abs(a_pos - t_pos)
-        a_ang = w.v_ptr.tactic_ang
-        t_ang = t.tactic_ang
-        # 目标在左侧
-        left_t = (t_pos < a_pos)
-        # 目标正对左侧
-        t_face_left = (t_ang == 0)
-        # 目标正对右侧
-        t_face_right = (t_ang == 180)
+        if hasattr(w, 'anti_embark'):
+            return aiming(w, t, p_i, 'face', 0)
+        else:
+            a_pos = w.v_ptr.tactic_pos
+            t_pos = t.tactic_pos
+            distance = abs(a_pos - t_pos)
+            a_ang = w.v_ptr.tactic_ang
+            t_ang = t.tactic_ang
+            # 目标在左侧
+            left_t = (t_pos < a_pos)
+            # 目标正对左侧
+            t_face_left = (t_ang == 0)
+            # 目标正对右侧
+            t_face_right = (t_ang == 180)
 
-        # 攻击者正对左侧
-        face_left = (a_ang == 0)
-        # 攻击者正对右侧
-        face_right = (a_ang == 180)
-        # 目标面对攻击者
-        face2face = (left_t and t_face_right) or (not left_t and t_face_left)
-        # 目标背对攻击者
-        face2rear = (left_t and t_face_left) or (not left_t and t_face_right)
-        # 目标侧对攻击者
-        face2flank = not t_face_left and not t_face_right
-        if face2flank:
-            face2 = 'flank'
-        else:
-            if face2face:
-                face2 = 'face'
+            # 攻击者正对左侧
+            face_left = (a_ang == 0)
+            # 攻击者正对右侧
+            face_right = (a_ang == 180)
+            # 目标面对攻击者
+            face2face = (left_t and t_face_right) or (not left_t and t_face_left)
+            # 目标背对攻击者
+            face2rear = (left_t and t_face_left) or (not left_t and t_face_right)
+            # 目标侧对攻击者
+            face2flank = not t_face_left and not t_face_right
+            if face2flank:
+                face2 = 'flank'
             else:
-                assert face2rear is True
-                face2 = 'rear'
-        if hasattr(w, 'sponson'):
-            if face_left or face_right:
-                # 侧舷炮正常姿态（正对左右侧）无法开火
-                print('侧舷炮在正常姿态（正对左右侧）无法开火!')
-                return False
+                if face2face:
+                    face2 = 'face'
+                else:
+                    assert face2rear is True
+                    face2 = 'rear'
+            if hasattr(w, 'sponson'):
+                if face_left or face_right:
+                    # 侧舷炮正常姿态（正对左右侧）无法开火
+                    print('侧舷炮在正常姿态（正对左右侧）无法开火!')
+                    return False
+                else:
+                    return aiming(w, t, p_i, face2, distance)
             else:
-                return aiming(w, t, p_i, face2, distance)
-        else:
-            if face_left and left_t:
-                # 目标在左，攻击者朝左
-                return aiming(w, t, p_i, face2, distance)
-            elif face_right and not left_t:
-                # 目标在右，攻击者朝右
-                return aiming(w, t, p_i, face2, distance)
-            else:
-                print('目标在攻击者六点钟方向！')
-                return False
-            # 主武器要判断朝向
+                # 主武器要判断朝向
+                if face_left and left_t:
+                    # 目标在左，攻击者朝左
+                    return aiming(w, t, p_i, face2, distance)
+                elif face_right and not left_t:
+                    # 目标在右，攻击者朝右
+                    return aiming(w, t, p_i, face2, distance)
+                else:
+                    print('目标在攻击者六点钟方向！')
+                    return False
 
     attacker = weapon.v_ptr
     if hasattr(weapon, 'anti_embark'):
@@ -419,6 +422,8 @@ class Propulsion(Part):
 class SentryGun(Part):
     anti_embark = None
     damage = None
+    acc = None
+    max_range = None
 
     def __init__(self, damage):
         s = room_params['size']
@@ -427,6 +432,8 @@ class SentryGun(Part):
         super().__init__(type_str='sentry_gun', size=s, mass=m, hp=h)
         self.anti_embark = True
         self.damage = damage
+        self.acc = 100
+        self.max_range = 1
         self.function_list.append(self.attack)
         self.params_list.append(['target_index', 'p_index'])
 

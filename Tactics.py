@@ -84,29 +84,32 @@ def round_start(task_force):
 def task_force_action(task_force, tf_side):
     round_start(task_force)
     while not task_force.acted():
-        print(tf_side, '回合：')
-        if task_force.ai_controlled:
-            print('AI行动中：')
-            unit = random.choice(task_force.units)
-            unit.use_part(random.randint(0, len(unit.p_list) - 1), True)
-        else:
-            print('玩家行动：')
-            unit_acted = True
-            u_index = ''
-            while unit_acted:
-                battle_awareness(task_force)
-                print('输入接收命令的载具编号：')
-                u_index = input()
-                unit_acted = task_force.units[int(u_index)].acted
-                if unit_acted:
-                    print('这个载具本回合已经行动过了')
-            print(task_force.units[int(u_index)].p_list)
-            p_index = input()
-            if p_index == '':
-                print('这个载具本回合待机')
-                task_force.units[int(u_index)].acted = True
+        try:
+            print(tf_side, '回合：')
+            if task_force.ai_controlled:
+                print('AI行动中：')
+                unit = random.choice(task_force.units)
+                unit.use_part(random.randint(0, len(unit.p_list) - 1), True)
             else:
-                task_force.units[int(u_index)].use_part(int(p_index))
+                print('玩家行动：')
+                unit_acted = True
+                u_index = ''
+                while unit_acted:
+                    battle_awareness(task_force)
+                    print('输入接收命令的载具编号：')
+                    u_index = input()
+                    unit_acted = task_force.units[int(u_index)].acted
+                    if unit_acted:
+                        print('这个载具本回合已经行动过了')
+                print(task_force.units[int(u_index)].p_list)
+                p_index = input()
+                if p_index == '':
+                    print('这个载具本回合待机')
+                    task_force.units[int(u_index)].acted = True
+                else:
+                    task_force.units[int(u_index)].use_part(int(p_index))
+        except Exception as e:
+            print(e)
     return task_force
 
 
