@@ -1,3 +1,4 @@
+import random
 import uuid
 
 from MapEvent import TaskForce
@@ -51,17 +52,17 @@ device_params = {'size': 'small', 'mass': 10, 'hp': 10}
 
 
 def embark(steer_part, target):
-    parasite_v = steer_part.v_ptr
-    if parasite_v is not target:
-        if parasite_v.size in ['medium', 'small']:
-            if target.size in parasite_v.can_para:
-                if parasite_v.para_target is None:
-                    if abs(parasite_v.tactic_pos - target.tactic_pos) <= parasite_v.thrust:
-                        if parasite_v not in target.para_in:
-                            target.para_in.append(parasite_v)
-                        parasite_v.para_target = target
-                        parasite_v.tactic_pos = target.tactic_pos
-                        if target.belonged == parasite_v.belonged:
+    para_v = steer_part.v_ptr
+    if para_v is not target:
+        if para_v.size in ['medium', 'small']:
+            if target.size in para_v.can_para:
+                if para_v.para_target is None:
+                    if abs(para_v.tactic_pos - target.tactic_pos) <= para_v.thrust:
+                        if para_v not in target.para_in:
+                            target.para_in.append(para_v)
+                        para_v.para_target = target
+                        para_v.tactic_pos = target.tactic_pos
+                        if target.belonged == para_v.belonged:
                             print('驻扎成功！正在守卫！')
                         else:
                             print('跳帮成功！正在占领！')
@@ -117,23 +118,130 @@ def move_to_tac_pos(thrust_part, dst_tac_pos):
 
 def rotate_to_tac_ang(steer_part, dst_tac_ang):
     # todo
-    pass
+    return True
 
 
 def attack(weapon, target, part_index):
-    # todo:filter parasite unit
+    def locate(w, t, p_i):
+        def aiming(w0, t0, p_i0, f2, dist):
+            def fire(w1, t1, p_i1):
+                print(
+                    '嘣！',
+                    w1.type_str,
+                    '打中了',
+                    t1.size,
+                    '的',
+                    t1.p_list[p_i1].type_str
+                )
+                # todo:disable parts with 0 hp
+                return True
+
+            # 武器的基准精度（最远射程的精度，距离为0时精度为100）
+            lowest_acc = w0.acc
+            # 武器的最远射程，超出该射程的目标无法攻击
+            max_range = w0.range
+            if dist > max_range:
+                print('目标超出武器最大射程！')
+                return False
+            else:
+                acc_ratio = (100 - lowest_acc) / max_range
+                current_acc = 100 - (acc_ratio * dist)
+                if f2 == 'flank':
+                    if current_acc > 75:
+                        return fire(w0, t0, p_i0)
+                    elif current_acc < 25:
+                        print('没命中目标！')
+                        return True
+                    else:
+                        new_p_i0 = random.randint(0, len(t0.p_list) - 1)
+                        return fire(w0, t0, new_p_i0)
+                elif f2 == 'face':
+                    next_part_i_inc = 1
+                    blocked_count = len(t0.p_list) - p_i0 - 1
+                elif f2 == 'rear':
+                    next_part_i_inc = -1
+                    blocked_count = p_i0
+                else:
+                    print('无法识别目标朝向，火控解算失败！')
+                    return False
+                current_acc -= 5 * blocked_count
+                if current_acc > 75:
+                    return fire(w0, t0, p_i0)
+                elif current_acc < 25:
+                    print('没命中目标！')
+                    return True
+                else:
+                    d_acc = 50 / blocked_count
+                    acc_0 = 75 - d_acc
+                    new_p_i0 = p_i0 + next_part_i_inc
+                    for i in range(blocked_count):
+                        if current_acc > acc_0:
+                            return fire(w0, t0, new_p_i0)
+                        else:
+                            acc_0 -= d_acc
+                            new_p_i0 += next_part_i_inc
+                    print('火控故障！')
+                    return False
+
+        a_pos = w.v_ptr.tactic_pos
+        t_pos = t.tactic_pos
+        distance = abs(a_pos - t_pos)
+        a_ang = w.v_ptr.tactic_ang
+        t_ang = t.tactic_ang
+        # 目标在左侧
+        left_t = (t_pos < a_pos)
+        # 目标正对左侧
+        t_face_left = (t_ang == 0)
+        # 目标正对右侧
+        t_face_right = (t_ang == 180)
+
+        # 攻击者正对左侧
+        face_left = (a_ang == 0)
+        # 攻击者正对右侧
+        face_right = (a_ang == 180)
+        # 目标面对攻击者
+        face2face = (left_t and t_face_right) or (not left_t and t_face_left)
+        # 目标背对攻击者
+        face2rear = (left_t and t_face_left) or (not left_t and t_face_right)
+        # 目标侧对攻击者
+        face2flank = not t_face_left and not t_face_right
+        if face2flank:
+            face2 = 'flank'
+        else:
+            if face2face:
+                face2 = 'face'
+            else:
+                assert face2rear is True
+                face2 = 'rear'
+        if hasattr(w, 'sponson'):
+            if face_left or face_right:
+                # 侧舷炮正常姿态（正对左右侧）无法开火
+                print('侧舷炮在正常姿态（正对左右侧）无法开火!')
+                return False
+            else:
+                return aiming(w, t, p_i, face2, distance)
+        else:
+            if face_left and left_t:
+                # 目标在左，攻击者朝左
+                return aiming(w, t, p_i, face2, distance)
+            elif face_right and not left_t:
+                # 目标在右，攻击者朝右
+                return aiming(w, t, p_i, face2, distance)
+            else:
+                print('目标在攻击者六点钟方向！')
+                return False
+            # 主武器要判断朝向
+
     attacker = weapon.v_ptr
     if hasattr(weapon, 'anti_embark'):
         if target.para_target == attacker:
-            # todo:damage process
-            return True
+            return locate(weapon, target, part_index)
         else:
             print('内部防卫武器无法用于攻击外部目标！')
             return False
     else:
         if target.para_target == attacker.para_target:
-            # todo:damage process
-            return True
+            return locate(weapon, target, part_index)
         else:
             print('攻击者和目标不同处战场或相同载具中（跳帮）！')
             return False
@@ -238,6 +346,33 @@ class Command(Part):
         return True
 
 
+class NuclearMobileSystem(Part):
+    lift = None
+    thrust = None
+    yaw_spd = None
+
+    def __init__(self, lift, thrust, yaw_spd):
+        s = building_params['size']
+        m = building_params['mass']
+        h = building_params['hp']
+        super().__init__(type_str='nuke_mod_sys', size=s, mass=m, hp=h)
+        self.lift = lift
+        self.thrust = thrust
+        self.yaw_spd = yaw_spd
+        self.function_list.append(self.rotate_to_tac_ang)
+        self.params_list.append(['dst_tac_ang'])
+        self.function_list.append(self.move_to_tac_pos)
+        self.params_list.append(['dst_tac_pos'])
+
+    def rotate_to_tac_ang(self, params):
+        dst_tac_ang = params[0]
+        return rotate_to_tac_ang(self, dst_tac_ang)
+
+    def move_to_tac_pos(self, params):
+        dst_tac_pos = params[0]
+        return move_to_tac_pos(self, dst_tac_pos)
+
+
 # Rooms
 class LiftEngine(Part):
     lift = None
@@ -252,15 +387,23 @@ class LiftEngine(Part):
 
 class Propulsion(Part):
     thrust = None
+    yaw_spd = None
 
-    def __init__(self, thrust):
+    def __init__(self, thrust, yaw_spd):
         s = room_params['size']
         m = room_params['mass']
         h = room_params['hp']
         super().__init__(type_str='propulsion', size=s, mass=m, hp=h)
         self.thrust = thrust
+        self.yaw_spd = yaw_spd
+        self.function_list.append(self.rotate_to_tac_ang)
+        self.params_list.append(['dst_tac_ang'])
         self.function_list.append(self.move_to_tac_pos)
         self.params_list.append(['dst_tac_pos'])
+
+    def rotate_to_tac_ang(self, params):
+        dst_tac_ang = params[0]
+        return rotate_to_tac_ang(self, dst_tac_ang)
 
     def move_to_tac_pos(self, params):
         dst_tac_pos = params[0]
@@ -324,10 +467,16 @@ class CtrlSurface(Part):
         h = equipment_params['hp']
         super().__init__(type_str='ctrl_surface', size=s, mass=m, hp=h)
         self.yaw_spd = yaw_spd
+        self.function_list.append(self.rotate_to_tac_ang)
+        self.params_list.append(['dst_tac_ang'])
         self.function_list.append(self.embark)
         self.params_list.append(['target_index', 'belonged'])
         self.function_list.append(self.disembark)
         self.params_list.append([])
+
+    def rotate_to_tac_ang(self, params):
+        dst_tac_ang = params[0]
+        return rotate_to_tac_ang(self, dst_tac_ang)
 
     def embark(self, params):
         target_index = params[0]
@@ -435,10 +584,16 @@ class SteerMotor(Part):
         h = device_params['hp']
         super().__init__(type_str='steer_motor', size=s, mass=m, hp=h)
         self.yaw_spd = yaw_spd
+        self.function_list.append(self.rotate_to_tac_ang)
+        self.params_list.append(['dst_tac_ang'])
         self.function_list.append(self.embark)
         self.params_list.append(['target_index', 'belonged'])
         self.function_list.append(self.disembark)
         self.params_list.append([])
+
+    def rotate_to_tac_ang(self, params):
+        dst_tac_ang = params[0]
+        return rotate_to_tac_ang(self, dst_tac_ang)
 
     def embark(self, params):
         vessel = self.v_ptr
