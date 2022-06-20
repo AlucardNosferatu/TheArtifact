@@ -1,4 +1,6 @@
 from Vessel import *
+import cocos
+from cocos.actions import *
 
 
 def get_city():
@@ -89,5 +91,21 @@ def get_task_force():
     print('Done')
 
 
+class HelloWorld(cocos.layer.ColorLayer):
+    def __init__(self):
+        super().__init__(64, 64, 224, 255)
+        sprite = cocos.sprite.Sprite('F-5E.png')
+        sprite.position = 320, 240
+        sprite.scale = 3
+        self.add(sprite, z=1)
+        scale = ScaleBy(3, duration=2)
+        sprite.do(Repeat(scale + Reverse(scale)))
+
+
 if __name__ == '__main__':
-    get_task_force()
+    # get_task_force()
+    cocos.director.director.init()
+    hello_layer = HelloWorld()
+    hello_layer.do(RotateBy(360, duration=10))
+    main_scene = cocos.scene.Scene(hello_layer)
+    cocos.director.director.run(main_scene)
