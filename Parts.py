@@ -1,0 +1,2 @@
+class Parts:
+    pass
