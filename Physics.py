@@ -1,5 +1,5 @@
 import pygame
-from Box2D.b2 import world, polygonShape, staticBody, dynamicBody
+from Box2D.b2 import world, polygonShape, staticBody, dynamicBody, fixtureDef
 from pygame.locals import (QUIT, KEYDOWN, K_ESCAPE)
 
 
@@ -25,15 +25,17 @@ ground_body = world.CreateStaticBody(
     position=(16, 2),
     shapes=polygonShape(box=(15, 1))
 )
-
-dynamic_body = world.CreateDynamicBody(position=(10, 15), angle=3.14 / 4)
-box = dynamic_body.CreatePolygonFixture(box=(2, 1), density=1, friction=0.1)
-
+fixture = fixtureDef(shape=polygonShape(box=(2, 1)), density=1)
+dynamic_body = world.CreateDynamicBody(position=(12, 10), angle=0, fixtures=fixture)
+dynamic_body2 = world.CreateDynamicBody(position=(10, 15), angle=0, fixtures=fixture)
+# joint = world.CreateRevoluteJoint(
+#     bodyA=dynamic_body,
+#     bodyB=dynamic_body2,
+#     anchor=(dynamic_body.worldCenter + dynamic_body2.worldCenter) / 2)
 colors = {
     staticBody: (255, 255, 255, 255),
     dynamicBody: (127, 127, 127, 255),
 }
-
 running = True
 while running:
     for event in pygame.event.get():
@@ -55,6 +57,6 @@ pygame.quit()
 print('Done!')
 
 # Basic Physics:√
-# Collision:√
+# Joint Collision:×
 # Breakable Connection:×
 # Lift & Drag:×
