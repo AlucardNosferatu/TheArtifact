@@ -12,12 +12,12 @@ class Part:
     connectors = None
     rotation: int
     neighbors = None
-    location: [int, int]
+    location: list[int]
     can_rotate: bool
 
     # 0123
     # 0123-上左下右,0-2,2-0,1-3,3-1
-    def __init__(self, d: float, loc: [int, int], con_types: list[str], n, can_r=True):
+    def __init__(self, d: float, loc: list[int], con_types: list[str], n, can_r=True):
         self.can_rotate = can_r
         self.density = d
         self.location = loc
@@ -52,6 +52,9 @@ class Part:
             self.connected: list[Part | None] = [None, None, None, None]
             self.connectors.insert(0, self.connectors.pop(-1))
             self.connect_nearby()
+
+    def func(self):
+        pass
 
 
 if __name__ == '__main__':

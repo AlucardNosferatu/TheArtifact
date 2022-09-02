@@ -32,16 +32,43 @@ class Vessel:
     parts_matrix: list[list[Part | None]]
     bodies_matrix: list[list[b2Body | None]]
     joint_cluster: list[b2Joint]
+    crew_map: list[list[int]]
+    pos2index: dict
+    index2pos: list[str]
 
+    # Adjacent Matrix of Accessible Parts
     def __init__(self, pm: list):
+        self.crew_map = []
+        self.pos2index = {}
+        self.index2pos = []
         self.parts_matrix = pm
         self.bodies_matrix = []
         self.joint_cluster = []
+        parts_to_itself = []
         for i in range(len(self.parts_matrix)):
             row_list = []
-            for j in range(len(self.parts_matrix[0])):
+            for j in range(len(self.parts_matrix[i])):
                 row_list.append(None)
+                if self.parts_matrix[i][j] is not None and 'pass' in self.parts_matrix[i][j].connectors:
+                    self.pos2index.__setitem__(str(i) + '_' + str(j), len(parts_to_itself))
+                    self.index2pos.append(str(i) + '_' + str(j))
+                    parts_to_itself.append(0)
             self.bodies_matrix.append(row_list)
+        for i in range(len(parts_to_itself)):
+            self.crew_map.append(parts_to_itself.copy())
+
+    def form_graph(self):
+        for i in range(len(self.index2pos)):
+            if self.index2pos[i] is not None:
+                r, c = [int(c_str) for c_str in self.index2pos[i].split('_')]
+                p_inst = self.parts_matrix[r][c]
+                for j in range(4):
+                    if p_inst.connected[j] is not None and p_inst.connectors[j] is 'pass':
+                        t_r, t_c = di2mi(j, r, c)
+                        t_i = self.pos2index[str(t_r) + '_' + str(t_c)]
+                        self.crew_map[i][t_i] = 1
+                        self.crew_map[t_i][i] = 1
+        # todo
 
     def form_cluster(self):
         for i in range(len(self.parts_matrix)):
@@ -116,8 +143,10 @@ if __name__ == '__main__':
     dorm = Part(d=0.5, loc=[-1, 0], con_types=[None, 'pass', 'struct', 'pass'], n=[None, None, None, cockpit])
     lg1 = Part(d=0.5, loc=[0, -1], con_types=['struct', 'struct', None, 'struct'], n=[cockpit, None, None, None])
     lg2 = Part(d=0.5, loc=[-1, -1], con_types=['struct', 'struct', None, 'struct'], n=[dorm, None, None, lg1])
+    corridor = Part(d=0.5, loc=[-2, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[None, None, None, dorm])
     part_m = [[dorm, cockpit], [lg2, lg1]]
     v = Vessel(part_m)
+    v.form_graph()
     body_init.append(v.form_cluster)
     body_test.append(test_2)
     loop_test.append(v.check_joints)
