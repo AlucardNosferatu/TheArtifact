@@ -2,7 +2,7 @@ from math import sqrt
 
 import pygame
 from Box2D import b2RevoluteJoint, b2World, b2PolygonShape, b2_staticBody, b2_dynamicBody, b2FixtureDef
-from pygame.locals import (QUIT, KEYDOWN, K_ESCAPE)
+from pygame.locals import (QUIT, KEYDOWN, KEYUP, K_ESCAPE, K_w, K_a, K_d)
 
 cd_test = 0.3
 ad_test = 1.295
@@ -27,7 +27,11 @@ joint: None | b2RevoluteJoint = None
 joint_exist = True
 body_init = []
 loop_test = []
-body_test=[]
+body_test = []
+key_w_test = []
+key_a_test = []
+key_d_test = []
+
 
 def body_vertices_2_pygame_polygon(body, shape):
     v_pos = [(body.transform * v) * PPM for v in shape.vertices]
@@ -96,9 +100,9 @@ def init_loop():
 
 def test_1a():
     global joint, world
-    fixture = b2FixtureDef(shape=b2PolygonShape(box=(1, 10)), density=1)
-    fixture2 = b2FixtureDef(shape=b2PolygonShape(box=(10, 1)), density=1)
-    dynamic_body = world.CreateDynamicBody(position=(20, 50), angle=0, fixtures=fixture)
+    fixture = b2FixtureDef(shape=b2PolygonShape(box=(1, 10)), density=100)
+    fixture2 = b2FixtureDef(shape=b2PolygonShape(box=(10, 1)), density=0.01)
+    dynamic_body = world.CreateDynamicBody(position=(20, 50), angle=-3.14 / 4, fixtures=fixture)
     dynamic_body2 = world.CreateDynamicBody(position=(40, 50), angle=0, fixtures=fixture2)
     joint = world.CreateRevoluteJoint(
         bodyA=dynamic_body,
@@ -111,10 +115,9 @@ def test_1a():
 def test_1b():
     global joint, joint_exist
     if joint_exist:
-        x, y = joint.GetReactionForce(10)
-        f = sqrt((x ** 2) + (y ** 2))
-        print(f)
-        if f > 500:
+        force = joint.GetReactionForce(1)
+        print(force.length)
+        if force.length > 500:
             world.DestroyJoint(joint)
             joint_exist = False
 
@@ -127,10 +130,26 @@ def test_2(body):
 def pygame_loop():
     global world, loop_test, body_test
     running = True
+    w_test = False
+    a_test = False
+    d_test = False
     while running:
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 running = False
+            elif event.type == KEYDOWN and event.key == K_w:
+                w_test = True
+            elif event.type == KEYUP and event.key == K_w:
+                w_test = False
+            elif event.type == KEYDOWN and event.key == K_a:
+                a_test = True
+            elif event.type == KEYUP and event.key == K_a:
+                a_test = False
+            elif event.type == KEYDOWN and event.key == K_d:
+                d_test = True
+            elif event.type == KEYUP and event.key == K_d:
+                d_test = False
+
         screen.fill((0, 0, 0, 0))
         for body in world.bodies:
             for fixture in body.fixtures:
@@ -140,6 +159,15 @@ def pygame_loop():
                 bt(body)
         for lt in loop_test:
             lt()
+        if w_test:
+            for wt in key_w_test:
+                wt()
+        if a_test:
+            for at in key_a_test:
+                at()
+        if d_test:
+            for dt in key_d_test:
+                dt()
         world.Step(TIME_STEP, 10, 10)
         pygame.display.flip()
         clock.tick(TARGET_FPS)
