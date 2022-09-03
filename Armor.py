@@ -37,7 +37,7 @@ class RayCastClosestCallback(b2RayCastCallback):
         return fraction
 
 
-def weapon_simulate(fire_loc: list[float], aim_loc: list[float]):
+def weapon_sim(fire_loc: list[float], aim_loc: list[float]):
     fl_scr = deepcopy(fire_loc)
     al_scr = deepcopy(aim_loc)
     fire_loc = [fire_loc[0], SCREEN_HEIGHT - fire_loc[1]]
@@ -62,6 +62,7 @@ def weapon_simulate(fire_loc: list[float], aim_loc: list[float]):
                     'p2': cp_scr
                 }
             )
+            return callback.fixture.body.userData
         else:
             persist_draw.__setitem__(
                 'weapon_test',
@@ -72,3 +73,5 @@ def weapon_simulate(fire_loc: list[float], aim_loc: list[float]):
                     'p2': al_scr
                 }
             )
+            return None
+    return None

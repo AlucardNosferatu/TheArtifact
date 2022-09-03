@@ -1,3 +1,5 @@
+import uuid
+
 direction = {
     0: 2,
     2: 0,
@@ -14,6 +16,7 @@ class Part:
     neighbors = None
     location: list[int]
     can_rotate: bool
+    uid: str
 
     # 0123
     # 0123-上左下右,0-2,2-0,1-3,3-1
@@ -27,6 +30,7 @@ class Part:
         # con_types = ['struct', 'pipe', 'pass', 'pylon',None]
         self.neighbors: list[Part | None] = n
         self.connect_nearby()
+        self.uid = str(uuid.uuid4())
 
     def connect_nearby(self):
         for i in range(4):

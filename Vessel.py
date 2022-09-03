@@ -1,7 +1,7 @@
 import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
 
-from Armor import weapon_simulate
+from Armor import weapon_sim
 from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
@@ -58,6 +58,17 @@ class Vessel:
             self.crew_map.append(parts_to_others.copy())
             self.crew_map[i][i] = 0
 
+    def hit_test(self, fire_loc, aim_loc):
+        uid = weapon_sim(fire_loc, aim_loc)
+        if uid is not None:
+            for i in range(len(self.parts_matrix)):
+                for j in range(len(self.parts_matrix[i])):
+                    if self.parts_matrix[i][j] is not None:
+                        if self.parts_matrix[i][j].uid == uid:
+                            print(i, j)
+                            return i, j
+        return -1, -1
+
     def form_graph(self):
         for i in range(len(self.index2pos)):
             if self.index2pos[i] is not None:
@@ -79,6 +90,7 @@ class Vessel:
                     pos_meter = grid2meter(parts_row[j].location)
                     fixture = b2FixtureDef(shape=b2PolygonShape(box=(1.75, 1.75)), density=p.density)
                     dynamic_body = world.CreateDynamicBody(position=pos_meter, angle=0, fixtures=fixture)
+                    dynamic_body.userData = p.uid
                     self.bodies_matrix[i][j] = dynamic_body
         for i in range(len(self.parts_matrix)):
             parts_row = self.parts_matrix[i]
@@ -165,6 +177,6 @@ if __name__ == '__main__':
     key_w_test.append(v.test_up)
     key_a_test.append(v.test_left)
     key_d_test.append(v.test_right)
-    m_drag_test.append(weapon_simulate)
+    m_drag_test.append(v.hit_test)
     init_loop()
     pygame_loop()
