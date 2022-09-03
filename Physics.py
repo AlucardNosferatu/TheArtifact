@@ -14,7 +14,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 1280, 720
 
 # --- pygame setup ---
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
-pygame.display.set_caption('Simple pygame example')
+pygame.display.set_caption('The Artifact')
 clock = pygame.time.Clock()
 
 world = b2World(gravity=(0, -50), doSleep=True)
