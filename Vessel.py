@@ -58,7 +58,7 @@ class Vessel:
             self.crew_map.append(parts_to_others.copy())
             self.crew_map[i][i] = 0
 
-    def hit_test(self, fire_loc, aim_loc):
+    def test_hit(self, fire_loc, aim_loc):
         uid = weapon_sim(fire_loc, aim_loc)
         if uid is not None:
             for i in range(len(self.parts_matrix)):
@@ -88,7 +88,7 @@ class Vessel:
                 if parts_row[j] is not None:
                     p = parts_row[j]
                     pos_meter = grid2meter(parts_row[j].location)
-                    fixture = b2FixtureDef(shape=b2PolygonShape(box=(1.75, 1.75)), density=p.density)
+                    fixture = b2FixtureDef(shape=b2PolygonShape(box=(1.75, 1.75)), density=p.density, friction=2)
                     dynamic_body = world.CreateDynamicBody(position=pos_meter, angle=0, fixtures=fixture)
                     dynamic_body.userData = p.uid
                     self.bodies_matrix[i][j] = dynamic_body
@@ -163,12 +163,12 @@ if __name__ == '__main__':
     dorm22 = Part(d=0.5, loc=[0, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm12, dorm21, None, None])
     dorm23 = Part(d=0.5, loc=[1, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm13, dorm22, None, None])
     dorm31 = Part(d=0.5, loc=[-1, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm21, None, None, None])
-    dorm32 = Part(d=0.5, loc=[0, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm22, dorm31, None, None])
-    dorm33 = Part(d=0.5, loc=[1, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm23, dorm32, None, None])
+    # dorm32 = Part(d=0.5, loc=[0, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm22, dorm31, None, None])
+    # dorm33 = Part(d=0.5, loc=[1, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm23, dorm32, None, None])
     part_m = [
         [dorm11, dorm12, dorm13],
         [dorm21, dorm22, dorm23],
-        [dorm31, dorm32, dorm33]
+        [dorm31, None, None]
     ]
     v = Vessel(part_m)
     body_init.append(v.form_cluster)
@@ -177,6 +177,6 @@ if __name__ == '__main__':
     key_w_test.append(v.test_up)
     key_a_test.append(v.test_left)
     key_d_test.append(v.test_right)
-    m_drag_test.append(v.hit_test)
+    m_drag_test.append(v.test_hit)
     init_loop()
     pygame_loop()

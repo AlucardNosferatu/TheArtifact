@@ -1,8 +1,14 @@
 from copy import deepcopy
 
+import numpy as np
 from Box2D import b2Vec2, b2RayCastCallback
 
 from Physics import world, PPM, SCREEN_HEIGHT, persist_draw
+
+shell_spec = {
+    'AP Level': 2,
+    'AP Angle In Degree': 45
+}
 
 
 # noinspection PyArgumentList,PyAttributeOutsideInit
@@ -37,6 +43,17 @@ class RayCastClosestCallback(b2RayCastCallback):
         return fraction
 
 
+def dot_product_angle(v1, v2):
+    if np.linalg.norm(v1) == 0 or np.linalg.norm(v2) == 0:
+        print("Zero magnitude vector!")
+    else:
+        vector_dot_product = np.dot(v1, v2)
+        arccos = np.arccos(vector_dot_product / (np.linalg.norm(v1) * np.linalg.norm(v2)))
+        angle = np.degrees(arccos)
+        return 90 - (180 - angle)
+    return 0
+
+
 def weapon_sim(fire_loc: list[float], aim_loc: list[float]):
     fl_scr = deepcopy(fire_loc)
     al_scr = deepcopy(aim_loc)
@@ -51,10 +68,19 @@ def weapon_sim(fire_loc: list[float], aim_loc: list[float]):
         world.RayCast(callback, fire_loc, aim_loc)
         if callback.hit:
             cp_scr = callback.point.copy()
+            head = b2Vec2(cp_scr) + 10 * b2Vec2(callback.normal)
             cp_scr *= PPM
             cp_scr = [cp_scr[0], SCREEN_HEIGHT - cp_scr[1]]
+            head *= PPM
+            head = [head[0], SCREEN_HEIGHT - head[1]]
+            ang = dot_product_angle(aim_loc - fire_loc, callback.normal)
+            print('ang:', ang)
+            if ang <= shell_spec['AP Angle In Degree']:
+                print('跳弹！我们未能击穿他们的装甲！')
+            else:
+                print('我们击穿了他们的装甲！')
             persist_draw.__setitem__(
-                'weapon_test',
+                'shell_ray',
                 {
                     'type': 'line',
                     'color': (0, 255, 0, 255),
@@ -62,10 +88,19 @@ def weapon_sim(fire_loc: list[float], aim_loc: list[float]):
                     'p2': cp_scr
                 }
             )
+            persist_draw.__setitem__(
+                'normal_ray',
+                {
+                    'type': 'line',
+                    'color': (0, 0, 255, 255),
+                    'p1': cp_scr,
+                    'p2': head
+                }
+            )
             return callback.fixture.body.userData
         else:
             persist_draw.__setitem__(
-                'weapon_test',
+                'shell_ray',
                 {
                     'type': 'line',
                     'color': (255, 0, 0, 255),
@@ -73,5 +108,7 @@ def weapon_sim(fire_loc: list[float], aim_loc: list[float]):
                     'p2': al_scr
                 }
             )
+            if 'normal_ray' in persist_draw:
+                del persist_draw['normal_ray']
             return None
     return None

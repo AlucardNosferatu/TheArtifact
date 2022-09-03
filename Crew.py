@@ -63,7 +63,7 @@ class Crew:
     def goto_order(self, x, y):
         self.current_route.clear()
         node_count = len(self.ship.crew_map)
-        node_cost: list[list[int | float]] = [[np.inf for i in range(0, 3)] for i in range(node_count)]
+        node_cost: list[list[int | float]] = [[np.inf for _ in range(0, 3)] for _ in range(node_count)]
         for i in range(node_count):
             node_cost[i][0] = i
         node0 = self.ship.pos2index[str(self.loc[0]) + '_' + str(self.loc[1])]
@@ -116,7 +116,6 @@ if __name__ == '__main__':
     v = Vessel(part_m)
     v.form_cluster()
     v.form_graph()
-    crew1 = Crew('Linhaobo', v)
+    crew1 = Crew('Scrooge', v)
     crew1.spawn_at(0, 0)
     crew1.goto_order(2, 2)
-
