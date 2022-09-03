@@ -32,6 +32,7 @@ key_w_test = []
 key_a_test = []
 key_d_test = []
 m_drag_test = []
+persist_draw = {}
 
 
 def body_vertices_2_pygame_polygon(body, shape):
@@ -129,7 +130,7 @@ def test_2(body):
 
 
 def pygame_loop():
-    global world, loop_test, body_test, key_w_test, key_a_test, key_d_test, m_drag_test
+    global screen, world, loop_test, body_test, key_w_test, key_a_test, key_d_test, m_drag_test
     running = True
     w_test = False
     a_test = False
@@ -163,6 +164,14 @@ def pygame_loop():
             for fixture in body.fixtures:
                 fix_vertices = body_vertices_2_pygame_polygon(body, fixture.shape)
                 pygame.draw.polygon(screen, colors[body.type], fix_vertices)
+                for key in persist_draw:
+                    item = persist_draw[key]
+                    if item['type'] == 'line':
+                        color = item['color']
+                        start_p = item['p1']
+                        end_p = item['p2']
+                        pygame.draw.line(screen, color, start_p, end_p)
+
             for bt in body_test:
                 bt(body)
         for lt in loop_test:
