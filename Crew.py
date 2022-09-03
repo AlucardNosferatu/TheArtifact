@@ -119,4 +119,4 @@ if __name__ == '__main__':
     crew1 = Crew('Linhaobo', v)
     crew1.spawn_at(0, 0)
     crew1.goto_order(2, 2)
-    
+

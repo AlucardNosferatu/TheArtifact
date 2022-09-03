@@ -1,5 +1,3 @@
-from math import sqrt
-
 import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
 
