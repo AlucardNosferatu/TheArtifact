@@ -1,5 +1,6 @@
 from math import sqrt
 
+import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
 
 from Part import Part
@@ -44,18 +45,19 @@ class Vessel:
         self.parts_matrix = pm
         self.bodies_matrix = []
         self.joint_cluster = []
-        parts_to_itself = []
+        parts_to_others = []
         for i in range(len(self.parts_matrix)):
             row_list = []
             for j in range(len(self.parts_matrix[i])):
                 row_list.append(None)
                 if self.parts_matrix[i][j] is not None and 'pass' in self.parts_matrix[i][j].connectors:
-                    self.pos2index.__setitem__(str(i) + '_' + str(j), len(parts_to_itself))
+                    self.pos2index.__setitem__(str(i) + '_' + str(j), len(parts_to_others))
                     self.index2pos.append(str(i) + '_' + str(j))
-                    parts_to_itself.append(0)
+                    parts_to_others.append(np.inf)
             self.bodies_matrix.append(row_list)
-        for i in range(len(parts_to_itself)):
-            self.crew_map.append(parts_to_itself.copy())
+        for i in range(len(parts_to_others)):
+            self.crew_map.append(parts_to_others.copy())
+            self.crew_map[i][i] = 0
 
     def form_graph(self):
         for i in range(len(self.index2pos)):
@@ -63,12 +65,11 @@ class Vessel:
                 r, c = [int(c_str) for c_str in self.index2pos[i].split('_')]
                 p_inst = self.parts_matrix[r][c]
                 for j in range(4):
-                    if p_inst.connected[j] is not None and p_inst.connectors[j] is 'pass':
+                    if p_inst.connected[j] is not None and p_inst.connectors[j] == 'pass':
                         t_r, t_c = di2mi(j, r, c)
                         t_i = self.pos2index[str(t_r) + '_' + str(t_c)]
                         self.crew_map[i][t_i] = 1
                         self.crew_map[t_i][i] = 1
-        # todo
 
     def form_cluster(self):
         for i in range(len(self.parts_matrix)):
@@ -139,15 +140,28 @@ class Vessel:
 
 
 if __name__ == '__main__':
-    cockpit = Part(d=0.5, loc=[0, 0], con_types=[None, 'pass', 'struct', None], n=[None, None, None, None])
-    dorm = Part(d=0.5, loc=[-1, 0], con_types=[None, 'pass', 'struct', 'pass'], n=[None, None, None, cockpit])
-    lg1 = Part(d=0.5, loc=[0, -1], con_types=['struct', 'struct', None, 'struct'], n=[cockpit, None, None, None])
-    lg2 = Part(d=0.5, loc=[-1, -1], con_types=['struct', 'struct', None, 'struct'], n=[dorm, None, None, lg1])
-    corridor = Part(d=0.5, loc=[-2, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[None, None, None, dorm])
-    part_m = [[dorm, cockpit], [lg2, lg1]]
+    # cockpit = Part(d=0.5, loc=[0, 0], con_types=[None, 'pass', 'struct', None], n=[None, None, None, None])
+    # dorm = Part(d=0.5, loc=[-1, 0], con_types=[None, 'pass', 'struct', 'pass'], n=[None, None, None, cockpit])
+    # lg1 = Part(d=0.5, loc=[0, -1], con_types=['struct', 'struct', None, 'struct'], n=[cockpit, None, None, None])
+    # lg2 = Part(d=0.5, loc=[-1, -1], con_types=['struct', 'struct', None, 'struct'], n=[dorm, None, None, lg1])
+    # part_m = [[dorm, cockpit], [lg2, lg1]]
+    dorm11 = Part(d=0.5, loc=[-1, 1], con_types=['pass', 'pass', 'pass', 'pass'], n=[None, None, None, None])
+    dorm12 = Part(d=0.5, loc=[0, 1], con_types=['pass', 'pass', 'pass', 'pass'], n=[None, dorm11, None, None])
+    dorm13 = Part(d=0.5, loc=[1, 1], con_types=['pass', 'pass', 'pass', 'pass'], n=[None, dorm12, None, None])
+    dorm21 = Part(d=0.5, loc=[-1, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm11, None, None, None])
+    dorm22 = Part(d=0.5, loc=[0, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm12, dorm21, None, None])
+    dorm23 = Part(d=0.5, loc=[1, 0], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm13, dorm22, None, None])
+    dorm31 = Part(d=0.5, loc=[-1, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm21, None, None, None])
+    dorm32 = Part(d=0.5, loc=[0, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm22, dorm31, None, None])
+    dorm33 = Part(d=0.5, loc=[1, -1], con_types=['pass', 'pass', 'pass', 'pass'], n=[dorm23, dorm32, None, None])
+    part_m = [
+        [dorm11, dorm12, dorm13],
+        [dorm21, dorm22, dorm23],
+        [dorm31, dorm32, dorm33]
+    ]
     v = Vessel(part_m)
-    v.form_graph()
     body_init.append(v.form_cluster)
+    body_init.append(v.form_graph)
     body_test.append(test_2)
     loop_test.append(v.check_joints)
     key_w_test.append(v.test_up)
