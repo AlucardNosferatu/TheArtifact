@@ -31,6 +31,7 @@ body_test = []
 key_w_test = []
 key_a_test = []
 key_d_test = []
+m_drag_test = []
 
 
 def body_vertices_2_pygame_polygon(body, shape):
@@ -128,28 +129,35 @@ def test_2(body):
 
 
 def pygame_loop():
-    global world, loop_test, body_test
+    global world, loop_test, body_test, key_w_test, key_a_test, key_d_test, m_drag_test
     running = True
     w_test = False
     a_test = False
     d_test = False
+    m_start_pos = None
     while running:
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 running = False
-            elif event.type == KEYDOWN and event.key == K_w:
+            if event.type == KEYDOWN and event.key == K_w:
                 w_test = True
-            elif event.type == KEYUP and event.key == K_w:
+            if event.type == KEYUP and event.key == K_w:
                 w_test = False
-            elif event.type == KEYDOWN and event.key == K_a:
+            if event.type == KEYDOWN and event.key == K_a:
                 a_test = True
-            elif event.type == KEYUP and event.key == K_a:
+            if event.type == KEYUP and event.key == K_a:
                 a_test = False
-            elif event.type == KEYDOWN and event.key == K_d:
+            if event.type == KEYDOWN and event.key == K_d:
                 d_test = True
-            elif event.type == KEYUP and event.key == K_d:
+            if event.type == KEYUP and event.key == K_d:
                 d_test = False
-
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                m_start_pos = event.pos
+            if event.type == pygame.MOUSEBUTTONUP:
+                m_end_pos = event.pos
+                for mdt in m_drag_test:
+                    mdt(m_start_pos, m_end_pos)
+                m_start_pos = None
         screen.fill((0, 0, 0, 0))
         for body in world.bodies:
             for fixture in body.fixtures:

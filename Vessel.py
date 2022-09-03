@@ -1,9 +1,10 @@
 import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
 
+from Armor import weapon_simulate
 from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
-    key_d_test
+    key_d_test, m_drag_test
 
 center_meter = [32, 32]
 
@@ -159,11 +160,11 @@ if __name__ == '__main__':
     ]
     v = Vessel(part_m)
     body_init.append(v.form_cluster)
-    body_init.append(v.form_graph)
     body_test.append(test_2)
     loop_test.append(v.check_joints)
     key_w_test.append(v.test_up)
     key_a_test.append(v.test_left)
     key_d_test.append(v.test_right)
+    m_drag_test.append(weapon_simulate)
     init_loop()
     pygame_loop()
