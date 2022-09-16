@@ -36,7 +36,7 @@ def preprocess(array, rescale=False):
 
 
 def pad_shape(array, p_size):
-    pad = {'left': 75, 'right': 75, 'top': 50, 'bottom': 5}
+    pad = {'left': 75, 'right': 75, 'top': 50, 'bottom': 50}
     padded = np.pad(array, [(int(pad['top'] / p_size), int(pad['bottom'] / p_size)),
                             (int(pad['left'] / p_size), int(pad['right'] / p_size))], 'constant', constant_values=0)
     return padded
@@ -170,13 +170,11 @@ def my_plot(self, padded):
 def cb_vel(self):
     # vx,vy for left wall
     self.fields['v'][0, :, 0, 1] = 0
-    self.fields['v'][0, :, 0, 2] = .1
-    # vx,vy for road
-    self.fields['v'][0, -1, :, 1] = 0
-    self.fields['v'][0, -1, :, 2] = .1
+    self.fields['v'][0, :, 0, 2] = 1
 
-    self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]  # open-right
-    self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]  # open-top
+    self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]   # open-bottom
+    self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]   # open-right
+    self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]     # open-top
     padded = self.padded
     if self.step % 10 == 0:
         dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
@@ -192,19 +190,19 @@ def cb_vel(self):
         my_plot(self, padded)
 
 
-a = load_img()
+a = load_img(fn_img='airfoil.png')
 a, pixel_size = preprocess(a)
 M = pad_shape(a, pixel_size)
 S = pylbm.LBM((1, *M.shape))
 S.padded = M
-S.fields['ns'][0, :, :, 0] = M  # car
+S.fields['ns'][0, :, :, 0] = S.padded  # car
 
 # track how the velocity profile changes
 S.V_old = S.fields['v'].copy()
 S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
           'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
-S.dv_to_l = 1e-3
+S.dv_to_l = 5e-4
 
 cb = {'postMacro': [cb_vel]}
 
-S.sim(steps=40000, callbacks=cb)
+S.sim(steps=1000, callbacks=cb)
