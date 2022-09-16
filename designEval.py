@@ -36,7 +36,7 @@ def preprocess(array, rescale=False):
 
 
 def pad_shape(array, p_size):
-    pad = {'left': 75, 'right': 75, 'top': 50, 'bottom': 50}
+    pad = {'left': 75, 'right': 75, 'top': 12, 'bottom': 12}
     padded = np.pad(array, [(int(pad['top'] / p_size), int(pad['bottom'] / p_size)),
                             (int(pad['left'] / p_size), int(pad['right'] / p_size))], 'constant', constant_values=0)
     return padded
@@ -170,7 +170,7 @@ def my_plot(self, padded):
 def cb_vel(self):
     # vx,vy for left wall
     self.fields['v'][0, :, 0, 1] = 0
-    self.fields['v'][0, :, 0, 2] = 1
+    self.fields['v'][0, :, 0, 2] = .1
 
     self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]   # open-bottom
     self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]   # open-right
