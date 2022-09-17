@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from WindTunnel.lbm import pylbm
 from PIL import Image, ImageDraw
 
-canvas_size = (1280, 720)
+canvas_size = (32, 18)
 
 
 def load_img(fn_img=r'WindTunnel/content/car.png'):

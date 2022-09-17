@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
 
@@ -185,6 +186,7 @@ if __name__ == '__main__':
     test_b = v.bodies_matrix[0][0]
     vert = conv_vert(test_b)
     array = draw_poly(vert)
+
     a, pixel_size = preprocess(array)
     M = pad_shape(a, pixel_size)
     S = pylbm.LBM((1, *M.shape))
