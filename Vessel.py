@@ -1,13 +1,15 @@
-import matplotlib.pyplot as plt
+import math
+
 import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
+from matplotlib import pyplot as plt
 
 from Armor import weapon_sim
 from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
 from WindTunnel.lbm import pylbm
-from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel, my_plot
+from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel, cb_get_final_result, s_rotate
 
 center_meter = [32, 32]
 
@@ -153,12 +155,6 @@ class Vessel:
                     target_body.ApplyForce(force, target_body.worldCenter, True)
 
 
-def cb_get_final_result(self):
-    print('Step:', self.step)
-    if self.step == S.total_steps - 1:
-        my_plot(self)
-
-
 if __name__ == '__main__':
     # cockpit = Part(d=0.5, loc=[0, 0], con_types=[None, 'pass', 'struct', None], n=[None, None, None, None])
     # dorm = Part(d=0.5, loc=[-1, 0], con_types=[None, 'pass', 'struct', 'pass'], n=[None, None, None, cockpit])
@@ -190,7 +186,7 @@ if __name__ == '__main__':
     init_loop()
 
     # test_b = v.bodies_matrix[0][0]
-    test_b = [
+    src_b = [
         (-1.95699, 4.6173),
         (-3.81181, 3.67303),
         (-3.9467, 2.29034),
@@ -198,21 +194,40 @@ if __name__ == '__main__':
         (1.34795, 3.84165),
         (-0.27079, 4.75219)
     ]
-    vert, c_size = conv_vert(test_b, True)
-    a = draw_poly(vert, c_size)
-    plt.imshow(a)
-    plt.show()
-    a, pixel_size = scale2lattices(a)
-    M = pad_shape(a, pixel_size)
-    S = pylbm.LBM((1, *M.shape))
-    S.padded = M
-    S.fields['ns'][0, :, :, 0] = S.padded  # car
 
-    # track how the velocity profile changes
-    S.V_old = S.fields['v'].copy()
-    S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
-              'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
-    cb = {'postMacro': [cb_vel, cb_get_final_result]}
-    S.total_steps = 1000
-    S.sim(steps=S.total_steps, callbacks=cb, verbose=True)
+    for m in range(-6, 6):
+        test_b = src_b.copy()
+        for n, t in enumerate(test_b):
+            point_x = t[0]
+            point_y = t[1]
+            s_point_x, s_point_y = s_rotate(math.radians(m * 5), point_x, point_y, 0, 0)
+            test_b[n] = (s_point_x, s_point_y)
+        print('rot ang:', m * 5)
+        vert, c_size = conv_vert(test_b, True)
+        a = draw_poly(vert, c_size)
+        # plt.imshow(a)
+        # plt.show()
+        a, pixel_size = scale2lattices(a)
+        M = pad_shape(a, pixel_size)
+        S = pylbm.LBM((1, *M.shape))
+        S.padded = M
+        S.fields['ns'][0, :, :, 0] = S.padded  # car
+
+        # track how the velocity profile changes
+        S.V_old = S.fields['v'].copy()
+        S.hist = {
+            'dv_max': [],
+            'fx': [],
+            'fy': [],
+            'step': [],
+            'fxN': [],
+            'fyN': [],
+            'fxU': [],
+            'fxB': [],
+            'fyL': [],
+            'fyR': []
+        }
+        cb = {'postMacro': [cb_vel, cb_get_final_result]}
+        S.total_steps = 1000
+        S.sim(steps=S.total_steps, callbacks=cb, verbose=True)
     pygame_loop()

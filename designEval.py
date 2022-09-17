@@ -4,6 +4,7 @@ Created on Sat Mar  5 16:25:38 2022
 
 @author: Ted
 """
+import math
 
 import cv2
 import matplotlib.pyplot as plt
@@ -11,6 +12,24 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 from WindTunnel.lbm import pylbm
+
+
+# 逆时针旋转
+def n_rotate(angle, value_x, value_y, point_x, point_y):
+    value_x = np.array(value_x)
+    value_y = np.array(value_y)
+    n_rotate_x = (value_x - point_x) * math.cos(angle) - (value_y - point_y) * math.sin(angle) + point_x
+    n_rotate_y = (value_x - point_x) * math.sin(angle) + (value_y - point_y) * math.cos(angle) + point_y
+    return round(n_rotate_x, 2), round(n_rotate_y, 2)
+
+
+# 顺时针旋转
+def s_rotate(angle, value_x, value_y, point_x, point_y):
+    value_x = np.array(value_x)
+    value_y = np.array(value_y)
+    s_rotate_x = (value_x - point_x) * math.cos(angle) + (value_y - point_y) * math.sin(angle) + point_x
+    s_rotate_y = (value_y - point_y) * math.cos(angle) - (value_x - point_x) * math.sin(angle) + point_y
+    return s_rotate_x, s_rotate_y
 
 
 def load_img(fn_img=r'WindTunnel/content/car.png'):
@@ -100,7 +119,7 @@ def pad_shape(array, p_size):
     return padded
 
 
-def drag(self):
+def update_drag(self):
     nu = 1 / 6
     # fluid points just left of the car
     kL = np.where(np.roll(self.padded, (0, -1), axis=(0, 1)) > self.padded)
@@ -137,7 +156,6 @@ def drag(self):
     self.hist['fyL'].append(fyL)
     self.hist['fyR'].append(fyR)
     self.hist['fy'].append(fyN + fyL + fyR)
-    return P
 
 
 def my_plot(self):
@@ -224,12 +242,21 @@ def cb_vel(self):
     self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]  # open-top
     dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
     max_dv = dv.max()
-    print('max-dv: %.3g' % (max_dv,))
+    # print('max-dv: %.3g' % (max_dv,))
     self.V_old = self.fields['v'].copy()
     self.hist['dv_max'].append(max_dv)
-    drag(self)
+    update_drag(self)
     # if (self.step > 0) and (self.step % 100 == 0):
     #     my_plot(self)
+
+
+def cb_get_final_result(self):
+    # print('Step:', self.step)
+    if self.step == self.total_steps - 1:
+        # my_plot(self)
+        drag = self.hist['fx'][-1]
+        lift = self.hist['fy'][-1]
+        print('lift:', lift, 'drag:', drag)
 
 
 if __name__ == '__main__':
