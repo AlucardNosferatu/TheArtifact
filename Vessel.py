@@ -5,7 +5,8 @@ from Armor import weapon_sim
 from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
-from designEval import conv_vert, draw_poly
+from WindTunnel.lbm import pylbm
+from designEval import conv_vert, draw_poly, preprocess, pad_shape, cb_vel
 
 center_meter = [32, 32]
 
@@ -184,4 +185,19 @@ if __name__ == '__main__':
     test_b = v.bodies_matrix[0][0]
     vert = conv_vert(test_b)
     array = draw_poly(vert)
+    a, pixel_size = preprocess(array)
+    M = pad_shape(a, pixel_size)
+    S = pylbm.LBM((1, *M.shape))
+    S.padded = M
+    S.fields['ns'][0, :, :, 0] = S.padded  # car
+
+    # track how the velocity profile changes
+    S.V_old = S.fields['v'].copy()
+    S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
+              'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
+    S.dv_to_l = 5e-4
+
+    cb = {'postMacro': [cb_vel]}
+
+    S.sim(steps=1000, callbacks=cb)
     pygame_loop()
