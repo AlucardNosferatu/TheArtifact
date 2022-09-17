@@ -1,10 +1,10 @@
 # TheArtifact
 ### Current Progress:
 <p align="center">
-  <img width="640" height="640" src="https://raw.githubusercontent.com/AlucardNosferatu/TheArtifact/main/Figure_1.png">
+  <img width="640" height="640" src="https://raw.githubusercontent.com/AlucardNosferatu/TheArtifact/main/Pics/Figure_1.png">
 </p>
 <p align="center">
-  <img width="1280" height="720" src="https://raw.githubusercontent.com/AlucardNosferatu/TheArtifact/main/CurrentProgress.png">
+  <img width="1280" height="720" src="https://raw.githubusercontent.com/AlucardNosferatu/TheArtifact/main/Pics/CurrentProgress.png">
 </p>
 
 ### Inspired By:

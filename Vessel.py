@@ -195,26 +195,25 @@ if __name__ == '__main__':
         (4, 1)
     ]
 
-    for m in range(-6, 6):
+    for m in range(-6, 7):
         test_b = src_b.copy()
         for n, t in enumerate(test_b):
             point_x = t[0]
             point_y = t[1]
             s_point_x, s_point_y = s_rotate(math.radians(m * 5), point_x, point_y, 0, 0)
             test_b[n] = (s_point_x, s_point_y)
-        print('rot ang:', m * 5)
         vert, c_size = conv_vert(test_b, True)
         a = draw_poly(vert, c_size)
-        # plt.imshow(a)
-        # plt.savefig('AoA_'+str(m * 5)+'.png', dpi=200)
+        plt.imshow(a)
+        plt.savefig('Pics/AoA_'+str(m+6)+'.png', dpi=200)
         # plt.show()
-        # plt.close()
+        plt.close()
         a, pixel_size = scale2lattices(a)
         M = pad_shape(a, pixel_size)
         S = pylbm.LBM((1, *M.shape))
+        S.rot_ang=m * 5
         S.padded = M
         S.fields['ns'][0, :, :, 0] = S.padded  # car
-
         # track how the velocity profile changes
         S.V_old = S.fields['v'].copy()
         S.hist = {
@@ -230,6 +229,6 @@ if __name__ == '__main__':
             'fyR': []
         }
         cb = {'postMacro': [cb_vel, cb_get_final_result]}
-        S.total_steps = 1000
-        S.sim(steps=S.total_steps, callbacks=cb, verbose=True)
+        S.total_steps = 2000
+        S.sim(steps=S.total_steps, callbacks=cb)
     pygame_loop()

@@ -255,12 +255,12 @@ def cb_get_final_result(self):
     if self.step == self.total_steps - 1:
         # my_plot(self)
         drag = self.hist['fx'][-1]
-        lift = self.hist['fy'][-1]
-        print('lift:', lift, 'drag:', drag)
+        lift = -self.hist['fy'][-1]
+        print('rot ang:', self.rot_ang, 'lift:', lift, 'drag:', drag)
 
 
 if __name__ == '__main__':
-    a = load_img(fn_img='airfoil.png')
+    a = load_img(fn_img='Pics/airfoil.png')
     a, pixel_size = scale2lattices(a)
     M = pad_shape(a, pixel_size)
     S = pylbm.LBM((1, *M.shape))

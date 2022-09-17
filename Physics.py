@@ -97,7 +97,6 @@ def init_loop():
     )
     for bi in body_init:
         bi()
-    print('Done')
 
 
 def test_1a():
@@ -189,7 +188,6 @@ def pygame_loop():
         pygame.display.flip()
         clock.tick(TARGET_FPS)
     pygame.quit()
-    print('Done!')
 
 
 if __name__ == '__main__':
