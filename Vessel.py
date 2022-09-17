@@ -229,6 +229,6 @@ if __name__ == '__main__':
             'fyR': []
         }
         cb = {'postMacro': [cb_vel, cb_get_final_result]}
-        S.total_steps = 500
+        S.total_steps = 1000
         S.sim(steps=S.total_steps, callbacks=cb)
     pygame_loop()
