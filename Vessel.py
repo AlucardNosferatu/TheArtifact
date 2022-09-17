@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from Box2D import b2FixtureDef, b2PolygonShape, b2Body, b2Joint, b2Vec2
 
@@ -184,19 +185,20 @@ if __name__ == '__main__':
 
     # test_b = v.bodies_matrix[0][0]
     test_b = [
-        (-5.5, -0.76),
-        (-4.54, 0.6),
-        (-3.38, 1.5),
-        (-2.16, 1.48),
-        (0.58, 0.6),
-        (4.5, -0.76),
-        (6.78, -1.4),
-        (-4.86, -1.48)
+        (-5.5 + 5, -0.76 + 10),
+        (-4.54 + 5, 0.6 + 10),
+        (-3.38 + 5, 1.5 + 10),
+        (-2.16 + 5, 1.3 + 10),
+        (0.58 + 5, 0.6 + 10),
+        (4.5 + 5, -0.76 + 10),
+        (6.78 + 5, -1.4 + 10),
+        (-4.86 + 5, -1.48 + 10)
     ]
-    vert = conv_vert(test_b, True)
-    array = draw_poly(vert)
-
-    a, pixel_size = preprocess(array)
+    vert, c_size = conv_vert(test_b, True)
+    a = draw_poly(vert, c_size)
+    # plt.imshow(array)
+    # plt.show()
+    a, pixel_size = preprocess(a)
     M = pad_shape(a, pixel_size)
     S = pylbm.LBM((1, *M.shape))
     S.padded = M
@@ -206,9 +208,6 @@ if __name__ == '__main__':
     S.V_old = S.fields['v'].copy()
     S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
               'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
-    S.dv_to_l = 1e-5
-
     cb = {'postMacro': [cb_vel]}
-
-    S.sim(steps=500, callbacks=cb)
+    S.sim(steps=1000, callbacks=cb, verbose=True)
     pygame_loop()

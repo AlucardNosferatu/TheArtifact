@@ -4,15 +4,13 @@ Created on Sat Mar  5 16:25:38 2022
 
 @author: Ted
 """
-import sys
 
-import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from WindTunnel.lbm import pylbm
+import numpy as np
 from PIL import Image, ImageDraw
 
-canvas_size = (320, 180)
+from WindTunnel.lbm import pylbm
 
 
 def load_img(fn_img=r'WindTunnel/content/car.png'):
@@ -20,24 +18,54 @@ def load_img(fn_img=r'WindTunnel/content/car.png'):
 
 
 def conv_vert(body, vert_list=False):
+    px_ratio = 16
     if vert_list:
         vert = body
     else:
         vert = body.fixtures[0].shape.vertices
-    center_offset = [int(0.5 * c) for c in canvas_size]
-    px_ratio = 16
+    max_x = vert[0][0]
+    max_y = vert[0][1]
+    min_x = vert[0][0]
+    min_y = vert[0][1]
+    for v in vert:
+        if v[0] > max_x:
+            max_x = v[0]
+        elif v[0] < min_x:
+            min_x = v[0]
+        if v[1] > max_y:
+            max_y = v[1]
+        elif v[1] < min_y:
+            min_y = v[1]
+    canvas_size = (
+        max_x - min_x,
+        max_y - min_y
+    )
+    canvas_size_pixel = (
+        int(canvas_size[0] * px_ratio) + 1,
+        int(canvas_size[1] * px_ratio) + 1
+    )
+    canvas_offset = [
+        canvas_size[0] * 0.5 + min_x,
+        canvas_size[1] * 0.5 + min_y
+    ]
+    center_offset = [int(0.5 * c) for c in canvas_size_pixel]
+
     for i, t in enumerate(vert):
         t = list(t)
+        t = [
+            t[0] - canvas_offset[0],
+            t[1] - canvas_offset[1]
+        ]
         t = [c * px_ratio for c in t]
         t[0] += center_offset[0]
         t[1] += center_offset[1]
-        t[1] = canvas_size[1] - t[1]
+        t[1] = canvas_size_pixel[1] - t[1]
         t = tuple(t)
         vert[i] = t
-    return vert
+    return vert, canvas_size_pixel
 
 
-def draw_poly(vert):
+def draw_poly(vert, canvas_size):
     empty_canvas = Image.new('L', canvas_size, 'white')
     drawObject = ImageDraw.Draw(empty_canvas)
     drawObject.polygon(vert, fill="black", outline="black")
@@ -59,14 +87,14 @@ def preprocess(array, rescale=False):
         LB_car = 300
         f = LB_car / array.shape[1]
         t_dim = (int(array.shape[1] * f), int(array.shape[0] * f))
-        array = cv2.resize(array, t_dim, interpolation=cv2.INTER_AREA)
+        array = cv2.resize(array, t_dim, interpolation=cv2.INTER_CUBIC)
         p_size = L_car / array.shape[1]
     array = (array < 127).astype(int)
     return array, p_size
 
 
 def pad_shape(array, p_size):
-    pad = {'left': 75, 'right': 75, 'top': 12, 'bottom': 12}
+    pad = {'left': 50, 'right': 50, 'top': 10, 'bottom': 10}
     padded = np.pad(array, [(int(pad['top'] / p_size), int(pad['bottom'] / p_size)),
                             (int(pad['left'] / p_size), int(pad['right'] / p_size))], 'constant', constant_values=0)
     return padded
@@ -112,7 +140,8 @@ def drag(self, padded):
     return P
 
 
-def my_plot(self, padded):
+def my_plot(self):
+    padded = self.padded
     mx, my = np.meshgrid(range(padded.shape[1]), range(padded.shape[0]))
     # velocity
     v = self.fields['v'][0]
@@ -124,14 +153,12 @@ def my_plot(self, padded):
     v_mag[np.where(padded == 1)] = v_mag.max()
 
     # velocity difference
+
     dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
     max_dv = dv.max()
     print('step: %d, max-dv: %.3g' % (self.step, max_dv))
     self.V_old = self.fields['v'].copy()
     self.hist['dv_max'].append(max_dv)
-
-    if max_dv < self.dv_to_l:
-        sys.exit()
 
     # calc drag
     P = drag(self, padded)
@@ -201,23 +228,12 @@ def cb_vel(self):
     # vx,vy for left wall
     self.fields['v'][0, :, 0, 1] = 0
     self.fields['v'][0, :, 0, 2] = .1
-
     self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]  # open-bottom
     self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]  # open-right
     self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]  # open-top
-    padded = self.padded
-    if self.step % 10 == 0:
-        dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
-        max_dv = dv.max()
-        # noinspection PyUnusedLocal
-        P = drag(self, padded)
-        # self.hist['step'].append(self.step)
-        # self.hist['fx'].append(fx)
-        # self.hist['fy'].append(fy)
-        self.hist['dv_max'].append(max_dv)
-
+    print('Step:', self.step)
     if (self.step > 0) and (self.step % 100 == 0):
-        my_plot(self, padded)
+        my_plot(self)
 
 
 if __name__ == '__main__':
@@ -232,7 +248,6 @@ if __name__ == '__main__':
     S.V_old = S.fields['v'].copy()
     S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
               'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
-    S.dv_to_l = 5e-4
 
     cb = {'postMacro': [cb_vel]}
 
