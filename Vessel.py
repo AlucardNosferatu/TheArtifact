@@ -187,12 +187,12 @@ if __name__ == '__main__':
 
     # test_b = v.bodies_matrix[0][0]
     src_b = [
-        (-1.95699, 4.6173),
-        (-3.81181, 3.67303),
-        (-3.9467, 2.29034),
-        (10.48714, -4.21838),
-        (1.34795, 3.84165),
-        (-0.27079, 4.75219)
+        (-4, 1),
+        (-6, 0),
+        (-4, -1),
+        (4, -1),
+        (6, 0),
+        (4, 1)
     ]
 
     for m in range(-6, 6):
@@ -206,7 +206,9 @@ if __name__ == '__main__':
         vert, c_size = conv_vert(test_b, True)
         a = draw_poly(vert, c_size)
         # plt.imshow(a)
+        # plt.savefig('AoA_'+str(m * 5)+'.png', dpi=200)
         # plt.show()
+        # plt.close()
         a, pixel_size = scale2lattices(a)
         M = pad_shape(a, pixel_size)
         S = pylbm.LBM((1, *M.shape))
