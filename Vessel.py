@@ -7,7 +7,7 @@ from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
 from WindTunnel.lbm import pylbm
-from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel
+from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel, drag
 
 center_meter = [32, 32]
 
@@ -153,6 +153,14 @@ class Vessel:
                     target_body.ApplyForce(force, target_body.worldCenter, True)
 
 
+def cb_get_final_result(self):
+    print('Step:', self.step)
+    if (self.step > 0) and (self.step % 1000 == 0):
+        P = drag(self)
+        plt.imshow(P)
+        plt.show()
+
+
 if __name__ == '__main__':
     # cockpit = Part(d=0.5, loc=[0, 0], con_types=[None, 'pass', 'struct', None], n=[None, None, None, None])
     # dorm = Part(d=0.5, loc=[-1, 0], con_types=[None, 'pass', 'struct', 'pass'], n=[None, None, None, cockpit])
@@ -185,14 +193,12 @@ if __name__ == '__main__':
 
     # test_b = v.bodies_matrix[0][0]
     test_b = [
-        (-5.5 + 5, -0.76 + 10),
-        (-4.54 + 5, 0.6 + 10),
-        (-3.38 + 5, 1.5 + 10),
-        (-2.16 + 5, 1.3 + 10),
-        (0.58 + 5, 0.6 + 10),
-        (4.5 + 5, -0.76 + 10),
-        (6.78 + 5, -1.4 + 10),
-        (-4.86 + 5, -1.48 + 10)
+        (-1.95699, 4.6173),
+        (-3.81181, 3.67303),
+        (-3.9467, 2.29034),
+        (10.48714, -4.21838),
+        (1.34795, 3.84165),
+        (-0.27079, 4.75219)
     ]
     vert, c_size = conv_vert(test_b, True)
     a = draw_poly(vert, c_size)
@@ -208,6 +214,7 @@ if __name__ == '__main__':
     S.V_old = S.fields['v'].copy()
     S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
               'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
-    cb = {'postMacro': [cb_vel]}
+    cb = {'postMacro': [cb_vel, cb_get_final_result]}
+
     S.sim(steps=1000, callbacks=cb, verbose=True)
     pygame_loop()

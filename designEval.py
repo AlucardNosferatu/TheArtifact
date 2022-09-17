@@ -94,19 +94,19 @@ def scale2lattices(array, rescale=False):
 
 
 def pad_shape(array, p_size):
-    pad = {'left': 50, 'right': 50, 'top': 10, 'bottom': 10}
+    pad = {'left': 50, 'right': 50, 'top': 25, 'bottom': 25}
     padded = np.pad(array, [(int(pad['top'] / p_size), int(pad['bottom'] / p_size)),
                             (int(pad['left'] / p_size), int(pad['right'] / p_size))], 'constant', constant_values=0)
     return padded
 
 
-def drag(self, padded):
+def drag(self):
     nu = 1 / 6
     # fluid points just left of the car
-    kL = np.where(np.roll(padded, (0, -1), axis=(0, 1)) > padded)
-    kR = np.where(np.roll(padded, (0, 1), axis=(0, 1)) > padded)
-    kU = np.where(np.roll(padded, (-1, 0), axis=(0, 1)) > padded)
-    kB = np.where(np.roll(padded, (1, 0), axis=(0, 1)) > padded)
+    kL = np.where(np.roll(self.padded, (0, -1), axis=(0, 1)) > self.padded)
+    kR = np.where(np.roll(self.padded, (0, 1), axis=(0, 1)) > self.padded)
+    kU = np.where(np.roll(self.padded, (-1, 0), axis=(0, 1)) > self.padded)
+    kB = np.where(np.roll(self.padded, (1, 0), axis=(0, 1)) > self.padded)
     # normal forces
     P = self.fields['rho'][0, :, :, 0] / 3
     fxN = sum(P[kL]) - sum(P[kR])
@@ -141,8 +141,7 @@ def drag(self, padded):
 
 
 def my_plot(self):
-    padded = self.padded
-    mx, my = np.meshgrid(range(padded.shape[1]), range(padded.shape[0]))
+    mx, my = np.meshgrid(range(self.padded.shape[1]), range(self.padded.shape[0]))
     # velocity
     v = self.fields['v'][0]
     vx = v[..., 2]
@@ -150,7 +149,7 @@ def my_plot(self):
     v_mag = ((v ** 2).sum(axis=-1)) ** 0.5
 
     # -- for display
-    v_mag[np.where(padded == 1)] = v_mag.max()
+    v_mag[np.where(self.padded == 1)] = v_mag.max()
 
     # velocity difference
 
@@ -161,11 +160,11 @@ def my_plot(self):
     self.hist['dv_max'].append(max_dv)
 
     # calc drag
-    P = drag(self, padded)
+    P = drag(self)
     fx = self.hist['fx'][-1]
     fy = self.hist['fy'][-1]
     # -- for display
-    P[np.where(padded == 1)] = P.min()
+    P[np.where(self.padded == 1)] = P.min()
 
     # display
     plt.figure(figsize=(12, 6))
@@ -231,9 +230,8 @@ def cb_vel(self):
     self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]  # open-bottom
     self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]  # open-right
     self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]  # open-top
-    print('Step:', self.step)
-    if (self.step > 0) and (self.step % 100 == 0):
-        my_plot(self)
+    # if (self.step > 0) and (self.step % 100 == 0):
+    #     my_plot(self)
 
 
 if __name__ == '__main__':
