@@ -205,13 +205,13 @@ if __name__ == '__main__':
         vert, c_size = conv_vert(test_b, True)
         a = draw_poly(vert, c_size)
         plt.imshow(a)
-        plt.savefig('Pics/AoA_'+str(m+6)+'.png', dpi=200)
+        plt.savefig('Pics/AoA_' + str(m + 6) + '.png', dpi=200)
         # plt.show()
         plt.close()
         a, pixel_size = scale2lattices(a)
         M = pad_shape(a, pixel_size)
         S = pylbm.LBM((1, *M.shape))
-        S.rot_ang=m * 5
+        S.rot_ang = m * 5
         S.padded = M
         S.fields['ns'][0, :, :, 0] = S.padded  # car
         # track how the velocity profile changes
