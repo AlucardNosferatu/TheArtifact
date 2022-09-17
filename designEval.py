@@ -12,17 +12,20 @@ import matplotlib.pyplot as plt
 from WindTunnel.lbm import pylbm
 from PIL import Image, ImageDraw
 
-canvas_size = (32, 18)
+canvas_size = (320, 180)
 
 
 def load_img(fn_img=r'WindTunnel/content/car.png'):
     return cv2.cvtColor(cv2.imread(fn_img), cv2.COLOR_BGR2GRAY)
 
 
-def conv_vert(body):
-    vert = body.fixtures[0].shape.vertices
+def conv_vert(body, vert_list=False):
+    if vert_list:
+        vert = body
+    else:
+        vert = body.fixtures[0].shape.vertices
     center_offset = [int(0.5 * c) for c in canvas_size]
-    px_ratio = 4
+    px_ratio = 16
     for i, t in enumerate(vert):
         t = list(t)
         t = [c * px_ratio for c in t]
