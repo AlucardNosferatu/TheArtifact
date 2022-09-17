@@ -151,14 +151,6 @@ def my_plot(self):
     # -- for display
     v_mag[np.where(self.padded == 1)] = v_mag.max()
 
-    # velocity difference
-
-    dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
-    max_dv = dv.max()
-    print('step: %d, max-dv: %.3g' % (self.step, max_dv))
-    self.V_old = self.fields['v'].copy()
-    self.hist['dv_max'].append(max_dv)
-
     # calc drag
     P = drag(self)
     fx = self.hist['fx'][-1]
@@ -172,7 +164,7 @@ def my_plot(self):
     plt.subplot(2, 1, 1)
     plt.imshow(v_mag)
     plt.axis('off')
-    ttl = 'Velocity (time=%d): dv-max: %.3g' % (self.step, max_dv)
+    ttl = 'Velocity (time=%d): dv-max: %.3g' % (self.step, self.hist['dv_max'][-1])
     plt.title(ttl)
     plt.colorbar()
     plt.streamplot(mx, my, vx, vy, color='r', density=.8)
@@ -230,6 +222,11 @@ def cb_vel(self):
     self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]  # open-bottom
     self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]  # open-right
     self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]  # open-top
+    dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
+    max_dv = dv.max()
+    print('max-dv: %.3g' % (max_dv,))
+    self.V_old = self.fields['v'].copy()
+    self.hist['dv_max'].append(max_dv)
     # if (self.step > 0) and (self.step % 100 == 0):
     #     my_plot(self)
 
