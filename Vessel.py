@@ -5,6 +5,7 @@ from Armor import weapon_sim
 from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
+from designEval import conv_vert, draw_poly
 
 center_meter = [32, 32]
 
@@ -179,4 +180,8 @@ if __name__ == '__main__':
     key_d_test.append(v.test_right)
     m_drag_test.append(v.test_hit)
     init_loop()
+
+    test_b = v.bodies_matrix[0][0]
+    vert = conv_vert(test_b)
+    array = draw_poly(vert)
     pygame_loop()

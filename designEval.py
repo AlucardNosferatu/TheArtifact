@@ -5,14 +5,41 @@ Created on Sat Mar  5 16:25:38 2022
 @author: Ted
 """
 import sys
+
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 from WindTunnel.lbm import pylbm
+from PIL import Image, ImageDraw
+
+canvas_size = (1280, 720)
 
 
 def load_img(fn_img=r'WindTunnel/content/car.png'):
     return cv2.cvtColor(cv2.imread(fn_img), cv2.COLOR_BGR2GRAY)
+
+
+def conv_vert(body):
+    vert = body.fixtures[0].shape.vertices
+    center_offset = [int(0.5 * c) for c in canvas_size]
+    px_ratio = 4
+    for i, t in enumerate(vert):
+        t = list(t)
+        t = [c * px_ratio for c in t]
+        t[0] += center_offset[0]
+        t[1] += center_offset[1]
+        t[1] = canvas_size[1] - t[1]
+        t = tuple(t)
+        vert[i] = t
+    return vert
+
+
+def draw_poly(vert):
+    empty_canvas = Image.new('L', canvas_size, 'white')
+    drawObject = ImageDraw.Draw(empty_canvas)
+    drawObject.polygon(vert, fill="black", outline="black")
+    # noinspection PyTypeChecker
+    return np.array(empty_canvas)
 
 
 def preprocess(array, rescale=False):
@@ -172,9 +199,9 @@ def cb_vel(self):
     self.fields['v'][0, :, 0, 1] = 0
     self.fields['v'][0, :, 0, 2] = .1
 
-    self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]   # open-bottom
-    self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]   # open-right
-    self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]     # open-top
+    self.fields['v'][0, -1, :, :] = self.fields['v'][0, -2, :, :]  # open-bottom
+    self.fields['v'][0, :, -1, :] = self.fields['v'][0, :, -2, :]  # open-right
+    self.fields['v'][0, 0, :, :] = self.fields['v'][0, 1, :, :]  # open-top
     padded = self.padded
     if self.step % 10 == 0:
         dv = (((self.fields['v'] - self.V_old) ** 2).sum(axis=-1)) ** 0.5
@@ -190,19 +217,20 @@ def cb_vel(self):
         my_plot(self, padded)
 
 
-a = load_img(fn_img='airfoil.png')
-a, pixel_size = preprocess(a)
-M = pad_shape(a, pixel_size)
-S = pylbm.LBM((1, *M.shape))
-S.padded = M
-S.fields['ns'][0, :, :, 0] = S.padded  # car
+if __name__ == '__main__':
+    a = load_img(fn_img='airfoil.png')
+    a, pixel_size = preprocess(a)
+    M = pad_shape(a, pixel_size)
+    S = pylbm.LBM((1, *M.shape))
+    S.padded = M
+    S.fields['ns'][0, :, :, 0] = S.padded  # car
 
-# track how the velocity profile changes
-S.V_old = S.fields['v'].copy()
-S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
-          'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
-S.dv_to_l = 5e-4
+    # track how the velocity profile changes
+    S.V_old = S.fields['v'].copy()
+    S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
+              'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
+    S.dv_to_l = 5e-4
 
-cb = {'postMacro': [cb_vel]}
+    cb = {'postMacro': [cb_vel]}
 
-S.sim(steps=1000, callbacks=cb)
+    S.sim(steps=1000, callbacks=cb)
