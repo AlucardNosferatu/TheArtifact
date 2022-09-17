@@ -152,7 +152,7 @@ def my_plot(self):
     v_mag[np.where(self.padded == 1)] = v_mag.max()
 
     # calc drag
-    P = drag(self)
+    P = self.fields['rho'][0, :, :, 0] / 3
     fx = self.hist['fx'][-1]
     fy = self.hist['fy'][-1]
     # -- for display
@@ -227,6 +227,7 @@ def cb_vel(self):
     print('max-dv: %.3g' % (max_dv,))
     self.V_old = self.fields['v'].copy()
     self.hist['dv_max'].append(max_dv)
+    drag(self)
     # if (self.step > 0) and (self.step % 100 == 0):
     #     my_plot(self)
 

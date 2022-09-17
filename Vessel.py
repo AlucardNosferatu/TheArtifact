@@ -7,7 +7,7 @@ from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
 from WindTunnel.lbm import pylbm
-from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel, drag, my_plot
+from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel, my_plot
 
 center_meter = [32, 32]
 
@@ -155,7 +155,7 @@ class Vessel:
 
 def cb_get_final_result(self):
     print('Step:', self.step)
-    if self.step == 999:
+    if self.step == S.total_steps - 1:
         my_plot(self)
 
 
@@ -213,6 +213,6 @@ if __name__ == '__main__':
     S.hist = {'dv_max': [], 'fx': [], 'fy': [], 'step': [],
               'fxN': [], 'fyN': [], 'fxU': [], 'fxB': [], 'fyL': [], 'fyR': []}
     cb = {'postMacro': [cb_vel, cb_get_final_result]}
-
-    S.sim(steps=1000, callbacks=cb, verbose=True)
+    S.total_steps = 1000
+    S.sim(steps=S.total_steps, callbacks=cb, verbose=True)
     pygame_loop()
