@@ -196,8 +196,9 @@ def my_plot(self):
     plt.streamplot(mx, my, vx, vy, color='r', density=.8)
     plt.tight_layout()
 
-    # plt.savefig(fn_out, dpi=200)
-    plt.show()
+    plt.savefig('Pics/AoA_'+str(int((self.rot_ang/5)+6))+'_streamline.png', dpi=200)
+    # plt.show()
+    plt.close()
 
     # diagnostic
     plt.figure(figsize=(12, 4))
@@ -229,8 +230,8 @@ def my_plot(self):
     plt.legend()
 
     plt.tight_layout()
-    # plt.savefig(fn_out2, dpi=200)
-    plt.show()
+    plt.savefig('Pics/AoA_' + str(int((self.rot_ang / 5) + 6)) + '_diagram.png', dpi=200)
+    plt.close()
 
 
 def cb_vel(self):
@@ -253,7 +254,7 @@ def cb_vel(self):
 def cb_get_final_result(self):
     # print('Step:', self.step)
     if self.step == self.total_steps - 1:
-        # my_plot(self)
+        my_plot(self)
         drag = self.hist['fx'][-1]
         lift = -self.hist['fy'][-1]
         print('rot ang:', self.rot_ang, 'lift:', lift, 'drag:', drag)
