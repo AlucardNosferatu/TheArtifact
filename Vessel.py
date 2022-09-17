@@ -7,7 +7,7 @@ from Part import Part
 from Physics import world, init_loop, pygame_loop, body_init, body_test, loop_test, test_2, key_w_test, key_a_test, \
     key_d_test, m_drag_test
 from WindTunnel.lbm import pylbm
-from designEval import conv_vert, draw_poly, preprocess, pad_shape, cb_vel
+from designEval import conv_vert, draw_poly, scale2lattices, pad_shape, cb_vel
 
 center_meter = [32, 32]
 
@@ -196,9 +196,9 @@ if __name__ == '__main__':
     ]
     vert, c_size = conv_vert(test_b, True)
     a = draw_poly(vert, c_size)
-    # plt.imshow(array)
-    # plt.show()
-    a, pixel_size = preprocess(a)
+    plt.imshow(a)
+    plt.show()
+    a, pixel_size = scale2lattices(a)
     M = pad_shape(a, pixel_size)
     S = pylbm.LBM((1, *M.shape))
     S.padded = M

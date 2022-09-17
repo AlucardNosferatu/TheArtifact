@@ -18,7 +18,7 @@ def load_img(fn_img=r'WindTunnel/content/car.png'):
 
 
 def conv_vert(body, vert_list=False):
-    px_ratio = 16
+    px_ratio = 64
     if vert_list:
         vert = body
     else:
@@ -73,7 +73,7 @@ def draw_poly(vert, canvas_size):
     return np.array(empty_canvas)
 
 
-def preprocess(array, rescale=False):
+def scale2lattices(array, rescale=False):
     L_car = 7 * 25.4
     if rescale:
         scale = .5
@@ -238,7 +238,7 @@ def cb_vel(self):
 
 if __name__ == '__main__':
     a = load_img(fn_img='airfoil.png')
-    a, pixel_size = preprocess(a)
+    a, pixel_size = scale2lattices(a)
     M = pad_shape(a, pixel_size)
     S = pylbm.LBM((1, *M.shape))
     S.padded = M
