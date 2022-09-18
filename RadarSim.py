@@ -35,13 +35,27 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
 
+def direct_draw(element):
+    color = BLUE
+    screenX, screenY, scaleX, scaleY = element.pos[0], element.pos[1], 1, 1
+    angleRad = element.orientation * np.pi / 180
+    if isinstance(element.properties, dict):
+        color = element.properties['color']
+    x1, y1 = element.boundaries * np.cos(angleRad) * scaleX + screenX, element.boundaries * np.sin(
+        angleRad) * scaleY + screenY
+    x2, y2 = -element.boundaries * np.cos(angleRad) * scaleX + screenX, -element.boundaries * np.sin(
+        angleRad) * scaleY + screenY
+    pygame.draw.line(screen, color, [x1, y1], [x2, y2], 7)
+
+
 def screen_map_function(pos):
     rangeX = abs(coord_lims[0][0] - coord_lims[0][1])
     rangeY = abs(coord_lims[1][0] - coord_lims[1][1])
     scale_x = float(size[0]) / rangeX
     scale_y = float(size[1]) / rangeY
     return (
-        int((pos[0] - coord_lims[0][0]) / rangeX * size[0]), int((-pos[1] - coord_lims[1][0]) / rangeY * size[1]),
+        int((pos[0] - coord_lims[0][0]) / rangeX * size[0]),
+        int((-pos[1] - coord_lims[1][0]) / rangeY * size[1]),
         scale_x,
         scale_y)
 
@@ -358,14 +372,33 @@ def ray_scan(start_point, ang_offset):
         )
 
 
-if __name__ == '__main__':
+def polygon_mirror(vertices):
+    for i in range(len(vertices)):
+        start = vertices[i]
+        if i == len(vertices) - 1:
+            end = vertices[0]
+        else:
+            end = vertices[i + 1]
+        pos = [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2]
+        dx = end[0] - start[0]
+        dy = end[1] - start[1]
+        ang = math.atan2(dy, dx) * 180 / math.pi
+        length = math.sqrt(dx ** 2 + dy ** 2)
+        half_length = length / 2
+        elements.append(opticalElement.FlatMirror(np.array(pos), ang, half_length, {'color': BLACK}))
+
+
+def radar_cross_section():
+    global size, screen
     src_b = [
-        (-4, 1),
+        (-4, 2),
+        (-5, 2),
         (-6, 0),
-        (-4, -1),
-        (4, -1),
-        (6, 0),
-        (4, 1)
+        (-2, -1),
+        (8, -1),
+        (10, 0),
+        (7, 1.5),
+        (-3.5, 0)
     ]
     vert, canvas_size_pixel = conv_vert(src_b, True)
     p_list, rad = get_ray_start_p(canvas_size_pixel)
@@ -378,6 +411,7 @@ if __name__ == '__main__':
     pygame.display.set_caption("Ray Tracer")
     done = False
     r_sp_index = 0
+    polygon_mirror(vert)
     while not done:
         for event_ in pygame.event.get():
             # -------Mouse Events--------
@@ -398,17 +432,25 @@ if __name__ == '__main__':
             pygame.draw.circle(screen, RED, p, 2)
         for p in p_list:
             pygame.draw.circle(screen, BLUE, p, 2)
-
+        for i in range(0, len(elements)):
+            direct_draw(elements[i])
         for i_ in range(0, len(outputRays)):
             for j_ in range(0, len(outputRays[i_])):
                 x1, y1 = outputRays[i_][j_]['pos']
-                x2, y2 = outputRays[i_][j_]['pos'] + outputRays[i_][j_]['dir'] * (
+                if 'intersect' in outputRays[i_][j_] and outputRays[i_][j_]['intersect'] is not None:
+                    x2, y2 = outputRays[i_][j_]['intersect']
+                else:
+                    x2, y2 = outputRays[i_][j_]['pos'] + outputRays[i_][j_]['dir'] * (
                             np.max(coord_lims) - np.min(coord_lims))
                 if 'color' in outputRays[i_][j_]:
                     pygame.draw.line(screen, outputRays[i_][j_]['color'], [x1, y1], [x2, y2], 1)
                 else:
                     pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
         pygame.display.flip()
-        c.tick(15)
+        c.tick(1)
     # Exit thread after loop has been exited
     pygame.quit()
+
+
+if __name__ == '__main__':
+    radar_cross_section()
