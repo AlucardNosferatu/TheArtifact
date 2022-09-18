@@ -14,27 +14,7 @@ import pygame
 
 from AeroSim import conv_vert
 from RayTracer import opticalElement
-from RayTracer.opticalElement import FlatMirror, CurvedMirror, OpticalElement
-
-
-class CurvedRec(CurvedMirror):
-    rec_count = 0
-
-    def elementType(self):
-        return 'CurvedReceiver'
-
-    def reset_count(self):
-        self.rec_count = 0
-
-    def getCenterPoint(self):
-        angle_cent = self.orientation * np.pi / 180
-        return np.array(
-            [
-                self.pos[0] - self.boundaries[1] * np.cos(angle_cent),
-                self.pos[1] + self.boundaries[1] * np.sin(angle_cent)
-            ]
-        )
-
+from RayTracer.opticalElement import FlatMirror, CurvedMirror
 
 size = (700, 700)
 screen = pygame.display.set_mode(size)
@@ -42,7 +22,7 @@ screen = pygame.display.set_mode(size)
 coord_lims_default = np.array([[-1000.0, 1000.0], [-1000.0, 1000.0]])
 coord_lims = coord_lims_default
 mousePos: np.ndarray | None = None
-elements: list[FlatMirror | CurvedMirror | CurvedRec] = []
+elements: list[FlatMirror | CurvedMirror] = []
 rays = []
 MAX_BOUNCE = 100
 # Define some colors
@@ -100,7 +80,7 @@ def ray_trace():
             closest_elem = None
             closest_intersect = None
             for elem in elements:
-                if elem.elementType() == 'CurvedReceiver':
+                if elem.elementType() == 'CurvedMirror':
                     if r['color'] == GREEN:
                         continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
@@ -109,10 +89,13 @@ def ray_trace():
                 dist = np.linalg.norm(intersect - r['pos'])
                 if dist < .0001:
                     continue
-                if min_dist > dist and elem.elementType() != 'CurvedReceiver':
-                    min_dist = dist
-                    closest_elem = elem
-                    closest_intersect = intersect
+                if min_dist > dist:
+                    if elem.elementType() == 'CurvedMirror':
+                        elem.properties['color'] = GREEN
+                    else:
+                        min_dist = dist
+                        closest_elem = elem
+                        closest_intersect = intersect
             if closest_elem is not None:
                 dir_new = closest_elem.reflect(r['pos'], r['dir'], closest_intersect)
                 dir_new = dir_new / np.linalg.norm(dir_new)
@@ -188,8 +171,9 @@ def polygon_mirror(vertices):
 
 
 def circle_receiver(start_points, start_ang, radius):
-    for i in range(int(len(start_points) / 2)):
-        elements.append(CurvedRec(start_points[i], start_ang[i], [5, radius], {'color': RED}))
+    for i in range(len(start_points)):
+        sp = start_points[i]
+        elements.append(CurvedMirror((sp[0], size[1] - sp[1]), start_ang[i], [5, radius], {'color': RED}))
 
 
 def radar_cross_section():
@@ -217,7 +201,7 @@ def radar_cross_section():
     r_sp_index = 0
     polygon_mirror(vert)
     circle_receiver(p_list, a_list, rad)
-    reset_count = False
+    # reset_count = False
     while not done:
         print('next source:')
         for event_ in pygame.event.get():
@@ -233,7 +217,7 @@ def radar_cross_section():
         r_sp_index += 1
         if r_sp_index >= len(p_list):
             r_sp_index = 0
-            reset_count = True
+            # reset_count = True
         output_rays = ray_trace()
         screen.fill(WHITE)
         for p in vert:
@@ -243,14 +227,14 @@ def radar_cross_section():
         for i in range(0, len(elements)):
             if elements[i].elementType() == 'FlatMirror':
                 direct_draw_line(elements[i])
-            elif elements[i].elementType() == 'CurvedReceiver':
+            elif elements[i].elementType() == 'CurvedMirror':
                 direct_draw_arc(elements[i])
                 elements[i].properties['color'] = RED
-                if reset_count:
-                    print(elements[i].orientation, elements[i].rec_count)
-                    elements[i].reset_count()
-        if reset_count:
-            reset_count = False
+                # if reset_count:
+                #     print(elements[i].orientation, elements[i].rec_count)
+                #     elements[i].reset_count()
+        # if reset_count:
+        #     reset_count = False
         for i_ in range(0, len(output_rays)):
             for j_ in range(0, len(output_rays[i_])):
                 x1, y1 = output_rays[i_][j_]['pos']
