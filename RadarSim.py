@@ -18,22 +18,6 @@ from RayTracer import opticalElement
 from RayTracer.menu import Menu
 from RayTracer.opticalElement import FlatMirror, CurvedMirror, OpticalElement
 
-size = (700, 700)
-screen = pygame.display.set_mode(size)
-
-coord_lims_default = np.array([[-1000.0, 1000.0], [-1000.0, 1000.0]])
-coord_lims = coord_lims_default
-mousePos: np.ndarray | None = None
-elements: list[FlatMirror | CurvedMirror] = []
-rays = []
-MAX_BOUNCE = 100
-# Define some colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic
 class CurvedReceiver(OpticalElement):
@@ -41,6 +25,7 @@ class CurvedReceiver(OpticalElement):
 
     def __init__(self, pos, orientation, boundaries, properties):
         super().__init__(pos, orientation, boundaries, properties)
+        self.properties['color'] = RED
 
     def reset_count(self):
         self.rec_count = 0
@@ -61,13 +46,14 @@ class CurvedReceiver(OpticalElement):
         rx, ry, vx, vy, R = ray_pos[0] - center[0], ray_pos[1] - center[1], ray_dir[0], ray_dir[1], self.boundaries[1]
         angExtent = np.arctan(self.boundaries[0] / R) * 180 / np.pi
         if (2 * rx * vx + 2 * ry * vy) ** 2 - 4 * (-R ** 2 + rx ** 2 + ry ** 2) * (vx ** 2 + vy ** 2) < 0:
+            self.properties['color'] = RED
             return None
         t_val1 = (-2 * rx * vx - 2 * ry * vy - np.sqrt(
             (2 * rx * vx + 2 * ry * vy) ** 2 - 4 * (-R ** 2 + rx ** 2 + ry ** 2) * (vx ** 2 + vy ** 2))) / (
-                        2 * (vx ** 2 + vy ** 2))
+                         2 * (vx ** 2 + vy ** 2))
         t_val2 = (-2 * rx * vx - 2 * ry * vy + np.sqrt(
             (2 * rx * vx + 2 * ry * vy) ** 2 - 4 * (-R ** 2 + rx ** 2 + ry ** 2) * (vx ** 2 + vy ** 2))) / (
-                        2 * (vx ** 2 + vy ** 2))
+                         2 * (vx ** 2 + vy ** 2))
 
         intersect1 = np.array(ray_pos) + t_val1 * ray_dir
         intersect2 = np.array(ray_pos) + t_val2 * ray_dir
@@ -82,14 +68,27 @@ class CurvedReceiver(OpticalElement):
                 dist1 = np.linalg.norm(ray_pos - intersect1)
                 dist2 = np.linalg.norm(ray_pos - intersect2)
                 if dist1 < dist2:
+                    self.rec_count += 1
+                    print(self.orientation, 'side 1')
+                    self.properties['color'] = GREEN
                     return None
+                self.rec_count += 1
+                print(self.orientation, 'side 2')
+                self.properties['color'] = GREEN
                 return None
             else:
+                self.rec_count += 1
+                print(self.orientation, 'side 1')
+                self.properties['color'] = GREEN
                 return None
 
         elif self.angleBetween(angle2, b1, b2):
+            self.rec_count += 1
+            print(self.orientation, 'side 2')
+            self.properties['color'] = GREEN
             return None
         else:
+            self.properties['color'] = RED
             return None
 
     def reflect(self, ray_pos, ray_dir, intersect):
@@ -123,6 +122,23 @@ class CurvedReceiver(OpticalElement):
         pass
 
 
+size = (700, 700)
+screen = pygame.display.set_mode(size)
+
+coord_lims_default = np.array([[-1000.0, 1000.0], [-1000.0, 1000.0]])
+coord_lims = coord_lims_default
+mousePos: np.ndarray | None = None
+elements: list[FlatMirror | CurvedMirror | CurvedReceiver] = []
+rays = []
+MAX_BOUNCE = 100
+# Define some colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
+
 def direct_draw_line(element):
     color = BLUE
     screen_x, screen_y, scale_x, scale_y = element.pos[0], element.pos[1], 1, 1
@@ -137,17 +153,35 @@ def direct_draw_line(element):
 
 
 def direct_draw_arc(element):
-    # todo
-    color = BLUE
     screen_x, screen_y, scale_x, scale_y = element.pos[0], element.pos[1], 1, 1
-    angle_rad = element.orientation * np.pi / 180
+    radius = element.boundaries[1]
+    ang_ext = element.boundaries[0]
+    dx_from_c = round(np.cos(element.orientation * np.pi / 180) * radius)
+    dy_from_c = round(np.sin(element.orientation * np.pi / 180) * radius)
+    c_x = screen_x - dx_from_c
+    c_y = screen_y + dy_from_c
+    top_left_x = c_x - radius
+    top_left_y = c_y - radius
+    color = BLUE
     if isinstance(element.properties, dict):
         color = element.properties['color']
-    x1, y1 = element.boundaries * np.cos(angle_rad) * scale_x + screen_x, element.boundaries * np.sin(
-        angle_rad) * scale_y + screen_y
-    x2, y2 = -element.boundaries * np.cos(angle_rad) * scale_x + screen_x, -element.boundaries * np.sin(
-        angle_rad) * scale_y + screen_y
-    pygame.draw.line(screen, color, [x1, y1], [x2, y2], 7)
+
+    b1 = (element.orientation - (ang_ext / 2)) * np.pi / 180
+    b2 = (element.orientation + (ang_ext / 2)) * np.pi / 180
+    rect_ellipse = [
+        top_left_x,
+        top_left_y,
+        radius * 2,
+        radius * 2
+    ]
+    pygame.draw.arc(
+        screen,
+        color,
+        rect_ellipse,
+        b1,
+        b2,
+        1
+    )
 
 
 def screen_map_function(pos):
@@ -175,7 +209,7 @@ def screen_map_inv(pos_screen):
 
 def add_flat_mirror():
     x_, y_, _, _ = screen_map_inv(mousePos)
-    elements.append(opticalElement.FlatMirror([x_, y_], 45, 100, {'color': BLACK}))
+    elements.append(opticalElement.FlatMirror([x_, y_], 45, 100, {'color': RED}))
 
 
 def add_curved_mirror():
@@ -188,7 +222,7 @@ def add_curved_mirror():
 # noinspection PyPep8Naming
 def ray_trace():
     output_rays = [rays]
-
+    first_round = True
     for i in range(0, MAX_BOUNCE):
         newRays = []
         # print("i = %d" % i)
@@ -198,8 +232,9 @@ def ray_trace():
             closestElem = None
             closestIntersect = None
             for elem in elements:
+                if elem.elementType() == 'CurvedReceiver' and first_round:
+                    continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
-                print(intersect)
                 if intersect is None:
                     continue
                 dist = np.linalg.norm(intersect - r['pos'])
@@ -215,14 +250,13 @@ def ray_trace():
                 dir_new = closestElem.reflect(r['pos'], r['dir'], closestIntersect)
                 dir_new = dir_new / np.linalg.norm(dir_new)
                 r['intersect'] = closestIntersect
-                if 'color' in r:
-                    newRays.append({'pos': closestIntersect, 'dir': dir_new, 'color': r['color']})
-                else:
-                    newRays.append({'pos': closestIntersect, 'dir': dir_new, 'color': r['color']})
+                newRays.append({'pos': closestIntersect, 'dir': dir_new, 'color': BLUE})
             else:
                 r['intersect'] = None
         if len(newRays) != 0:
             output_rays.append(newRays)
+            first_round = False
+
     return output_rays
 
 
@@ -441,6 +475,7 @@ def get_ray_start_p(rect_size):
     # radius=2*(diameter/2)
     # 1 start point per 5°
     points_list = []
+    ang_list = []
     for i in range(int(360 / 5)):
         point = (round(np.cos(5 * i * np.pi / 180) * radius), round(np.sin(5 * i * np.pi / 180) * radius))
         point = list(point)
@@ -448,8 +483,9 @@ def get_ray_start_p(rect_size):
         point[1] += round(rect_size[1] / 2)
         point[1] = rect_size[1] - point[1]
         points_list.append(tuple(point))
+        ang_list.append(i * 5)
     # center is 1/2 rect_size
-    return points_list, radius
+    return points_list, ang_list, radius
 
 
 def fit_square(points, old_scr_size, new_scr_size):
@@ -491,6 +527,11 @@ def polygon_mirror(vertices):
         elements.append(opticalElement.FlatMirror(np.array(pos), ang, half_length, {'color': BLACK}))
 
 
+def circle_receiver(start_points, start_ang, radius):
+    for i in range(len(start_points)):
+        elements.append(CurvedReceiver(start_points[i], start_ang[i], [4.9, radius], {'color': RED}))
+
+
 def radar_cross_section():
     global size, screen
     src_b = [
@@ -504,7 +545,7 @@ def radar_cross_section():
         (-3.5, 0)
     ]
     vert, canvas_size_pixel = conv_vert(src_b, True)
-    p_list, rad = get_ray_start_p(canvas_size_pixel)
+    p_list, a_list, rad = get_ray_start_p(canvas_size_pixel)
     size = (round(2 * rad) + 100, round(2 * rad) + 100)
     p_list = fit_square(p_list, canvas_size_pixel, size)
     vert = fit_square(vert, canvas_size_pixel, size)
@@ -515,7 +556,10 @@ def radar_cross_section():
     done = False
     r_sp_index = 0
     polygon_mirror(vert)
+    circle_receiver(p_list, a_list, rad)
+    reset_count = False
     while not done:
+        print('next source:')
         for event_ in pygame.event.get():
             # -------Mouse Events--------
             if event_.type == pygame.MOUSEBUTTONDOWN:  # Mouse click events
@@ -529,6 +573,7 @@ def radar_cross_section():
         r_sp_index += 1
         if r_sp_index >= len(p_list):
             r_sp_index = 0
+            reset_count = True
         output_rays = ray_trace()
         screen.fill(WHITE)
         for p in vert:
@@ -536,7 +581,15 @@ def radar_cross_section():
         for p in p_list:
             pygame.draw.circle(screen, BLUE, p, 2)
         for i in range(0, len(elements)):
-            direct_draw_line(elements[i])
+            if elements[i].elementType() == 'FlatMirror':
+                direct_draw_line(elements[i])
+            elif elements[i].elementType() == 'CurvedReceiver':
+                direct_draw_arc(elements[i])
+                if reset_count:
+                    print(elements[i].orientation, elements[i].rec_count)
+                    elements[i].reset_count()
+        if reset_count:
+            reset_count = False
         for i_ in range(0, len(output_rays)):
             for j_ in range(0, len(output_rays[i_])):
                 x1, y1 = output_rays[i_][j_]['pos']
