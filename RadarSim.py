@@ -17,107 +17,23 @@ from RayTracer import opticalElement
 from RayTracer.opticalElement import FlatMirror, CurvedMirror, OpticalElement
 
 
-# noinspection PyPep8Naming,PyMethodMayBeStatic
-class CurvedReceiver(OpticalElement):
+class CurvedRec(CurvedMirror):
     rec_count = 0
-
-    def __init__(self, pos, orientation, boundaries, properties):
-        super().__init__(pos, orientation, boundaries, properties)
-        self.properties['color'] = RED
-
-    def reset_count(self):
-        self.rec_count = 0
 
     def elementType(self):
         return 'CurvedReceiver'
 
-    # self.boundaries = [angularSize, radius]
-    # self.orientation = direction
+    def reset_count(self):
+        self.rec_count = 0
 
     def getCenterPoint(self):
-        angleCent = self.orientation * np.pi / 180
-        return np.array([self.pos[0] - self.boundaries[1] * np.cos(angleCent),
-                         self.pos[1] - self.boundaries[1] * np.sin(angleCent)])
-
-    def rayIntersection(self, ray_pos, ray_dir):
-        center = self.getCenterPoint()
-        rx, ry, vx, vy, R = ray_pos[0] - center[0], ray_pos[1] - center[1], ray_dir[0], ray_dir[1], self.boundaries[1]
-        angExtent = np.arctan(self.boundaries[0] / R) * 180 / np.pi
-        if (2 * rx * vx + 2 * ry * vy) ** 2 - 4 * (-R ** 2 + rx ** 2 + ry ** 2) * (vx ** 2 + vy ** 2) < 0:
-            # self.properties['color'] = RED
-            return None
-        t_val1 = (-2 * rx * vx - 2 * ry * vy - np.sqrt(
-            (2 * rx * vx + 2 * ry * vy) ** 2 - 4 * (-R ** 2 + rx ** 2 + ry ** 2) * (vx ** 2 + vy ** 2))) / (
-                         2 * (vx ** 2 + vy ** 2))
-        t_val2 = (-2 * rx * vx - 2 * ry * vy + np.sqrt(
-            (2 * rx * vx + 2 * ry * vy) ** 2 - 4 * (-R ** 2 + rx ** 2 + ry ** 2) * (vx ** 2 + vy ** 2))) / (
-                         2 * (vx ** 2 + vy ** 2))
-
-        intersect1 = np.array(ray_pos) + t_val1 * ray_dir
-        intersect2 = np.array(ray_pos) + t_val2 * ray_dir
-
-        angle1 = np.arctan2(intersect1[1] - center[1], intersect1[0] - center[0]) * 180 / np.pi % 360
-        angle2 = np.arctan2(intersect2[1] - center[1], intersect2[0] - center[0]) * 180 / np.pi % 360
-
-        b1, b2 = (self.orientation - angExtent) % 360, (self.orientation + angExtent) % 360
-
-        if self.angleBetween(angle1, b1, b2):
-            if self.angleBetween(angle2, b1, b2):
-                dist1 = np.linalg.norm(ray_pos - intersect1)
-                dist2 = np.linalg.norm(ray_pos - intersect2)
-                if dist1 < dist2:
-                    self.rec_count += 1
-                    print(self.orientation, 'side 1')
-                    self.properties['color'] = GREEN
-                    return None
-                self.rec_count += 1
-                print(self.orientation, 'side 2')
-                self.properties['color'] = GREEN
-                return None
-            else:
-                self.rec_count += 1
-                print(self.orientation, 'side 1')
-                self.properties['color'] = GREEN
-                return None
-
-        elif self.angleBetween(angle2, b1, b2):
-            self.rec_count += 1
-            print(self.orientation, 'side 2')
-            self.properties['color'] = GREEN
-            return None
-        else:
-            # self.properties['color'] = RED
-            return None
-
-    def reflect(self, ray_pos, ray_dir, intersect):
-        center = self.getCenterPoint()
-        v_p = np.array([intersect[0] - center[0], intersect[1] - center[1]])
-        v_p = v_p / np.linalg.norm(v_p)
-        vin = np.array(ray_dir)
-        return vin - 2 * np.dot(ray_dir, v_p) * v_p
-
-    def checkBoundaries(self, pos):
-        return False
-
-    def angleBetween(self, angle, b1, b2):
-        diff1, diff2 = abs(angle % 360 - b1 % 360), abs(angle % 360 - b2 % 360)
-        width = abs(b1 - b2)
-        if width > 180:
-            width = 360 - width
-        if diff1 > 180:
-            diff1 = 360 - diff1
-        if diff2 > 180:
-            diff2 = 360 - diff2
-        return (diff1 < width) and (diff2 < width)
-
-    def setOrientation(self, angleDeg):
-        self.orientation = angleDeg % 360
-
-    def draw(self, scr, screenPosFunction):
-        pass
-
-    def drawSelected(self, scr, screenPosFunc):
-        pass
+        angle_cent = self.orientation * np.pi / 180
+        return np.array(
+            [
+                self.pos[0] - self.boundaries[1] * np.cos(angle_cent),
+                self.pos[1] + self.boundaries[1] * np.sin(angle_cent)
+            ]
+        )
 
 
 size = (700, 700)
@@ -126,7 +42,7 @@ screen = pygame.display.set_mode(size)
 coord_lims_default = np.array([[-1000.0, 1000.0], [-1000.0, 1000.0]])
 coord_lims = coord_lims_default
 mousePos: np.ndarray | None = None
-elements: list[FlatMirror | CurvedMirror | CurvedReceiver] = []
+elements: list[FlatMirror | CurvedMirror | CurvedRec] = []
 rays = []
 MAX_BOUNCE = 100
 # Define some colors
@@ -143,31 +59,26 @@ def direct_draw_line(element):
     angle_rad = element.orientation * np.pi / 180
     if isinstance(element.properties, dict):
         color = element.properties['color']
-    x1, y1 = element.boundaries * np.cos(angle_rad) * scale_x + screen_x, element.boundaries * np.sin(
-        angle_rad) * scale_y + screen_y
-    x2, y2 = -element.boundaries * np.cos(angle_rad) * scale_x + screen_x, -element.boundaries * np.sin(
-        angle_rad) * scale_y + screen_y
+    x1 = element.boundaries * np.cos(angle_rad) * scale_x + screen_x
+    y1 = element.boundaries * np.sin(angle_rad) * scale_y + screen_y
+    x2 = -element.boundaries * np.cos(angle_rad) * scale_x + screen_x
+    y2 = -element.boundaries * np.sin(angle_rad) * scale_y + screen_y
     pygame.draw.line(screen, color, [x1, y1], [x2, y2], 7)
 
 
 def direct_draw_arc(element):
-    screen_x, screen_y, scale_x, scale_y = element.pos[0], element.pos[1], 1, 1
+    screen_x, screen_y = element.getCenterPoint()
+    scale_x, scale_y = 1, 1
     radius = element.boundaries[1]
-    ang_ext = element.boundaries[0]
-    dx_from_c = round(np.cos(element.orientation * np.pi / 180) * radius)
-    dy_from_c = round(np.sin(element.orientation * np.pi / 180) * radius)
-    c_x = screen_x - dx_from_c
-    c_y = screen_y + dy_from_c
-    top_left_x = c_x - radius
-    top_left_y = c_y - radius
+    ang_ext = element.boundaries[0] / 2
     color = element.properties['color']
-    b1 = (element.orientation - (ang_ext / 2)) * np.pi / 180
-    b2 = (element.orientation + (ang_ext / 2)) * np.pi / 180
+    b1 = ((element.orientation - ang_ext) % 360) * np.pi / 180
+    b2 = ((element.orientation + ang_ext) % 360) * np.pi / 180
     rect_ellipse = [
-        top_left_x,
-        top_left_y,
-        radius * 2,
-        radius * 2
+        screen_x - radius * scale_x,
+        screen_y - radius * scale_y,
+        radius * scale_x * 2,
+        radius * scale_y * 2
     ]
     pygame.draw.arc(
         screen,
@@ -193,14 +104,12 @@ def ray_trace():
                     if r['color'] == GREEN:
                         continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
-                if elem.orientation == 105:
-                    print('105', intersect, r)
                 if intersect is None:
                     continue
                 dist = np.linalg.norm(intersect - r['pos'])
                 if dist < .0001:
                     continue
-                if min_dist > dist:
+                if min_dist > dist and elem.elementType() != 'CurvedReceiver':
                     min_dist = dist
                     closest_elem = elem
                     closest_intersect = intersect
@@ -279,8 +188,8 @@ def polygon_mirror(vertices):
 
 
 def circle_receiver(start_points, start_ang, radius):
-    for i in range(len(start_points)):
-        elements.append(CurvedReceiver(start_points[i], start_ang[i], [5, radius], {'color': RED}))
+    for i in range(int(len(start_points) / 2)):
+        elements.append(CurvedRec(start_points[i], start_ang[i], [5, radius], {'color': RED}))
 
 
 def radar_cross_section():
@@ -336,6 +245,7 @@ def radar_cross_section():
                 direct_draw_line(elements[i])
             elif elements[i].elementType() == 'CurvedReceiver':
                 direct_draw_arc(elements[i])
+                elements[i].properties['color'] = RED
                 if reset_count:
                     print(elements[i].orientation, elements[i].rec_count)
                     elements[i].reset_count()
