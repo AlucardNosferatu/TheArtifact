@@ -8,10 +8,12 @@ Created on Sun Nov 25 16:15:36 2018
 """
 
 import copy
+import math
 
 import numpy as np
 import pygame
 
+from AeroSim import conv_vert
 from RayTracer import opticalElement
 from RayTracer.menu import Menu
 from RayTracer.opticalElement import FlatMirror, CurvedMirror
@@ -70,7 +72,7 @@ def add_curved_mirror():
 def ray_trace():
     output_rays = [rays]
 
-    for i_ in range(0, MAX_BOUNCE):
+    for i in range(0, MAX_BOUNCE):
         newRays = []
         # print("i = %d" % i)
         for r in output_rays[-1]:
@@ -107,7 +109,7 @@ def ray_trace():
     return output_rays
 
 
-def radar_sim():
+def ray_sim():
     global mousePos, coord_lims
     pygame.init()
 
@@ -118,7 +120,7 @@ def radar_sim():
     pygame.display.set_caption("Ray Tracer")
 
     # Loop until the user clicks the close button.
-    done = False
+    end = False
 
     theta = 0
     rays.append(
@@ -151,7 +153,7 @@ def radar_sim():
     viewDrag_mouseStart = None
     viewDrag_c_start = None
 
-    while not done:
+    while not end:
         for event in pygame.event.get():  # Handle events
             rightClickMenu.processMouseInput(event)
             if event.type == pygame.QUIT:
@@ -273,7 +275,7 @@ def radar_sim():
 
                 # Handle window close
             if event.type == pygame.QUIT:  # If user clicked close
-                done = True  # Flag that we are done so we exit this loop
+                end = True  # Flag that we are done so we exit this loop
 
         outputRays = ray_trace()
 
@@ -314,5 +316,99 @@ def radar_sim():
     pygame.quit()
 
 
+def get_ray_start_p(rect_size):
+    dx = rect_size[0]
+    dy = rect_size[1]
+    diameter = math.sqrt(dx ** 2 + dy ** 2)
+    radius = diameter
+    # radius=2*(diameter/2)
+    # 1 start point per 5°
+    points_list = []
+    for i in range(int(360 / 5)):
+        point = (round(np.cos(5 * i * np.pi / 180) * radius), round(np.sin(5 * i * np.pi / 180) * radius))
+        point = list(point)
+        point[0] += round(rect_size[0] / 2)
+        point[1] += round(rect_size[1] / 2)
+        point[1] = rect_size[1] - point[1]
+        points_list.append(tuple(point))
+    # center is 1/2 rect_size
+    return points_list, radius
+
+
+def fit_square(points, old_scr_size, new_scr_size):
+    dx = (new_scr_size[0] - old_scr_size[0]) / 2
+    dy = (new_scr_size[1] - old_scr_size[1]) / 2
+    for i, point in enumerate(points):
+        point = list(point)
+        point[0] += dx
+        point[1] += dy
+        points[i] = tuple(point)
+    return points
+
+
+def ray_scan(start_point, ang_offset):
+    for i in range(int(180 / 5) + 1):
+        theta = 5 * i + ang_offset
+        rays.append(
+            {
+                'pos': np.array(list(start_point)),
+                'dir': np.array([np.cos(np.pi * theta / 180), np.sin(np.pi * theta / 180)]),
+                'color': GREEN
+            }
+        )
+
+
 if __name__ == '__main__':
-    radar_sim()
+    src_b = [
+        (-4, 1),
+        (-6, 0),
+        (-4, -1),
+        (4, -1),
+        (6, 0),
+        (4, 1)
+    ]
+    vert, canvas_size_pixel = conv_vert(src_b, True)
+    p_list, rad = get_ray_start_p(canvas_size_pixel)
+    size = (round(2 * rad) + 100, round(2 * rad) + 100)
+    p_list = fit_square(p_list, canvas_size_pixel, size)
+    vert = fit_square(vert, canvas_size_pixel, size)
+    screen = pygame.display.set_mode(size)
+    pygame.init()
+    c = pygame.time.Clock()
+    pygame.display.set_caption("Ray Tracer")
+    done = False
+    r_sp_index = 0
+    while not done:
+        for event_ in pygame.event.get():
+            # -------Mouse Events--------
+            if event_.type == pygame.MOUSEBUTTONDOWN:  # Mouse click events
+                print(event_)
+            elif event_.type == pygame.MOUSEBUTTONUP:  # Mouse release event
+                print(event_)
+            if event_.type == pygame.QUIT:  # If user clicked close
+                done = True  # Flag that we are done so we exit this loop
+        rays.clear()
+        ray_scan(p_list[r_sp_index], 90 - 5 * r_sp_index)
+        r_sp_index += 1
+        if r_sp_index >= len(p_list):
+            r_sp_index = 0
+        outputRays = ray_trace()
+        screen.fill(WHITE)
+        for p in vert:
+            pygame.draw.circle(screen, RED, p, 2)
+        for p in p_list:
+            pygame.draw.circle(screen, BLUE, p, 2)
+
+        for i_ in range(0, len(outputRays)):
+            for j_ in range(0, len(outputRays[i_])):
+                x1, y1 = outputRays[i_][j_]['pos']
+                x2, y2 = outputRays[i_][j_]['pos'] + outputRays[i_][j_]['dir'] * (
+                            np.max(coord_lims) - np.min(coord_lims))
+                if 'color' in outputRays[i_][j_]:
+                    pygame.draw.line(screen, outputRays[i_][j_]['color'], [x1, y1], [x2, y2], 1)
+                else:
+                    pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
+        pygame.display.flip()
+        c.tick(15)
+    # Exit thread after loop has been exited
+    pygame.quit()

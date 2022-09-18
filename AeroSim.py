@@ -37,7 +37,7 @@ def load_img(fn_img=r'WindTunnel/content/car.png'):
 
 
 def conv_vert(body, vert_list=False):
-    px_ratio = 64
+    px_ratio = 16
     if vert_list:
         vert = body
     else:
