@@ -166,16 +166,26 @@ def ray_trace(rays_, stat_):
 
 
 src_b = [
-    (-1, 2),
-    (1, 2),
-    (3, 2),
-    (5, -2),
-    (4, -4),
-    (2, -4),
-    (0, -4),
-    (-2, -4),
-    (-3, -2)
+    (-4, 2),
+    (-5, 2),
+    (-6, 0),
+    (-2, -1),
+    (8, -1),
+    (10, 0),
+    (7, 1.5),
+    (-3.5, 0)
 ]
+# src_b = [
+#     (-1, 2),
+#     (1, 2),
+#     (3, 2),
+#     (5, -2),
+#     (4, -4),
+#     (2, -4),
+#     (0, -4),
+#     (-2, -4),
+#     (-3, -2)
+# ]
 # src_b = [
 #     (-1, 2),
 #     (0, 0),
@@ -280,6 +290,6 @@ while not done:
             else:
                 pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(1)
     # Exit thread after loop has been exited
 pygame.quit()
