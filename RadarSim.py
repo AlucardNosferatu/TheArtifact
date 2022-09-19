@@ -127,6 +127,8 @@ def ray_trace(rays_, stat_):
     for i_ in range(0, max_bounce):
         new_rays = []
         for r in output_rays_[-1]:
+            if type(r) != dict:
+                continue
             min_dist = np.inf
             closest_elem = None
             closest_intersect = None
@@ -296,7 +298,7 @@ def radar_cross_section(src_b_):
                 else:
                     pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
         pygame.display.flip()
-        clock.tick(1)
+        clock.tick(60)
         # Exit thread after loop has been exited
     pygame.quit()
 
