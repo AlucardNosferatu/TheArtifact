@@ -4,7 +4,7 @@ import numpy as np
 import pygame
 from matplotlib import pyplot as plt
 
-from AeroSim import s_rotate
+# from AeroSim import s_rotate
 from RayTracer import opticalElement
 from RayTracer.opticalElement import BLACK, GREEN, WHITE, RED, BLUE
 
@@ -130,7 +130,7 @@ def ray_trace(rays_, stat_):
             closest_elem = None
             closest_intersect = None
             for elem in elements:
-                if elem.elementType() == 'CurvedMirror' and r['color'] == GREEN:
+                if elem.elementType() == 'CurvedMirror' and r['color'] != RED:
                     continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
                 if intersect is None:
@@ -154,7 +154,10 @@ def ray_trace(rays_, stat_):
                     dir_new = closest_elem.reflect(r['pos'], r['dir'], closest_intersect)
                     dir_new = dir_new / np.linalg.norm(dir_new)
                     r['intersect'] = closest_intersect
-                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': RED})
+                    if r['color'] != GREEN:
+                        new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': BLUE})
+                    else:
+                        new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': RED})
             else:
                 r['intersect'] = None
         if len(new_rays) != 0:
@@ -163,13 +166,32 @@ def ray_trace(rays_, stat_):
 
 
 src_b = [
-    (-4 + 5, 1 + 5),
-    (-6 + 5, 0 + 5),
-    (-4 + 5, -1 + 5),
-    (4 + 5, -1 + 5),
-    (6 + 5, 0 + 5),
-    (4 + 5, 1 + 5)
+    (-1, 2),
+    (1, 2),
+    (3, 2),
+    (5, -2),
+    (4, -4),
+    (2, -4),
+    (0, -4),
+    (-2, -4),
+    (-3, -2)
 ]
+# src_b = [
+#     (-1, 2),
+#     (0, 0),
+#     (1, 2),
+#     (2, 0),
+#     (3, 2),
+#     (5, -2),
+#     (4, -4),
+#     (3, -2),
+#     (2, -4),
+#     (1, -2),
+#     (0, -4),
+#     (-1, -2),
+#     (-2, -4),
+#     (-3, -2)
+# ]
 # for n, t in enumerate(src_b):
 #     point_x = t[0]
 #     point_y = t[1]
