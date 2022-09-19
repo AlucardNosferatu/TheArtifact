@@ -290,6 +290,6 @@ while not done:
             else:
                 pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
     pygame.display.flip()
-    clock.tick(1)
+    clock.tick(60)
     # Exit thread after loop has been exited
 pygame.quit()
