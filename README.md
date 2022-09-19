@@ -1,6 +1,9 @@
 # TheArtifact
 ### Current Progress:
 <p align="center">
+  <img width="640" height="640" src="https://raw.githubusercontent.com/AlucardNosferatu/TheArtifact/main/Pics/RCS.png">
+</p>
+<p align="center">
   <img width="640" height="640" src="https://raw.githubusercontent.com/AlucardNosferatu/TheArtifact/main/Pics/Figure_1.png">
 </p>
 <p align="center">
