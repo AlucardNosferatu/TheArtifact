@@ -227,11 +227,10 @@ while not done:
         # 设置雷达图的0度起始位置
         ax.set_theta_zero_location('E')
         # 设置雷达图的坐标刻度范围
-        ax.set_rlim(0, 100)
+        ax.set_rlim(0, max(stat.values()))
         # 设置雷达图的坐标值显示角度，相对于起始角度的偏移量
         ax.set_rlabel_position(270)
         ax.set_title("RCS Estimation")
-        plt.legend(["Ray Reflection Intensity"], loc='best')
         plt.show()
 
     output_rays, stat = ray_trace(rays, stat)
