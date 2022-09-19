@@ -129,6 +129,8 @@ def ray_trace(rays_, stat_):
         for r in output_rays_[-1]:
             if type(r) != dict:
                 continue
+            # if round(r['dir'][0], 1) == -0.6:
+            #     continue
             min_dist = np.inf
             closest_elem = None
             closest_intersect = None
@@ -152,7 +154,7 @@ def ray_trace(rays_, stat_):
                     dir_new = r['dir']
                     dir_new = dir_new / np.linalg.norm(dir_new)
                     r['intersect'] = closest_intersect
-                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': GREEN})
+                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': BLUE})
                 else:
                     dir_new = closest_elem.reflect(r['pos'], r['dir'], closest_intersect)
                     dir_new = dir_new / np.linalg.norm(dir_new)
