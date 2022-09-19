@@ -308,3 +308,4 @@ def radar_cross_section(src_b_):
 
 if __name__ == '__main__':
     radar_cross_section(src_b)
+    # todo:use FlatMirror as receiver
