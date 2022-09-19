@@ -209,88 +209,97 @@ src_b = [
 #     s_point_x, s_point_y = s_rotate(math.radians(9 * 5), point_x, point_y, 0, 0)
 #     src_b[n] = (s_point_x, s_point_y)
 elements = []
-src_b, sp_list, so_list, rad, stat = get_start_points(src_b)
-elements = polygon_mirror(src_b, elements)
-elements = circle_receiver(elements, sp_list, so_list, rad)
-pygame.init()
-clock = pygame.time.Clock()
-canvas_size = (
-    2 * rad + 100,
-    2 * rad + 100
-)
-screen = pygame.display.set_mode(canvas_size)
-pygame.display.set_caption("Ray Tracer")
-rays = []
-r_sp_index = 0
-done = False
+canvas_size: None | tuple = None
 
-while not done:
-    print('current orient:', so_list[r_sp_index])
-    for event_ in pygame.event.get():
-        # -------Mouse Events--------
-        if event_.type == pygame.MOUSEBUTTONDOWN:  # Mouse click events
-            print(event_)
-        elif event_.type == pygame.MOUSEBUTTONUP:  # Mouse release event
-            print(event_)
-        if event_.type == pygame.QUIT:  # If user clicked close
-            done = True  # Flag that we are done so we exit this loop
-    rays.clear()
-    rays = ray_scan(sp_list[r_sp_index], 90 + 5 * r_sp_index, rays)
-    r_sp_index += 1
-    if r_sp_index >= len(sp_list):
-        r_sp_index = 0
-        done = True
-        data_length = len(stat)
-        # 将极坐标根据数据长度进行等分
-        angles = np.linspace(0, 2 * np.pi, data_length, endpoint=False)
-        labels = [key for key in stat.keys()]
-        score = [v for v in stat.values()]
-        # 使雷达图数据封闭
-        score_a = np.concatenate((score, [score[0]]))
-        angles = np.concatenate((angles, [angles[0]]))
-        labels = np.concatenate((labels, [labels[0]]))
-        # 设置图形的大小
-        fig = plt.figure(figsize=(8, 6), dpi=100)
-        # 新建一个子图
-        ax = plt.subplot(111, polar=True)
-        # 绘制雷达图
-        ax.plot(angles, score_a, color='g')
-        # 设置雷达图中每一项的标签显示
-        ax.set_thetagrids(angles * 180 / np.pi, labels)
-        # 设置雷达图的0度起始位置
-        ax.set_theta_zero_location('E')
-        # 设置雷达图的坐标刻度范围
-        ax.set_rlim(0, max(stat.values()))
-        # 设置雷达图的坐标值显示角度，相对于起始角度的偏移量
-        ax.set_rlabel_position(270)
-        ax.set_title("RCS Estimation")
-        plt.show()
 
-    output_rays, stat = ray_trace(rays, stat)
-    screen.fill(WHITE)
-    for p in src_b:
-        x, y, _, _ = screen_map_function(p)
-        pygame.draw.circle(screen, RED, (x, y), 2)
-    for p in sp_list:
-        x, y, _, _ = screen_map_function(p)
-        pygame.draw.circle(screen, BLUE, (x, y), 2)
-    for i in range(0, len(elements)):
-        elements[i].draw(screen, screen_map_function)
-        elements[i].properties['color'] = BLACK
-    for i in range(0, len(output_rays)):
-        for j in range(0, len(output_rays[i])):
-            x1, y1, _, _ = screen_map_function(output_rays[i][j]['pos'])
-            if 'intersect' in output_rays[i][j] and output_rays[i][j]['intersect'] is not None:
-                x2, y2, _, _ = screen_map_function(output_rays[i][j]['intersect'])
-            else:
-                x2, y2, _, _ = screen_map_function(
-                    output_rays[i][j]['pos'] + output_rays[i][j]['dir'] * np.max(canvas_size)
-                )
-            if 'color' in output_rays[i][j]:
-                pygame.draw.line(screen, output_rays[i][j]['color'], [x1, y1], [x2, y2], 1)
-            else:
-                pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
-    pygame.display.flip()
-    clock.tick(1)
-    # Exit thread after loop has been exited
-pygame.quit()
+def radar_cross_section(src_b_):
+    global elements, canvas_size
+    src_b_, sp_list, so_list, rad, stat = get_start_points(src_b_)
+    elements = polygon_mirror(src_b_, elements)
+    elements = circle_receiver(elements, sp_list, so_list, rad)
+    pygame.init()
+    clock = pygame.time.Clock()
+    canvas_size = (
+        2 * rad + 100,
+        2 * rad + 100
+    )
+    screen = pygame.display.set_mode(canvas_size)
+    pygame.display.set_caption("Ray Tracer")
+    rays = []
+    r_sp_index = 0
+    done = False
+
+    while not done:
+        print('current orient:', so_list[r_sp_index])
+        for event_ in pygame.event.get():
+            # -------Mouse Events--------
+            if event_.type == pygame.MOUSEBUTTONDOWN:  # Mouse click events
+                print(event_)
+            elif event_.type == pygame.MOUSEBUTTONUP:  # Mouse release event
+                print(event_)
+            if event_.type == pygame.QUIT:  # If user clicked close
+                done = True  # Flag that we are done so we exit this loop
+        rays.clear()
+        rays = ray_scan(sp_list[r_sp_index], 90 + 5 * r_sp_index, rays)
+        r_sp_index += 1
+        if r_sp_index >= len(sp_list):
+            r_sp_index = 0
+            done = True
+            data_length = len(stat)
+            # 将极坐标根据数据长度进行等分
+            angles = np.linspace(0, 2 * np.pi, data_length, endpoint=False)
+            labels = [key for key in stat.keys()]
+            score = [v for v in stat.values()]
+            # 使雷达图数据封闭
+            score_a = np.concatenate((score, [score[0]]))
+            angles = np.concatenate((angles, [angles[0]]))
+            labels = np.concatenate((labels, [labels[0]]))
+            # 设置图形的大小
+            plt.figure(figsize=(8, 6), dpi=100)
+            # 新建一个子图
+            ax = plt.subplot(111, polar=True)
+            # 绘制雷达图
+            ax.plot(angles, score_a, color='g')
+            # 设置雷达图中每一项的标签显示
+            ax.set_thetagrids(angles * 180 / np.pi, labels)
+            # 设置雷达图的0度起始位置
+            ax.set_theta_zero_location('E')
+            # 设置雷达图的坐标刻度范围
+            ax.set_rlim(0, max(stat.values()))
+            # 设置雷达图的坐标值显示角度，相对于起始角度的偏移量
+            ax.set_rlabel_position(270)
+            ax.set_title("RCS Estimation")
+            plt.show()
+
+        output_rays, stat = ray_trace(rays, stat)
+        screen.fill(WHITE)
+        for p in src_b_:
+            x, y, _, _ = screen_map_function(p)
+            pygame.draw.circle(screen, RED, (x, y), 2)
+        for p in sp_list:
+            x, y, _, _ = screen_map_function(p)
+            pygame.draw.circle(screen, BLUE, (x, y), 2)
+        for i in range(0, len(elements)):
+            elements[i].draw(screen, screen_map_function)
+            elements[i].properties['color'] = BLACK
+        for i in range(0, len(output_rays)):
+            for j in range(0, len(output_rays[i])):
+                x1, y1, _, _ = screen_map_function(output_rays[i][j]['pos'])
+                if 'intersect' in output_rays[i][j] and output_rays[i][j]['intersect'] is not None:
+                    x2, y2, _, _ = screen_map_function(output_rays[i][j]['intersect'])
+                else:
+                    x2, y2, _, _ = screen_map_function(
+                        output_rays[i][j]['pos'] + output_rays[i][j]['dir'] * np.max(canvas_size)
+                    )
+                if 'color' in output_rays[i][j]:
+                    pygame.draw.line(screen, output_rays[i][j]['color'], [x1, y1], [x2, y2], 1)
+                else:
+                    pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
+        pygame.display.flip()
+        clock.tick(1)
+        # Exit thread after loop has been exited
+    pygame.quit()
+
+
+if __name__ == '__main__':
+    radar_cross_section(src_b)
