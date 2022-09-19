@@ -4,7 +4,25 @@ import numpy as np
 import pygame
 
 from RayTracer import opticalElement
-from RayTracer.rayTracer import BLACK, GREEN
+from RayTracer.opticalElement import BLACK, GREEN, WHITE, RED, BLUE
+
+
+def screen_map_function(pos, canvas_size_):
+    return (
+        int(pos[0] + (canvas_size_[0] / 2)),
+        int(-pos[1] + (canvas_size_[1] / 2)),
+        1,
+        1
+    )
+
+
+def screen_map_inv(pos_screen, canvas_size_):
+    return (
+        int(pos_screen[0] - (canvas_size_[0] / 2)),
+        int(-(pos_screen[1] - (canvas_size_[0] / 2))),
+        1,
+        1
+    )
 
 
 def get_start_points(src_b_):
@@ -73,8 +91,8 @@ def polygon_mirror(src_b_, elements_):
 
 
 def ray_scan(start_point, ang_offset, rays_):
-    for i in range(int(180 / 5) + 1):
-        theta = 5 * i + ang_offset
+    for i_ in range(int(180 / 5) + 1):
+        theta = 5 * i_ + ang_offset
         rays_.append(
             {
                 'pos': np.array(list(start_point)),
@@ -83,6 +101,41 @@ def ray_scan(start_point, ang_offset, rays_):
             }
         )
     return rays_
+
+
+def ray_trace(rays_):
+    max_bounce = 100
+    output_rays_ = [rays_]
+    for i_ in range(0, max_bounce):
+        new_rays = []
+        for r in output_rays_[-1]:
+            min_dist = np.inf
+            closest_elem = None
+            closest_intersect = None
+            for elem in elements:
+                intersect = elem.rayIntersection(r['pos'], r['dir'])
+                if intersect is None:
+                    continue
+                dist = np.linalg.norm(intersect - r['pos'])
+                if dist < .0001:
+                    continue
+                if min_dist > dist:
+                    min_dist = dist
+                    closest_elem = elem
+                    closest_intersect = intersect
+            if closest_elem is not None:
+                dir_new = closest_elem.reflect(r['pos'], r['dir'], closest_intersect)
+                dir_new = dir_new / np.linalg.norm(dir_new)
+                r['intersect'] = closest_intersect
+                if 'color' in r:
+                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': r['color']})
+                else:
+                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': RED})
+            else:
+                r['intersect'] = None
+        if len(new_rays) != 0:
+            output_rays_.append(new_rays)
+    return output_rays_
 
 
 src_b = [
@@ -106,7 +159,8 @@ screen = pygame.display.set_mode(canvas_size)
 pygame.display.set_caption("Ray Tracer")
 rays = []
 r_sp_index = 0
-while True:
+done = False
+while not done:
     for event_ in pygame.event.get():
         # -------Mouse Events--------
         if event_.type == pygame.MOUSEBUTTONDOWN:  # Mouse click events
@@ -115,8 +169,21 @@ while True:
             print(event_)
         if event_.type == pygame.QUIT:  # If user clicked close
             done = True  # Flag that we are done so we exit this loop
+    rays.clear()
     rays = ray_scan(sp_list[r_sp_index], 90 + 5 * r_sp_index, rays)
     r_sp_index += 1
-    if r_sp_index >= len(p_list):
+    if r_sp_index >= len(sp_list):
         r_sp_index = 0
-    rays.clear()
+    output_rays = ray_trace(rays)
+    screen.fill(WHITE)
+    for p in src_b:
+        x, y, _, _ = screen_map_function(p, canvas_size)
+        pygame.draw.circle(screen, RED, (x, y), 2)
+    for p in sp_list:
+        x, y, _, _ = screen_map_function(p, canvas_size)
+        pygame.draw.circle(screen, BLUE, (x, y), 2)
+
+    pygame.display.flip()
+    clock.tick(1)
+    # Exit thread after loop has been exited
+pygame.quit()
