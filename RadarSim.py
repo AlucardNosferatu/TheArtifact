@@ -2,7 +2,9 @@ import math
 
 import numpy as np
 import pygame
+from matplotlib import pyplot as plt
 
+from AeroSim import s_rotate
 from RayTracer import opticalElement
 from RayTracer.opticalElement import BLACK, GREEN, WHITE, RED, BLUE
 
@@ -26,14 +28,15 @@ def screen_map_inv(pos_screen):
 
 
 def get_start_points(src_b_):
+    stat_ = {}
     px_ratio = 16
-    for i, t in enumerate(src_b_):
+    for i_, t in enumerate(src_b_):
         t = list(t)
         t = [
             t[0] * px_ratio,
             t[1] * px_ratio
         ]
-        src_b_[i] = tuple(t)
+        src_b_[i_] = tuple(t)
     max_x = src_b_[0][0]
     max_y = src_b_[0][1]
     min_x = src_b_[0][0]
@@ -55,22 +58,23 @@ def get_start_points(src_b_):
         rect_size[0] * 0.5 + min_x,
         rect_size[1] * 0.5 + min_y
     ]
-    for i, t in enumerate(src_b_):
+    for i_, t in enumerate(src_b_):
         t = list(t)
         t = [
             t[0] - rect_offset[0],
             t[1] - rect_offset[1],
         ]
-        src_b_[i] = tuple(t)
+        src_b_[i_] = tuple(t)
     radius = math.sqrt(rect_size[0] ** 2 + rect_size[1] ** 2)
     start_points = []
     start_orient = []
-    for i in range(int(360 / 5)):
-        ang = i * 5
+    for i_ in range(int(360 / 5)):
+        ang = i_ * 5
         sp = (np.cos(ang * np.pi / 180) * radius, np.sin(ang * np.pi / 180) * radius)
         start_points.append(sp)
         start_orient.append(ang)
-    return src_b_, start_points, start_orient, radius
+        stat_.__setitem__(ang, 0)
+    return src_b_, start_points, start_orient, radius, stat_
 
 
 def polygon_mirror(src_b_, elements_):
@@ -116,7 +120,7 @@ def ray_scan(start_point, ang_offset, rays_):
     return rays_
 
 
-def ray_trace(rays_):
+def ray_trace(rays_, stat_):
     max_bounce = 10
     output_rays_ = [rays_]
     for i_ in range(0, max_bounce):
@@ -141,6 +145,7 @@ def ray_trace(rays_):
             if closest_elem is not None:
                 closest_elem.properties['color'] = RED
                 if closest_elem.elementType() == 'CurvedMirror':
+                    stat_[closest_elem.orientation] += 1
                     dir_new = r['dir']
                     dir_new = dir_new / np.linalg.norm(dir_new)
                     r['intersect'] = closest_intersect
@@ -154,7 +159,7 @@ def ray_trace(rays_):
                 r['intersect'] = None
         if len(new_rays) != 0:
             output_rays_.append(new_rays)
-    return output_rays_
+    return output_rays_, stat_
 
 
 src_b = [
@@ -165,8 +170,13 @@ src_b = [
     (6 + 5, 0 + 5),
     (4 + 5, 1 + 5)
 ]
+# for n, t in enumerate(src_b):
+#     point_x = t[0]
+#     point_y = t[1]
+#     s_point_x, s_point_y = s_rotate(math.radians(9 * 5), point_x, point_y, 0, 0)
+#     src_b[n] = (s_point_x, s_point_y)
 elements = []
-src_b, sp_list, so_list, rad = get_start_points(src_b)
+src_b, sp_list, so_list, rad, stat = get_start_points(src_b)
 elements = polygon_mirror(src_b, elements)
 elements = circle_receiver(elements, sp_list, so_list, rad)
 pygame.init()
@@ -180,7 +190,9 @@ pygame.display.set_caption("Ray Tracer")
 rays = []
 r_sp_index = 0
 done = False
+
 while not done:
+    print('current orient:', so_list[r_sp_index])
     for event_ in pygame.event.get():
         # -------Mouse Events--------
         if event_.type == pygame.MOUSEBUTTONDOWN:  # Mouse click events
@@ -194,7 +206,35 @@ while not done:
     r_sp_index += 1
     if r_sp_index >= len(sp_list):
         r_sp_index = 0
-    output_rays = ray_trace(rays)
+        done = True
+        data_length = len(stat)
+        # 将极坐标根据数据长度进行等分
+        angles = np.linspace(0, 2 * np.pi, data_length, endpoint=False)
+        labels = [key for key in stat.keys()]
+        score = [v for v in stat.values()]
+        # 使雷达图数据封闭
+        score_a = np.concatenate((score, [score[0]]))
+        angles = np.concatenate((angles, [angles[0]]))
+        labels = np.concatenate((labels, [labels[0]]))
+        # 设置图形的大小
+        fig = plt.figure(figsize=(8, 6), dpi=100)
+        # 新建一个子图
+        ax = plt.subplot(111, polar=True)
+        # 绘制雷达图
+        ax.plot(angles, score_a, color='g')
+        # 设置雷达图中每一项的标签显示
+        ax.set_thetagrids(angles * 180 / np.pi, labels)
+        # 设置雷达图的0度起始位置
+        ax.set_theta_zero_location('E')
+        # 设置雷达图的坐标刻度范围
+        ax.set_rlim(0, 100)
+        # 设置雷达图的坐标值显示角度，相对于起始角度的偏移量
+        ax.set_rlabel_position(270)
+        ax.set_title("RCS Estimation")
+        plt.legend(["Ray Reflection Intensity"], loc='best')
+        plt.show()
+
+    output_rays, stat = ray_trace(rays, stat)
     screen.fill(WHITE)
     for p in src_b:
         x, y, _, _ = screen_map_function(p)
@@ -219,6 +259,6 @@ while not done:
             else:
                 pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
     pygame.display.flip()
-    clock.tick(1)
+    clock.tick(60)
     # Exit thread after loop has been exited
 pygame.quit()
