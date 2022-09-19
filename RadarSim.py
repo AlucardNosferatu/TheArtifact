@@ -109,14 +109,15 @@ def circle_receiver(elements_, start_points, start_ang, radius):
 
 def ray_scan(start_point, ang_offset, rays_):
     for i_ in range(int(180 / 5) + 1):
-        theta = 5 * i_ + ang_offset
-        rays_.append(
-            {
-                'pos': np.array(list(start_point)),
-                'dir': np.array([np.cos(np.pi * theta / 180), np.sin(np.pi * theta / 180)]),
-                'color': GREEN
-            }
-        )
+        if 17 < i_ < 19:
+            theta = 5 * i_ + ang_offset
+            rays_.append(
+                {
+                    'pos': np.array(list(start_point)),
+                    'dir': np.array([np.cos(np.pi * theta / 180), np.sin(np.pi * theta / 180)]),
+                    'color': GREEN
+                }
+            )
     return rays_
 
 
@@ -290,6 +291,6 @@ while not done:
             else:
                 pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(1)
     # Exit thread after loop has been exited
 pygame.quit()
