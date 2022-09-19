@@ -9,6 +9,11 @@ from RayTracer import opticalElement
 from RayTracer.opticalElement import BLACK, GREEN, WHITE, RED, BLUE
 
 
+class FlatReceiver(opticalElement.FlatMirror):
+    def elementType(self):
+        return 'FlatReceiver'
+
+
 def screen_map_function(pos):
     return (
         int(pos[0] + (canvas_size[0] / 2)),
@@ -96,28 +101,29 @@ def polygon_mirror(src_b_, elements_):
 
 def circle_receiver(elements_, start_points, start_ang, radius):
     for i_ in range(len(start_points)):
-        elements_.append(
-            opticalElement.CurvedMirror(
-                start_points[i_],
-                start_ang[i_],
-                [10, radius],
-                {'color': BLACK}
-            )
-        )
+        # elements_.append(
+        #     opticalElement.CurvedMirror(
+        #         start_points[i_],
+        #         start_ang[i_],
+        #         [10, radius],
+        #         {'color': BLACK}
+        #     )
+        # )
+        elements_.append(FlatReceiver(start_points[i_], start_ang[i_]+90, 10, {'color': BLACK}))
     return elements_
 
 
 def ray_scan(start_point, ang_offset, rays_):
     for i_ in range(int(180 / 5) + 1):
-        if 17 < i_ < 19:
-            theta = 5 * i_ + ang_offset
-            rays_.append(
-                {
-                    'pos': np.array(list(start_point)),
-                    'dir': np.array([np.cos(np.pi * theta / 180), np.sin(np.pi * theta / 180)]),
-                    'color': GREEN
-                }
-            )
+        # if 17 < i_ < 19:
+        theta = 5 * i_ + ang_offset
+        rays_.append(
+            {
+                'pos': np.array(list(start_point)),
+                'dir': np.array([np.cos(np.pi * theta / 180), np.sin(np.pi * theta / 180)]),
+                'color': GREEN
+            }
+        )
     return rays_
 
 
@@ -135,7 +141,7 @@ def ray_trace(rays_, stat_):
             closest_elem = None
             closest_intersect = None
             for elem in elements:
-                if elem.elementType() == 'CurvedMirror' and r['color'] != RED:
+                if elem.elementType() == 'FlatReceiver' and r['color'] != RED:
                     continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
                 # CurvedMirror would intersect rays on opposite direction
@@ -150,8 +156,8 @@ def ray_trace(rays_, stat_):
                     closest_intersect = intersect
             if closest_elem is not None:
                 closest_elem.properties['color'] = RED
-                if closest_elem.elementType() == 'CurvedMirror':
-                    stat_[closest_elem.orientation] += 1
+                if closest_elem.elementType() == 'FlatReceiver':
+                    stat_[closest_elem.orientation-90] += 1
                     dir_new = r['dir']
                     dir_new = dir_new / np.linalg.norm(dir_new)
                     r['intersect'] = closest_intersect
