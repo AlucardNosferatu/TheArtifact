@@ -4,7 +4,7 @@ import numpy as np
 import pygame
 from matplotlib import pyplot as plt
 
-# from AeroSim import s_rotate
+from AeroSim import s_rotate
 from RayTracer import opticalElement
 from RayTracer.opticalElement import BLACK, GREEN, WHITE, RED, BLUE
 
@@ -35,13 +35,13 @@ def screen_map_inv(pos_screen):
 def get_start_points(src_b_):
     stat_ = {}
     px_ratio = 16
-    for i_, t in enumerate(src_b_):
-        t = list(t)
-        t = [
-            t[0] * px_ratio,
-            t[1] * px_ratio
+    for i_, t_ in enumerate(src_b_):
+        t_ = list(t_)
+        t_ = [
+            t_[0] * px_ratio,
+            t_[1] * px_ratio
         ]
-        src_b_[i_] = tuple(t)
+        src_b_[i_] = tuple(t_)
     max_x = src_b_[0][0]
     max_y = src_b_[0][1]
     min_x = src_b_[0][0]
@@ -63,13 +63,13 @@ def get_start_points(src_b_):
         rect_size[0] * 0.5 + min_x,
         rect_size[1] * 0.5 + min_y
     ]
-    for i_, t in enumerate(src_b_):
-        t = list(t)
-        t = [
-            t[0] - rect_offset[0],
-            t[1] - rect_offset[1],
+    for i_, t_ in enumerate(src_b_):
+        t_ = list(t_)
+        t_ = [
+            t_[0] - rect_offset[0],
+            t_[1] - rect_offset[1],
         ]
-        src_b_[i_] = tuple(t)
+        src_b_[i_] = tuple(t_)
     radius = math.sqrt(rect_size[0] ** 2 + rect_size[1] ** 2)
     start_points = []
     start_orient = []
@@ -99,7 +99,7 @@ def polygon_mirror(src_b_, elements_):
     return elements_
 
 
-def circle_receiver(elements_, start_points, start_ang, radius):
+def circle_receiver(elements_, start_points, start_ang):
     for i_ in range(len(start_points)):
         # elements_.append(
         #     opticalElement.CurvedMirror(
@@ -177,48 +177,48 @@ def ray_trace(rays_, stat_):
     return output_rays_, stat_
 
 
+# src_b = [
+#     (-4, 2),
+#     (-5, 2),
+#     (-6, 0),
+#     (-2, -1),
+#     (8, -1),
+#     (10, 0),
+#     (7, 1.5),
+#     (-3.5, 0)
+# ]
+# src_b = [
+#     (-1, 2),
+#     (1, 2),
+#     (3, 2),
+#     (5, -2),
+#     (4, -4),
+#     (2, -4),
+#     (0, -4),
+#     (-2, -4),
+#     (-3, -2)
+# ]
 src_b = [
-    (-4, 2),
-    (-5, 2),
-    (-6, 0),
-    (-2, -1),
-    (8, -1),
-    (10, 0),
-    (7, 1.5),
-    (-3.5, 0)
+    (-1, 2),
+    (0, 0),
+    (1, 2),
+    (2, 0),
+    (3, 2),
+    (5, -2),
+    (4, -4),
+    (3, -2),
+    (2, -4),
+    (1, -2),
+    (0, -4),
+    (-1, -2),
+    (-2, -4),
+    (-3, -2)
 ]
-# src_b = [
-#     (-1, 2),
-#     (1, 2),
-#     (3, 2),
-#     (5, -2),
-#     (4, -4),
-#     (2, -4),
-#     (0, -4),
-#     (-2, -4),
-#     (-3, -2)
-# ]
-# src_b = [
-#     (-1, 2),
-#     (0, 0),
-#     (1, 2),
-#     (2, 0),
-#     (3, 2),
-#     (5, -2),
-#     (4, -4),
-#     (3, -2),
-#     (2, -4),
-#     (1, -2),
-#     (0, -4),
-#     (-1, -2),
-#     (-2, -4),
-#     (-3, -2)
-# ]
-# for n, t in enumerate(src_b):
-#     point_x = t[0]
-#     point_y = t[1]
-#     s_point_x, s_point_y = s_rotate(math.radians(9 * 5), point_x, point_y, 0, 0)
-#     src_b[n] = (s_point_x, s_point_y)
+for n, t in enumerate(src_b):
+    point_x = t[0]
+    point_y = t[1]
+    s_point_x, s_point_y = s_rotate(math.radians(0 * 5), point_x, point_y, 0, 0)
+    src_b[n] = (s_point_x, s_point_y)
 elements = []
 canvas_size: None | tuple = None
 
@@ -227,7 +227,7 @@ def radar_cross_section(src_b_):
     global elements, canvas_size
     src_b_, sp_list, so_list, rad, stat = get_start_points(src_b_)
     elements = polygon_mirror(src_b_, elements)
-    elements = circle_receiver(elements, sp_list, so_list, rad)
+    elements = circle_receiver(elements, sp_list, so_list)
     pygame.init()
     clock = pygame.time.Clock()
     canvas_size = (
@@ -281,6 +281,7 @@ def radar_cross_section(src_b_):
             ax.set_rlabel_position(270)
             ax.set_title("RCS Estimation")
             plt.show()
+            plt.close()
 
         output_rays, stat = ray_trace(rays, stat)
         screen.fill(WHITE)
