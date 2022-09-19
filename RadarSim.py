@@ -144,8 +144,6 @@ def ray_trace(rays_, stat_):
                 if dist < .0001:
                     continue
                 if min_dist > dist:
-                    if elem.elementType() == 'CurvedMirror':
-                        continue
                     min_dist = dist
                     closest_elem = elem
                     closest_intersect = intersect
