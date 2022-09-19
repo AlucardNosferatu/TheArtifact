@@ -7,19 +7,19 @@ from RayTracer import opticalElement
 from RayTracer.opticalElement import BLACK, GREEN, WHITE, RED, BLUE
 
 
-def screen_map_function(pos, canvas_size_):
+def screen_map_function(pos):
     return (
-        int(pos[0] + (canvas_size_[0] / 2)),
-        int(-pos[1] + (canvas_size_[1] / 2)),
+        int(pos[0] + (canvas_size[0] / 2)),
+        int(-pos[1] + (canvas_size[1] / 2)),
         1,
         1
     )
 
 
-def screen_map_inv(pos_screen, canvas_size_):
+def screen_map_inv(pos_screen):
     return (
-        int(pos_screen[0] - (canvas_size_[0] / 2)),
-        int(-(pos_screen[1] - (canvas_size_[0] / 2))),
+        int(pos_screen[0] - (canvas_size[0] / 2)),
+        int(-(pos_screen[1] - (canvas_size[0] / 2))),
         1,
         1
     )
@@ -74,12 +74,12 @@ def get_start_points(src_b_):
 
 
 def polygon_mirror(src_b_, elements_):
-    for i in range(len(src_b_)):
-        start = src_b_[i]
-        if i == len(src_b_) - 1:
+    for i_ in range(len(src_b_)):
+        start = src_b_[i_]
+        if i_ == len(src_b_) - 1:
             end = src_b_[0]
         else:
-            end = src_b_[i + 1]
+            end = src_b_[i_ + 1]
         pos = [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2]
         dx = end[0] - start[0]
         dy = end[1] - start[1]
@@ -87,6 +87,19 @@ def polygon_mirror(src_b_, elements_):
         length = math.sqrt(dx ** 2 + dy ** 2)
         half_length = length / 2
         elements_.append(opticalElement.FlatMirror(np.array(pos), ang, half_length, {'color': BLACK}))
+    return elements_
+
+
+def circle_receiver(elements_, start_points, start_ang, radius):
+    for i_ in range(len(start_points)):
+        elements_.append(
+            opticalElement.CurvedMirror(
+                start_points[i_],
+                start_ang[i_],
+                [10, radius],
+                {'color': BLACK}
+            )
+        )
     return elements_
 
 
@@ -104,7 +117,7 @@ def ray_scan(start_point, ang_offset, rays_):
 
 
 def ray_trace(rays_):
-    max_bounce = 100
+    max_bounce = 10
     output_rays_ = [rays_]
     for i_ in range(0, max_bounce):
         new_rays = []
@@ -113,6 +126,8 @@ def ray_trace(rays_):
             closest_elem = None
             closest_intersect = None
             for elem in elements:
+                if elem.elementType() == 'CurvedMirror' and r['color'] == GREEN:
+                    continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
                 if intersect is None:
                     continue
@@ -124,12 +139,16 @@ def ray_trace(rays_):
                     closest_elem = elem
                     closest_intersect = intersect
             if closest_elem is not None:
-                dir_new = closest_elem.reflect(r['pos'], r['dir'], closest_intersect)
-                dir_new = dir_new / np.linalg.norm(dir_new)
-                r['intersect'] = closest_intersect
-                if 'color' in r:
-                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': r['color']})
+                closest_elem.properties['color'] = RED
+                if closest_elem.elementType() == 'CurvedMirror':
+                    dir_new = r['dir']
+                    dir_new = dir_new / np.linalg.norm(dir_new)
+                    r['intersect'] = closest_intersect
+                    new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': GREEN})
                 else:
+                    dir_new = closest_elem.reflect(r['pos'], r['dir'], closest_intersect)
+                    dir_new = dir_new / np.linalg.norm(dir_new)
+                    r['intersect'] = closest_intersect
                     new_rays.append({'pos': closest_intersect, 'dir': dir_new, 'color': RED})
             else:
                 r['intersect'] = None
@@ -149,6 +168,7 @@ src_b = [
 elements = []
 src_b, sp_list, so_list, rad = get_start_points(src_b)
 elements = polygon_mirror(src_b, elements)
+elements = circle_receiver(elements, sp_list, so_list, rad)
 pygame.init()
 clock = pygame.time.Clock()
 canvas_size = (
@@ -177,12 +197,27 @@ while not done:
     output_rays = ray_trace(rays)
     screen.fill(WHITE)
     for p in src_b:
-        x, y, _, _ = screen_map_function(p, canvas_size)
+        x, y, _, _ = screen_map_function(p)
         pygame.draw.circle(screen, RED, (x, y), 2)
     for p in sp_list:
-        x, y, _, _ = screen_map_function(p, canvas_size)
+        x, y, _, _ = screen_map_function(p)
         pygame.draw.circle(screen, BLUE, (x, y), 2)
-
+    for i in range(0, len(elements)):
+        elements[i].draw(screen, screen_map_function)
+        elements[i].properties['color'] = BLACK
+    for i in range(0, len(output_rays)):
+        for j in range(0, len(output_rays[i])):
+            x1, y1, _, _ = screen_map_function(output_rays[i][j]['pos'])
+            if 'intersect' in output_rays[i][j] and output_rays[i][j]['intersect'] is not None:
+                x2, y2, _, _ = screen_map_function(output_rays[i][j]['intersect'])
+            else:
+                x2, y2, _, _ = screen_map_function(
+                    output_rays[i][j]['pos'] + output_rays[i][j]['dir'] * np.max(canvas_size)
+                )
+            if 'color' in output_rays[i][j]:
+                pygame.draw.line(screen, output_rays[i][j]['color'], [x1, y1], [x2, y2], 1)
+            else:
+                pygame.draw.line(screen, GREEN, [x1, y1], [x2, y2], 1)
     pygame.display.flip()
     clock.tick(1)
     # Exit thread after loop has been exited
