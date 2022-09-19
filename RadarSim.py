@@ -138,6 +138,7 @@ def ray_trace(rays_, stat_):
                 if elem.elementType() == 'CurvedMirror' and r['color'] != RED:
                     continue
                 intersect = elem.rayIntersection(r['pos'], r['dir'])
+                # CurvedMirror would intersect rays on opposite direction
                 if intersect is None:
                     continue
                 dist = np.linalg.norm(intersect - r['pos'])
