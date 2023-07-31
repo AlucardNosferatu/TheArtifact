@@ -6,10 +6,9 @@ class Fleet:
     FlagShip = None
 
     def __init__(self, init_params=None):
-        if init_params is None:
-            self.Ships = {}
-            self.FlagShip = None
-        else:
+        self.Ships = {}
+        self.FlagShip = None
+        if init_params is not None:
             self.FlagShip = init_params['FlagShip']
             ships = init_params['Ships']
             for ship_param in ships:

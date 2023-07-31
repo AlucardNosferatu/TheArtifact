@@ -7,6 +7,8 @@ from Classes.Ship import Ship
 from Classes.Weapon import Weapon
 from Events.TestEvents import a_ship_joins, a_ship_leaves, nothing_happened
 
+events_list = [a_ship_joins, a_ship_leaves, nothing_happened]
+
 
 class Game:
     Fleet = None
@@ -82,6 +84,8 @@ class Game:
         for ship_uid in self.Fleet.Ships.keys():
             ship = self.Fleet.Ships[ship_uid]
             print('=========================')
+            if ship_uid == self.Fleet.FlagShip:
+                print('###Flag Ship###')
             print('Ship ID:', ship.UID)
             print('Ship HP:', ship.HitPoints, '/', ship.MaxHitPoints)
             for i in range(len(ship.Weapons)):
@@ -91,7 +95,7 @@ class Game:
 
     def random_event(self, fleet):
         self.Fleet = fleet
-        event = random.choice([a_ship_joins, a_ship_leaves, nothing_happened])
+        event = random.choice(events_list)
         fleet = event(fleet)
         # todo: add some events to make game interesting
         return fleet
