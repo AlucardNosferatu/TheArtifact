@@ -2,29 +2,29 @@ from Classes.Ship import Ship
 
 
 class Fleet:
-    Ships = None
-    FlagShip = None
+    ships = None
+    flag_ship = None
 
     def __init__(self, init_params=None):
-        self.Ships = {}
-        self.FlagShip = None
+        self.ships = {}
+        self.flag_ship = None
         if init_params is not None:
-            self.FlagShip = init_params['FlagShip']
+            self.flag_ship = init_params['FlagShip']
             ships = init_params['Ships']
             for ship_param in ships:
                 ship = Ship(init_params=ship_param)
-                self.Ships.__setitem__(ship.UID, ship)
+                self.ships.__setitem__(ship.uid, ship)
 
     def join(self, ship):
-        self.Ships.__setitem__(ship.UID, ship)
+        self.ships.__setitem__(ship.uid, ship)
 
     def leave(self, ship_uid):
-        if ship_uid in self.Ships.keys() and ship_uid != self.FlagShip:
-            del self.Ships[ship_uid]
+        if ship_uid in self.ships.keys() and ship_uid != self.flag_ship:
+            del self.ships[ship_uid]
 
     def save(self):
         save_params = []
-        for uid in self.Ships:
-            ship: Ship = self.Ships[uid]
+        for uid in self.ships:
+            ship: Ship = self.ships[uid]
             save_params.append(ship.save())
-        return {'Ships': save_params, 'FlagShip': self.FlagShip}
+        return {'Ships': save_params, 'FlagShip': self.flag_ship}

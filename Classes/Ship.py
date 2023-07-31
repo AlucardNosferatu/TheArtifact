@@ -4,43 +4,43 @@ from Classes.Weapon import Weapon
 
 
 class Ship:
-    Weapons = None
-    HitPoints = None
-    MaxWeapons = None
-    MaxHitPoints = None
-    UID = None
+    weapons = None
+    hit_points = None
+    max_weapons = None
+    max_hit_points = None
+    uid = None
 
     def __init__(self, mh=None, mw=None, init_params=None):
-        self.Weapons = []
+        self.weapons = []
         if init_params is None:
-            self.UID = str(uuid.uuid4())
-            self.MaxHitPoints = mh
-            self.MaxWeapons = mw
-            self.HitPoints = self.MaxHitPoints
+            self.uid = str(uuid.uuid4())
+            self.max_hit_points = mh
+            self.max_weapons = mw
+            self.hit_points = self.max_hit_points
         else:
-            self.UID = init_params['UID']
-            self.MaxHitPoints = init_params['MaxHP']
-            self.MaxWeapons = init_params['MaxWeapons']
-            self.HitPoints = init_params['HP']
+            self.uid = init_params['UID']
+            self.max_hit_points = init_params['MaxHP']
+            self.max_weapons = init_params['MaxWeapons']
+            self.hit_points = init_params['HP']
             for weapon_param in init_params['Weapons']:
-                self.Weapons.append(Weapon(init_params=weapon_param))
+                self.weapons.append(Weapon(init_params=weapon_param))
 
     def install_weapon(self, weapon):
-        if len(self.Weapons) < self.MaxWeapons:
-            self.Weapons.append(weapon)
+        if len(self.weapons) < self.max_weapons:
+            self.weapons.append(weapon)
 
     def uninstall_weapon(self, w_index):
-        if w_index < self.MaxWeapons and w_index < len(self.Weapons):
-            self.Weapons.pop(w_index)
+        if w_index < self.max_weapons and w_index < len(self.weapons):
+            self.weapons.pop(w_index)
 
     def save(self):
         ship_dict = {}
-        ship_dict.__setitem__('UID', self.UID)
-        ship_dict.__setitem__('MaxHP', self.MaxHitPoints)
-        ship_dict.__setitem__('MaxWeapons', self.MaxWeapons)
-        ship_dict.__setitem__('HP', self.HitPoints)
-        ship_dict.__setitem__('Weapons', [weapon.save() for weapon in self.Weapons])
+        ship_dict.__setitem__('UID', self.uid)
+        ship_dict.__setitem__('MaxHP', self.max_hit_points)
+        ship_dict.__setitem__('MaxWeapons', self.max_weapons)
+        ship_dict.__setitem__('HP', self.hit_points)
+        ship_dict.__setitem__('Weapons', [weapon.save() for weapon in self.weapons])
         return ship_dict
 
     def is_destroyed(self):
-        return self.HitPoints <= 0
+        return self.hit_points <= 0

@@ -18,7 +18,7 @@ def a_ship_joins(fleet: Fleet):
 
 
 def a_ship_leaves(fleet: Fleet):
-    ship_uid = random.choice(list(fleet.Ships.keys()))
+    ship_uid = random.choice(list(fleet.ships.keys()))
     fleet.leave(ship_uid)
     print('A ship left the fleet!')
     return fleet
