@@ -7,6 +7,7 @@ from Classes.Weapon import Weapon
 
 def show_ship(ship):
     print('=========================')
+    print('Ship Name:', ship.name)
     print('Ship ID:', ship.uid)
     print('Ship HP:', ship.hit_points, '/', ship.max_hit_points)
     for i in range(len(ship.weapons)):
@@ -39,6 +40,13 @@ def a_ship_joins(fleet: Fleet, show=False):
 
 def a_ship_leaves(fleet: Fleet):
     ship_uid = random.choice(list(fleet.ships.keys()))
-    fleet.leave(ship_uid)
-    print('A ship left the fleet!')
+    if fleet.leave(ship_uid):
+        print('A ship left the fleet!')
+    else:
+        fleet = nothing_happened(fleet)
+    return fleet
+
+
+def nothing_happened(fleet: Fleet):
+    print('Nothing happened!')
     return fleet

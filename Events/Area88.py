@@ -1,6 +1,7 @@
 import random
 
 from Classes.Fleet import Fleet
+from Events.Battle import battle_event
 from Utils import show_ship, a_ship_joins
 
 
@@ -18,18 +19,17 @@ def volunteer_engineers(fleet: Fleet):
 
 
 def defection(fleet):
-    fleet_hostile = Fleet()
+    enemy_fleet = Fleet()
     ship_uid = fleet.flag_ship
     if len(list(fleet.ships.keys())) > 1:
         while ship_uid == fleet.flag_ship:
             ship_uid = random.choice(list(fleet.ships.keys()))
-        fleet_hostile.join(fleet.ships[ship_uid])
+        enemy_fleet.join(fleet.ships[ship_uid])
+        enemy_fleet.flag_ship = ship_uid
         fleet.leave(ship_uid)
         print('A ship betrayed the fleet!')
-        show_ship(fleet_hostile.ships[ship_uid])
-        while True:
-            break
-            # todo: design battle process
+        show_ship(enemy_fleet.ships[ship_uid])
+        fleet = battle_event(fleet, enemy_fleet=enemy_fleet)
         return fleet
     print('You stopped a menacing disturbance on the flag ship.')
     return fleet

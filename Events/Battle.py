@@ -101,20 +101,20 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders)
         ship = fleets_and_actions[order[2]][0].ships[order[0]]
         if not ship.is_destroyed():
             if action[0] == 'idle':
-                print(order[0], 'waits for a better chance!')
+                print(ship.name, 'waits for a better chance!')
             elif action[0] == 'repair':
                 amount = int((order[1] / 13) * ship.max_hit_points * 0.75)
                 ship.repair(amount)
-                print(order[0], 'repairs itself!')
+                print(ship.name, 'repairs itself!')
                 show_ship(ship)
             elif action[0] == 'attack':
                 amount = ship.weapons[action[2]].power
-                print(order[0], 'fires on active target(s)!')
+                print(ship.name, 'fires on active target(s)!')
                 for target_uid in action[3]:
                     target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
                     if not target_ship.is_destroyed():
                         target_ship.damaged(amount)
-                        print(target_uid, 'was fired by', order[0], '!')
+                        print(target_ship.name, 'was fired by', ship.name, '!')
                         show_ship(target_ship)
             elif action[0] == 'escape':
                 fleet_names = {'FleetA': "Player's Fleet", 'FleetB': "Enemies' Fleet"}
@@ -129,14 +129,21 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders)
             else:
                 raise ValueError('Wrong action type:', action[0])
         else:
-            print(order[0], 'was destroyed, it cannot do anything!')
+            print(ship.name, 'was destroyed, it cannot do anything!')
         print('==========================================================================')
     return orders
 
 
 def should_it_break(fleet_a, fleet_b, orders):
-    return len(orders) > 0 or fleet_a.ships[fleet_a.flag_ship].is_destroyed() or fleet_b.ships[
-        fleet_b.flag_ship].is_destroyed()
+    if len(orders) > 0:
+        print('A fleet that joined this battle has withdrawn so the fight was over.')
+    elif fleet_a.ships[fleet_a.flag_ship].is_destroyed():
+        print('Your flagship was destroyed so the fight was over.')
+    elif fleet_b.ships[fleet_b.flag_ship].is_destroyed():
+        print("Enemies' flagship was destroyed so the fight was over.")
+    else:
+        return False
+    return True
 
 
 def remove_destroyed(fleet: Fleet):

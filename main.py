@@ -5,8 +5,7 @@ import random
 from Classes.Fleet import Fleet
 from Events.Area88 import new_mercenary, volunteer_engineers, defection
 from Events.Battle import battle_event
-from Events.TestEvents import nothing_happened
-from Utils import show_ship, a_ship_joins, a_ship_leaves
+from Utils import show_ship, a_ship_joins, a_ship_leaves, nothing_happened
 
 events_list = [a_ship_joins, a_ship_leaves, nothing_happened]
 events_chains = {
@@ -30,6 +29,7 @@ class Game:
 
     def game_loop(self):
         while True:
+            print('~~~~~~~~~~~~~~~~~~~~~~~~')
             cmd = ''
             while cmd not in ['1', '2', '3']:
                 cmd = input('1.New Game\n2.Old Game\n3.Exit')
@@ -51,6 +51,7 @@ class Game:
             self.fleet = self.random_event(self.fleet)
             # check game over
             if self.is_game_over():
+                print('=======Game Over=======')
                 self.display_score()
                 return
             cmd = ''

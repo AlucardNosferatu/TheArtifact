@@ -12,3 +12,6 @@ class Fleet:
     def leave(self, ship_uid):
         if ship_uid in self.ships.keys() and ship_uid != self.flag_ship:
             del self.ships[ship_uid]
+            return True
+        else:
+            return False
