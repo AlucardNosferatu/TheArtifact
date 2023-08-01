@@ -1,7 +1,8 @@
 import random
 
 from Classes.Fleet import Fleet
-from Events.TestEvents import a_ship_joins
+from Classes.Ship import Ship
+from Classes.Weapon import Weapon
 
 
 def show_ship(ship):
@@ -14,9 +15,30 @@ def show_ship(ship):
         print('Weapon:', i, 'Power:', weapon.power, 'Targets:', weapon.target)
 
 
-def generate_fleet():
+def generate_fleet(min_ships=1, max_ships=5):
     fleet = Fleet()
-    for _ in range(random.randint(1, 5)):
+    for _ in range(random.randint(min_ships, max_ships)):
         fleet = a_ship_joins(fleet)
     fleet.flag_ship = random.choice(list(fleet.ships.keys()))
+    return fleet
+
+
+def a_ship_joins(fleet: Fleet, show=False):
+    mh = random.randint(50, 100)
+    mw = random.randint(5, 10)
+    spd = random.randint(7, 10)
+    ship = Ship(mh=mh, mw=mw, spd=spd)
+    p = random.randint(5, 15)
+    t = random.randint(7, 10)
+    ship.install_weapon(Weapon(p=p, t=t))
+    fleet.join(ship)
+    if show:
+        show_ship(ship)
+    return fleet
+
+
+def a_ship_leaves(fleet: Fleet):
+    ship_uid = random.choice(list(fleet.ships.keys()))
+    fleet.leave(ship_uid)
+    print('A ship left the fleet!')
     return fleet

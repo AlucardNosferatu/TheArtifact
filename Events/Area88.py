@@ -1,30 +1,12 @@
 import random
 
 from Classes.Fleet import Fleet
-from Classes.Ship import Ship
-from Classes.Weapon import Weapon
-from Utils import show_ship, generate_fleet
-
-
-def rebel_attack(fleet):
-    enemy_fleet = generate_fleet()
-    _ = enemy_fleet
-    while True:
-        break
-        # todo: design battle process
-    return fleet
+from Utils import show_ship, a_ship_joins
 
 
 def new_mercenary(fleet: Fleet):
-    mh = random.randint(50, 101)
-    mw = random.randint(5, 11)
-    ship = Ship(mh=mh, mw=mw)
-    p = random.randint(5, 15)
-    t = random.randint(1, 10)
-    ship.install_weapon(Weapon(p=p, t=t))
-    fleet.join(ship)
     print('New ship joined the fleet!')
-    show_ship(ship)
+    fleet = a_ship_joins(fleet, show=True)
     return fleet
 
 

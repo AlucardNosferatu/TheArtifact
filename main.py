@@ -3,29 +3,28 @@ import pickle
 import random
 
 from Classes.Fleet import Fleet
-from Classes.Ship import Ship
-from Classes.Weapon import Weapon
-from Events.Area88 import rebel_attack, new_mercenary, volunteer_engineers, defection
-from Events.TestEvents import a_ship_joins, a_ship_leaves, nothing_happened
-from Utils import show_ship
+from Events.Area88 import new_mercenary, volunteer_engineers, defection
+from Events.Battle import battle_event
+from Events.TestEvents import nothing_happened
+from Utils import show_ship, a_ship_joins, a_ship_leaves
 
 events_list = [a_ship_joins, a_ship_leaves, nothing_happened]
 events_chains = {
-    '0#Area 88': {'condition': ['a88'], 'events_list': [rebel_attack, new_mercenary, volunteer_engineers, defection]}
+    '0#Area 88': {'condition': ['a88'], 'events_list': [battle_event, new_mercenary, volunteer_engineers, defection]}
 }
 add_flags = {a_ship_joins: ['a88']}
 del_flags = {a_ship_leaves: ['a88']}
 
 
 class Game:
-    Fleet = None
-    Score = None
+    fleet = None
+    score = None
     finished_chains = None
     flags = None
 
     def __init__(self):
-        self.Score = 0
-        self.Fleet = None
+        self.score = 0
+        self.fleet = None
         self.finished_chains = []
         self.flags = []
 
@@ -37,7 +36,7 @@ class Game:
             if cmd == '1':
                 self.init_fleet()
             elif cmd == '2':
-                if not self.load_fleet():
+                if not self.load():
                     continue
             elif cmd == '3':
                 os.abort()
@@ -49,7 +48,7 @@ class Game:
         while True:
             # random event
             print('~~~~~~~~~~~~~~~~~~~~~~~~')
-            self.Fleet = self.random_event(self.Fleet)
+            self.fleet = self.random_event(self.fleet)
             # check game over
             if self.is_game_over():
                 self.display_score()
@@ -62,45 +61,41 @@ class Game:
             if cmd == '1':
                 continue
             elif cmd == '3':
-                self.save_fleet()
+                self.save()
                 return
             else:
                 raise ValueError()
 
     def init_fleet(self):
-        mh = random.randint(50, 101)
-        mw = random.randint(5, 11)
-        ship = Ship(mh=mh, mw=mw)
-        p = random.randint(5, 15)
-        t = random.randint(1, 10)
-        ship.install_weapon(Weapon(p=p, t=t))
-        self.Fleet = Fleet()
-        self.Fleet.join(ship)
-        self.Fleet.flag_ship = ship.uid
+        self.fleet = Fleet()
+        self.fleet = a_ship_joins(self.fleet, show=True)
+        self.fleet.flag_ship = list(self.fleet.ships.keys())[0]
 
-    def load_fleet(self):
+    def load(self):
         if os.path.exists('save.pkl'):
-            save = pickle.load(open('save.pkl', 'rb'))
-            self.Fleet = Fleet(init_params=save['Fleet'])
-            self.Score = save['Score']
-            self.finished_chains = save['Finished']
-            self.flags = save['Flags']
+            old_game = pickle.load(open('save.pkl', 'rb'))
+            self.score = old_game['score']
+            self.fleet = old_game['fleet']
+            self.finished_chains = old_game['finished_chains']
+            self.flags = old_game['flags']
             return True
         else:
             print('No previously saved game.')
             return False
 
-    def save_fleet(self):
-        pickle.dump(
-            {'Fleet': self.Fleet.save(), 'Score': self.Score, 'Finished': self.finished_chains, 'Flags': self.flags},
-            open('save.pkl', 'wb')
-        )
+    def save(self):
+        old_game = {}
+        old_game.__setitem__('score', self.score)
+        old_game.__setitem__('fleet', self.fleet)
+        old_game.__setitem__('finished_chains', self.finished_chains)
+        old_game.__setitem__('flags', self.flags)
+        pickle.dump(old_game, open('save.pkl', 'wb'))
 
     def show_status(self):
-        for ship_uid in self.Fleet.ships.keys():
-            ship = self.Fleet.ships[ship_uid]
+        for ship_uid in self.fleet.ships.keys():
+            ship = self.fleet.ships[ship_uid]
             print('=========================')
-            if ship_uid == self.Fleet.flag_ship:
+            if ship_uid == self.fleet.flag_ship:
                 print('###Flag Ship###')
             show_ship(ship)
 
@@ -136,10 +131,10 @@ class Game:
         return fleet
 
     def is_game_over(self):
-        return self.Fleet.ships[self.Fleet.flag_ship].is_destroyed()
+        return self.fleet.ships[self.fleet.flag_ship].is_destroyed()
 
     def display_score(self):
-        print('Score:', self.Score)
+        print('Score:', self.score)
 
 
 if __name__ == '__main__':
