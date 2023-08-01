@@ -105,16 +105,17 @@ class Game:
         [priority_dict.__setitem__(int(chain.split('#')[0]), chain) for chain in chains]
         temp_list = None
         for i in range(len(chains)):
-            if priority_dict[i] not in self.finished_chains:
-                check_chain = events_chains[priority_dict[i]]
-                condition = check_chain['condition']
-                triggered = True
-                for flag in condition:
-                    if flag not in self.flags:
-                        triggered = False
-                        break
-                if triggered:
-                    temp_list = check_chain['events_list']
+            if i in priority_dict.keys():
+                if priority_dict[i] not in self.finished_chains:
+                    check_chain = events_chains[priority_dict[i]]
+                    condition = check_chain['condition']
+                    triggered = True
+                    for flag in condition:
+                        if flag not in self.flags:
+                            triggered = False
+                            break
+                    if triggered:
+                        temp_list = check_chain['events_list']
         if temp_list is None:
             temp_list = events_list
         event = random.choice(temp_list)

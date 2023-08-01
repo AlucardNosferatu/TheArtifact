@@ -14,6 +14,7 @@ def volunteer_engineers(fleet: Fleet):
     for ship_uid in fleet.ships.keys():
         fleet.ships[ship_uid].hit_points = fleet.ships[ship_uid].max_hit_points
     print('A troop of volunteers repaired all ships in your fleet.')
+    return fleet
 
 
 def defection(fleet):

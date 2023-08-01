@@ -4,8 +4,10 @@ from Classes.Fleet import Fleet
 from Utils import generate_fleet, show_ship
 
 
-def battle_event(fleet):
-    enemy_fleet = generate_fleet(10, 20)
+def battle_event(fleet, enemy_fleet=None):
+    print('You encountered a fleet of enemies!')
+    if enemy_fleet is None:
+        enemy_fleet = generate_fleet(10, 20)
     while True:
         orders = arrange_orders(fleet, enemy_fleet)
         enemy_cards = spawn_actions(enemy_fleet)
