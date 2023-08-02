@@ -5,13 +5,13 @@ import random
 from Classes.Fleet import Fleet
 from Events.Area88 import new_mercenary, volunteer_engineers, defection
 from Events.Battle import battle_event
-from Utils import show_ship, a_ship_joins, a_ship_leaves, nothing_happened
+from Utils import a_ship_joins, a_ship_leaves, nothing_happened, show_status
 
-events_list = [a_ship_joins, a_ship_leaves, nothing_happened]
+events_list = [new_mercenary, a_ship_leaves, nothing_happened]
 events_chains = {
     '0#Area 88': {'condition': ['a88'], 'events_list': [battle_event, new_mercenary, volunteer_engineers, defection]}
 }
-add_flags = {a_ship_joins: ['a88']}
+add_flags = {new_mercenary: ['a88']}
 del_flags = {a_ship_leaves: ['a88']}
 
 
@@ -29,10 +29,11 @@ class Game:
 
     def game_loop(self):
         while True:
-            print('~~~~~~~~~~~~~~~~~~~~~~~~')
             cmd = ''
             while cmd not in ['1', '2', '3']:
-                cmd = input('1.New Game\n2.Old Game\n3.Exit')
+                os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                print('~~~~~~~~~~~~~~~~~~~~~~~~')
+                cmd = input('1.New Game\t2.Old Game\t3.Exit\n')
             if cmd == '1':
                 self.init_fleet()
             elif cmd == '2':
@@ -47,18 +48,27 @@ class Game:
     def events_loop(self):
         while True:
             # random event
+            os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print('~~~~~~~~~~~~~~~~~~~~~~~~')
             self.fleet = self.random_event(self.fleet)
             # check game over
             if self.is_game_over():
+                os.system('cls' if os.name == 'nt' else "printf '\033c'")
                 print('=======Game Over=======')
                 self.display_score()
                 return
+            clear = False
             cmd = ''
             while cmd not in ['1', '3']:
-                cmd = input('1.Continue\n2.Show Status\n3.Save & Exit')
+                if not clear:
+                    clear = True
+                else:
+                    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                print('~~~~~~~~~~~~~~~~~~~~~~~~')
+                cmd = input('1.Continue\t2.Show Status\t3.Save & Exit\n')
                 if cmd == '2':
-                    self.show_status()
+                    show_status(self.fleet)
+                    clear = False
             if cmd == '1':
                 continue
             elif cmd == '3':
@@ -91,14 +101,6 @@ class Game:
         old_game.__setitem__('finished_chains', self.finished_chains)
         old_game.__setitem__('flags', self.flags)
         pickle.dump(old_game, open('save.pkl', 'wb'))
-
-    def show_status(self):
-        for ship_uid in self.fleet.ships.keys():
-            ship = self.fleet.ships[ship_uid]
-            print('=========================')
-            if ship_uid == self.fleet.flag_ship:
-                print('###Flag Ship###')
-            show_ship(ship)
 
     def random_event(self, fleet):
         chains = list(events_chains.keys())

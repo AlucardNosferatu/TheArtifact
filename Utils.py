@@ -7,8 +7,8 @@ from Classes.Weapon import Weapon
 
 def show_ship(ship):
     print('=========================')
-    print('Ship Name:', ship.name)
-    print('Ship ID:', ship.uid)
+    print('Ship Name:', ship.name,end='\t')
+    print('Ship ID:', ship.uid,end='\t')
     print('Ship HP:', ship.hit_points, '/', ship.max_hit_points)
     for i in range(len(ship.weapons)):
         weapon = ship.weapons[i]
@@ -50,3 +50,14 @@ def a_ship_leaves(fleet: Fleet):
 def nothing_happened(fleet: Fleet):
     print('Nothing happened!')
     return fleet
+
+
+def show_status(fleet):
+    for ship_uid in fleet.ships.keys():
+        ship = fleet.ships[ship_uid]
+        print('=========================')
+        if ship_uid == fleet.flag_ship:
+            print('###Flag Ship###')
+        else:
+            print('---Normal Ship---')
+        show_ship(ship)
