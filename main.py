@@ -3,13 +3,13 @@ import pickle
 import random
 
 from Classes.Fleet import Fleet
-from Events.Area88 import new_mercenary, volunteer_engineers, defection, leaved_mercenary
+from Plots.Area88 import new_mercenary, volunteer_engineers, defection, leaved_mercenary
 from Events.Battle import battle_event
 from Utils import a_ship_joins, nothing_happened, show_status
 
-events_list = [new_mercenary, leaved_mercenary, nothing_happened]
+events_pool_default = [new_mercenary, leaved_mercenary, nothing_happened]
 events_chains = {
-    '0#Area 88': {'condition': ['a88'], 'events_list': [battle_event, leaved_mercenary, volunteer_engineers, defection]}
+    '0#Area 88': {'condition': ['a88'], 'events_pool': [battle_event, leaved_mercenary, volunteer_engineers, defection]}
 }
 add_flags = {new_mercenary: ['a88']}
 del_flags = {leaved_mercenary: ['a88']}
@@ -22,6 +22,7 @@ class Game:
     flags = None
 
     def __init__(self):
+        self.events_pool = events_pool_default
         self.score = 0
         self.fleet = None
         self.finished_chains = []
@@ -50,7 +51,7 @@ class Game:
             # random event
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print('~~~~~~~~~~~~~~~~~~~~~~~~')
-            self.fleet = self.random_event(self.fleet)
+            self.random_event()
             # check game over
             if self.is_game_over():
                 os.system('cls' if os.name == 'nt' else "printf '\033c'")
@@ -89,6 +90,7 @@ class Game:
             self.fleet = old_game['fleet']
             self.finished_chains = old_game['finished_chains']
             self.flags = old_game['flags']
+            self.events_pool = old_game['events_pool']
             return True
         else:
             print('No previously saved game.')
@@ -100,13 +102,28 @@ class Game:
         old_game.__setitem__('fleet', self.fleet)
         old_game.__setitem__('finished_chains', self.finished_chains)
         old_game.__setitem__('flags', self.flags)
+        old_game.__setitem__('events_pool', self.events_pool)
         pickle.dump(old_game, open('save.pkl', 'wb'))
 
-    def random_event(self, fleet):
+    def random_event(self):
+        # select event form pool
+        event = random.choice(self.events_pool)
+        # execute that event
+        self.fleet, change_score = event(self.fleet)
+        # update flags by pool_flags
+        self.score += change_score
+        if event in add_flags.keys():
+            for flag in add_flags[event]:
+                if flag not in self.flags:
+                    self.flags.append(flag)
+        if event in del_flags.keys():
+            for flag in del_flags[event]:
+                if flag in self.flags:
+                    self.flags.remove(flag)
+
         chains = list(events_chains.keys())
         priority_dict = {}
         [priority_dict.__setitem__(int(chain.split('#')[0]), chain) for chain in chains]
-        temp_list = None
         for i in range(len(chains)):
             if i in priority_dict.keys():
                 if priority_dict[i] not in self.finished_chains:
@@ -118,22 +135,7 @@ class Game:
                             triggered = False
                             break
                     if triggered:
-                        temp_list = check_chain['events_list']
-        if temp_list is None:
-            temp_list = events_list
-        event = random.choice(temp_list)
-        fleet, change_score = event(fleet)
-        self.score += change_score
-        if event in add_flags.keys():
-            for flag in add_flags[event]:
-                if flag not in self.flags:
-                    self.flags.append(flag)
-        if event in del_flags.keys():
-            for flag in del_flags[event]:
-                if flag in self.flags:
-                    self.flags.remove(flag)
-        # todo: add some events to make game interesting
-        return fleet
+                        self.events_pool = check_chain['events_pool']
 
     def is_game_over(self):
         return self.fleet.ships[self.fleet.flag_ship].is_destroyed()
