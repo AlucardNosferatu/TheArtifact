@@ -6,21 +6,33 @@ from Utils import generate_fleet, show_ship, show_status
 
 
 def battle_event(fleet, enemy_fleet=None):
+    def count_killed(enemy_fleet_):
+        score_per_ship = 10
+        change_score_ = 0
+        for ship_uid in enemy_fleet_.ships:
+            if enemy_fleet_.ships[ship_uid].is_destroyed():
+                change_score_ += score_per_ship
+        return change_score_
+
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
     print('You encountered a fleet of enemies!')
     if enemy_fleet is None:
-        enemy_fleet = generate_fleet(10, 20)
+        player_fleet_scale = len(list(fleet.ships.keys()))
+        deviant = 2
+        enemy_fleet = generate_fleet(max(1, player_fleet_scale - deviant), player_fleet_scale + deviant)
+    will_to_fight = {'FleetA': len(list(fleet.ships.keys())), 'FleetB': len(list(enemy_fleet.ships.keys()))}
     while True:
         orders = arrange_orders(fleet, enemy_fleet)
         enemy_cards = spawn_actions(enemy_fleet)
         player_cards = spawn_actions(fleet)
         enemy_actions = plan_actions(fleet, enemy_fleet, enemy_cards)
         player_actions = plan_actions_player(enemy_fleet, fleet, player_cards)
-        orders = make_it_happen(fleet, enemy_fleet, player_actions, enemy_actions, orders)
+        orders = make_it_happen(fleet, enemy_fleet, player_actions, enemy_actions, orders, will_to_fight)
+        change_score = count_killed(enemy_fleet)
         if should_it_break(fleet, enemy_fleet, orders):
             break
     fleet = remove_destroyed(fleet)
-    return fleet
+    return fleet, change_score
 
 
 def arrange_orders(fleet_a: Fleet, fleet_b: Fleet):
@@ -28,7 +40,7 @@ def arrange_orders(fleet_a: Fleet, fleet_b: Fleet):
     orders += [[fleet_b.ships[ship].uid, fleet_b.ships[ship].speed, 'FleetB'] for ship in fleet_b.ships.keys()]
     speeds = [ship_info[1] for ship_info in orders]
     new_orders = []
-    while len(speeds) > 1:
+    while len(speeds) > 0:
         assert len(speeds) == len(orders)
         max_speed = max(speeds)
         max_speed_count = speeds.count(max_speed)
@@ -244,9 +256,8 @@ def plan_actions_player(enemy_fleet, fleet, player_cards):
     return actions
 
 
-def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders):
+def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders, will_to_fight):
     fleets_and_actions = {'FleetA': [fleet_a, actions_a, 'FleetB'], 'FleetB': [fleet_b, actions_b, 'FleetA']}
-    will_to_fight = {'FleetA': 5, 'FleetB': 5}
     while len(orders) > 0:
         order = orders.pop(0)
         action = fleets_and_actions[order[2]][1][order[0]]
@@ -255,12 +266,12 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders)
             if action[0] == 'idle':
                 print(ship.name, 'waits for a better chance!')
             elif action[0] == 'repair':
-                amount = int((order[1] / 13) * ship.max_hit_points * 0.75)
+                amount = int((order[1] / 13) * ship.max_hit_points * 0.5)
                 ship.repair(amount)
                 print(ship.name, 'repairs itself!')
                 show_ship(ship)
             elif action[0] == 'attack':
-                amount = ship.weapons[action[2]].power
+                amount = int((((order[1] - 6) / 13) + 1) * ship.weapons[action[2]].power)
                 print(ship.name, 'fires on active target(s)!')
                 for target_uid in action[3]:
                     target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]

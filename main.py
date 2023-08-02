@@ -3,16 +3,16 @@ import pickle
 import random
 
 from Classes.Fleet import Fleet
-from Events.Area88 import new_mercenary, volunteer_engineers, defection
+from Events.Area88 import new_mercenary, volunteer_engineers, defection, leaved_mercenary
 from Events.Battle import battle_event
-from Utils import a_ship_joins, a_ship_leaves, nothing_happened, show_status
+from Utils import a_ship_joins, nothing_happened, show_status
 
-events_list = [new_mercenary, a_ship_leaves, nothing_happened]
+events_list = [new_mercenary, leaved_mercenary, nothing_happened]
 events_chains = {
-    '0#Area 88': {'condition': ['a88'], 'events_list': [battle_event, new_mercenary, volunteer_engineers, defection]}
+    '0#Area 88': {'condition': ['a88'], 'events_list': [battle_event, leaved_mercenary, volunteer_engineers, defection]}
 }
 add_flags = {new_mercenary: ['a88']}
-del_flags = {a_ship_leaves: ['a88']}
+del_flags = {leaved_mercenary: ['a88']}
 
 
 class Game:
@@ -122,7 +122,8 @@ class Game:
         if temp_list is None:
             temp_list = events_list
         event = random.choice(temp_list)
-        fleet = event(fleet)
+        fleet, change_score = event(fleet)
+        self.score += change_score
         if event in add_flags.keys():
             for flag in add_flags[event]:
                 if flag not in self.flags:

@@ -1,3 +1,4 @@
+import os
 import random
 
 from Classes.Fleet import Fleet
@@ -7,8 +8,8 @@ from Classes.Weapon import Weapon
 
 def show_ship(ship):
     print('=========================')
-    print('Ship Name:', ship.name,end='\t')
-    print('Ship ID:', ship.uid,end='\t')
+    print('Ship Name:', ship.name, end='\t')
+    print('Ship ID:', ship.uid, end='\t')
     print('Ship HP:', ship.hit_points, '/', ship.max_hit_points)
     for i in range(len(ship.weapons)):
         weapon = ship.weapons[i]
@@ -38,21 +39,22 @@ def a_ship_joins(fleet: Fleet, show=False):
     return fleet
 
 
-def a_ship_leaves(fleet: Fleet):
+def a_ship_leaves(fleet: Fleet, show=False):
     ship_uid = random.choice(list(fleet.ships.keys()))
-    if fleet.leave(ship_uid):
-        print('A ship left the fleet!')
-    else:
-        fleet = nothing_happened(fleet)
+    if show:
+        show_ship(fleet.ships[ship_uid])
+    if not fleet.leave(ship_uid):
+        print("But it's your flag ship, you managed to stop it from leaving")
     return fleet
 
 
 def nothing_happened(fleet: Fleet):
     print('Nothing happened!')
-    return fleet
+    return fleet, 0
 
 
 def show_status(fleet):
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
     for ship_uid in fleet.ships.keys():
         ship = fleet.ships[ship_uid]
         print('=========================')
