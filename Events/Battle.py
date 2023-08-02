@@ -282,13 +282,26 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
             elif action[0] == 'escape':
                 fleet_names = {'FleetA': "Player's Fleet", 'FleetB': "Enemies' Fleet"}
                 print(fleet_names[order[2]], 'is about to escape.')
-                if will_to_fight[order[2]] <= 0:
-                    while len(orders) <= 0:
-                        orders.append(None)
-                    print(fleet_names[order[2]], 'escapes from the battle zone.')
-                    break
+                failed = False
+                if int(action[1]) < 6:
+                    size = 6 - int(action[1])
+                    chances: list[bool] = [True] * size
+                    chances[random.randint(0, size - 1)] = False
+                    print('The chance is {}%.'.format(int(100 / size)))
+                    if random.choice(chances):
+                        print('It failed to escape.')
+                        failed = True
                 else:
-                    will_to_fight[order[2]] -= 1
+                    print('The chance is 100%.')
+                if not failed:
+                    if will_to_fight[order[2]] <= 1:
+                        while len(orders) <= 0:
+                            orders.append(None)
+                        print('It escaped from the battle zone.')
+                        break
+                    else:
+                        will_to_fight[order[2]] -= 1
+                        print("It flew for a while, but it hasn't been out of battle zone yet.")
             else:
                 raise ValueError('Wrong action type:', action[0])
         else:
