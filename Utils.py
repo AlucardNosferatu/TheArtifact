@@ -48,7 +48,7 @@ def a_ship_leaves(fleet: Fleet, show=False):
     return fleet
 
 
-def nothing_happened(fleet: Fleet):
+def nothing(fleet: Fleet):
     print('Nothing happened!')
     return fleet, 0
 

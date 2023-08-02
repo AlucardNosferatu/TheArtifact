@@ -3,16 +3,9 @@ import pickle
 import random
 
 from Classes.Fleet import Fleet
-from Plots.Area88 import new_mercenary, volunteer_engineers, defection, leaved_mercenary
-from Events.Battle import battle_event
-from Utils import a_ship_joins, nothing_happened, show_status
-
-events_pool_default = [new_mercenary, leaved_mercenary, nothing_happened]
-events_chains = {
-    '0#Area 88': {'condition': ['a88'], 'events_pool': [battle_event, leaved_mercenary, volunteer_engineers, defection]}
-}
-add_flags = {new_mercenary: ['a88']}
-del_flags = {leaved_mercenary: ['a88']}
+from Events.EventSystem import event_process, global_pools_dict
+from Events.EventSystemDeprecated import events_chains, add_flags, del_flags
+from Utils import a_ship_joins, show_status
 
 
 class Game:
@@ -22,7 +15,8 @@ class Game:
     flags = None
 
     def __init__(self):
-        self.events_pool = events_pool_default
+        # self.events_pool = events_pool_default
+        self.events_pool = global_pools_dict['default']
         self.score = 0
         self.fleet = None
         self.finished_chains = []
@@ -51,6 +45,7 @@ class Game:
             # random event
             os.system('cls' if os.name == 'nt' else "printf '\033c'")
             print('~~~~~~~~~~~~~~~~~~~~~~~~')
+            # self.random_event_deprecated()
             self.random_event()
             # check game over
             if self.is_game_over():
@@ -106,6 +101,9 @@ class Game:
         pickle.dump(old_game, open('save.pkl', 'wb'))
 
     def random_event(self):
+        event_process(self)
+
+    def random_event_deprecated(self):
         # select event form pool
         event = random.choice(self.events_pool)
         # execute that event

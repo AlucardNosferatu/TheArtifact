@@ -17,7 +17,7 @@ def leaved_mercenary(fleet: Fleet):
     return fleet, 0
 
 
-def volunteer_engineers(fleet: Fleet):
+def volunteers(fleet: Fleet):
     for ship_uid in fleet.ships.keys():
         fleet.ships[ship_uid].hit_points = fleet.ships[ship_uid].max_hit_points
     print('A troop of volunteers repaired all ships in your fleet.')
