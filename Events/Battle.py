@@ -23,8 +23,11 @@ def battle_event(fleet, enemy_fleet=None):
     will_to_fight = {'FleetA': len(list(fleet.ships.keys())), 'FleetB': len(list(enemy_fleet.ships.keys()))}
     while True:
         orders = arrange_orders(fleet, enemy_fleet)
-        enemy_cards = spawn_actions(enemy_fleet)
-        player_cards = spawn_actions(fleet)
+        cards = spawn_actions(fleet, enemy_fleet, orders)
+        enemy_cards = {}
+        [enemy_cards.__setitem__(suid, cards[suid]) for suid in cards if suid in enemy_fleet.ships.keys()]
+        player_cards = {}
+        [player_cards.__setitem__(suid, cards[suid]) for suid in cards if suid in fleet.ships.keys()]
         enemy_actions = plan_actions(fleet, enemy_fleet, enemy_cards)
         player_actions = plan_actions_player(enemy_fleet, fleet, player_cards)
         orders = make_it_happen(fleet, enemy_fleet, player_actions, enemy_actions, orders, will_to_fight)
@@ -36,43 +39,70 @@ def battle_event(fleet, enemy_fleet=None):
 
 
 def arrange_orders(fleet_a: Fleet, fleet_b: Fleet):
-    orders = [[fleet_a.ships[ship].uid, fleet_a.ships[ship].speed, 'FleetA'] for ship in fleet_a.ships.keys()]
-    orders += [[fleet_b.ships[ship].uid, fleet_b.ships[ship].speed, 'FleetB'] for ship in fleet_b.ships.keys()]
-    speeds = [ship_info[1] for ship_info in orders]
-    new_orders = []
-    while len(speeds) > 0:
-        assert len(speeds) == len(orders)
-        max_speed = max(speeds)
-        max_speed_count = speeds.count(max_speed)
-        max_speed_indices = []
-        prev_max_speed_index = -1
-        for _ in range(max_speed_count):
-            prev_max_speed_index = speeds.index(max_speed, prev_max_speed_index + 1)
-            max_speed_indices.append(prev_max_speed_index)
-        msi_copy = max_speed_indices.copy()
-        while len(max_speed_indices) > 0:
-            pop_index = random.choice(max_speed_indices)
-            max_speed_indices.remove(pop_index)
-            new_orders.append(orders[pop_index])
-        msi_copy.sort()
-        while len(msi_copy) > 0:
-            pop_index = msi_copy.pop(-1)
-            speeds.pop(pop_index)
-            orders.pop(pop_index)
-    return new_orders
+    def get_action_times(speed_, round_duration_, battlefield_size_):
+        action_duration = battlefield_size_ / speed_
+        action_times = round_duration_ // action_duration
+        lead_time = round_duration_ % action_duration
+        return [action_times, lead_time]
+
+    ships2orders = [[fleet_a.ships[ship].uid, fleet_a.ships[ship].speed, 'FleetA'] for ship in fleet_a.ships.keys()]
+    ships2orders += [[fleet_b.ships[ship].uid, fleet_b.ships[ship].speed, 'FleetB'] for ship in fleet_b.ships.keys()]
+    ships2orders_new = []
+    ships2speeds = [ship_info[1] for ship_info in ships2orders]
+    min_speed = min(ships2speeds)
+    battlefield_size = len(list(fleet_a.ships.keys())) + len(list(fleet_b.ships.keys()))
+    round_duration = battlefield_size / min_speed
+    ships2speeds = [get_action_times(speed, round_duration, battlefield_size) for speed in ships2speeds]
+    ships2rounds = [speed[0] for speed in ships2speeds]
+    ships2leads = [speed[1] for speed in ships2speeds]
+    total_rounds = int(max(ships2rounds))
+    for round_nth in range(1, total_rounds + 1):
+        orders_in_round = []
+        ships_in_round = []
+        for ship_index in range(len(ships2rounds)):
+            if ships2rounds[ship_index] >= round_nth:
+                ships_in_round.append(ship_index)
+        leads_in_round = [ships2leads[index] for index in ships_in_round]
+
+        while len(leads_in_round) > 0:
+            assert len(ships_in_round) == len(leads_in_round)
+            max_lead = max(leads_in_round)
+            max_lead_count = leads_in_round.count(max_lead)
+            max_lead_indices = []
+            prev_max_lead_index = -1
+            for _ in range(max_lead_count):
+                prev_max_lead_index = leads_in_round.index(max_lead, prev_max_lead_index + 1)
+                max_lead_indices.append(prev_max_lead_index)
+            mli_copy = max_lead_indices.copy()
+            while len(max_lead_indices) > 0:
+                pop_index = random.choice(max_lead_indices)
+                max_lead_indices.remove(pop_index)
+                orders_in_round.append(ships_in_round[pop_index])
+            mli_copy.sort()
+            while len(mli_copy) > 0:
+                pop_index = mli_copy.pop(-1)
+                leads_in_round.pop(pop_index)
+                ships_in_round.pop(pop_index)
+        orders_in_round = [ships2orders[index] for index in orders_in_round]
+        ships2orders_new = orders_in_round + ships2orders_new
+    return ships2orders_new
 
 
-def spawn_actions(fleet):
+def spawn_actions(fleet_a, fleet_b, orders):
+    fleets_dict = {'FleetA': fleet_a, 'FleetB': fleet_b}
     cards_dict = {}
-    for ship_uid in fleet.ships.keys():
-        cards = []
-        if fleet.ships[ship_uid].is_destroyed():
-            cards.append(['idle', 1])
-        else:
-            for _ in range(5):
-                card_type = random.choice(['attack', 'repair', 'idle', 'escape'])
-                card_point = random.randint(1, 13)
-                cards.append([card_type, card_point])
+    for ship_uid in list(fleet_a.ships.keys()) + list(fleet_b.ships.keys()):
+        cards = [[order[2]] for order in orders if order[0] == ship_uid]
+        faction = cards[0][0]
+        [cards_.pop(0) for cards_ in cards]
+        for action_chance in range(len(cards)):
+            if fleets_dict[faction].ships[ship_uid].is_destroyed():
+                cards[action_chance].append(['idle', 1])
+            else:
+                for _ in range(5):
+                    card_type = random.choice(['attack', 'repair', 'idle', 'escape'])
+                    card_point = random.randint(1, 13)
+                    cards[action_chance].append([card_type, card_point])
         cards_dict.__setitem__(ship_uid, cards.copy())
     return cards_dict
 
@@ -80,38 +110,41 @@ def spawn_actions(fleet):
 def plan_actions(enemy_fleet: Fleet, fleet: Fleet, cards):
     actions = {}
     for ship_uid in fleet.ships.keys():
-        card = random.choice(cards[ship_uid])
-        if card[0] == 'attack':
-            use_weapon = random.randint(0, len(fleet.ships[ship_uid].weapons) - 1)
-            card.append(use_weapon)
-            target_count = fleet.ships[ship_uid].weapons[use_weapon].target
-            targets = []
-            valid_targets = 0
-            for ship_uid_ in enemy_fleet.ships.keys():
-                if not enemy_fleet.ships[ship_uid_].is_destroyed():
-                    valid_targets += 1
-            for i in range(min(valid_targets, target_count)):
-                selected = random.choice(list(enemy_fleet.ships.keys()))
-                while selected in targets:
+        actions.__setitem__(ship_uid, [])
+        for action_chance in cards[ship_uid]:
+            card = random.choice(action_chance)
+            if card[0] == 'attack':
+                use_weapon = random.randint(0, len(fleet.ships[ship_uid].weapons) - 1)
+                card.append(use_weapon)
+                target_count = fleet.ships[ship_uid].weapons[use_weapon].target
+                targets = []
+                valid_targets = 0
+                for ship_uid_ in enemy_fleet.ships.keys():
+                    if not enemy_fleet.ships[ship_uid_].is_destroyed():
+                        valid_targets += 1
+                for i in range(min(valid_targets, target_count)):
                     selected = random.choice(list(enemy_fleet.ships.keys()))
-                targets.append(selected)
-            card.append(targets)
-        actions.__setitem__(ship_uid, card)
+                    while selected in targets:
+                        selected = random.choice(list(enemy_fleet.ships.keys()))
+                    targets.append(selected)
+                card.append(targets)
+            actions[ship_uid].append(card)
     return actions
 
 
 def plan_actions_player(enemy_fleet, fleet, player_cards):
     def check_ready(actions_, fleet_):
         for ship_uid in actions_.keys():
-            if actions_[ship_uid] is None:
+            if None in actions_[ship_uid]:
                 if fleet_.ships[ship_uid].is_destroyed():
-                    actions_[ship_uid] = ['idle', 1]
+                    for index in range(len(actions_[ship_uid])):
+                        actions_[ship_uid][index] = ['idle', 1]
                 else:
                     return False
         return True
 
     actions = {}
-    [actions.__setitem__(ship_uid, None) for ship_uid in fleet.ships.keys()]
+    [actions.__setitem__(ship_uid, [None] * len(player_cards[ship_uid])) for ship_uid in player_cards.keys()]
     while True:
         cmd = ''
         clear = False
@@ -161,7 +194,19 @@ def plan_actions_player(enemy_fleet, fleet, player_cards):
                     print('Ship:', fleet.ships[ship_uid].name, 'was destroyed!')
                     pass
                 else:
-                    cards = player_cards[ship_uid]
+                    chance_count = len(player_cards[ship_uid])
+                    cmd = ''
+                    while cmd not in [str(element) for element in range(1, chance_count + 1)]:
+                        os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                        print('Ship:', fleet.ships[ship_uid].name, 'has {} times to act'.format(chance_count))
+                        print(
+                            'Select chance to perform actions by input chance_index start from 1 to {}.'.format(
+                                chance_count
+                            )
+                        )
+                        cmd = input()
+                    chance_index = int(cmd) - 1
+                    cards = player_cards[ship_uid][chance_index]
                     card_map = {}
                     [card_map.__setitem__(str(index + 1), cards[index]) for index in range(len(cards))]
                     cmd = ''
@@ -227,12 +272,12 @@ def plan_actions_player(enemy_fleet, fleet, player_cards):
                                 else:
                                     targets = list(set(targets))
                                     card.append(targets)
-                                    actions[ship_uid] = card
+                                    actions[ship_uid][chance_index] = card
                                     os.system('cls' if os.name == 'nt' else "printf '\033c'")
                                     print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
                                     print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
                         else:
-                            actions[ship_uid] = card
+                            actions[ship_uid][chance_index] = card
                             os.system('cls' if os.name == 'nt' else "printf '\033c'")
                             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
                             print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
@@ -260,7 +305,8 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
     fleets_and_actions = {'FleetA': [fleet_a, actions_a, 'FleetB'], 'FleetB': [fleet_b, actions_b, 'FleetA']}
     while len(orders) > 0:
         order = orders.pop(0)
-        action = fleets_and_actions[order[2]][1][order[0]]
+        # noinspection PyUnresolvedReferences
+        action = fleets_and_actions[order[2]][1][order[0]].pop(0)
         ship = fleets_and_actions[order[2]][0].ships[order[0]]
         if not ship.is_destroyed():
             if action[0] == 'idle':
@@ -281,7 +327,7 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
                         show_ship(target_ship)
             elif action[0] == 'escape':
                 fleet_names = {'FleetA': "Player's Fleet", 'FleetB': "Enemies' Fleet"}
-                print(fleet_names[order[2]], 'is about to escape.')
+                print(fleet_names[order[2]], 'is about to escape. {} is evading combat.'.format(ship.name))
                 failed = False
                 if int(action[1]) < 6:
                     size = 6 - int(action[1])
@@ -333,5 +379,5 @@ def remove_destroyed(fleet: Fleet):
 
 
 if __name__ == '__main__':
-    fa = generate_fleet(10, 20)
+    fa = generate_fleet(1, 1)
     fa = battle_event(fa)

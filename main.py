@@ -55,20 +55,21 @@ class Game:
                 return
             clear = False
             cmd = ''
-            while cmd not in ['1', '3']:
+            while cmd not in ['1', '3', '4']:
                 if not clear:
                     clear = True
                 else:
                     os.system('cls' if os.name == 'nt' else "printf '\033c'")
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
-                cmd = input('1.Continue\t2.Show Status\t3.Save & Exit\n')
+                cmd = input('1.Continue\t2.Show Status\t3.Save & Exit\t4.Exit\n')
                 if cmd == '2':
                     show_status(self.fleet)
                     clear = False
             if cmd == '1':
                 continue
-            elif cmd == '3':
-                self.save()
+            elif cmd in ['3', '4']:
+                if cmd == '3':
+                    self.save()
                 return
             else:
                 raise ValueError()

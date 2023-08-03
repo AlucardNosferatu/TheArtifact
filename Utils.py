@@ -10,7 +10,8 @@ def show_ship(ship):
     print('=========================')
     print('Ship Name:', ship.name, end='\t')
     print('Ship ID:', ship.uid, end='\t')
-    print('Ship HP:', ship.hit_points, '/', ship.max_hit_points)
+    print('Ship HP:', ship.hit_points, '/', ship.max_hit_points, end='\t')
+    print('Ship Speed:', ship.speed)
     for i in range(len(ship.weapons)):
         weapon = ship.weapons[i]
         print('+++++++++++++++++++++++++')
@@ -28,7 +29,7 @@ def generate_fleet(min_ships=1, max_ships=5):
 def a_ship_joins(fleet: Fleet, show=False):
     mh = random.randint(50, 100)
     mw = random.randint(5, 10)
-    spd = random.randint(7, 10)
+    spd = random.randint(5, 30)
     ship = Ship(mh=mh, mw=mw, spd=spd)
     p = random.randint(5, 15)
     t = random.randint(7, 10)
