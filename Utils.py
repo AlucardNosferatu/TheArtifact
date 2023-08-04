@@ -2,20 +2,7 @@ import os
 import random
 
 from Classes.Fleet import Fleet
-from Classes.Ship import Ship
-from Classes.Weapon import Weapon
-
-
-def show_ship(ship):
-    print('=========================')
-    print('Ship Name:', ship.name, end='\t')
-    print('Ship ID:', ship.uid, end='\t')
-    print('Ship HP:', ship.hit_points, '/', ship.max_hit_points, end='\t')
-    print('Ship Speed:', ship.speed)
-    for i in range(len(ship.weapons)):
-        weapon = ship.weapons[i]
-        print('+++++++++++++++++++++++++')
-        print('Weapon:', i, 'Power:', weapon.power, 'Targets:', weapon.target)
+from Classes.Ship import Ship, show_ship
 
 
 def generate_fleet(min_ships=1, max_ships=5):
@@ -27,13 +14,7 @@ def generate_fleet(min_ships=1, max_ships=5):
 
 
 def a_ship_joins(fleet: Fleet, show=False):
-    mh = random.randint(50, 100)
-    mw = random.randint(5, 10)
-    spd = random.randint(5, 30)
-    ship = Ship(mh=mh, mw=mw, spd=spd)
-    p = random.randint(5, 15)
-    t = random.randint(7, 10)
-    ship.install_weapon(Weapon(p=p, t=t))
+    ship = Ship.spawn()
     fleet.join(ship)
     if show:
         show_ship(ship)
@@ -64,3 +45,11 @@ def show_status(fleet):
         else:
             print('---Normal Ship---')
         show_ship(ship)
+
+
+def clear_screen(clear_):
+    if not clear_:
+        clear_ = True
+    else:
+        os.system('cls' if os.name == 'nt' else "printf '\033c'")
+    return clear_

@@ -5,7 +5,9 @@ import random
 from Classes.Fleet import Fleet
 from Events.EventSystem import event_process, global_pools_dict
 from Events.EventSystemDeprecated import events_chains, add_flags, del_flags
-from Utils import a_ship_joins, show_status
+from Utils import a_ship_joins, show_status, clear_screen
+
+clear = True
 
 
 class Game:
@@ -23,15 +25,22 @@ class Game:
         self.flags = []
 
     def game_loop(self):
+        global clear
         while True:
             cmd = ''
             while cmd not in ['1', '2', '3']:
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                clear = clear_screen(clear)
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 cmd = input('1.New Game\t2.Old Game\t3.Exit\n')
             if cmd == '1':
+                print('~~~~~~~~~~~~~~~~~~~~~~~~')
+                print('=======New Game=======')
                 self.init_fleet()
+                clear = False
             elif cmd == '2':
+                print('~~~~~~~~~~~~~~~~~~~~~~~~')
+                print('=======Old Game=======')
+                clear = False
                 if not self.load():
                     continue
             elif cmd == '3':
@@ -41,25 +50,23 @@ class Game:
             self.events_loop()
 
     def events_loop(self):
+        global clear
         while True:
             # random event
-            os.system('cls' if os.name == 'nt' else "printf '\033c'")
+            clear = clear_screen(clear)
             print('~~~~~~~~~~~~~~~~~~~~~~~~')
             # self.random_event_deprecated()
             self.random_event()
             # check game over
             if self.is_game_over():
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                clear = clear_screen(clear)
                 print('=======Game Over=======')
                 self.display_score()
                 return
             clear = False
             cmd = ''
             while cmd not in ['1', '3', '4']:
-                if not clear:
-                    clear = True
-                else:
-                    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+                clear = clear_screen(clear)
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 cmd = input('1.Continue\t2.Show Status\t3.Save & Exit\t4.Exit\n')
                 if cmd == '2':

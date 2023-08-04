@@ -2,7 +2,8 @@ import random
 
 from Classes.Fleet import Fleet
 from Events.Battle import battle_event
-from Utils import show_ship, a_ship_joins, a_ship_leaves
+from Utils import a_ship_joins, a_ship_leaves
+from Classes.Ship import show_ship
 
 
 def new_mercenary(fleet: Fleet):
@@ -35,7 +36,7 @@ def defection(fleet):
         fleet.leave(ship_uid)
         print('A ship betrayed the fleet!')
         show_ship(enemy_fleet.ships[ship_uid])
-        fleet, change_score = battle_event(fleet, enemy_fleet=enemy_fleet)
+        fleet, change_score = battle_event(fleet, enemy_fleet=enemy_fleet,clear_=False)
         return fleet, change_score
     print('You stopped a menacing disturbance on the flag ship.')
     return fleet, 0

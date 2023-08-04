@@ -1,11 +1,13 @@
-import os
 import random
 
 from Classes.Fleet import Fleet
-from Utils import generate_fleet, show_ship, show_status
+from Classes.Ship import Ship, show_ship
+from Utils import generate_fleet, show_status, clear_screen
+
+clear = True
 
 
-def battle_event(fleet, enemy_fleet=None):
+def battle_event(fleet, enemy_fleet=None, clear_=True):
     def count_killed(enemy_fleet_):
         score_per_ship = 10
         change_score_ = 0
@@ -14,7 +16,12 @@ def battle_event(fleet, enemy_fleet=None):
                 change_score_ += score_per_ship
         return change_score_
 
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+    global clear
+    if clear_:
+        clear = True
+    else:
+        clear = False
+    clear = clear_screen(clear)
     print('You encountered a fleet of enemies!')
     if enemy_fleet is None:
         player_fleet_scale = len(list(fleet.ships.keys()))
@@ -29,8 +36,18 @@ def battle_event(fleet, enemy_fleet=None):
         player_cards = {}
         [player_cards.__setitem__(suid, cards[suid]) for suid in cards if suid in fleet.ships.keys()]
         enemy_actions = plan_actions(fleet, enemy_fleet, enemy_cards)
-        player_actions = plan_actions_player(enemy_fleet, fleet, player_cards)
+        cmd = ''
+        while cmd not in ['y', 'n']:
+            cmd = input('Auto Resolve?[y/n]')
+        if cmd == 'n':
+            player_actions = plan_actions_player(enemy_fleet, fleet, player_cards)
+        elif cmd == 'y':
+            player_actions = plan_actions(enemy_fleet, fleet, player_cards)
+        else:
+            raise ValueError('Auto Resolve?[y/n]')
         orders = make_it_happen(fleet, enemy_fleet, player_actions, enemy_actions, orders, will_to_fight)
+        # god mode
+        fleet.ships[fleet.flag_ship].hit_points = fleet.ships[fleet.flag_ship].max_hit_points
         change_score = count_killed(enemy_fleet)
         if should_it_break(fleet, enemy_fleet, orders):
             break
@@ -132,6 +149,7 @@ def plan_actions(enemy_fleet: Fleet, fleet: Fleet, cards):
     return actions
 
 
+# as 'pap'
 def plan_actions_player(enemy_fleet, fleet, player_cards):
     def check_ready(actions_, fleet_):
         for ship_uid in actions_.keys():
@@ -143,162 +161,258 @@ def plan_actions_player(enemy_fleet, fleet, player_cards):
                     return False
         return True
 
+    global clear
     actions = {}
     [actions.__setitem__(ship_uid, [None] * len(player_cards[ship_uid])) for ship_uid in player_cards.keys()]
     while True:
-        cmd = ''
         clear = False
-        while cmd not in ['1', '2', '3']:
-            if not clear:
-                clear = True
-            else:
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-            print('You need to plan actions for each ship in your fleet now.')
-            print('1.Show Status', end='\t')
-            print('2.Plan Actions', end='\t')
-            print("3.What's the plan?")
-            cmd = input()
-        if cmd == '1':
-            cmd = ''
-            while cmd not in ['1', '2', '3']:
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                print('1.Your Fleet', end='\t')
-                print("2.Enemies' Fleet", end='\t')
-                print('3.Back')
-                cmd = input()
-            if cmd == '1':
-                show_status(fleet)
-            elif cmd == '2':
-                show_status(enemy_fleet)
-            elif cmd == '3':
-                pass
-        elif cmd == '2':
-            uid_map = {}
-            uid_list = list(fleet.ships.keys())
-            [uid_map.__setitem__(str(index + 1), uid_list[index]) for index in range(len(uid_list))]
-            cmd = ''
-            while cmd not in list(uid_map.keys()) + [str(len(uid_list) + 1)]:
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                [print(key + '.', fleet.ships[uid_map[key]].name, end='\t') for key in uid_map.keys()]
-                print(str(len(uid_list) + 1) + '.', 'Back')
-                cmd = input()
-            if cmd == str(len(uid_list) + 1):
-                pass
-            else:
-                ship_uid = uid_map[cmd]
-                if fleet.ships[ship_uid].is_destroyed():
-                    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                    print('Ship:', fleet.ships[ship_uid].name, 'was destroyed!')
-                    pass
-                else:
-                    chance_count = len(player_cards[ship_uid])
-                    cmd = ''
-                    while cmd not in [str(element) for element in range(1, chance_count + 1)]:
-                        os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                        print('Ship:', fleet.ships[ship_uid].name, 'has {} times to act'.format(chance_count))
-                        print(
-                            'Select chance to perform actions by input chance_index start from 1 to {}.'.format(
-                                chance_count
-                            )
-                        )
-                        cmd = input()
-                    chance_index = int(cmd) - 1
-                    cards = player_cards[ship_uid][chance_index]
-                    card_map = {}
-                    [card_map.__setitem__(str(index + 1), cards[index]) for index in range(len(cards))]
-                    cmd = ''
-                    while cmd not in list(card_map.keys()) + [str(len(cards) + 1)]:
-                        os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                        print('Select 1 action for:', fleet.ships[ship_uid].name)
-                        [print(key + '.', card_map[key], end='\t') for key in card_map.keys()]
-                        print(str(len(cards) + 1) + '.', 'Back')
-                        cmd = input()
-                    if cmd == str(len(cards) + 1):
-                        pass
-                    else:
-                        card = card_map[cmd].copy()
-                        if card[0] == 'attack':
-                            weapons = fleet.ships[ship_uid].weapons
-                            cmd = ''
-                            while cmd not in [str(index + 1) for index in range(len(weapons) + 1)]:
-                                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                                print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                                print('Select 1 weapon used by:', fleet.ships[ship_uid].name)
-                                [print(str(index + 1) + '.', 'Power:', weapons[index].power, 'Target:',
-                                       weapons[index].target, end='\t') for index in range(len(weapons))]
-                                print(str(len(weapons) + 1) + '.', 'Back')
-                                cmd = input()
-                            if cmd == str(len(weapons) + 1):
-                                pass
-                            else:
-                                use_weapon = int(cmd) - 1
-                                target_count = weapons[use_weapon].target
-                                card.append(use_weapon)
-                                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                                print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                                print('Select {} targets fired by:'.format(target_count), fleet.ships[ship_uid].name)
-                                print('*CAUTION*', 'Destroyed targets will be ignored during execution!')
-                                print('*CAUTION*', 'Duplicated targets will only be fired once!')
-                                targets = []
-                                target_map = {}
-                                target_list = list(enemy_fleet.ships.keys())
-                                [target_map.__setitem__(str(index + 1), target_list[index]) for index in
-                                 range(len(target_list))]
-                                back_flag = False
-                                for _ in range(target_count):
-                                    cmd = ''
-                                    while cmd not in list(target_map.keys()) + [str(len(target_list) + 2)]:
-                                        os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                                        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                                        [print(key + '.', enemy_fleet.ships[target_map[key]].name,
-                                               show_ship(enemy_fleet.ships[target_map[key]])) for key in
-                                         target_map.keys()]
-                                        print(str(len(target_list) + 1) + '.', 'Back')
-                                        print(str(len(target_list) + 2) + '.', 'OK')
-                                        cmd = input()
-                                    if cmd == str(len(target_list) + 1):
-                                        back_flag = True
-                                        break
-                                    elif cmd == str(len(target_list) + 2):
-                                        break
-                                    else:
-                                        targets.append(target_map[cmd])
-                                if back_flag:
-                                    pass
-                                else:
-                                    targets = list(set(targets))
-                                    card.append(targets)
-                                    actions[ship_uid][chance_index] = card
-                                    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                                    print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                                    print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
-                        else:
-                            actions[ship_uid][chance_index] = card
-                            os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                            print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
-        elif cmd == '3':
-            os.system('cls' if os.name == 'nt' else "printf '\033c'")
-            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-            [print(fleet.ships[ship_uid].name, actions[ship_uid]) for ship_uid in actions.keys()]
+        cmd = pap_choice_1()
+        pap_tree_1(actions, cmd, enemy_fleet, fleet, player_cards)
         if check_ready(actions_=actions, fleet_=fleet):
-            cmd = ''
-            while cmd not in ['1', '2']:
-                os.system('cls' if os.name == 'nt' else "printf '\033c'")
-                print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-                print('All ships in your fleet were scheduled:')
-                print('1.Make It Happen', end='\t')
-                print('2.Wait A Minute')
-                cmd = input()
+            cmd = pap_choice_8()
             if cmd == '1':
                 break
             elif cmd == '2':
                 pass
     return actions
+
+
+def pap_tree_1(actions, cmd, enemy_fleet, fleet, player_cards):
+    global clear
+    if cmd == '1':
+        cmd = pap_choice_2()
+        pap_tree_2(cmd, enemy_fleet, fleet)
+    elif cmd == '2':
+        uid_map = {}
+        uid_list = list(fleet.ships.keys())
+        [uid_map.__setitem__(str(index + 1), uid_list[index]) for index in range(len(uid_list))]
+        cmd = pap_choice_3(fleet, uid_list, uid_map)
+        pap_tree_3(actions, cmd, enemy_fleet, fleet, player_cards, uid_list, uid_map)
+    elif cmd == '3':
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        [print(fleet.ships[ship_uid].name, actions[ship_uid]) for ship_uid in actions.keys()]
+
+
+def pap_tree_2(cmd, enemy_fleet, fleet):
+    if cmd == '1':
+        show_status(fleet)
+    elif cmd == '2':
+        show_status(enemy_fleet)
+    elif cmd == '3':
+        pass
+
+
+def pap_tree_3(actions, cmd, enemy_fleet, fleet, player_cards, uid_list, uid_map):
+    global clear
+    if cmd == str(len(uid_list) + 1):
+        pass
+    else:
+        ship_uid = uid_map[cmd]
+        if fleet.ships[ship_uid].is_destroyed():
+            clear = clear_screen(clear)
+            print('Ship:', fleet.ships[ship_uid].name, 'was destroyed!')
+            pass
+        else:
+            chance_count = len(player_cards[ship_uid])
+            cmd = pap_choice_4(chance_count, fleet, ship_uid)
+            chance_index = int(cmd) - 1
+            cards = player_cards[ship_uid][chance_index]
+            card_map = {}
+            [card_map.__setitem__(str(index + 1), cards[index]) for index in range(len(cards))]
+            cmd = pap_choice_5(card_map, cards, fleet, ship_uid)
+            pap_tree_4(actions, card_map, cards, chance_index, cmd, enemy_fleet, fleet, ship_uid)
+
+
+def pap_tree_4(actions, card_map, cards, chance_index, cmd, enemy_fleet, fleet, ship_uid):
+    global clear
+    if cmd == str(len(cards) + 1):
+        pass
+    else:
+        card = card_map[cmd].copy()
+        if card[0] == 'attack':
+            weapons = fleet.ships[ship_uid].weapons
+            cmd = pap_choice_6(fleet, ship_uid, weapons)
+            pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid, weapons)
+        else:
+            actions[ship_uid][chance_index] = card
+            clear = clear_screen(clear)
+            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+            print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
+
+
+def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid, weapons):
+    global clear
+    if cmd == str(len(weapons) + 1):
+        pass
+    else:
+        use_weapon = int(cmd) - 1
+        target_count = weapons[use_weapon].target
+        card.append(use_weapon)
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print('Select {} targets fired by:'.format(target_count), fleet.ships[ship_uid].name)
+        print('*CAUTION*', 'Destroyed targets will be ignored during execution!')
+        print('*CAUTION*', 'Duplicated targets will only be fired once!')
+        targets = []
+        target_map = {}
+        target_list = list(enemy_fleet.ships.keys())
+        [target_map.__setitem__(str(index + 1), target_list[index]) for index in
+         range(len(target_list))]
+        back_flag = False
+        for _ in range(target_count):
+            cmd = pap_choice_7(enemy_fleet, target_list, target_map)
+            if cmd == str(len(target_list) + 1):
+                back_flag = True
+                break
+            elif cmd == str(len(target_list) + 2):
+                break
+            else:
+                targets.append(target_map[cmd])
+        if back_flag:
+            pass
+        else:
+            targets = list(set(targets))
+            card.append(targets)
+            actions[ship_uid][chance_index] = card
+            clear = clear_screen(clear)
+            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+            print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
+
+
+def pap_choice_8():
+    global clear
+    cmd = ''
+    while cmd not in ['1', '2']:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print('All ships in your fleet were scheduled:')
+        print('1.Make It Happen', end='\t')
+        print('2.Wait A Minute')
+        cmd = input()
+    return cmd
+
+
+def pap_choice_7(enemy_fleet, target_list, target_map):
+    global clear
+    cmd = ''
+    while cmd not in list(target_map.keys()) + [str(len(target_list) + 2)]:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        [print(key + '.', enemy_fleet.ships[target_map[key]].name,
+               show_ship(enemy_fleet.ships[target_map[key]])) for key in
+         target_map.keys()]
+        print(str(len(target_list) + 1) + '.', 'Back')
+        print(str(len(target_list) + 2) + '.', 'OK')
+        cmd = input()
+    return cmd
+
+
+def pap_choice_6(fleet, ship_uid, weapons):
+    global clear
+    cmd = ''
+    while cmd not in [str(index + 1) for index in range(len(weapons) + 1)]:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print('Select 1 weapon used by:', fleet.ships[ship_uid].name)
+        [print(str(index + 1) + '.', 'Power:', weapons[index].power, 'Target:',
+               weapons[index].target, end='\t') for index in range(len(weapons))]
+        print(str(len(weapons) + 1) + '.', 'Back')
+        cmd = input()
+    return cmd
+
+
+def pap_choice_5(card_map, cards, fleet, ship_uid):
+    global clear
+    cmd = ''
+    while cmd not in list(card_map.keys()) + [str(len(cards) + 1)]:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print('Select 1 action for:', fleet.ships[ship_uid].name)
+        [print(key + '.', card_map[key], end='\t') for key in card_map.keys()]
+        print(str(len(cards) + 1) + '.', 'Back')
+        cmd = input()
+    return cmd
+
+
+def pap_choice_4(chance_count, fleet, ship_uid):
+    global clear
+    cmd = ''
+    while cmd not in [str(element) for element in range(1, chance_count + 1)]:
+        clear = clear_screen(clear)
+        print('Ship:', fleet.ships[ship_uid].name, 'has {} times to act'.format(chance_count))
+        print(
+            'Select chance to perform actions by input chance_index start from 1 to {}.'.format(
+                chance_count
+            )
+        )
+        cmd = input()
+    return cmd
+
+
+def pap_choice_3(fleet, uid_list, uid_map):
+    global clear
+    row_length = 5
+    cmd = ''
+    while cmd not in list(uid_map.keys()) + [str(len(uid_list) + 1)]:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        um_copy = list(uid_map.keys()).copy()
+        while len(um_copy) > 0:
+            for i in range(min(row_length, len(um_copy))):
+                key = um_copy.pop(0)
+                print(key + '.', fleet.ships[uid_map[key]].name, end='\t')
+            print()
+        print(str(len(uid_list) + 1) + '.', 'Back')
+        cmd = input()
+    return cmd
+
+
+def pap_choice_2():
+    global clear
+    cmd = ''
+    while cmd not in ['1', '2', '3']:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print('1.Your Fleet', end='\t')
+        print("2.Enemies' Fleet", end='\t')
+        print('3.Back')
+        cmd = input()
+    return cmd
+
+
+def pap_choice_1():
+    global clear
+    cmd = ''
+    while cmd not in ['1', '2', '3']:
+        clear = clear_screen(clear)
+        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        print('You need to plan actions for each ship in your fleet now.')
+        print('1.Show Status', end='\t')
+        print('2.Plan Actions', end='\t')
+        print("3.What's the plan?")
+        cmd = input()
+    return cmd
+
+
+def hit(basic_accuracy, maneuver, maneuver_target):
+    accuracy = basic_accuracy
+    bias = maneuver - maneuver_target
+    bias /= ((maneuver + maneuver_target) / 2)
+    accuracy += (100 * bias)
+    accuracy = min(int(accuracy), 100)
+    print('Hit chance is {}%'.format(accuracy))
+    chances = [False] * 100
+    selected = []
+    indices = list(range(100))
+    index = -1
+    for _ in range(accuracy):
+        while index not in indices or index in selected:
+            index = random.choice(indices)
+        selected.append(index)
+    for index in selected:
+        chances[index] = True
+    return random.choice(chances)
 
 
 def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders, will_to_fight):
@@ -318,13 +432,20 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
                 show_ship(ship)
             elif action[0] == 'attack':
                 amount = int((((order[1] - 6) / 13) + 1) * ship.weapons[action[2]].power)
+                basic_accuracy = ship.fire_control_system
+                maneuver = ship.maneuver
                 print(ship.name, 'fires on active target(s)!')
                 for target_uid in action[3]:
-                    target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
+                    target_ship: Ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
                     if not target_ship.is_destroyed():
-                        target_ship.damaged(amount)
                         print(target_ship.name, 'was fired by', ship.name, '!')
-                        show_ship(target_ship)
+                        maneuver_target = target_ship.maneuver
+                        if hit(basic_accuracy, maneuver, maneuver_target):
+                            target_ship.damaged(amount)
+                            print('Target was hit!')
+                            show_ship(target_ship)
+                        else:
+                            print('Missed!')
             elif action[0] == 'escape':
                 fleet_names = {'FleetA': "Player's Fleet", 'FleetB': "Enemies' Fleet"}
                 print(fleet_names[order[2]], 'is about to escape. {} is evading combat.'.format(ship.name))
@@ -379,5 +500,5 @@ def remove_destroyed(fleet: Fleet):
 
 
 if __name__ == '__main__':
-    fa = generate_fleet(1, 1)
+    fa = generate_fleet(20, 50)
     fa = battle_event(fa)
