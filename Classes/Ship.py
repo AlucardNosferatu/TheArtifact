@@ -1,6 +1,7 @@
 import random
 import uuid
 
+from Battle.BattleOverride import OverrideActions
 from Classes.Weapon import Weapon
 
 
@@ -8,15 +9,19 @@ class Ship:
     max_hit_points = None
     max_weapons = None
     speed = None
-
+    # 0 for normal, 1 for not-escapable, 2 for fast escape
+    escapable = None
     uid = None
     hit_points = None
     weapons = None
     name = None
+    idle_speech = None
     names = {
         'Nautilus': 0, 'Red Noah': 0, 'Enterprise': 0, 'Dugong': 0, 'Area': 0, 'Nimbus': 0, 'Nebula': 0, 'Rainbow': 0
     }
     buff_list = None
+    override_enabled = None
+    override_actions = None
 
     def __init__(self, mh, mw, spd, armor, fcs, man, name=None):
         self.max_hit_points = mh
@@ -25,6 +30,7 @@ class Ship:
         self.armor = armor
         self.fire_control_system = fcs
         self.maneuver = man
+        self.escapable = 0
         self.buff_list = []
         self.uid = str(uuid.uuid4())
         self.hit_points = self.max_hit_points
@@ -34,6 +40,9 @@ class Ship:
             Ship.names[name] += 1
             name += (' #' + str(Ship.names[name]))
         self.name = name
+        self.idle_speech = ['Why should I waits for a better chance?']
+        self.override_enabled = False
+        self.override_actions = OverrideActions()
 
     def install_weapon(self, weapon):
         if len(self.weapons) < self.max_weapons:

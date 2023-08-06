@@ -1,6 +1,7 @@
 import random
 
-from Events.Battle import battle_event
+import Battle.BattlePlan
+from Battle.BattleEvent import battle_event
 from Plots.Area88 import new_mercenary, leaved_mercenary, volunteers, defection
 from Utils import nothing
 
@@ -101,7 +102,7 @@ def update_score_and_flags(change_score, event, game_obj):
     if event in del_flags.keys():
         for flag in del_flags[event]:
             if flag == '%ALL%':
-                game_obj.flags.clear()
+                Battle.BattlePlan.clear()
                 break
             elif flag in game_obj.flags:
                 game_obj.flags.remove(flag)

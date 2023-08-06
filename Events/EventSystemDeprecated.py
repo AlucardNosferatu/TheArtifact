@@ -1,4 +1,4 @@
-from Events.Battle import battle_event
+from Battle.BattleEvent import battle_event
 from Plots.Area88 import new_mercenary, leaved_mercenary, volunteers, defection
 from Utils import nothing
 
