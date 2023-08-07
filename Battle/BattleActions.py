@@ -2,7 +2,6 @@ import random
 
 from Buffs.BasicBuffs import Evade, Defend
 from Classes.Fleet import Fleet
-from Classes.Ship import Ship, show_ship
 
 
 def escape(action, order, acting_ship, extra_params):
@@ -52,14 +51,14 @@ def attack(action, order, acting_ship, extra_params):
     maneuver = acting_ship.maneuver
     print(acting_ship.name, 'fires on active target(s)!')
     for target_uid in action[3]:
-        target_ship: Ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
+        target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
         if not target_ship.is_destroyed():
             print(target_ship.name, 'was fired by', acting_ship.name, '!')
             maneuver_target = target_ship.maneuver
             if hit(basic_accuracy, maneuver, maneuver_target):
+                old_hp = target_ship.hit_points
                 target_ship.damaged(amount)
-                print('Target was hit!')
-                show_ship(target_ship)
+                print('Target was hit! HP:{}->{}'.format(old_hp, target_ship.hit_points))
             else:
                 print('Missed!')
 
@@ -67,9 +66,9 @@ def attack(action, order, acting_ship, extra_params):
 def repair(action, order, acting_ship, extra_params):
     _, _ = order, extra_params
     amount = int((action[1] / 13) * acting_ship.max_hit_points * 0.5)
+    old_hp = acting_ship.hit_points
     acting_ship.repair(amount)
-    print(acting_ship.name, 'repairs itself!')
-    show_ship(acting_ship)
+    print(acting_ship.name, 'repaired itself! HP:{}->{}'.format(old_hp, acting_ship.hit_points))
 
 
 def evade(action, order, acting_ship, extra_params):
@@ -113,3 +112,13 @@ def hit(basic_accuracy, maneuver, maneuver_target):
     for index in selected:
         chances[index] = True
     return random.choice(chances)
+
+
+basic_actions_dict = {
+    'escape': [escape, '[interrupt, orders, acting_fleet]'],
+    'idle': [idle, '[]'],
+    'attack': [attack, '[fleets_and_actions]'],
+    'repair': [repair, '[]'],
+    'evade': [evade, '[]'],
+    'defend': [defend, '[]']
+}

@@ -1,8 +1,7 @@
+import os
 import random
 
 from Classes.Fleet import Fleet
-from Classes.Ship import show_ship
-from Utils import clear_screen, show_status
 
 clear = True
 
@@ -89,9 +88,8 @@ def pap_tree_4(actions, card_map, cards, chance_index, cmd, enemy_fleet, fleet, 
     else:
         card = card_map[cmd].copy()
         if card[0] == 'attack':
-            weapons = fleet.ships[ship_uid].weapons
-            cmd = pap_choice_6(fleet, ship_uid, weapons)
-            pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid, weapons)
+            cmd = pap_choice_6(fleet, ship_uid)
+            pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid)
         else:
             actions[ship_uid][chance_index] = card
             clear = clear_screen(clear)
@@ -99,10 +97,11 @@ def pap_tree_4(actions, card_map, cards, chance_index, cmd, enemy_fleet, fleet, 
             print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
 
 
-def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid, weapons):
+def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid):
     global clear
+    weapons = fleet.ships[ship_uid].weapons
     if cmd == str(len(weapons) + 1):
-        pass
+        return False
     else:
         use_weapon = int(cmd) - 1
         target_count = weapons[use_weapon].target
@@ -136,6 +135,7 @@ def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid, w
             clear = clear_screen(clear)
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
             print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
+        return True
 
 
 def pap_choice_8():
@@ -157,17 +157,20 @@ def pap_choice_7(enemy_fleet, target_list, target_map):
     while cmd not in list(target_map.keys()) + [str(len(target_list) + 2)]:
         clear = clear_screen(clear)
         print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-        [print(key + '.', enemy_fleet.ships[target_map[key]].name,
-               show_ship(enemy_fleet.ships[target_map[key]])) for key in
-         target_map.keys()]
+        [print(
+            key + '.', enemy_fleet.ships[target_map[key]].name,
+            enemy_fleet.ships[target_map[key]].show_ship()
+        ) for key in
+            target_map.keys()]
         print(str(len(target_list) + 1) + '.', 'Back')
         print(str(len(target_list) + 2) + '.', 'OK')
         cmd = input()
     return cmd
 
 
-def pap_choice_6(fleet, ship_uid, weapons):
+def pap_choice_6(fleet, ship_uid):
     global clear
+    weapons = fleet.ships[ship_uid].weapons
     cmd = ''
     while cmd not in [str(index + 1) for index in range(len(weapons) + 1)]:
         clear = clear_screen(clear)
@@ -277,3 +280,23 @@ def plan_actions(enemy_fleet: Fleet, fleet: Fleet, cards):
                 card.append(targets)
             actions[ship_uid].append(card)
     return actions
+
+
+def show_status(fleet):
+    os.system('cls' if os.name == 'nt' else "printf '\033c'")
+    for ship_uid in fleet.ships.keys():
+        ship = fleet.ships[ship_uid]
+        print('=========================')
+        if ship_uid == fleet.flag_ship:
+            print('###Flag Ship###')
+        else:
+            print('---Normal Ship---')
+        ship.show_ship()
+
+
+def clear_screen(clear_):
+    if not clear_:
+        clear_ = True
+    else:
+        os.system('cls' if os.name == 'nt' else "printf '\033c'")
+    return clear_

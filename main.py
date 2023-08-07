@@ -5,7 +5,8 @@ import random
 from Classes.Fleet import Fleet
 from Events.EventSystem import event_process, global_pools_dict
 from Events.EventSystemDeprecated import events_chains, add_flags, del_flags
-from Utils import a_ship_joins, show_status, clear_screen
+from Utils import a_ship_joins
+from Battle.BattlePlan import show_status, clear_screen
 
 clear = True
 

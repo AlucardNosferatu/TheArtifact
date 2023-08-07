@@ -90,19 +90,22 @@ class Ship:
         ship.install_weapon(Weapon(p=wp, t=wt))
         return ship
 
+    def show_ship(self):
+        print('=========================')
+        print('■' + self.name, end='\t')
+        # print('Ship ID:', ship.uid, end='\t')
+        print(
+            '■HP:', self.hit_points, '/', self.max_hit_points,
+            '■Speed:', self.speed,
+            '■Armor:', self.armor,
+            '■FCS (Fire Control System):', self.fire_control_system,
+            '■Maneuverability:', self.maneuver
+        )
+        for i in range(len(self.weapons)):
+            weapon = self.weapons[i]
+            print('++++++++Weapons++++++++')
+            print('■Weapon ID:', i, '■Power:', weapon.power, '■Targets:', weapon.target)
 
-def show_ship(ship):
-    print('=========================')
-    print('■' + ship.name, end='\t')
-    # print('Ship ID:', ship.uid, end='\t')
-    print(
-        '■HP:', ship.hit_points, '/', ship.max_hit_points,
-        '■Speed:', ship.speed,
-        '■Armor:', ship.armor,
-        '■FCS (Fire Control System):', ship.fire_control_system,
-        '■Maneuverability:', ship.maneuver
-    )
-    for i in range(len(ship.weapons)):
-        weapon = ship.weapons[i]
-        print('++++++++Weapons++++++++')
-        print('■Weapon ID:', i, '■Power:', weapon.power, '■Targets:', weapon.target)
+
+if __name__ == '__main__':
+    pass

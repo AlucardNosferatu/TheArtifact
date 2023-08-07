@@ -1,20 +1,12 @@
 import random
 
-from Battle.BattleActions import escape, idle, attack, repair, evade, defend
+from Battle.BattleActions import basic_actions_dict
 from Battle.BattleOverride import override_control, override_orders, override_init
-from Battle.BattlePlan import plan_actions_player, plan_actions
+from Battle.BattlePlan import plan_actions_player, plan_actions, clear_screen
 from Classes.Buff import Buff
 from Classes.Fleet import Fleet
-from Utils import generate_fleet, clear_screen
+from Utils import generate_fleet
 
-actions_dict = {
-    'escape': [escape, '[interrupt, orders, acting_fleet]'],
-    'idle': [idle, '[]'],
-    'attack': [attack, '[fleets_and_actions]'],
-    'repair': [repair, '[]'],
-    'evade': [evade, '[]'],
-    'defend': [defend, '[]']
-}
 clear = True
 
 
@@ -51,7 +43,6 @@ def battle_event(fleet_p, fleet_e=None, clear_=True):
         else:
             cmd = 'n'
         orders = arrange_orders(fleet_p, fleet_e)
-
         if cmd == 'y':
             orders, override_chances = override_orders(fleet_p, orders)
         elif cmd == 'n':
@@ -168,9 +159,9 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
         action = fleets_and_actions[order[2]][1][order[0]].pop(0)
         acting_ship = acting_fleet.ships[order[0]]
         if not acting_ship.is_destroyed():
-            if action[0] in actions_dict.keys():
-                action_function = actions_dict[action[0]][0]
-                extra_params = eval(actions_dict[action[0]][1])
+            if action[0] in basic_actions_dict.keys():
+                action_function = basic_actions_dict[action[0]][0]
+                extra_params = eval(basic_actions_dict[action[0]][1])
                 action_function(action, order, acting_ship, extra_params=extra_params)
             else:
                 raise ValueError('Wrong action type:', action[0])
@@ -182,23 +173,26 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
                 print('The Flagship was destroyed! Cannot start Override Control!')
                 print('##ERROR##ERROR##ERROR##ERROR##ERROR##ERROR##ERROR##ERROR##')
             else:
-                override_control(fleet_a, fleet_b)
+                packed_ep = {
+                    'interrupt': interrupt,
+                    'orders': orders,
+                    'acting_fleet': acting_fleet,
+                    'fleets_and_actions': fleets_and_actions
+                }
+                override_control(fleet_a, fleet_b, packed_ep=packed_ep)
         print('==========================================================================')
     return orders
 
 
 def buffs_decay(fleet, clear_buff=False):
     for ship_uid in fleet.ships:
-        expired_indices = []
-        for index in range(len(fleet.ships[ship_uid].buff_list)):
+        buf_count = len(fleet.ships[ship_uid].buff_list)
+        for index in range(buf_count):
+            index = buf_count - index - 1
             fleet.ships[ship_uid].buff_list[index]: Buff
             fleet.ships[ship_uid].buff_list[index].decay()
             if fleet.ships[ship_uid].buff_list[index].expired or clear_buff:
-                expired_indices.append(index)
-        expired_indices.sort()
-        expired_indices.reverse()
-        for index in expired_indices:
-            fleet.ships[ship_uid].buff_list.pop(index)
+                fleet.ships[ship_uid].buff_list.pop(index)
 
 
 def should_it_break(fleet_a, fleet_b, orders):

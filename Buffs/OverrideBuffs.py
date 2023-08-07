@@ -1,13 +1,12 @@
 from Classes.Buff import Buff
-from Classes.Ship import Ship
 
 
 class WeaponOverload(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, WeaponOverload.t_func, WeaponOverload.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         if hasattr(target, 'free_overload') and target.free_overload:
             print('{} has enhanced circuit that can endure energy overload!'.format(target.name))
             params['activated'] = True
@@ -24,7 +23,7 @@ class WeaponOverload(Buff):
         if params['activated']:
             amounts = []
             for weapon in target.weapons:
-                amount = max(1, 0.2 * weapon.power)
+                amount = max(1, int(0.2 * weapon.power))
                 amounts.append(amount)
                 p = weapon.power
                 weapon.power += amount
@@ -32,7 +31,7 @@ class WeaponOverload(Buff):
             params['amounts'] = amounts
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         if params['activated']:
             for i in range(min(len(params['amounts']), len(target.weapons))):
                 p = target.weapons[i].power
@@ -41,22 +40,22 @@ class WeaponOverload(Buff):
 
 
 class RedistributedPower(Buff):
-    def __init__(self, effect_target: Ship, new_targets, weapon_index):
+    def __init__(self, effect_target, new_targets, weapon_index):
         super().__init__(1, effect_target, RedistributedPower.t_func, RedistributedPower.r_func,
                          {'new_targets': new_targets, 'weapon_index': weapon_index})
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         weapon_index = params['weapon_index']
         weapon = target.weapons[weapon_index]
         params['old_targets'] = weapon.target
         params['old_power'] = weapon.power
-        new_power = round(params['old_targets'] * params['old_targets'] / params['new_targets'])
+        new_power = round(params['old_power'] * params['old_targets'] / params['new_targets'])
         weapon.target = params['new_targets']
         weapon.power = new_power
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         weapon_index = params['weapon_index']
         weapon = target.weapons[weapon_index]
         weapon.target = params['old_targets']
@@ -64,11 +63,11 @@ class RedistributedPower(Buff):
 
 
 class ShieldOverload(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, ShieldOverload.t_func, ShieldOverload.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         if hasattr(target, 'free_overload') and target.free_overload:
             print('{} has enhanced circuit that can endure energy overload!'.format(target.name))
             params['activated'] = True
@@ -90,7 +89,7 @@ class ShieldOverload(Buff):
             params['amount'] = amount
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         if params['activated']:
             a = target.armor
             target.armor -= params['amount']
@@ -98,12 +97,12 @@ class ShieldOverload(Buff):
 
 
 class PinpointShield(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, PinpointShield.t_func, PinpointShield.r_func,
                          {'new_damaged': self.damaged})
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         if target.hit_points < 0.5 * target.max_hit_points:
             print('Pinpoint-Shield of {} cannot be triggered when its HP  is below 50%!'.format(target.name))
             params['activated'] = False
@@ -115,7 +114,7 @@ class PinpointShield(Buff):
             target.damaged = params['new_damaged']
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         if params['activated']:
             target.damaged = params['old_damaged']
 
@@ -135,11 +134,11 @@ class PinpointShield(Buff):
 
 
 class EngineOverload(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, EngineOverload.t_func, EngineOverload.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         if hasattr(target, 'free_overload') and target.free_overload:
             print('{} has enhanced circuit that can endure energy overload!'.format(target.name))
             params['activated'] = True
@@ -161,7 +160,7 @@ class EngineOverload(Buff):
             params['amount'] = amount
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         if params['activated']:
             s = target.speed
             target.speed -= params['amount']
@@ -169,11 +168,11 @@ class EngineOverload(Buff):
 
 
 class HighGManeuver(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, HighGManeuver.t_func, HighGManeuver.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         cost = max(1, int(0.2 * target.speed))
         amount = max(1, 0.2 * target.maneuver)
         if target.speed - cost <= 0:
@@ -190,7 +189,7 @@ class HighGManeuver(Buff):
             params['activated'] = True
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         if params['activated']:
             print('{} recovered from the PSM (post-stall maneuver).'.format(target.name))
             print('Ship Speed:{}->{}'.format(target.speed, params['old_speed']))
@@ -200,55 +199,55 @@ class HighGManeuver(Buff):
 
 
 class CantEscape(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, CantEscape.t_func, CantEscape.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         params['prev_state'] = target.escapable
         target.escapable = 1
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         target.escapable = params['prev_state']
 
 
 class FastEscape(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, FastEscape.t_func, FastEscape.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         params['prev_state'] = target.escapable
         target.escapable = 2
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         target.escapable = params['prev_state']
 
 
 class EnhancedCircuit(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, EnhancedCircuit.t_func, EnhancedCircuit.r_func)
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         _ = params
         setattr(target, 'free_overload', True)
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         _ = params
         delattr(target, 'free_overload')
 
 
 class DamageControl(Buff):
-    def __init__(self, effect_target: Ship):
+    def __init__(self, effect_target):
         super().__init__(1, effect_target, DamageControl.t_func, DamageControl.r_func,
                          {'new_damaged': self.damaged, 'this_buff': self})
 
     @staticmethod
-    def t_func(target: Ship, params: dict):
+    def t_func(target, params: dict):
         already_triggered = False
         for buff in target.buff_list:
             if buff is not params['this_buff']:
@@ -268,7 +267,7 @@ class DamageControl(Buff):
             target.damaged = params['new_damaged']
 
     @staticmethod
-    def r_func(target: Ship, params: dict):
+    def r_func(target, params: dict):
         if params['activated']:
             target.damaged = params['old_damaged']
 
@@ -288,13 +287,4 @@ class DamageControl(Buff):
 
 
 if __name__ == '__main__':
-    ship_ = Ship.spawn(mh=100, armor=20)
-    dc1 = DamageControl(ship_)
-    dc2 = DamageControl(ship_)
-    ship_.buff_list.append(dc1)
-    ship_.buff_list.append(dc2)
-    dc1.trigger()
-    dc2.trigger()
-    while not ship_.is_destroyed():
-        ship_.damaged(amount=40)
-        print(ship_.hit_points)
+    pass
