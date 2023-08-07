@@ -23,10 +23,10 @@ def plan_actions_player(enemy_fleet, fleet, player_cards):
     [actions.__setitem__(ship_uid, [None] * len(player_cards[ship_uid])) for ship_uid in player_cards.keys()]
     while True:
         clear = False
-        cmd = pap_choice_1()
+        cmd = pap_choice_1_first_glance()
         pap_tree_1(actions, cmd, enemy_fleet, fleet, player_cards)
         if check_ready(actions_=actions, fleet_=fleet):
-            cmd = pap_choice_8()
+            cmd = pap_choice_8_final_check()
             if cmd == '1':
                 break
             elif cmd == '2':
@@ -37,13 +37,13 @@ def plan_actions_player(enemy_fleet, fleet, player_cards):
 def pap_tree_1(actions, cmd, enemy_fleet, fleet, player_cards):
     global clear
     if cmd == '1':
-        cmd = pap_choice_2()
+        cmd = pap_choice_2_show_status()
         pap_tree_2(cmd, enemy_fleet, fleet)
     elif cmd == '2':
         uid_map = {}
         uid_list = list(fleet.ships.keys())
         [uid_map.__setitem__(str(index + 1), uid_list[index]) for index in range(len(uid_list))]
-        cmd = pap_choice_3(fleet, uid_list, uid_map)
+        cmd = pap_choice_3_select_executor(fleet, uid_list, uid_map)
         pap_tree_3(actions, cmd, enemy_fleet, fleet, player_cards, uid_list, uid_map)
     elif cmd == '3':
         clear = clear_screen(clear)
@@ -72,12 +72,12 @@ def pap_tree_3(actions, cmd, enemy_fleet, fleet, player_cards, uid_list, uid_map
             pass
         else:
             chance_count = len(player_cards[ship_uid])
-            cmd = pap_choice_4(chance_count, fleet, ship_uid)
+            cmd = pap_choice_4_select_chance(chance_count, fleet, ship_uid)
             chance_index = int(cmd) - 1
             cards = player_cards[ship_uid][chance_index]
             card_map = {}
             [card_map.__setitem__(str(index + 1), cards[index]) for index in range(len(cards))]
-            cmd = pap_choice_5(card_map, cards, fleet, ship_uid)
+            cmd = pap_choice_5_select_action(card_map, cards, fleet, ship_uid)
             pap_tree_4(actions, card_map, cards, chance_index, cmd, enemy_fleet, fleet, ship_uid)
 
 
@@ -88,7 +88,7 @@ def pap_tree_4(actions, card_map, cards, chance_index, cmd, enemy_fleet, fleet, 
     else:
         card = card_map[cmd].copy()
         if card[0] == 'attack':
-            cmd = pap_choice_6(fleet, ship_uid)
+            cmd = pap_choice_6_select_weapon(fleet, ship_uid)
             pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid)
         else:
             actions[ship_uid][chance_index] = card
@@ -118,7 +118,7 @@ def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid):
          range(len(target_list))]
         back_flag = False
         for _ in range(target_count):
-            cmd = pap_choice_7(enemy_fleet, target_list, target_map)
+            cmd = pap_choice_7_select_targets(enemy_fleet, target_list, target_map)
             if cmd == str(len(target_list) + 1):
                 back_flag = True
                 break
@@ -138,7 +138,7 @@ def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid):
         return True
 
 
-def pap_choice_8():
+def pap_choice_8_final_check():
     global clear
     cmd = ''
     while cmd not in ['1', '2']:
@@ -151,7 +151,7 @@ def pap_choice_8():
     return cmd
 
 
-def pap_choice_7(enemy_fleet, target_list, target_map):
+def pap_choice_7_select_targets(enemy_fleet, target_list, target_map):
     global clear
     cmd = ''
     while cmd not in list(target_map.keys()) + [str(len(target_list) + 2)]:
@@ -168,7 +168,7 @@ def pap_choice_7(enemy_fleet, target_list, target_map):
     return cmd
 
 
-def pap_choice_6(fleet, ship_uid):
+def pap_choice_6_select_weapon(fleet, ship_uid):
     global clear
     weapons = fleet.ships[ship_uid].weapons
     cmd = ''
@@ -183,7 +183,7 @@ def pap_choice_6(fleet, ship_uid):
     return cmd
 
 
-def pap_choice_5(card_map, cards, fleet, ship_uid):
+def pap_choice_5_select_action(card_map, cards, fleet, ship_uid):
     global clear
     cmd = ''
     while cmd not in list(card_map.keys()) + [str(len(cards) + 1)]:
@@ -196,7 +196,7 @@ def pap_choice_5(card_map, cards, fleet, ship_uid):
     return cmd
 
 
-def pap_choice_4(chance_count, fleet, ship_uid):
+def pap_choice_4_select_chance(chance_count, fleet, ship_uid):
     global clear
     cmd = ''
     while cmd not in [str(element) for element in range(1, chance_count + 1)]:
@@ -211,7 +211,7 @@ def pap_choice_4(chance_count, fleet, ship_uid):
     return cmd
 
 
-def pap_choice_3(fleet, uid_list, uid_map):
+def pap_choice_3_select_executor(fleet, uid_list, uid_map):
     global clear
     row_length = 5
     cmd = ''
@@ -230,7 +230,7 @@ def pap_choice_3(fleet, uid_list, uid_map):
     return cmd
 
 
-def pap_choice_2():
+def pap_choice_2_show_status():
     global clear
     cmd = ''
     while cmd not in ['1', '2', '3']:
@@ -243,7 +243,7 @@ def pap_choice_2():
     return cmd
 
 
-def pap_choice_1():
+def pap_choice_1_first_glance():
     global clear
     cmd = ''
     while cmd not in ['1', '2', '3']:

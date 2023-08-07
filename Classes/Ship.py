@@ -101,10 +101,20 @@ class Ship:
             '■FCS (Fire Control System):', self.fire_control_system,
             '■Maneuverability:', self.maneuver
         )
+        print('++++++++Weapons++++++++')
         for i in range(len(self.weapons)):
             weapon = self.weapons[i]
-            print('++++++++Weapons++++++++')
             print('■Weapon ID:', i, '■Power:', weapon.power, '■Targets:', weapon.target)
+        print('+++++++++Buffs+++++++++')
+        if len(self.buff_list) <= 0:
+            print('==No buff in this ship==')
+        else:
+            for i in range(len(self.buff_list)):
+                buff = self.buff_list[i]
+                print(
+                    '■Buff ID:', i, '■Type:', type(buff), '■Triggered:', buff.triggered, '■Expired:', buff.expired,
+                    '■Timeout:', buff.decay_count
+                )
 
 
 if __name__ == '__main__':

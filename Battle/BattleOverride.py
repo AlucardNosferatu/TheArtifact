@@ -3,7 +3,7 @@ import time
 
 from Battle.BattleActions import basic_actions_dict
 from Battle.BattleOverrideActions import overload_weapon, redistribute_firepower
-from Battle.BattlePlan import pap_choice_6, pap_tree_5
+from Battle.BattlePlan import pap_choice_6_select_weapon, pap_tree_5, pap_choice_2_show_status, pap_tree_2
 from Classes.Fleet import Fleet
 
 chances = [0]
@@ -38,10 +38,12 @@ class OverrideActions:
             if rc[0] > 0:
                 print('1.Basic Actions')
                 print('2.Override Actions')
-                e = {'1': self.basic_act, '2': self.override_act}
+                print('3.Show Status')
+                e = {'1': self.basic_act, '2': self.override_act, '3': self.show_status}
             else:
                 print('1.Override Actions')
-                e = {'1': self.override_act}
+                print('2.Show Status')
+                e = {'1': self.override_act, '2': self.show_status}
             return e
 
         while True:
@@ -98,6 +100,13 @@ class OverrideActions:
                 return True
 
     @staticmethod
+    def show_status(fleet_a, fleet_b, round_chance, packed_ep):
+        _, _ = round_chance, packed_ep
+        cmd = pap_choice_2_show_status()
+        pap_tree_2(cmd, fleet_b, fleet_a)
+        return False
+
+    @staticmethod
     def prompt_input(ad):
         last_index = 0
         ks = list(ad.keys())
@@ -115,7 +124,7 @@ class OverrideActions:
         acting_ship = fleet_a.ships[fleet_a.flag_ship]
         order = [fleet_a.flag_ship, fleet_a.ships[fleet_a.flag_ship].speed, 'FleetA']
         if act_name == 'attack':
-            weapon_index = pap_choice_6(fleet_a, fleet_a.flag_ship)
+            weapon_index = pap_choice_6_select_weapon(fleet_a, fleet_a.flag_ship)
             set_weapon = pap_tree_5(
                 {fleet_a.flag_ship: [None]}, action, 0, weapon_index, fleet_b, fleet_a, fleet_a.flag_ship
             )
