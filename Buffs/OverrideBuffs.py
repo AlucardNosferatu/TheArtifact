@@ -153,9 +153,9 @@ class EngineOverload(Buff):
                     target.name))
                 params['activated'] = True
         if params['activated']:
-            amount = max(1, 0.2 * target.speed)
+            amount = max(1, int(1.2 * target.max_speed - target.speed))
             s = target.speed
-            target.speed += amount
+            target.change_speed(amount=amount, allow_exceed=True)
             print('Ship Speed:{}->{}'.format(s, target.speed))
             params['amount'] = amount
 
@@ -163,7 +163,7 @@ class EngineOverload(Buff):
     def r_func(target, params: dict):
         if params['activated']:
             s = target.speed
-            target.speed -= params['amount']
+            target.change_speed(amount=-params['amount'])
             print('Ship Speed:{}->{}'.format(s, target.speed))
 
 
@@ -181,8 +181,9 @@ class HighGManeuver(Buff):
         else:
             print('{} activated the air-brake while doing a sharp turn!'.format(target.name))
             params['old_speed'] = target.speed
+            params['speed_cost'] = cost
             params['old_maneuver'] = target.maneuver
-            target.speed -= cost
+            target.change_speed(amount=-cost)
             target.maneuver += amount
             print('Ship Speed:{}->{}'.format(params['old_speed'], target.speed))
             print('Ship Maneuver:{}->{}'.format(params['old_maneuver'], target.maneuver))
@@ -194,7 +195,7 @@ class HighGManeuver(Buff):
             print('{} recovered from the PSM (post-stall maneuver).'.format(target.name))
             print('Ship Speed:{}->{}'.format(target.speed, params['old_speed']))
             print('Ship Maneuver:{}->{}'.format(target.maneuver, params['old_maneuver']))
-            target.speed = params['old_speed']
+            target.change_speed(amount=params['speed_cost'])
             target.maneuver = params['old_maneuver']
 
 

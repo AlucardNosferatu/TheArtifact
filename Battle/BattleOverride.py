@@ -2,14 +2,29 @@ import random
 import time
 
 from Battle.BattleActions import basic_actions_dict
-from Battle.BattleOverrideActions import overload_weapon, redistribute_firepower
+from Battle.BattleOverrideActions import overload_weapon, redistribute_firepower, overload_shield, pinpoint_shield, \
+    overload_engine, high_g_maneuver, prevent_escape, boost_escape, enhance_circuit, control_damage
 from Battle.BattlePlan import pap_choice_6_select_weapon, pap_tree_5, pap_choice_2_show_status, pap_tree_2
 from Classes.Fleet import Fleet
 
 chances = [0]
 override_actions_dict_sample = {
     'Overload Weapon': [overload_weapon, 'Over-charge all weapons installed at a cost of 20% HP.'],
-    'Redistribute Firepower': [redistribute_firepower, 'Focus energy on less targets to raise power, or vice versa.']
+    'Redistribute Firepower': [redistribute_firepower, 'Focus energy on less targets to raise power, or vice versa.'],
+    'Overload Shield': [overload_shield, 'Over-charge shield to 120% at a cost of 20% HP.'],
+    'Pinpoint Shield': [
+        pinpoint_shield,
+        'Only triggered when HP is higher than 50% MAX-HP.\nArmor halved when HP is higher than 50% MAX-HP.\nArmor '
+        'doubled when HP is lower than 50% MAX-HP.'],
+    'Overload Engine': [overload_engine, 'Over-charge engine to exceed 20% MAX-Speed at a cost of 20% HP.'],
+    'High-G Maneuver': [high_g_maneuver, 'Decelerate while doing maneuvers, makes ship 20% more swift.'],
+    'Prevent Escape': [prevent_escape, 'Block the exit of battle zone, prevent enemy from escaping.'],
+    'Boost Escape': [boost_escape, 'Secure the exit of battle zone, escaping can be accomplished instantly.'],
+    'Enhance Circuit': [enhance_circuit, 'Strengthen energy circuit to prevent side-effects of overloads.'],
+    'Control Damage': [
+        control_damage,
+        'Can only be used once in a round, when HP reaches 0, instantly recover 10% MAX-HP.'
+    ]
 }
 
 
@@ -53,7 +68,7 @@ class OverrideActions:
                 entries = prompt(round_chance)
                 cmd = input()
             # noinspection PyArgumentList
-            finished = entries[cmd](fleet_a, fleet_b, round_chance, packed_ep)
+            finished = entries[cmd](fleet_a=fleet_a, fleet_b=fleet_b, round_chance=round_chance, packed_ep=packed_ep)
             if finished:
                 break
 
@@ -74,7 +89,7 @@ class OverrideActions:
                 cmd = input('Confirm?[y/n]')
             if cmd == 'y':
                 acting_ship = fleet_a.ships[fleet_a.flag_ship]
-                finished = self.override_actions_dict[act_name][0](acting_ship)
+                finished = self.override_actions_dict[act_name][0](fleet_a, fleet_b, acting_ship)
                 return finished
             elif cmd == 'n':
                 return False
@@ -126,7 +141,8 @@ class OverrideActions:
         if act_name == 'attack':
             weapon_index = pap_choice_6_select_weapon(fleet_a, fleet_a.flag_ship)
             set_weapon = pap_tree_5(
-                {fleet_a.flag_ship: [None]}, action, 0, weapon_index, fleet_b, fleet_a, fleet_a.flag_ship
+                actions={fleet_a.flag_ship: [None]}, card=action, chance_index=0, cmd=weapon_index, enemy_fleet=fleet_b,
+                fleet=fleet_a, ship_uid=fleet_a.flag_ship
             )
         else:
             set_weapon = True

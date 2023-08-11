@@ -2,18 +2,21 @@ import random
 import uuid
 
 from Battle.BattleOverride import OverrideActions
+from Buffs.NegativeBuff import Stall
+from Classes.Altitude import default_altitude
 from Classes.Weapon import Weapon
 
 
 class Ship:
     max_hit_points = None
     max_weapons = None
-    speed = None
+    max_speed = None
     # 0 for normal, 1 for not-escapable, 2 for fast escape
     escapable = None
     uid = None
     hit_points = None
     weapons = None
+    speed = None
     name = None
     idle_speech = None
     names = {
@@ -23,10 +26,10 @@ class Ship:
     override_enabled = None
     override_actions = None
 
-    def __init__(self, mh, mw, spd, armor, fcs, man, name=None):
+    def __init__(self, mh, mw, ms, armor, fcs, man, name=None, local_altitude=default_altitude):
         self.max_hit_points = mh
         self.max_weapons = mw
-        self.speed = spd
+        self.max_speed = ms
         self.armor = armor
         self.fire_control_system = fcs
         self.maneuver = man
@@ -35,6 +38,8 @@ class Ship:
         self.uid = str(uuid.uuid4())
         self.hit_points = self.max_hit_points
         self.weapons: list[Weapon] = []
+        self.speed = 0
+        self.altitude = local_altitude['terrain']
         if name is None:
             name = random.choice(list(Ship.names.keys()))
             Ship.names[name] += 1
@@ -68,14 +73,44 @@ class Ship:
         if self.hit_points < 0:
             self.hit_points = 0
 
+    def change_speed(self, amount, allow_exceed=False):
+        self.speed += amount
+        if self.speed > self.max_speed:
+            if allow_exceed:
+                print('Over-Speed ({}>{}) is possible when engine is overloaded!'.format(self.speed, self.max_speed))
+            else:
+                print('Over-Speed ({}>{}) was prevented by Fly Control System.'.format(self.speed, self.max_speed))
+                self.speed = self.max_speed
+        elif self.speed < 0:
+            self.speed = 0
+        if self.speed < (0.125 * self.max_speed):
+            print('Speed of {} is too low ({}<{}*12.5%), it is stalling!'.format(self.name, self.speed, self.max_speed))
+            already_stall = False
+            for buff in self.buff_list:
+                if type(buff) is Stall:
+                    if buff.triggered and not buff.expired:
+                        already_stall = True
+                        break
+            if not already_stall:
+                st = Stall(self)
+                self.buff_list.append(st)
+                st.trigger()
+        else:
+            for buff in self.buff_list:
+                if type(buff) is Stall:
+                    if buff.triggered and not buff.expired:
+                        print('{} speed up, it has recovered from stalling.'.format(self.name))
+                        while not buff.expired:
+                            buff.decay()
+
     @staticmethod
-    def spawn(mh=None, mw=None, spd=None, wp=None, wt=None, armor=None, fcs=None, man=None):
+    def spawn(mh=None, mw=None, ms=None, wp=None, wt=None, armor=None, fcs=None, man=None):
         if mh is None:
             mh = random.randint(50, 100)
         if mw is None:
             mw = random.randint(5, 10)
-        if spd is None:
-            spd = random.randint(5, 30)
+        if ms is None:
+            ms = random.randint(5, 30)
         if wp is None:
             wp = random.randint(5, 20)
         if wt is None:
@@ -86,8 +121,9 @@ class Ship:
             fcs = random.randint(10, 50)
         if man is None:
             man = random.randint(5, 10)
-        ship = Ship(mh=mh, mw=mw, spd=spd, armor=armor, fcs=fcs, man=man)
+        ship = Ship(mh=mh, mw=mw, ms=ms, armor=armor, fcs=fcs, man=man)
         ship.install_weapon(Weapon(p=wp, t=wt))
+        ship.change_speed(amount=max(1, int(0.5 * ship.max_speed)))
         return ship
 
     def show_ship(self):

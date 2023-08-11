@@ -13,7 +13,15 @@ def generate_fleet(min_ships=1, max_ships=5):
 
 
 def a_ship_joins(fleet: Fleet, show=False):
-    ship = Ship.spawn()
+    reunion = random.choice([True, False])
+    if len(list(Fleet.ships.keys())) <= 0:
+        reunion = False
+    if reunion:
+        print('A ship has rejoined the fleet!')
+        ship_uid = random.choice(list(Fleet.ships.keys()))
+        ship = Fleet.ships.pop(ship_uid)
+    else:
+        ship = Ship.spawn()
     fleet.join(ship)
     if show:
         ship.show_ship()

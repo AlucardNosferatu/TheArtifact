@@ -2,14 +2,16 @@ from Buffs.OverrideBuffs import WeaponOverload, RedistributedPower, ShieldOverlo
     HighGManeuver, CantEscape, FastEscape, EnhancedCircuit, DamageControl
 
 
-def overload_weapon(acting_ship):
+def overload_weapon(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
     wo = WeaponOverload(acting_ship)
     acting_ship.buff_list.append(wo)
     wo.trigger()
     return True
 
 
-def redistribute_firepower(acting_ship):
+def redistribute_firepower(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
     w_count = len(acting_ship.weapons)
     opts = [str(option + 1) for option in list(range(w_count + 1))]
     cmd = ''
@@ -42,11 +44,59 @@ def redistribute_firepower(acting_ship):
         return True
 
 
-# ShieldOverload()
-# PinpointShield()
-# EngineOverload()
-# HighGManeuver()
-# CantEscape()
-# FastEscape()
-# EnhancedCircuit()
-# DamageControl()
+def overload_shield(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    so = ShieldOverload(acting_ship)
+    acting_ship.buff_list.append(so)
+    so.trigger()
+
+
+def pinpoint_shield(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    ps = PinpointShield(acting_ship)
+    acting_ship.buff_list.append(ps)
+    ps.trigger()
+
+
+def overload_engine(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    eo = EngineOverload(acting_ship)
+    acting_ship.buff_list.append(eo)
+    eo.trigger()
+
+
+def high_g_maneuver(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    hgm = HighGManeuver(acting_ship)
+    acting_ship.buff_list.append(hgm)
+    hgm.trigger()
+
+
+def prevent_escape(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, acting_ship
+    for ship_uid in fleet_b.ships.keys():
+        target_ship = fleet_b.ships[ship_uid]
+        ce = CantEscape(target_ship)
+        target_ship.buff_list.append(ce)
+        ce.trigger()
+
+
+def boost_escape(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    fe = FastEscape(acting_ship)
+    acting_ship.buff_list.append(fe)
+    fe.trigger()
+
+
+def enhance_circuit(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    ec = EnhancedCircuit(acting_ship)
+    acting_ship.buff_list.append(ec)
+    ec.trigger()
+
+
+def control_damage(fleet_a, fleet_b, acting_ship):
+    _, _ = fleet_a, fleet_b
+    dc = DamageControl(acting_ship)
+    acting_ship.buff_list.append(dc)
+    dc.trigger()
