@@ -1,5 +1,5 @@
 class Fleet:
-    ships = None
+    ships = {}
     flag_ship = None
     storage = None
     will_to_fight = None

@@ -286,11 +286,11 @@ def show_status(fleet):
     os.system('cls' if os.name == 'nt' else "printf '\033c'")
     for ship_uid in fleet.ships.keys():
         ship = fleet.ships[ship_uid]
-        print('=========================')
+        print('\n\n')
         if ship_uid == fleet.flag_ship:
-            print('###Flag Ship###')
+            print('###Flag Ship###', end='\t')
         else:
-            print('---Normal Ship---')
+            print('---Normal Ship---', end='\t')
         ship.show_ship()
 
 

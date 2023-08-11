@@ -3,20 +3,23 @@ import random
 import Battle.BattlePlan
 from Battle.BattleEvent import battle_event
 from Plots.Area88 import new_mercenary, leaved_mercenary, volunteers, defection
+from Plots.MainPlot import unlock_override
 from Utils import nothing
 
 global_pools_dict = {
     'default': {
-        'events': [new_mercenary] * 4 + [defection] + [nothing] * 5,
+        'events': [new_mercenary] * 4 + [defection] + [nothing] * 4 + [unlock_override],
         'add_flags': {
             new_mercenary: [],
             defection: ['encounter_rebel'],
-            nothing: []
+            nothing: [],
+            unlock_override: []
         },
         'del_flags': {
             new_mercenary: [],
             defection: ['annihilate_rebel'],
-            nothing: []
+            nothing: [],
+            unlock_override: []
         },
         'pool_triggers': {
             'Area88': {'include': ['encounter_rebel'], 'exclude': ['annihilate_rebel']}

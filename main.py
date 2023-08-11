@@ -2,11 +2,11 @@ import os
 import pickle
 import random
 
+from Battle.BattlePlan import show_status, clear_screen
 from Classes.Fleet import Fleet
 from Events.EventSystem import event_process, global_pools_dict
 from Events.EventSystemDeprecated import events_chains, add_flags, del_flags
 from Utils import a_ship_joins
-from Battle.BattlePlan import show_status, clear_screen
 
 clear = True
 
@@ -16,6 +16,8 @@ class Game:
     score = None
     finished_chains = None
     flags = None
+    killed = None
+    battles = None
 
     def __init__(self):
         # self.events_pool = events_pool_default
@@ -24,6 +26,8 @@ class Game:
         self.fleet = None
         self.finished_chains = []
         self.flags = []
+        self.killed = 0
+        self.battles = 0
 
     def game_loop(self):
         global clear
