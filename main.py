@@ -162,9 +162,10 @@ class Game:
         x, y = self.coordinate[0], self.coordinate[1]
         # noinspection PyTypeChecker
         self.map[y][x] = self
+        dist = 1
         surround_locations = [
-            [x + 2, y], [x - 2, y], [x, y + 2], [x, y - 2],
-            [x - 2, y - 2], [x + 2, y + 2], [x - 2, y + 2], [x + 2, y - 2]
+            [x + dist, y], [x - dist, y], [x, y + dist], [x, y - dist],
+            [x - dist, y - dist], [x + dist, y + dist], [x - dist, y + dist], [x + dist, y - dist]
         ]
         surround_locations = [
             sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
@@ -177,7 +178,7 @@ class Game:
             location = random.choice(surround_locations)
             x_loc, y_loc = location[0], location[1]
             event = random.choice(self.events_pool['events'])
-            self.map[y_loc][x_loc] = event
+            self.map[y_loc][x_loc] = event()
             surround_locations.remove(location)
 
     def show_map(self):
@@ -246,9 +247,10 @@ class Game:
 
     def contact_events(self):
         x, y = self.coordinate[0], self.coordinate[1]
+        dist = 1
         surround_locations = [
-            [x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1],
-            [x - 1, y - 1], [x + 1, y + 1], [x - 1, y + 1], [x + 1, y - 1]
+            [x + dist, y], [x - dist, y], [x, y + dist], [x, y - dist],
+            [x - dist, y - dist], [x + dist, y + dist], [x - dist, y + dist], [x + dist, y - dist]
         ]
         surround_locations = [
             sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)

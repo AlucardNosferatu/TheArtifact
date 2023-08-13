@@ -1,6 +1,7 @@
 import random
 
 from Battle.BattleEvent import battle_event
+from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Utils import a_ship_joins, a_ship_leaves
 
@@ -11,10 +12,20 @@ def new_mercenary(fleet: Fleet):
     return fleet, 0
 
 
+class NewMercenary(Event):
+    def __init__(self):
+        super().__init__(new_mercenary)
+
+
 def leaved_mercenary(fleet: Fleet):
     print('A ship left the fleet!')
     fleet = a_ship_leaves(fleet, show=True)
     return fleet, 0
+
+
+class LeavedMercenary(Event):
+    def __init__(self):
+        super().__init__(leaved_mercenary)
 
 
 def volunteers(fleet: Fleet):
@@ -22,6 +33,11 @@ def volunteers(fleet: Fleet):
         fleet.ships[ship_uid].hit_points = fleet.ships[ship_uid].max_hit_points
     print('A troop of volunteers repaired all ships in your fleet.')
     return fleet, 0
+
+
+class Volunteers(Event):
+    def __init__(self):
+        super().__init__(volunteers)
 
 
 def defection(fleet):
@@ -39,3 +55,8 @@ def defection(fleet):
         return fleet, change_score
     print('You stopped a menacing disturbance on the flag ship.')
     return fleet, 0
+
+
+class Defection(Event):
+    def __init__(self):
+        super().__init__(defection)

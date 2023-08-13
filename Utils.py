@@ -1,5 +1,6 @@
 import random
 
+from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Classes.Ship import Ship
 
@@ -40,3 +41,8 @@ def a_ship_leaves(fleet: Fleet, show=False):
 def nothing(fleet: Fleet):
     print('Nothing happened!')
     return fleet, 0
+
+
+class Nothing(Event):
+    def __init__(self):
+        super().__init__(nothing)

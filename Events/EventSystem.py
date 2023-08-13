@@ -1,53 +1,54 @@
 import random
 
 import Battle.BattlePlan
-from Battle.BattleEvent import battle_event
-from Plots.Area88 import new_mercenary, leaved_mercenary, volunteers, defection
-from Plots.MainPlot import unlock_override
-from Utils import nothing
+from Battle.BattleEvent import BattleEvent
+from Plots.Area88 import NewMercenary, Defection, LeavedMercenary, Volunteers
+from Plots.MainPlot import UnlockOverride
+from Utils import Nothing
 
 # todo: Event should be refactored as an object!!! see ya next version.
+# noinspection PyTypeChecker
 global_pools_dict = {
     'default': {
-        'events': [new_mercenary] * 4 + [defection] + [nothing] * 4 + [unlock_override],
+        'events': [NewMercenary] * 4 + [Defection] + [Nothing] * 4 + [UnlockOverride],
         'stealth': {
-            new_mercenary: 20,
+            NewMercenary: 20,
         },
         'add_flags': {
-            new_mercenary: [],
-            defection: ['encounter_rebel'],
-            nothing: [],
-            unlock_override: []
+            NewMercenary: [],
+            Defection: ['encounter_rebel'],
+            Nothing: [],
+            UnlockOverride: []
         },
         'del_flags': {
-            new_mercenary: [],
-            defection: ['annihilate_rebel'],
-            nothing: [],
-            unlock_override: []
+            NewMercenary: [],
+            Defection: ['annihilate_rebel'],
+            Nothing: [],
+            UnlockOverride: []
         },
         'pool_triggers': {
             'Area88': {'include': ['encounter_rebel'], 'exclude': ['annihilate_rebel']}
         }
     },
     'Area88': {
-        'events': [battle_event] + [new_mercenary] * 2 + [leaved_mercenary] + [volunteers] * 3 + [nothing] * 3,
+        'events': [BattleEvent] + [NewMercenary] * 2 + [LeavedMercenary] * 2 + [Volunteers] * 2 + [Nothing] * 3,
         'stealth': {
-            battle_event: 10,
-            new_mercenary: 20
+            BattleEvent: 10,
+            NewMercenary: 20
         },
         'add_flags': {
-            battle_event: ['annihilate_rebel'],
-            new_mercenary: [],
-            leaved_mercenary: [],
-            volunteers: [],
-            nothing: []
+            BattleEvent: ['annihilate_rebel'],
+            NewMercenary: [],
+            LeavedMercenary: [],
+            Volunteers: [],
+            Nothing: []
         },
         'del_flags': {
-            battle_event: [],
-            new_mercenary: [],
-            leaved_mercenary: [],
-            volunteers: [],
-            nothing: []
+            BattleEvent: [],
+            NewMercenary: [],
+            LeavedMercenary: [],
+            Volunteers: [],
+            Nothing: []
         },
         'pool_triggers': {
             'default': {'include': ['annihilate_rebel'], 'exclude': []}
@@ -100,8 +101,8 @@ def update_score_and_flags(change_score, event, game_obj):
     game_obj.score += change_score
     add_flags = game_obj.events_pool['add_flags']
     del_flags = game_obj.events_pool['del_flags']
-    if event in add_flags.keys():
-        for flag in add_flags[event]:
+    if type(event) in add_flags.keys():
+        for flag in add_flags[type(event)]:
             if type(flag) is str:
                 if flag not in game_obj.flags:
                     game_obj.flags.append(flag)
@@ -114,8 +115,8 @@ def update_score_and_flags(change_score, event, game_obj):
                     game_obj.flags.append(flag)
             else:
                 raise TypeError('flag should be str or list[str]!')
-    if event in del_flags.keys():
-        for flag in del_flags[event]:
+    if type(event) in del_flags.keys():
+        for flag in del_flags[type(event)]:
             if flag == '%ALL%':
                 Battle.BattlePlan.clear()
                 break

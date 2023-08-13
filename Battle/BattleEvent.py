@@ -4,6 +4,7 @@ from Battle.BattleActions import basic_actions_dict
 from Battle.BattleOverride import override_control, override_orders, override_init
 from Battle.BattlePlan import plan_actions_player, plan_actions, clear_screen
 from Classes.Buff import Buff
+from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Utils import generate_fleet
 
@@ -74,6 +75,11 @@ def battle_event(fleet_p, fleet_e=None, clear_=True):
         print('++++++++Weapons++++++++')
         print('■Storage ID:', fleet_p.storage.index(weapon), '■Power:', weapon.power, '■Targets:', weapon.target)
     return fleet_p, change_score
+
+
+class BattleEvent(Event):
+    def __init__(self):
+        super().__init__(battle_event)
 
 
 def arrange_orders(fleet_a: Fleet, fleet_b: Fleet):
