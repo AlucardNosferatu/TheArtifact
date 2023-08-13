@@ -1,3 +1,6 @@
+import os
+
+
 class Fleet:
     ships = {}
     flag_ship = None
@@ -25,3 +28,18 @@ class Fleet:
         for ship_uid in self.ships:
             if not self.ships[ship_uid].is_destroyed():
                 self.will_to_fight += 1
+
+    def show_fleet_status(self):
+        os.system('cls' if os.name == 'nt' else "printf '\033c'")
+        for ship_uid in self.ships.keys():
+            ship = self.ships[ship_uid]
+            print('\n\n')
+            if ship_uid == self.flag_ship:
+                print('###Flag Ship###', end='\t')
+            else:
+                print('---Normal Ship---', end='\t')
+            ship.show_ship()
+
+    def get_cruise_speed(self):
+        speeds = [self.ships[ship_uid].speed for ship_uid in self.ships.keys()]
+        return min(speeds)

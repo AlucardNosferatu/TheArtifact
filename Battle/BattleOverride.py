@@ -54,11 +54,11 @@ class OverrideActions:
                 print('1.Basic Actions')
                 print('2.Override Actions')
                 print('3.Show Status')
-                e = {'1': self.basic_act, '2': self.override_act, '3': self.show_status}
+                e = {'1': self.basic_act, '2': self.override_act, '3': self.show_battle_status}
             else:
                 print('1.Override Actions')
                 print('2.Show Status')
-                e = {'1': self.override_act, '2': self.show_status}
+                e = {'1': self.override_act, '2': self.show_battle_status}
             return e
 
         while True:
@@ -115,7 +115,7 @@ class OverrideActions:
                 return True
 
     @staticmethod
-    def show_status(fleet_a, fleet_b, round_chance, packed_ep):
+    def show_battle_status(fleet_a, fleet_b, round_chance, packed_ep):
         _, _ = round_chance, packed_ep
         cmd = pap_choice_2_show_status()
         pap_tree_2(cmd, fleet_b, fleet_a)

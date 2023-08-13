@@ -1,8 +1,9 @@
 import os
 import pickle
 import random
+from math import sqrt
 
-from Battle.BattlePlan import show_status, clear_screen
+from Battle.BattlePlan import clear_screen
 from Classes.Fleet import Fleet
 from Events.EventSystem import event_process, global_pools_dict
 from Events.EventSystemDeprecated import events_chains, add_flags, del_flags
@@ -18,6 +19,10 @@ class Game:
     flags = None
     killed = None
     battles = None
+    map = None
+    coordinate = None
+    map_width = 1024
+    map_height = 1024
 
     def __init__(self):
         # self.events_pool = events_pool_default
@@ -28,6 +33,13 @@ class Game:
         self.flags = []
         self.killed = 0
         self.battles = 0
+        self.map = []
+        row = []
+        for _ in range(Game.map_width):
+            row.append(None)
+        for _ in range(Game.map_height):
+            self.map.append(row.copy())
+        self.coordinate = [int(0.5 * Game.map_width), int(0.5 * Game.map_height)]
 
     def game_loop(self):
         global clear
@@ -54,14 +66,73 @@ class Game:
                 raise ValueError()
             self.events_loop()
 
+    def update_map(self):
+        # todo: implement map update
+        x, y = self.coordinate[0], self.coordinate[1]
+        # noinspection PyTypeChecker
+        self.map[y][x] = self
+        surround_locations = [
+            [x + 2, y], [x - 2, y], [x, y + 2], [x, y - 2],
+            [x - 2, y - 2], [x + 2, y + 2], [x - 2, y + 2], [x + 2, y - 2]
+        ]
+        surround_locations = [
+            sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
+        ]
+        for i in range(8):
+            location = surround_locations[i]
+            x_loc, y_loc = location[0], location[1]
+            self.map[y_loc][x_loc] = None
+        for i in range(2):
+            location = surround_locations[i]
+            x_loc, y_loc = location[0], location[1]
+            event = random.choice(self.events_pool['events'])
+            self.map[y_loc][x_loc] = event
+
+    def show_map(self):
+        x, y = self.coordinate[0], self.coordinate[1]
+        for i in range(max(0, y - 10), min(len(self.map), y + 11)):
+            for j in range(max(0, x - 10), min(len(self.map[i]), x + 11)):
+                if self.map[i][j] is None:
+                    print('_', end='  ')
+                else:
+                    if self.map[i][j] == self:
+                        print('@', end='  ')
+                    else:
+                        print('!', end='  ')
+            print()
+
+    def contact_events(self):
+        x, y = self.coordinate[0], self.coordinate[1]
+        surround_locations = [
+            [x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1],
+            [x - 1, y - 1], [x + 1, y + 1], [x - 1, y + 1], [x + 1, y - 1]
+        ]
+        surround_locations = [
+            sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
+        ]
+        events = [[self.map[sl[1]][sl[0]], sl] for sl in surround_locations if self.map[sl[1]][sl[0]] is not None]
+        return events
+
     def events_loop(self):
         global clear
         while True:
             # random event
             clear = clear_screen(clear)
-            print('~~~~~~~~~~~~~~~~~~~~~~~~')
-            # self.random_event_deprecated()
-            self.random_event()
+            if not self.is_game_over():
+                print('~~~~~~~~~~~~~~~~~~~~~~~~')
+                # self.random_event_deprecated()
+                self.update_map()
+                self.show_map()
+                print('~~~~~~~~~~~~~~~~~~~~~~~~')
+                clear = False
+                events = self.contact_events()
+                while not self.is_game_over() and len(events) > 0:
+                    event = random.choice(events)
+                    location = event[1]
+                    event_func = event[0]
+                    self.random_event(event_func)
+                    events.remove(event)
+                    self.map[location[1]][location[0]] = None
             # check game over
             if self.is_game_over():
                 clear = clear_screen(clear)
@@ -70,21 +141,71 @@ class Game:
                 return
             clear = False
             cmd = ''
-            while cmd not in ['1', '3', '4']:
+            while cmd not in ['1', '4', '5']:
                 clear = clear_screen(clear)
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
-                cmd = input('1.Continue\t2.Show Status\t3.Save & Exit\t4.Exit\n')
+                cmd = input('1.Hold Position\t2.Manage Fleet\t3.Move\t4.Save & Exit\t5.Exit\n')
                 if cmd == '2':
-                    show_status(self.fleet)
+                    self.fleet.show_fleet_status()
+                    clear = False
+                elif cmd == '3':
+                    cmd = ''
+                    while cmd not in [str(index) for index in list(range(-10, 11))] + ['B']:
+                        cmd = input('Input X-factor of direction from -10-10, [B] for back.')
+                    if cmd == 'B':
+                        continue
+                    else:
+                        x_factor = cmd
+                    cmd = ''
+                    while cmd not in [str(index) for index in list(range(-10, 11))] + ['B']:
+                        cmd = input('Input Y-factor of direction from -10-10, [B] for back.')
+                    if cmd == 'B':
+                        continue
+                    else:
+                        y_factor = cmd
+                    cmd = ''
+                    while cmd not in [str(index) for index in list(range(10, 110, 10))] + ['B']:
+                        cmd = input(
+                            'Input Speed percentage level [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]%, [B] for back.'
+                        )
+                    if cmd == 'B':
+                        continue
+                    else:
+                        s_factor = cmd
+                    direction = '{},{}'.format(x_factor, y_factor)
+                    full_speed = self.fleet.get_cruise_speed()
+                    speed = max(1, round(full_speed * float(s_factor) / 100))
+                    self.move_fleet(direction, speed)
+                    cmd = '1'
                     clear = False
             if cmd == '1':
                 continue
-            elif cmd in ['3', '4']:
+            elif cmd in ['4', '5']:
                 if cmd == '3':
                     self.save()
                 return
             else:
                 raise ValueError()
+
+    def move_fleet(self, direction, speed):
+        global clear
+        x, y = self.coordinate[0], self.coordinate[1]
+        self.map[y][x] = None
+        dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
+        ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
+        dx, dy = round(speed * dx / ds), round(speed * dy / ds)
+        x_new, y_new = min(max(0, x + dx), self.map_width - 1), min(max(0, y + dy), self.map_height - 1)
+        self.coordinate = [x_new, y_new]
+        if self.map[y_new][x_new] is not None:
+            # todo: extend encounter logic
+            print('Something happened as soon as our fleet arrived the destination!')
+            event_func = self.map[y_new][x_new]
+            self.random_event(event_func)
+            if self.is_game_over():
+                return
+        # noinspection PyTypeChecker
+        self.map[y_new][x_new] = self
+        print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_new, y_new, speed, direction))
 
     def init_fleet(self):
         self.fleet = Fleet()
@@ -94,27 +215,19 @@ class Game:
     def load(self):
         if os.path.exists('save.pkl'):
             old_game = pickle.load(open('save.pkl', 'rb'))
-            self.score = old_game['score']
-            self.fleet = old_game['fleet']
-            self.finished_chains = old_game['finished_chains']
-            self.flags = old_game['flags']
-            self.events_pool = old_game['events_pool']
+            for key in old_game.keys():
+                setattr(self, key, old_game[key])
             return True
         else:
             print('No previously saved game.')
             return False
 
     def save(self):
-        old_game = {}
-        old_game.__setitem__('score', self.score)
-        old_game.__setitem__('fleet', self.fleet)
-        old_game.__setitem__('finished_chains', self.finished_chains)
-        old_game.__setitem__('flags', self.flags)
-        old_game.__setitem__('events_pool', self.events_pool)
+        old_game = vars(self)
         pickle.dump(old_game, open('save.pkl', 'wb'))
 
-    def random_event(self):
-        event_process(self)
+    def random_event(self, event):
+        event_process(self, event)
 
     def random_event_deprecated(self):
         # select event form pool

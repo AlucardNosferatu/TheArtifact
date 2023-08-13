@@ -48,9 +48,10 @@ global_pools_dict = {
 }
 
 
-def event_process(game_obj):
+def event_process(game_obj, event):
     # select an event in current event_pool
-    event = random.choice(game_obj.events_pool['events'])
+    # event = random.choice(game_obj.events_pool['events'])
+    # the code above will be used in update_map
     # execute that event
     game_obj.fleet, change_score = event(game_obj.fleet)
     # update flags by pool_flags

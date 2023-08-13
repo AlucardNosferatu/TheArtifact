@@ -53,9 +53,9 @@ def pap_tree_1(actions, cmd, enemy_fleet, fleet, player_cards):
 
 def pap_tree_2(cmd, enemy_fleet, fleet):
     if cmd == '1':
-        show_status(fleet)
+        fleet.show_fleet_status()
     elif cmd == '2':
-        show_status(enemy_fleet)
+        enemy_fleet.show_fleet_status()
     elif cmd == '3':
         pass
 
@@ -280,18 +280,6 @@ def plan_actions(enemy_fleet: Fleet, fleet: Fleet, cards):
                 card.append(targets)
             actions[ship_uid].append(card)
     return actions
-
-
-def show_status(fleet):
-    os.system('cls' if os.name == 'nt' else "printf '\033c'")
-    for ship_uid in fleet.ships.keys():
-        ship = fleet.ships[ship_uid]
-        print('\n\n')
-        if ship_uid == fleet.flag_ship:
-            print('###Flag Ship###', end='\t')
-        else:
-            print('---Normal Ship---', end='\t')
-        ship.show_ship()
 
 
 def clear_screen(clear_):

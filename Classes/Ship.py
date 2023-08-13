@@ -25,6 +25,7 @@ class Ship:
     buff_list = None
     override_enabled = None
     override_actions = None
+    parts = None
 
     def __init__(self, mh, mw, ms, armor, fcs, man, name=None, local_altitude=default_altitude):
         self.max_hit_points = mh
@@ -48,6 +49,7 @@ class Ship:
         self.idle_speech = ['Why should I waits for a better chance?']
         self.override_enabled = False
         self.override_actions = OverrideActions()
+        self.parts = []
 
     def install_weapon(self, weapon):
         if len(self.weapons) < self.max_weapons:
