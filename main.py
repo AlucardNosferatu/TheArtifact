@@ -206,7 +206,7 @@ class Game:
             if cmd == '1':
                 continue
             elif cmd in ['4', '5']:
-                if cmd == '3':
+                if cmd == '4':
                     self.save()
                 return
             else:
