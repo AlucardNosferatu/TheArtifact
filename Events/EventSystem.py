@@ -9,6 +9,9 @@ from Utils import nothing
 global_pools_dict = {
     'default': {
         'events': [new_mercenary] * 4 + [defection] + [nothing] * 4 + [unlock_override],
+        'stealth': {
+            new_mercenary: 20,
+        },
         'add_flags': {
             new_mercenary: [],
             defection: ['encounter_rebel'],
@@ -27,6 +30,10 @@ global_pools_dict = {
     },
     'Area88': {
         'events': [battle_event] + [new_mercenary] * 2 + [leaved_mercenary] + [volunteers] * 3 + [nothing] * 3,
+        'stealth': {
+            battle_event: 10,
+            new_mercenary: 20
+        },
         'add_flags': {
             battle_event: ['annihilate_rebel'],
             new_mercenary: [],

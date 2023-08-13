@@ -21,8 +21,8 @@ class Game:
     battles = None
     map = None
     coordinate = None
-    map_width = 1024
-    map_height = 1024
+    map_width = 512
+    map_height = 512
 
     def __init__(self):
         # self.events_pool = events_pool_default
@@ -78,27 +78,53 @@ class Game:
         surround_locations = [
             sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
         ]
-        for i in range(8):
-            location = surround_locations[i]
-            x_loc, y_loc = location[0], location[1]
-            self.map[y_loc][x_loc] = None
+        # for i in range(8):
+        #     location = surround_locations[i]
+        #     x_loc, y_loc = location[0], location[1]
+        #     self.map[y_loc][x_loc] = None
         for i in range(2):
-            location = surround_locations[i]
+            location = random.choice(surround_locations)
             x_loc, y_loc = location[0], location[1]
             event = random.choice(self.events_pool['events'])
             self.map[y_loc][x_loc] = event
+            surround_locations.remove(location)
 
     def show_map(self):
         x, y = self.coordinate[0], self.coordinate[1]
-        for i in range(max(0, y - 10), min(len(self.map), y + 11)):
-            for j in range(max(0, x - 10), min(len(self.map[i]), x + 11)):
-                if self.map[i][j] is None:
-                    print('_', end='  ')
+        window_size_w = 15
+        window_size_h = 10
+        digit_w = len(str(self.map_width))
+        digit_h = len(str(self.map_height))
+        print(r'Y\X', end='  ')
+        for j in range(max(0, x - window_size_w), min(len(self.map[0]), x + window_size_w + 1)):
+            j_str = str(j)
+            while len(j_str) < digit_w:
+                j_str = '0' + j_str
+            print(j_str, end='  ')
+        print()
+        for i in range(max(0, y - window_size_h), min(len(self.map), y + window_size_h + 1)):
+            i_str = str(i)
+            while len(i_str) < digit_h:
+                i_str = '0' + i_str
+            print(i_str, end='  ')
+            for j in range(max(0, x - window_size_w), min(len(self.map[i]), x + window_size_w + 1)):
+                x, y = self.coordinate[0], self.coordinate[1]
+                distance = sqrt((j - x) ** 2 + (i - y) ** 2)
+                if not self.in_detect_range(distance):
+                    loc_str = 'X'
+                elif not self.in_burn_through(distance):
+                    loc_str = '_'
                 else:
-                    if self.map[i][j] == self:
-                        print('@', end='  ')
-                    else:
-                        print('!', end='  ')
+                    loc_str = '.'
+                if self.map[i][j] == self:
+                    loc_str = '@'
+                elif self.map[i][j] is not None:
+                    if self.detected(i, j, distance):
+                        loc_str = '!'
+                temp_str = loc_str
+                while len(temp_str) < digit_w:
+                    temp_str += loc_str
+                print(temp_str, end='  ')
             print()
 
     def contact_events(self):
@@ -123,7 +149,6 @@ class Game:
                 # self.random_event_deprecated()
                 self.update_map()
                 self.show_map()
-                print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 clear = False
                 events = self.contact_events()
                 while not self.is_game_over() and len(events) > 0:
@@ -266,6 +291,32 @@ class Game:
 
     def display_score(self):
         print('Score:', self.score)
+
+    def in_detect_range(self, distance):
+        detect_range, _ = self.fleet.get_radar_range()
+        return distance < detect_range
+
+    def in_burn_through(self, distance):
+        _, burn_through_range = self.fleet.get_radar_range()
+        return distance < burn_through_range
+
+    def detected(self, i, j, distance):
+        if self.in_burn_through(distance):
+            return True
+        elif self.in_detect_range(distance):
+            if self.map[i][j] in self.events_pool['stealth'].keys():
+                stealth_degree = self.events_pool['stealth'][self.map[i][j]]
+                if type(stealth_degree) is list:
+                    stealth_degree = random.randint(stealth_degree[0], stealth_degree[1])
+                anti_stealth_degree = self.fleet.get_anti_stealth()
+                if stealth_degree > anti_stealth_degree:
+                    return False
+                else:
+                    return True
+            else:
+                return True
+        else:
+            return False
 
 
 if __name__ == '__main__':

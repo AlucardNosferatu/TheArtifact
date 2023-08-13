@@ -43,3 +43,12 @@ class Fleet:
     def get_cruise_speed(self):
         speeds = [self.ships[ship_uid].speed for ship_uid in self.ships.keys()]
         return min(speeds)
+
+    def get_radar_range(self):
+        _ = self
+        # todo: detect_range & BT range
+        return 10, 5
+
+    def get_anti_stealth(self):
+        _ = self
+        return 15
