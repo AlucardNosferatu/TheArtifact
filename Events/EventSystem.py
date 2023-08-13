@@ -6,6 +6,7 @@ from Plots.Area88 import new_mercenary, leaved_mercenary, volunteers, defection
 from Plots.MainPlot import unlock_override
 from Utils import nothing
 
+# todo: Event should be refactored as an object!!! see ya next version.
 global_pools_dict = {
     'default': {
         'events': [new_mercenary] * 4 + [defection] + [nothing] * 4 + [unlock_override],
@@ -55,12 +56,15 @@ global_pools_dict = {
 }
 
 
-def event_process(game_obj, event):
+def event_process(game_obj, event, specified_fleet=None):
     # select an event in current event_pool
     # event = random.choice(game_obj.events_pool['events'])
     # the code above will be used in update_map
     # execute that event
-    game_obj.fleet, change_score = event(game_obj.fleet)
+    if specified_fleet is None:
+        game_obj.fleet, change_score = event(game_obj.fleet)
+    else:
+        _, change_score = event(specified_fleet)
     # update flags by pool_flags
     update_score_and_flags(change_score, event, game_obj)
     # check pools jumper with flags
