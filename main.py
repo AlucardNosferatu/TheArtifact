@@ -4,9 +4,9 @@ import random
 from math import sqrt
 
 from Battle.BattlePlan import clear_screen
+from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Events.EventSystem import event_process, global_pools_dict
-from Events.EventSystemDeprecated import events_chains, add_flags, del_flags
 from Utils import a_ship_joins
 
 clear = True
@@ -34,7 +34,7 @@ class Game:
         self.killed = 0
         self.battles = 0
         self.map = []
-        row = []
+        row: list[None | Event | Game] = []
         for _ in range(Game.map_width):
             row.append(None)
         for _ in range(Game.map_height):
@@ -99,7 +99,8 @@ class Game:
                     event_func = event[0]
                     self.random_event(event_func)
                     events.remove(event)
-                    self.map[location[1]][location[0]] = None
+                    if event_func.end:
+                        self.map[location[1]][location[0]] = None
             # check game over
             if self.is_game_over():
                 clear = clear_screen(clear)
@@ -162,7 +163,7 @@ class Game:
         x, y = self.coordinate[0], self.coordinate[1]
         # noinspection PyTypeChecker
         self.map[y][x] = self
-        dist = 1
+        dist = 3
         surround_locations = [
             [x + dist, y], [x - dist, y], [x, y + dist], [x, y - dist],
             [x - dist, y - dist], [x + dist, y + dist], [x - dist, y + dist], [x + dist, y - dist]
@@ -261,38 +262,6 @@ class Game:
     def random_event(self, event, specified_fleet=None):
         event_process(self, event, specified_fleet=specified_fleet)
 
-    def random_event_deprecated(self):
-        # select event form pool
-        event = random.choice(self.events_pool)
-        # execute that event
-        self.fleet, change_score = event(self.fleet)
-        # update flags by pool_flags
-        self.score += change_score
-        if event in add_flags.keys():
-            for flag in add_flags[event]:
-                if flag not in self.flags:
-                    self.flags.append(flag)
-        if event in del_flags.keys():
-            for flag in del_flags[event]:
-                if flag in self.flags:
-                    self.flags.remove(flag)
-
-        chains = list(events_chains.keys())
-        priority_dict = {}
-        [priority_dict.__setitem__(int(chain.split('#')[0]), chain) for chain in chains]
-        for i in range(len(chains)):
-            if i in priority_dict.keys():
-                if priority_dict[i] not in self.finished_chains:
-                    check_chain = events_chains[priority_dict[i]]
-                    condition = check_chain['condition']
-                    triggered = True
-                    for flag in condition:
-                        if flag not in self.flags:
-                            triggered = False
-                            break
-                    if triggered:
-                        self.events_pool = check_chain['events_pool']
-
     def display_score(self):
         print('Score:', self.score)
 
@@ -303,40 +272,46 @@ class Game:
         dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
         ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
         dx, dy = round(speed * dx / ds), round(speed * dy / ds)
-        x_new, y_new = min(max(0, x + dx), self.map_width - 1), min(max(0, y + dy), self.map_height - 1)
-        self.coordinate = [x_new, y_new]
+        x_final, y_final = min(max(0, x + dx), self.map_width - 1), min(max(0, y + dy), self.map_height - 1)
         events = self.trail_events(x, y, dx, dy)
         if len(events) > 0:
             print('Something happened on the route to destination!')
         while len(events) > 0:
             event = events.pop(0)
             location = event[1]
-            event_func = event[0]
+            event_func: Event = event[0]
             self.random_event(event_func)
-            self.map[location[1]][location[0]] = None
+            if event_func.end:
+                self.map[location[1]][location[0]] = None
+            else:
+                dist = 2
+                surround_locations = [
+                    [location[0] + dist, location[1]], [location[0] - dist, location[1]],
+                    [location[0], location[1] + dist], [location[0], location[1] - dist],
+                    [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
+                    [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
+                ]
+                surround_locations = [
+                    sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
+                ]
+                evaded_location = random.choice(surround_locations)
+                x_final, y_final = evaded_location[0], evaded_location[1]
+                break
             if self.is_game_over():
                 return
-        if self.map[y_new][x_new] is not None:
-            print('Something happened as soon as our fleet arrived the destination!')
-            event_func = self.map[y_new][x_new]
-            self.random_event(event_func)
-            self.map[y_new][x_new] = None
-            if self.is_game_over():
-                return
-        # noinspection PyTypeChecker
-        self.map[y_new][x_new] = self
-        print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_new, y_new, speed, direction))
+        self.coordinate = [x_final, y_final]
+        self.map[self.coordinate[1]][self.coordinate[0]] = self
+        print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_final, y_final, speed, direction))
 
     def trail_events(self, x0, y0, dx, dy, trigger_radius=2, specified_fleet=None):
         # todo: implement encounter logic
-        k = dy / dx
-        # (y - y0) = k * (x - x0)
-        # 0 = k * x - y - k * x0 + y0
-        a, b, c = k, -1, y0 - k * x0
         events = []
         for i in range(self.map_height):
             for j in range(self.map_width):
-                d = self.p2l(a, b, c, i, j)
+                if dx != 0:
+                    d = self.p2l(x0, y0, dx, dy, i, j)
+                else:
+                    d = abs(j - x0)
                 if d < trigger_radius:
                     if self.map[i][j] is not None:
                         event = self.map[i][j]
@@ -348,7 +323,12 @@ class Game:
         return events
 
     @staticmethod
-    def p2l(a, b, c, i, j):
+    def p2l(x0, y0, dx, dy, i, j):
+        assert dx != 0
+        k = dy / dx
+        # (y - y0) = k * (x - x0)
+        # 0 = k * x - y - k * x0 + y0
+        a, b, c = k, -1, y0 - k * x0
         d = abs(a * j + b * i + c) / sqrt(a ** 2 + b ** 2)
         return d
 

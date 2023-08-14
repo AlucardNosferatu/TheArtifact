@@ -74,12 +74,28 @@ def battle_event(fleet_p, fleet_e=None, clear_=True):
         weapon = loots[i]
         print('++++++++Weapons++++++++')
         print('■Storage ID:', fleet_p.storage.index(weapon), '■Power:', weapon.power, '■Targets:', weapon.target)
+    setattr(fleet_p, 'enemy_fleet', fleet_e)
     return fleet_p, change_score
 
 
 class BattleEvent(Event):
-    def __init__(self):
-        super().__init__(battle_event)
+    def __init__(self, customized_event=None):
+        if customized_event is None:
+            customized_event = battle_event
+        super().__init__(customized_event)
+        self.fleet = None
+
+    def __call__(self, *args, **kwargs):
+        if self.fleet is None:
+            fleet, score = self.event_function(*args, **kwargs)
+        else:
+            fleet, score = self.event_function(fleet_e=self.fleet, *args, **kwargs)
+        if fleet.battle_result == 'win':
+            self.end = True
+        self.fleet = fleet.enemy_fleet
+        delattr(fleet, 'battle_result')
+        delattr(fleet, 'enemy_fleet')
+        return fleet, score
 
 
 def arrange_orders(fleet_a: Fleet, fleet_b: Fleet):
@@ -204,10 +220,13 @@ def buffs_decay(fleet, clear_buff=False):
 def should_it_break(fleet_a, fleet_b, orders):
     if len(orders) > 0:
         print('A fleet that joined this battle has withdrawn so the fight was over.')
+        setattr(fleet_a, 'battle_result', 'escape')
     elif fleet_a.ships[fleet_a.flag_ship].is_destroyed():
         print('Your flagship was destroyed so the fight was over.')
+        setattr(fleet_a, 'battle_result', 'lose')
     elif fleet_b.ships[fleet_b.flag_ship].is_destroyed():
         print("Enemies' flagship was destroyed so the fight was over.")
+        setattr(fleet_a, 'battle_result', 'win')
     else:
         return False
     buffs_decay(fleet_a, clear_buff=True)

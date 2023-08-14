@@ -1,6 +1,6 @@
 import random
 
-from Battle.BattleEvent import battle_event
+from Battle.BattleEvent import battle_event, BattleEvent
 from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Utils import a_ship_joins, a_ship_leaves
@@ -57,6 +57,6 @@ def defection(fleet):
     return fleet, 0
 
 
-class Defection(Event):
+class Defection(BattleEvent):
     def __init__(self):
-        super().__init__(defection)
+        super().__init__(customized_event=defection)
