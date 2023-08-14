@@ -143,7 +143,7 @@ class Ship:
         print('++++++++Weapons++++++++')
         for i in range(len(self.weapons)):
             weapon = self.weapons[i]
-            print('■Weapon ID:', i, '■Power:', weapon.power, '■Targets:', weapon.target)
+            print('■Weapon ID:', i, '■Type:', type(weapon), '■Power:', weapon.power, '■Targets:', weapon.target)
         print('+++++++++Buffs+++++++++')
         if len(self.buff_list) <= 0:
             print('==No buff in this ship==')

@@ -46,21 +46,28 @@ def idle(action, order, acting_ship, extra_params):
 
 def attack(action, order, acting_ship, extra_params):
     fleets_and_actions = extra_params[0]
-    amount = int((((action[1] - 6) / 13) + 1) * acting_ship.weapons[action[2]].power)
+    weapon = acting_ship.weapons[action[2]]
     basic_accuracy = acting_ship.fire_control_system
     maneuver = acting_ship.maneuver
-    print(acting_ship.name, 'fires on active target(s)!')
-    for target_uid in action[3]:
-        target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
-        if not target_ship.is_destroyed():
-            print(target_ship.name, 'was fired by', acting_ship.name, '!')
-            maneuver_target = target_ship.maneuver
-            if hit(basic_accuracy, maneuver, maneuver_target):
-                old_hp = target_ship.hit_points
-                target_ship.damaged(amount)
-                print('Target was hit! HP:{}->{}'.format(old_hp, target_ship.hit_points))
-            else:
-                print('Missed!')
+    if hasattr(weapon, 'special_function'):
+        weapon.special_function(action, order, acting_ship, extra_params)
+    else:
+        amount = int((((action[1] - 6) / 13) + 1) * weapon.power)
+        print(acting_ship.name, 'fires on active target(s)!')
+        for target_uid in action[3]:
+            if target_uid not in fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships.keys():
+                print("But one of its targets was no longer in targets' fleet! Attack was nullified!")
+                continue
+            target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
+            if not target_ship.is_destroyed():
+                print(target_ship.name, 'was fired by', acting_ship.name, '!')
+                maneuver_target = target_ship.maneuver
+                if hit(basic_accuracy, maneuver, maneuver_target):
+                    old_hp = target_ship.hit_points
+                    target_ship.damaged(amount)
+                    print('Target was hit! HP:{}->{}'.format(old_hp, target_ship.hit_points))
+                else:
+                    print('Missed!')
 
 
 def repair(action, order, acting_ship, extra_params):

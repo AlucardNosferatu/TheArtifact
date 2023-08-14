@@ -180,6 +180,9 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
         # noinspection PyUnresolvedReferences
         acting_fleet = fleets_and_actions[order[2]][0]
         action = fleets_and_actions[order[2]][1][order[0]].pop(0)
+        if order[0] not in acting_fleet.ships.keys():
+            print('The order cannot be executed as the executor was no longer in the fleet!')
+            continue
         acting_ship = acting_fleet.ships[order[0]]
         if not acting_ship.is_destroyed():
             if action[0] in basic_actions_dict.keys():

@@ -104,38 +104,45 @@ def pap_tree_5(actions, card, chance_index, cmd, enemy_fleet, fleet, ship_uid):
         return False
     else:
         use_weapon = int(cmd) - 1
-        target_count = weapons[use_weapon].target
         card.append(use_weapon)
-        clear = clear_screen(clear)
-        print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
-        print('Select {} targets fired by:'.format(target_count), fleet.ships[ship_uid].name)
-        print('*CAUTION*', 'Destroyed targets will be ignored during execution!')
-        print('*CAUTION*', 'Duplicated targets will only be fired once!')
-        targets = []
-        target_map = {}
-        target_list = list(enemy_fleet.ships.keys())
-        [target_map.__setitem__(str(index + 1), target_list[index]) for index in
-         range(len(target_list))]
-        back_flag = False
-        for _ in range(target_count):
-            cmd = pap_choice_7_select_targets(enemy_fleet, target_list, target_map)
-            if cmd == str(len(target_list) + 1):
-                back_flag = True
-                break
-            elif cmd == str(len(target_list) + 2):
-                break
+        if not hasattr(weapons[use_weapon], 'special_function'):
+            target_count = weapons[use_weapon].target
+            clear = clear_screen(clear)
+            print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+            print('Select {} targets fired by:'.format(target_count), fleet.ships[ship_uid].name)
+            print('*CAUTION*', 'Destroyed targets will be ignored during execution!')
+            print('*CAUTION*', 'Duplicated targets will only be fired once!')
+            targets = []
+            target_map = {}
+            target_list = list(enemy_fleet.ships.keys())
+            [target_map.__setitem__(str(index + 1), target_list[index]) for index in
+             range(len(target_list))]
+            back_flag = False
+            for _ in range(target_count):
+                cmd = pap_choice_7_select_targets(enemy_fleet, target_list, target_map)
+                if cmd == str(len(target_list) + 1):
+                    back_flag = True
+                    break
+                elif cmd == str(len(target_list) + 2):
+                    break
+                else:
+                    targets.append(target_map[cmd])
+            if back_flag:
+                return False
             else:
-                targets.append(target_map[cmd])
-        if back_flag:
-            pass
+                targets = list(set(targets))
+                card.append(targets)
+                actions[ship_uid][chance_index] = card
+                clear = clear_screen(clear)
+                print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+                print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
+                return True
         else:
-            targets = list(set(targets))
-            card.append(targets)
             actions[ship_uid][chance_index] = card
             clear = clear_screen(clear)
             print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
             print(fleet.ships[ship_uid].name, 'will do:', card, 'during next round.')
-        return True
+            return True
 
 
 def pap_choice_8_final_check():
@@ -266,18 +273,19 @@ def plan_actions(enemy_fleet: Fleet, fleet: Fleet, cards):
             if card[0] == 'attack':
                 use_weapon = random.randint(0, len(fleet.ships[ship_uid].weapons) - 1)
                 card.append(use_weapon)
-                target_count = fleet.ships[ship_uid].weapons[use_weapon].target
-                targets = []
-                valid_targets = 0
-                for ship_uid_ in enemy_fleet.ships.keys():
-                    if not enemy_fleet.ships[ship_uid_].is_destroyed():
-                        valid_targets += 1
-                for i in range(min(valid_targets, target_count)):
-                    selected = random.choice(list(enemy_fleet.ships.keys()))
-                    while selected in targets:
+                if not hasattr(fleet.ships[ship_uid].weapons[use_weapon], 'special_function'):
+                    target_count = fleet.ships[ship_uid].weapons[use_weapon].target
+                    targets = []
+                    valid_targets = 0
+                    for ship_uid_ in enemy_fleet.ships.keys():
+                        if not enemy_fleet.ships[ship_uid_].is_destroyed():
+                            valid_targets += 1
+                    for i in range(min(valid_targets, target_count)):
                         selected = random.choice(list(enemy_fleet.ships.keys()))
-                    targets.append(selected)
-                card.append(targets)
+                        while selected in targets:
+                            selected = random.choice(list(enemy_fleet.ships.keys()))
+                        targets.append(selected)
+                    card.append(targets)
             actions[ship_uid].append(card)
     return actions
 

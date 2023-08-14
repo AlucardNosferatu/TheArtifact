@@ -6,8 +6,10 @@ from math import sqrt
 from Battle.BattlePlan import clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
+from Classes.Ship import Ship
 from Events.EventSystem import event_process, global_pools_dict
 from Utils import a_ship_joins
+from Weapons.Drone import Drone
 
 clear = True
 
@@ -23,9 +25,13 @@ class Game:
     coordinate = None
     map_width = 512
     map_height = 512
+    events_pool = None
 
     def __init__(self):
         # self.events_pool = events_pool_default
+        self.reset_attributes()
+
+    def reset_attributes(self):
         self.events_pool = global_pools_dict['default']
         self.score = 0
         self.fleet = None
@@ -34,7 +40,7 @@ class Game:
         self.killed = 0
         self.battles = 0
         self.map = []
-        row: list[None | Event | Game] = []
+        row = []
         for _ in range(Game.map_width):
             row.append(None)
         for _ in range(Game.map_height):
@@ -52,6 +58,7 @@ class Game:
             if cmd == '1':
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 print('=======New Game=======')
+                self.reset_attributes()
                 self.init_fleet()
                 clear = False
             elif cmd == '2':
@@ -70,6 +77,8 @@ class Game:
         self.fleet = Fleet()
         self.fleet = a_ship_joins(self.fleet, show=True)
         self.fleet.flag_ship = list(self.fleet.ships.keys())[0]
+        flag_ship: Ship = self.fleet.ships[self.fleet.flag_ship]
+        flag_ship.install_weapon(Drone(spawner=False, mother_ship=flag_ship))
 
     def load(self):
         if os.path.exists('save.pkl'):
@@ -112,6 +121,7 @@ class Game:
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 cmd = input('1.Hold Position\t2.Manage Fleet\t3.Move\t4.Save & Exit\t5.Exit\n')
                 if cmd == '2':
+                    # todo: extend fleet management
                     self.fleet.show_fleet_status()
                     clear = False
                 elif cmd == '3':
@@ -283,6 +293,7 @@ class Game:
             same_direction = [factor for factor in same_direction if factor >= 0]
             if event_distance <= speed and len(same_direction) == 2:
                 print('Something happened on the route to destination!')
+                # noinspection PyTypeChecker
                 event_func: Event = event[0]
                 self.random_event(event_func)
                 if event_func.end:
@@ -304,6 +315,7 @@ class Game:
                 if self.is_game_over():
                     return
         self.coordinate = [x_final, y_final]
+        # noinspection PyTypeChecker
         self.map[self.coordinate[1]][self.coordinate[0]] = self
         print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_final, y_final, speed, direction))
 

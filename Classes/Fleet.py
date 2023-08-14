@@ -29,6 +29,14 @@ class Fleet:
             if not self.ships[ship_uid].is_destroyed():
                 self.will_to_fight += 1
 
+    def strategic_strike(self, event_map):
+        # todo: implement strategic_strike
+        pass
+
+    def modify_ships(self):
+        # todo: implement modify_ships
+        pass
+
     def show_fleet_status(self):
         os.system('cls' if os.name == 'nt' else "printf '\033c'")
         for ship_uid in self.ships.keys():
@@ -51,4 +59,5 @@ class Fleet:
 
     def get_anti_stealth(self):
         _ = self
+        # todo: return anti_stealth rank
         return 15
