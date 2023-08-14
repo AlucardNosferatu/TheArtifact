@@ -89,6 +89,7 @@ class BattleEvent(Event):
         if self.fleet is None:
             fleet, score = self.event_function(*args, **kwargs)
         else:
+            print('ATTENTION: This hostile fleet was engaged before.')
             fleet, score = self.event_function(fleet_e=self.fleet, *args, **kwargs)
         if fleet.battle_result == 'win':
             self.end = True

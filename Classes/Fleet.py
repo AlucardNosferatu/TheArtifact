@@ -33,7 +33,7 @@ class Fleet:
         os.system('cls' if os.name == 'nt' else "printf '\033c'")
         for ship_uid in self.ships.keys():
             ship = self.ships[ship_uid]
-            print('\n\n')
+            print('\n')
             if ship_uid == self.flag_ship:
                 print('###Flag Ship###', end='\t')
             else:

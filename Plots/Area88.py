@@ -40,21 +40,24 @@ class Volunteers(Event):
         super().__init__(volunteers)
 
 
-def defection(fleet):
-    enemy_fleet = Fleet()
-    ship_uid = fleet.flag_ship
-    if len(list(fleet.ships.keys())) > 1:
-        while ship_uid == fleet.flag_ship:
-            ship_uid = random.choice(list(fleet.ships.keys()))
-        enemy_fleet.join(fleet.ships[ship_uid])
-        enemy_fleet.flag_ship = ship_uid
-        fleet.leave(ship_uid)
-        print('A ship betrayed the fleet!')
-        enemy_fleet.ships[ship_uid].show_ship()
-        fleet, change_score = battle_event(fleet, fleet_e=enemy_fleet, clear_=False)
-        return fleet, change_score
-    print('You stopped a menacing disturbance on the flag ship.')
-    return fleet, 0
+def defection(fleet_p, fleet_e=None):
+    if fleet_e is None:
+        fleet_e = Fleet()
+        ship_uid = fleet_p.flag_ship
+        if len(list(fleet_p.ships.keys())) > 1:
+            while ship_uid == fleet_p.flag_ship:
+                ship_uid = random.choice(list(fleet_p.ships.keys()))
+            fleet_e.join(fleet_p.ships[ship_uid])
+            fleet_e.flag_ship = ship_uid
+            fleet_p.leave(ship_uid)
+            print('A ship betrayed the fleet!')
+            fleet_e.ships[ship_uid].show_ship()
+        else:
+            setattr(fleet_p, 'battle_result', 'win')
+            print('You stopped a menacing disturbance on the flag ship.')
+            return fleet_p, 0
+    fleet_p, change_score = battle_event(fleet_p, fleet_e=fleet_e, clear_=False)
+    return fleet_p, change_score
 
 
 class Defection(BattleEvent):

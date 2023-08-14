@@ -88,10 +88,7 @@ class Game:
             clear = clear_screen(clear)
             if not self.is_game_over():
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
-                # self.random_event_deprecated()
                 self.update_map()
-                self.show_map()
-                clear = False
                 events = self.contact_events()
                 while not self.is_game_over() and len(events) > 0:
                     event = random.choice(events)
@@ -111,6 +108,7 @@ class Game:
             cmd = ''
             while cmd not in ['1', '4', '5']:
                 clear = clear_screen(clear)
+                self.show_map()
                 print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 cmd = input('1.Hold Position\t2.Manage Fleet\t3.Move\t4.Save & Exit\t5.Exit\n')
                 if cmd == '2':
@@ -141,6 +139,7 @@ class Game:
                     else:
                         s_factor = cmd
                     direction = '{},{}'.format(x_factor, y_factor)
+                    clear = clear_screen(clear)
                     full_speed = self.fleet.get_cruise_speed()
                     speed = max(1, round(full_speed * float(s_factor) / 100))
                     self.move_fleet(direction, speed)
@@ -272,33 +271,38 @@ class Game:
         dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
         ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
         dx, dy = round(speed * dx / ds), round(speed * dy / ds)
+        moving_direction = [dx, dy]
         x_final, y_final = min(max(0, x + dx), self.map_width - 1), min(max(0, y + dy), self.map_height - 1)
         events = self.trail_events(x, y, dx, dy)
-        if len(events) > 0:
-            print('Something happened on the route to destination!')
         while len(events) > 0:
             event = events.pop(0)
             location = event[1]
-            event_func: Event = event[0]
-            self.random_event(event_func)
-            if event_func.end:
-                self.map[location[1]][location[0]] = None
-            else:
-                dist = 2
-                surround_locations = [
-                    [location[0] + dist, location[1]], [location[0] - dist, location[1]],
-                    [location[0], location[1] + dist], [location[0], location[1] - dist],
-                    [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
-                    [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
-                ]
-                surround_locations = [
-                    sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
-                ]
-                evaded_location = random.choice(surround_locations)
-                x_final, y_final = evaded_location[0], evaded_location[1]
-                break
-            if self.is_game_over():
-                return
+            event_distance = sqrt((location[0] - x) ** 2 + (location[1] - y) ** 2)
+            event_direction = [(location[0] - x), (location[1] - y)]
+            same_direction = [moving_direction[i] * event_direction[i] for i in range(2)]
+            same_direction = [factor for factor in same_direction if factor >= 0]
+            if event_distance <= speed and len(same_direction) == 2:
+                print('Something happened on the route to destination!')
+                event_func: Event = event[0]
+                self.random_event(event_func)
+                if event_func.end:
+                    self.map[location[1]][location[0]] = None
+                else:
+                    dist = 2
+                    surround_locations = [
+                        [location[0] + dist, location[1]], [location[0] - dist, location[1]],
+                        [location[0], location[1] + dist], [location[0], location[1] - dist],
+                        [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
+                        [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
+                    ]
+                    surround_locations = [
+                        sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
+                    ]
+                    evaded_location = random.choice(surround_locations)
+                    x_final, y_final = evaded_location[0], evaded_location[1]
+                    break
+                if self.is_game_over():
+                    return
         self.coordinate = [x_final, y_final]
         self.map[self.coordinate[1]][self.coordinate[0]] = self
         print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_final, y_final, speed, direction))
