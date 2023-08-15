@@ -5,5 +5,9 @@ class Event:
 
     def __call__(self, *args, **kwargs):
         fleet, score = self.event_function(*args, **kwargs)
-        self.end = True
+        if hasattr(self, 'next_e_func'):
+            self.event_function = self.next_e_func
+            delattr(self, 'next_e_func')
+        else:
+            self.end = True
         return fleet, score

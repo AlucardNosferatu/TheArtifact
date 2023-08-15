@@ -124,7 +124,7 @@ class Ship:
                             buff.decay()
 
     @staticmethod
-    def spawn(mh=None, mw=None, ms=None, wp=None, wt=None, armor=None, fcs=None, man=None):
+    def spawn(mh=None, mw=None, ms=None, wp=None, wt=None, armor=None, fcs=None, man=None, init_weapon=True):
         if mh is None:
             mh = random.randint(50, 100)
         if mw is None:
@@ -142,7 +142,8 @@ class Ship:
         if man is None:
             man = random.randint(5, 10)
         ship = Ship(mh=mh, mw=mw, ms=ms, armor=armor, fcs=fcs, man=man)
-        ship.install_weapon(Weapon(p=wp, t=wt))
+        if init_weapon:
+            ship.install_weapon(Weapon(p=wp, t=wt))
         ship.change_speed(amount=max(1, int(0.5 * ship.max_speed)))
         ship.altitude = (fixed_altitude['atmosphere'] + default_altitude['terrain']) / 2
         return ship

@@ -2,8 +2,8 @@ import random
 
 import Battle.BattlePlan
 from Battle.BattleEvent import BattleEvent
-from Plots.Area88 import NewMercenary, Defection, LeavedMercenary, Volunteers
-from Plots.MainPlot import UnlockOverride
+from Events.Area88 import NewMercenary, Defection, LeavedMercenary, Volunteers
+from Events.Generic import UnlockOverride
 from Utils import Nothing
 
 # todo: Event should be refactored as an object!!! see ya next version.
@@ -55,26 +55,6 @@ global_pools_dict = {
         }
     },
 }
-
-
-def event_process(game_obj, event, specified_fleet=None):
-    # select an event in current event_pool
-    # event = random.choice(game_obj.events_pool['events'])
-    # the code above will be used in update_map
-    # execute that event
-    if specified_fleet is None:
-        game_obj.fleet, change_score = event(game_obj.fleet)
-    else:
-        _, change_score = event(specified_fleet)
-    # update flags by pool_flags
-    update_score_and_flags(change_score, event, game_obj)
-    # check pools jumper with flags
-    triggered_pools = gather_triggered_pools(game_obj)
-    if len(triggered_pools) > 0:
-        next_pool = random.choice(triggered_pools)
-        print('Event pool is switching to:', next_pool)
-        new_events_pool = global_pools_dict[next_pool]
-        game_obj.events_pool = new_events_pool
 
 
 def gather_triggered_pools(game_obj):

@@ -6,10 +6,10 @@ from Classes.Fleet import Fleet
 from Utils import a_ship_joins, a_ship_leaves
 
 
-def new_mercenary(fleet: Fleet):
+def new_mercenary(fleet_p: Fleet):
     print('New ship joined the fleet!')
-    fleet = a_ship_joins(fleet, show=True)
-    return fleet, 0
+    fleet_p = a_ship_joins(fleet_p, show=True)
+    return fleet_p, 0
 
 
 class NewMercenary(Event):
@@ -17,10 +17,10 @@ class NewMercenary(Event):
         super().__init__(new_mercenary)
 
 
-def leaved_mercenary(fleet: Fleet):
+def leaved_mercenary(fleet_p: Fleet):
     print('A ship left the fleet!')
-    fleet = a_ship_leaves(fleet, show=True)
-    return fleet, 0
+    fleet_p = a_ship_leaves(fleet_p, show=True)
+    return fleet_p, 0
 
 
 class LeavedMercenary(Event):
@@ -28,11 +28,11 @@ class LeavedMercenary(Event):
         super().__init__(leaved_mercenary)
 
 
-def volunteers(fleet: Fleet):
-    for ship_uid in fleet.ships.keys():
-        fleet.ships[ship_uid].hit_points = fleet.ships[ship_uid].max_hit_points
+def volunteers(fleet_p: Fleet):
+    for ship_uid in fleet_p.ships.keys():
+        fleet_p.ships[ship_uid].hit_points = fleet_p.ships[ship_uid].max_hit_points
     print('A troop of volunteers repaired all ships in your fleet.')
-    return fleet, 0
+    return fleet_p, 0
 
 
 class Volunteers(Event):

@@ -6,10 +6,109 @@ from math import sqrt
 from Battle.BattlePlan import clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
-from Events.EventSystem import event_process, global_pools_dict
+from Events.EventSystem import global_pools_dict, update_score_and_flags, gather_triggered_pools
 from Utils import a_ship_joins
 
 clear = True
+
+
+def get_dst_coordinate(game_obj, direction, speed):
+    x, y = game_obj.coordinate[0], game_obj.coordinate[1]
+    game_obj.map[y][x] = None
+    dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
+    ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
+    dx, dy = round(speed * dx / ds), round(speed * dy / ds)
+    x_final, y_final = min(max(0, x + dx), game_obj.map_width - 1), min(max(0, y + dy), game_obj.map_height - 1)
+    return dx, dy, x, x_final, y, y_final
+
+
+def events_on_the_trail(game_obj, x0, y0, dx, dy, trigger_radius=2, specified_fleet=None):
+    # todo: implement encounter logic
+    events = []
+    for i in range(game_obj.map_height):
+        for j in range(game_obj.map_width):
+            if dx != 0:
+                d = game_obj.p2l(x0, y0, dx, dy, i, j)
+            else:
+                d = abs(j - x0)
+            if d < trigger_radius:
+                if game_obj.map[i][j] is not None:
+                    event = game_obj.map[i][j]
+                    location = [j, i]
+                    if specified_fleet is None:
+                        events.append([event, location])
+                    else:
+                        events.append([event, location, specified_fleet])
+    return events
+
+
+def get_evaded_location(game_obj, center):
+    def check_location(sl, go):
+        if 0 <= sl[0] < len(go.map[0]):
+            if 0 <= sl[1] < len(go.map):
+                if there_is_no_event(sl, go):
+                    return True
+        return False
+
+    def there_is_no_event(sl, go):
+        return go.map[sl[1]][sl[0]] is None
+
+    dist = 2
+    centers = [center]
+    surround_locations_ = []
+    while len(surround_locations_) <= 0:
+        location = centers.pop(0)
+        surround_locations = [
+            [location[0] + dist, location[1]], [location[0] - dist, location[1]],
+            [location[0], location[1] + dist], [location[0], location[1] - dist],
+            [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
+            [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
+        ]
+        centers += [
+            surround_loc for surround_loc in surround_locations if there_is_no_event(surround_loc, game_obj)
+        ]
+        surround_locations_ = [
+            surround_loc for surround_loc in surround_locations if check_location(surround_loc, game_obj)
+        ]
+    evaded_location = random.choice(surround_locations_)
+    x_final, y_final = evaded_location[0], evaded_location[1]
+    return x_final, y_final
+
+
+def move_on_map(game_obj, direction, speed, move_go=True, filter_event=None, specified_player_fleet=None):
+    global clear
+    dx, dy, x, x_final, y, y_final = get_dst_coordinate(game_obj, direction, speed)
+    events = events_on_the_trail(game_obj, x, y, dx, dy)
+    moving_direction = [dx, dy]
+    while len(events) > 0:
+        event = events.pop(0)
+        if filter_event is not None:
+            if filter_event(event):
+                pass
+            else:
+                continue
+        location = event[1]
+        event_distance = sqrt((location[0] - x) ** 2 + (location[1] - y) ** 2)
+        event_direction = [(location[0] - x), (location[1] - y)]
+        same_direction = [moving_direction[i] * event_direction[i] for i in range(2)]
+        same_direction = [factor for factor in same_direction if factor >= 0]
+        if event_distance <= speed and len(same_direction) == 2:
+            print('Something happened on the route to destination!')
+            # noinspection PyTypeChecker
+            event_func: Event = event[0]
+            game_obj.random_event(event=event_func, specified_player_fleet=specified_player_fleet)
+            if event_func.end:
+                game_obj.map[location[1]][location[0]] = None
+            else:
+                x_final, y_final = get_evaded_location(game_obj, location)
+                break
+            if game_obj.is_game_over():
+                return
+    if move_go:
+        game_obj.coordinate = [x_final, y_final]
+        # noinspection PyTypeChecker
+        game_obj.map[game_obj.coordinate[1]][game_obj.coordinate[0]] = game_obj
+        print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_final, y_final, speed, direction))
 
 
 class Game:
@@ -99,7 +198,7 @@ class Game:
                     event = random.choice(events)
                     location = event[1]
                     event_func = event[0]
-                    self.random_event(event_func)
+                    self.random_event(event=event_func)
                     events.remove(event)
                     if event_func.end:
                         self.map[location[1]][location[0]] = None
@@ -148,7 +247,7 @@ class Game:
                     clear = clear_screen(clear)
                     full_speed = self.fleet.get_cruise_speed()
                     speed = max(1, round(full_speed * float(s_factor) / 100))
-                    self.move_fleet(direction, speed)
+                    move_on_map(self, direction, speed, move_go=True)
                     cmd = '1'
                     clear = False
             if cmd == '1':
@@ -264,79 +363,27 @@ class Game:
         events = [[self.map[sl[1]][sl[0]], sl] for sl in surround_locations if self.map[sl[1]][sl[0]] is not None]
         return events
 
-    def random_event(self, event, specified_fleet=None):
-        event_process(self, event, specified_fleet=specified_fleet)
+    def random_event(self, event, specified_player_fleet=None):
+        # select an event in current event_pool
+        # event = random.choice(game_obj.events_pool['events'])
+        # the code above will be used in update_map
+        # execute that event
+        if specified_player_fleet is None:
+            self.fleet, change_score = event(fleet_p=self.fleet)
+        else:
+            _, change_score = event(fleet_p=specified_player_fleet)
+        # update flags by pool_flags
+        update_score_and_flags(change_score, event, self)
+        # check pools jumper with flags
+        triggered_pools = gather_triggered_pools(self)
+        if len(triggered_pools) > 0:
+            next_pool = random.choice(triggered_pools)
+            print('Event pool is switching to:', next_pool)
+            new_events_pool = global_pools_dict[next_pool]
+            self.events_pool = new_events_pool
 
     def display_score(self):
         print('Score:', self.score)
-
-    def move_fleet(self, direction, speed):
-        global clear
-
-        x, y = self.coordinate[0], self.coordinate[1]
-        self.map[y][x] = None
-        dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
-        ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
-        dx, dy = round(speed * dx / ds), round(speed * dy / ds)
-
-        x_final, y_final = min(max(0, x + dx), self.map_width - 1), min(max(0, y + dy), self.map_height - 1)
-
-        events = self.trail_events(x, y, dx, dy)
-        moving_direction = [dx, dy]
-        while len(events) > 0:
-            event = events.pop(0)
-            # todo: filter event for engage
-            location = event[1]
-            event_distance = sqrt((location[0] - x) ** 2 + (location[1] - y) ** 2)
-            event_direction = [(location[0] - x), (location[1] - y)]
-            same_direction = [moving_direction[i] * event_direction[i] for i in range(2)]
-            same_direction = [factor for factor in same_direction if factor >= 0]
-            if event_distance <= speed and len(same_direction) == 2:
-                print('Something happened on the route to destination!')
-                # noinspection PyTypeChecker
-                event_func: Event = event[0]
-                self.random_event(event_func)
-                if event_func.end:
-                    self.map[location[1]][location[0]] = None
-                else:
-                    dist = 2
-                    surround_locations = [
-                        [location[0] + dist, location[1]], [location[0] - dist, location[1]],
-                        [location[0], location[1] + dist], [location[0], location[1] - dist],
-                        [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
-                        [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
-                    ]
-                    surround_locations = [
-                        sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
-                    ]
-                    evaded_location = random.choice(surround_locations)
-                    x_final, y_final = evaded_location[0], evaded_location[1]
-                    break
-                if self.is_game_over():
-                    return
-        self.coordinate = [x_final, y_final]
-        # noinspection PyTypeChecker
-        self.map[self.coordinate[1]][self.coordinate[0]] = self
-        print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_final, y_final, speed, direction))
-
-    def trail_events(self, x0, y0, dx, dy, trigger_radius=2, specified_fleet=None):
-        # todo: implement encounter logic
-        events = []
-        for i in range(self.map_height):
-            for j in range(self.map_width):
-                if dx != 0:
-                    d = self.p2l(x0, y0, dx, dy, i, j)
-                else:
-                    d = abs(j - x0)
-                if d < trigger_radius:
-                    if self.map[i][j] is not None:
-                        event = self.map[i][j]
-                        location = [j, i]
-                        if specified_fleet is None:
-                            events.append([event, location])
-                        else:
-                            events.append([event, location, specified_fleet])
-        return events
 
     @staticmethod
     def p2l(x0, y0, dx, dy, i, j):

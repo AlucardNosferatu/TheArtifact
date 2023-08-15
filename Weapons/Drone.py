@@ -4,8 +4,8 @@ from Classes.Weapon import SpecialWeapon
 
 
 class Drone(SpecialWeapon):
-    def __init__(self, spawner=False, mother_ship=None):
-        self.drone_ship = Ship.spawn()
+    def __init__(self, spawner=False, mother_ship=None, init_weapon=True):
+        self.drone_ship = Ship.spawn(init_weapon=init_weapon)
         super().__init__(m=self.drone_ship.get_mass())
         self.spawner = spawner
         if not self.spawner and mother_ship is not None:

@@ -19,7 +19,7 @@ def missed_kamikaze(acting_fleet, acting_ship, target_ship, target_fleet):
 
 class Kamikaze(SpecialWeapon):
 
-    def __init__(self, acting_ship, damage_function=None, miss_function=None):
+    def __init__(self, acting_ship, damage_function=None, miss_function=None, external_fcs=None):
         super().__init__(m=None)
         self.acting_ship = acting_ship
         if damage_function is None:
@@ -28,6 +28,10 @@ class Kamikaze(SpecialWeapon):
         if miss_function is None:
             miss_function = missed_kamikaze
         self.miss_function = miss_function
+        if external_fcs is None:
+            self.basic_accuracy = acting_ship.fire_control_system
+        else:
+            self.basic_accuracy = external_fcs
 
     def special_function(self, action, order, acting_ship, extra_params):
         fleets_and_actions = extra_params[0]
@@ -46,10 +50,9 @@ class Kamikaze(SpecialWeapon):
         unlucky_ship_index = random.choice(slowest_count_indices)
         unlucky_ship_uid = ship_uid_list[unlucky_ship_index]
         unlucky_ship = target_fleet.ships[unlucky_ship_uid]
-        basic_accuracy = acting_ship.fire_control_system
         maneuver = acting_ship.maneuver
         maneuver_target = unlucky_ship.maneuver
-        if hit(basic_accuracy, maneuver, maneuver_target):
+        if hit(self.basic_accuracy, maneuver, maneuver_target):
             self.damage_function(
                 acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
             )
@@ -57,3 +60,33 @@ class Kamikaze(SpecialWeapon):
             self.miss_function(
                 acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
             )
+
+
+def ranged_explosion(acting_fleet, acting_ship, target_ship, target_fleet):
+    _ = target_ship
+    damaged_ships = [target_fleet.ships[ship_uid] for ship_uid in target_fleet.ships.keys()]
+    damaged_ships = [ship for ship in damaged_ships if ship.speed < acting_ship.explosion_range]
+    acting_ship.damaged(acting_ship.hit_points)
+    acting_fleet.leave(acting_ship.uid)
+    for damaged_ship in damaged_ships:
+        old_hp = damaged_ship.hit_points
+        damaged_ship.damaged(acting_ship.hit_points)
+        print('Target was hit! HP:{}->{}'.format(old_hp, damaged_ship.hit_points))
+
+
+def miss_and_explode(acting_fleet, acting_ship, target_ship, target_fleet):
+    _, _ = target_ship, target_fleet
+    print('Missed!')
+    acting_ship.damaged(acting_ship.hit_points)
+    print('The "projectile" missed the target and it exploded after a while.')
+    acting_fleet.leave(acting_ship.uid)
+
+
+class AllahAkbar(Kamikaze):
+    def __init__(self, acting_ship, explosion_range, external_fcs=None):
+        super().__init__(
+            acting_ship=acting_ship, damage_function=ranged_explosion, miss_function=miss_and_explode,
+            external_fcs=external_fcs
+        )
+        self.explosion_range = explosion_range
+        setattr(acting_ship, 'explosion_range', self.explosion_range)

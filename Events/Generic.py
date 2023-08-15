@@ -2,13 +2,13 @@ from Classes.Event import Event
 from Classes.Fleet import Fleet
 
 
-def unlock_override(fleet: Fleet):
+def unlock_override(fleet_p: Fleet):
     print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
     print('Flagship is able to be Override-Control now!')
     print('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$')
-    f_ship = fleet.ships[fleet.flag_ship]
+    f_ship = fleet_p.ships[fleet_p.flag_ship]
     f_ship.override_enabled = True
-    return fleet, 0
+    return fleet_p, 0
 
 
 class UnlockOverride(Event):
