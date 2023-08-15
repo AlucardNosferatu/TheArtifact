@@ -6,10 +6,8 @@ from math import sqrt
 from Battle.BattlePlan import clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
-from Classes.Ship import Ship
 from Events.EventSystem import event_process, global_pools_dict
 from Utils import a_ship_joins
-from Weapons.Drone import Drone
 
 clear = True
 
@@ -77,8 +75,6 @@ class Game:
         self.fleet = Fleet()
         self.fleet = a_ship_joins(self.fleet, show=True)
         self.fleet.flag_ship = list(self.fleet.ships.keys())[0]
-        flag_ship: Ship = self.fleet.ships[self.fleet.flag_ship]
-        flag_ship.install_weapon(Drone(spawner=False, mother_ship=flag_ship))
 
     def load(self):
         if os.path.exists('save.pkl'):

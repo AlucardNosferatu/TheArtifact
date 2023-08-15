@@ -51,13 +51,31 @@ class Ship:
         self.override_actions = OverrideActions()
         self.parts = []
 
+    def get_force(self, mass=None):
+        if mass is None:
+            mass = self.get_mass()
+        return mass * self.maneuver
+
+    def get_mass(self):
+        return (self.hit_points * self.armor) + self.get_weapon_mass()
+
+    def get_weapon_mass(self):
+        mass = [weapon.mass for weapon in self.weapons if weapon.mass is not None]
+        return sum(mass)
+
     def install_weapon(self, weapon):
         if len(self.weapons) < self.max_weapons:
+            force = self.get_force()
             self.weapons.append(weapon)
+            mass_new = self.get_mass()
+            self.maneuver = max(1, round(force / mass_new))
 
     def uninstall_weapon(self, w_index):
         if w_index < self.max_weapons and w_index < len(self.weapons):
+            force = self.get_force()
             self.weapons.pop(w_index)
+            mass_new = self.get_mass()
+            self.maneuver = max(1, round(force / mass_new))
 
     def is_destroyed(self):
         return self.hit_points <= 0

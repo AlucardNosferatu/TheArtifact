@@ -46,28 +46,42 @@ def idle(action, order, acting_ship, extra_params):
 
 def attack(action, order, acting_ship, extra_params):
     fleets_and_actions = extra_params[0]
-    weapon = acting_ship.weapons[action[2]]
-    basic_accuracy = acting_ship.fire_control_system
-    maneuver = acting_ship.maneuver
-    if hasattr(weapon, 'special_function'):
-        weapon.special_function(action, order, acting_ship, extra_params)
+    if action[2] < len(acting_ship.weapons):
+        weapon = acting_ship.weapons[action[2]]
+        basic_accuracy = acting_ship.fire_control_system
+        maneuver = acting_ship.maneuver
+        params_error = False
+        if hasattr(weapon, 'special_function'):
+            if len(action) == 3:
+                weapon.special_function(action, order, acting_ship, extra_params)
+            else:
+                params_error = True
+        else:
+            if len(action) == 4:
+                amount = int((((action[1] - 6) / 13) + 1) * weapon.power)
+                print(acting_ship.name, 'fires on active target(s)!')
+                for target_uid in action[3]:
+                    if target_uid not in fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships.keys():
+                        print("But one of its targets was no longer in targets' fleet! Attack was nullified!")
+                        continue
+                    target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
+                    if not target_ship.is_destroyed():
+                        print(target_ship.name, 'was fired by', acting_ship.name, '!')
+                        maneuver_target = target_ship.maneuver
+                        if hit(basic_accuracy, maneuver, maneuver_target):
+                            old_hp = target_ship.hit_points
+                            target_ship.damaged(amount)
+                            print('Target was hit! HP:{}->{}'.format(old_hp, target_ship.hit_points))
+                        else:
+                            print('Missed!')
+            else:
+                params_error = True
+        if params_error:
+            print('FCS Error@{}: Amount of firing setup is mismatched.'.format(acting_ship.name))
+            print('This could be caused by using disposable weapons more than 1 time in a round.')
     else:
-        amount = int((((action[1] - 6) / 13) + 1) * weapon.power)
-        print(acting_ship.name, 'fires on active target(s)!')
-        for target_uid in action[3]:
-            if target_uid not in fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships.keys():
-                print("But one of its targets was no longer in targets' fleet! Attack was nullified!")
-                continue
-            target_ship = fleets_and_actions[fleets_and_actions[order[2]][2]][0].ships[target_uid]
-            if not target_ship.is_destroyed():
-                print(target_ship.name, 'was fired by', acting_ship.name, '!')
-                maneuver_target = target_ship.maneuver
-                if hit(basic_accuracy, maneuver, maneuver_target):
-                    old_hp = target_ship.hit_points
-                    target_ship.damaged(amount)
-                    print('Target was hit! HP:{}->{}'.format(old_hp, target_ship.hit_points))
-                else:
-                    print('Missed!')
+        print('FCS Error@{}: weapon index exceeded current weapon amount.'.format(acting_ship.name))
+        print('This could be caused by using disposable weapons more than 1 time in a round.')
 
 
 def repair(action, order, acting_ship, extra_params):

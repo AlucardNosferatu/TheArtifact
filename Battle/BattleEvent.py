@@ -6,7 +6,9 @@ from Battle.BattlePlan import plan_actions_player, plan_actions, clear_screen
 from Classes.Buff import Buff
 from Classes.Event import Event
 from Classes.Fleet import Fleet
+from Classes.Weapon import Weapon
 from Utils import generate_fleet
+from Weapons.Drone import Drone
 
 clear = True
 
@@ -251,4 +253,6 @@ def remove_destroyed(fleet: Fleet):
 if __name__ == '__main__':
     fa = generate_fleet(1, 1)
     fa.ships[fa.flag_ship].override_enabled = True
+    fa.ships[fa.flag_ship].install_weapon(Drone(spawner=False, mother_ship=fa.ships[fa.flag_ship]))
+    fa.ships[fa.flag_ship].install_weapon(Weapon(p=10, t=2))
     fa = battle_event(fa)
