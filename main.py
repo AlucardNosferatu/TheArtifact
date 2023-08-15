@@ -272,16 +272,20 @@ class Game:
 
     def move_fleet(self, direction, speed):
         global clear
+
         x, y = self.coordinate[0], self.coordinate[1]
         self.map[y][x] = None
         dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
         ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
         dx, dy = round(speed * dx / ds), round(speed * dy / ds)
-        moving_direction = [dx, dy]
+
         x_final, y_final = min(max(0, x + dx), self.map_width - 1), min(max(0, y + dy), self.map_height - 1)
+
         events = self.trail_events(x, y, dx, dy)
+        moving_direction = [dx, dy]
         while len(events) > 0:
             event = events.pop(0)
+            # todo: filter event for engage
             location = event[1]
             event_distance = sqrt((location[0] - x) ** 2 + (location[1] - y) ** 2)
             event_direction = [(location[0] - x), (location[1] - y)]

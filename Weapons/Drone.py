@@ -15,9 +15,9 @@ class Drone(SpecialWeapon):
     def special_function(self, action, order, acting_ship, extra_params):
         fleets_and_actions = extra_params[0]
         # fleets_and_actions = {'FleetA': [fleet_a, actions_a, 'FleetB'], 'FleetB': [fleet_b, actions_b, 'FleetA']}
-        fleet_a: Fleet = fleets_and_actions['FleetA'][0]
+        fleet_a: Fleet = fleets_and_actions[order[2]][0]
         fleet_a.join(self.drone_ship)
-        print('Drone:{} was released into combat!'.format(self.drone_ship.name))
+        print('Drone/Missile:{} was released into combat!'.format(self.drone_ship.name))
         if not self.spawner:
             w_index = acting_ship.weapons.index(self)
             acting_ship.uninstall_weapon(w_index)
@@ -31,7 +31,7 @@ class DroneReturn(SpecialWeapon):
     def special_function(self, action, order, acting_ship, extra_params):
         fleets_and_actions = extra_params[0]
         # fleets_and_actions = {'FleetA': [fleet_a, actions_a, 'FleetB'], 'FleetB': [fleet_b, actions_b, 'FleetA']}
-        fleet_a: Fleet = fleets_and_actions['FleetA'][0]
+        fleet_a: Fleet = fleets_and_actions[order[2]][0]
         fleet_a.leave(acting_ship.uid)
         # noinspection PyUnresolvedReferences
         self.mother_ship.install_weapon(acting_ship.reinstall_drone)
