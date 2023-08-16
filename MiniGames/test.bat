@@ -1,2 +1,0 @@
-python Flappy.py
-pause
