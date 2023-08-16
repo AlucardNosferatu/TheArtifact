@@ -95,9 +95,10 @@ class BattleEvent(Event):
             fleet, score = self.event_function(fleet_e=self.fleet, *args, **kwargs)
         if fleet.battle_result == 'win':
             self.end = True
-        self.fleet = fleet.enemy_fleet
+        else:
+            self.fleet = fleet.enemy_fleet
+            delattr(fleet, 'enemy_fleet')
         delattr(fleet, 'battle_result')
-        delattr(fleet, 'enemy_fleet')
         return fleet, score
 
 

@@ -6,6 +6,7 @@ from math import sqrt
 from Battle.BattlePlan import clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
+from Config import default_new_event_period, default_new_event_dist
 from Events.EventSystem import global_pools_dict, update_score_and_flags, gather_triggered_pools
 from Utils import a_ship_joins
 
@@ -22,7 +23,7 @@ def get_dst_coordinate(game_obj, direction, speed):
     return dx, dy, x, x_final, y, y_final
 
 
-def events_on_the_trail(game_obj, x0, y0, dx, dy, trigger_radius=2, specified_fleet=None):
+def events_on_the_trail(game_obj, x0, y0, dx, dy, trigger_radius=2):
     # todo: implement encounter logic
     events = []
     for i in range(game_obj.map_height):
@@ -35,14 +36,11 @@ def events_on_the_trail(game_obj, x0, y0, dx, dy, trigger_radius=2, specified_fl
                 if game_obj.map[i][j] is not None:
                     event = game_obj.map[i][j]
                     location = [j, i]
-                    if specified_fleet is None:
-                        events.append([event, location])
-                    else:
-                        events.append([event, location, specified_fleet])
+                    events.append([event, location])
     return events
 
 
-def get_evaded_location(game_obj, center):
+def get_evaded_location(game_obj, center, near_point=None):
     def check_location(sl, go):
         if 0 <= sl[0] < len(go.map[0]):
             if 0 <= sl[1] < len(go.map):
@@ -55,22 +53,38 @@ def get_evaded_location(game_obj, center):
 
     dist = 2
     centers = [center]
+    used = []
     surround_locations_ = []
     while len(surround_locations_) <= 0:
-        location = centers.pop(0)
-        surround_locations = [
-            [location[0] + dist, location[1]], [location[0] - dist, location[1]],
-            [location[0], location[1] + dist], [location[0], location[1] - dist],
-            [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
-            [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
-        ]
-        centers += [
-            surround_loc for surround_loc in surround_locations if there_is_no_event(surround_loc, game_obj)
-        ]
-        surround_locations_ = [
-            surround_loc for surround_loc in surround_locations if check_location(surround_loc, game_obj)
-        ]
-    evaded_location = random.choice(surround_locations_)
+        if len(centers) > 0:
+            location = centers.pop(0)
+            if location not in used:
+                used.append(location)
+                surround_locations = [
+                    [location[0] + dist, location[1]], [location[0] - dist, location[1]],
+                    [location[0], location[1] + dist], [location[0], location[1] - dist],
+                    [location[0] - dist, location[1] - dist], [location[0] + dist, location[1] + dist],
+                    [location[0] - dist, location[1] + dist], [location[0] + dist, location[1] - dist]
+                ]
+                centers += [
+                    surround_loc for surround_loc in surround_locations if not there_is_no_event(surround_loc, game_obj)
+                ]
+                surround_locations_ = [
+                    surround_loc for surround_loc in surround_locations if check_location(surround_loc, game_obj)
+                ]
+        else:
+            return -1, -1
+    if near_point is None:
+        evaded_location = random.choice(surround_locations_)
+    else:
+        x_s, y_s = near_point[0], near_point[1]
+        dst = []
+        for e_loc in surround_locations_:
+            x_d, y_d = e_loc[0], e_loc[1]
+            dst.append(sqrt((x_d - x_s) ** 2 + (y_d - y_s) ** 2))
+        min_dst = min(dst)
+        min_dst_index = dst.index(min_dst)
+        evaded_location = surround_locations_[min_dst_index]
     x_final, y_final = evaded_location[0], evaded_location[1]
     return x_final, y_final
 
@@ -100,7 +114,10 @@ def move_on_map(game_obj, direction, speed, move_go=True, filter_event=None, spe
             if event_func.end:
                 game_obj.map[location[1]][location[0]] = None
             else:
-                x_final, y_final = get_evaded_location(game_obj, location)
+                x_final, y_final = get_evaded_location(game_obj, location, near_point=game_obj.coordinate)
+                if x_final < 0 or y_final < 0:
+                    x_final, y_final = x, y
+                    print('The fleet was blocked by other events!')
                 break
             if game_obj.is_game_over():
                 return
@@ -123,6 +140,8 @@ class Game:
     map_width = 512
     map_height = 512
     events_pool = None
+    new_event_countdown = None
+    new_event_period = None
 
     def __init__(self):
         # self.events_pool = events_pool_default
@@ -143,6 +162,8 @@ class Game:
         for _ in range(Game.map_height):
             self.map.append(row.copy())
         self.coordinate = [int(0.5 * Game.map_width), int(0.5 * Game.map_height)]
+        self.new_event_period = default_new_event_period
+        self.new_event_countdown = len(self.new_event_period)
 
     def game_loop(self):
         global clear
@@ -198,6 +219,7 @@ class Game:
                     event = random.choice(events)
                     location = event[1]
                     event_func = event[0]
+                    print('Something happened at:{}'.format(location))
                     self.random_event(event=event_func)
                     events.remove(event)
                     if event_func.end:
@@ -213,7 +235,6 @@ class Game:
             while cmd not in ['1', '4', '5']:
                 clear = clear_screen(clear)
                 self.show_map()
-                print('~~~~~~~~~~~~~~~~~~~~~~~~')
                 cmd = input('1.Hold Position\t2.Manage Fleet\t3.Move\t4.Save & Exit\t5.Exit\n')
                 if cmd == '2':
                     # todo: extend fleet management
@@ -264,10 +285,11 @@ class Game:
 
     def update_map(self):
         # todo: implement map update
+        Event.clear_timeout_event(self)
         x, y = self.coordinate[0], self.coordinate[1]
         # noinspection PyTypeChecker
         self.map[y][x] = self
-        dist = 3
+        dist = default_new_event_dist
         surround_locations = [
             [x + dist, y], [x - dist, y], [x, y + dist], [x, y - dist],
             [x - dist, y - dist], [x + dist, y + dist], [x - dist, y + dist], [x + dist, y - dist]
@@ -275,15 +297,19 @@ class Game:
         surround_locations = [
             sl for sl in surround_locations if 0 <= sl[0] < len(self.map[0]) and 0 <= sl[1] < len(self.map)
         ]
-        # for i in range(8):
-        #     location = surround_locations[i]
-        #     x_loc, y_loc = location[0], location[1]
-        #     self.map[y_loc][x_loc] = None
-        for i in range(2):
+        if self.new_event_countdown >= 0:
+            self.new_event_countdown -= 1
+        else:
+            self.new_event_countdown = len(self.new_event_period) - 1
+        print('{} events appeared!'.format(self.new_event_period[self.new_event_countdown]))
+        for i in range(self.new_event_period[self.new_event_countdown]):
             location = random.choice(surround_locations)
-            x_loc, y_loc = location[0], location[1]
             event = random.choice(self.events_pool['events'])
-            self.map[y_loc][x_loc] = event()
+            x_loc, y_loc = location[0], location[1]
+            if self.map[y_loc][x_loc] is not None:
+                x_loc, y_loc = get_evaded_location(self, location)
+            if x_loc >= 0 and y_loc >= 0:
+                self.map[y_loc][x_loc] = event()
             surround_locations.remove(location)
 
     def show_map(self):
@@ -318,6 +344,9 @@ class Game:
                 elif self.map[i][j] is not None:
                     if self.detected(i, j, distance):
                         loc_str = '!'
+                    # for debug
+                    elif self.in_detect_range(distance):
+                        loc_str = '#'
                 temp_str = loc_str
                 while len(temp_str) < digit_w:
                     temp_str += loc_str
@@ -336,8 +365,8 @@ class Game:
         if self.in_burn_through(distance):
             return True
         elif self.in_detect_range(distance):
-            if self.map[i][j] in self.events_pool['stealth'].keys():
-                stealth_degree = self.events_pool['stealth'][self.map[i][j]]
+            if type(self.map[i][j]) in self.events_pool['stealth'].keys():
+                stealth_degree = self.events_pool['stealth'][type(self.map[i][j])]
                 if type(stealth_degree) is list:
                     stealth_degree = random.randint(stealth_degree[0], stealth_degree[1])
                 anti_stealth_degree = self.fleet.get_anti_stealth()

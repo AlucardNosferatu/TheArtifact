@@ -10,7 +10,7 @@ from Utils import Nothing
 # noinspection PyTypeChecker
 global_pools_dict = {
     'default': {
-        'events': [NewMercenary] * 3 + [Defection] * 4 + [Nothing] * 1 + [UnlockOverride],
+        'events': [NewMercenary] * 6 + [Defection] * 1 + [Nothing] * 1 + [UnlockOverride],
         'stealth': {
             NewMercenary: 20,
         },
