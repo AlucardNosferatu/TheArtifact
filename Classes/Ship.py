@@ -57,7 +57,7 @@ class Ship:
         return mass * self.maneuver
 
     def get_mass(self):
-        return (self.hit_points * self.armor) + self.get_weapon_mass()
+        return (self.max_hit_points * self.armor) + self.get_weapon_mass()
 
     def get_weapon_mass(self):
         mass = [weapon.mass for weapon in self.weapons if weapon.mass is not None]

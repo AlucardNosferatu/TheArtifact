@@ -1,6 +1,7 @@
 import random
 
 from Battle.BattleActions import hit
+from Buffs.NegativeBuff import Parasite
 from Classes.Weapon import SpecialWeapon
 
 
@@ -90,3 +91,47 @@ class AllahAkbar(Kamikaze):
         )
         self.explosion_range = explosion_range
         setattr(acting_ship, 'explosion_range', self.explosion_range)
+
+
+def give_parasite_buff(p_dict):
+    p_buff = Parasite(effect_target=p_dict['ship_e'], parasite=p_dict)
+    p_buff.trigger()
+    p_dict['ship_e'].buff_list.append(p_buff)
+
+
+def force_boarding_action(acting_fleet, acting_ship, target_ship, target_fleet):
+    p_dict = {
+        'countdown': 5,
+        'type': 'internal',
+        'fleet_p': acting_fleet,
+        'ship_p': acting_ship,
+        'fleet_e': target_fleet,
+        'ship_e': target_ship
+    }
+    give_parasite_buff(p_dict)
+
+
+class Boarding(Kamikaze):
+    def __init__(self, acting_ship):
+        super().__init__(
+            acting_ship=acting_ship, damage_function=force_boarding_action, miss_function=missed_kamikaze
+        )
+
+
+def salvage_with_hiigara_style(acting_fleet, acting_ship, target_ship, target_fleet):
+    p_dict = {
+        'countdown': 3,
+        'type': 'external',
+        'fleet_p': acting_fleet,
+        'ship_p': acting_ship,
+        'fleet_e': target_fleet,
+        'ship_e': target_ship
+    }
+    give_parasite_buff(p_dict)
+
+
+class Salvage(Kamikaze):
+    def __init__(self, acting_ship):
+        super().__init__(
+            acting_ship=acting_ship, damage_function=salvage_with_hiigara_style, miss_function=missed_kamikaze
+        )
