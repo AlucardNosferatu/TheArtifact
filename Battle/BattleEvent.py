@@ -164,7 +164,8 @@ def spawn_actions(fleet, orders):
                     cards[action_chance].append(['idle', 1])
                 else:
                     for _ in range(5):
-                        card_type = random.choice(['attack', 'repair', 'idle', 'escape', 'evade', 'defend'])
+                        # card_type = random.choice(['attack', 'repair', 'idle', 'escape', 'evade', 'defend'])
+                        card_type = random.choice(['attack', 'idle'])
                         card_point = random.randint(1, 13)
                         cards[action_chance].append([card_type, card_point])
             cards_dict.__setitem__(ship_uid, cards.copy())
@@ -276,4 +277,5 @@ if __name__ == '__main__':
     acting_ship_.install_weapon(Salvage(acting_ship=acting_ship_))
 
     fb = generate_fleet(2, 2)
+    fb.ships[fb.flag_ship].fire_control_system = 1000
     fa = battle_event(fa, fb)

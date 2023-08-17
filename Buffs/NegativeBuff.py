@@ -77,11 +77,14 @@ class Parasite(Buff):
 
     def damaged(self, amount):
         amount = max(1, round(0.5 * amount))
-        type(self.memorized_params['parasite']['ship_p']).damaged(self.memorized_params['parasite']['ship_p'], amount)
+        old_hp = self.effect_target.hit_points
         type(self.effect_target).damaged(self.effect_target, amount)
         print(
-            '{} was involved while {} is being attacked!!!'.format(
+            '{} was involved while {} was being attacked!!! HP:{}->{}'.format(
                 self.effect_target.name,
-                self.memorized_params['parasite']['ship_p'].name
+                self.memorized_params['parasite']['ship_p'].name,
+                old_hp,
+                self.effect_target.hit_points
             )
         )
+        type(self.memorized_params['parasite']['ship_p']).damaged(self.memorized_params['parasite']['ship_p'], amount)
