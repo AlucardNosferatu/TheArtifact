@@ -54,6 +54,7 @@ class Combination(Ship):
         elif self.ship_b.override_actions is not None:
             self.override_actions = self.ship_b.override_actions
         self.parts = self.ship_a.parts + self.ship_b.parts
+        self.change_speed(amount=max(1, int(0.5 * self.max_speed)))
 
     def install_weapon(self, weapon, belong='ShipA'):
         super().install_weapon(weapon)
@@ -117,3 +118,13 @@ class Transformation(Ship):
         mass = super().get_weapon_mass()
         mass += self.mode_dict[self.mode_dict[self.mode][1]][0].get_weapon_mass()
         return mass
+
+
+if __name__ == '__main__':
+    ship = Ship.spawn()
+    ship.show_ship()
+    booster = Ship.spawn(mh=10, ms=100, man=100, armor=10, init_weapon=False)
+    booster.show_ship()
+    ship_with_booster = Combination(ship_a=ship, ship_b=booster)
+    ship_with_booster.show_ship()
+    print('Done')

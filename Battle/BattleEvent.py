@@ -3,12 +3,11 @@ import random
 from Battle.BattleActions import basic_actions_dict
 from Battle.BattleOverride import override_control, override_orders, override_init
 from Battle.BattlePlan import plan_actions_player, plan_actions, clear_screen
-from Classes.Buff import Buff
 from Classes.Event import Event
 from Classes.Fleet import Fleet
-from Classes.Weapon import Weapon
+from Classes.Ship import Ship
 from Utils import generate_fleet
-from Weapons.Drone import Drone
+from Weapons.Melee import Boarding, Salvage
 
 clear = True
 
@@ -67,7 +66,10 @@ def battle_event(fleet_p, fleet_e=None, clear_=True):
         change_score, loots = count_killed(fleet_e)
         buffs_decay(fleet_p)
         buffs_decay(fleet_e)
-        if should_it_break(fleet_p, fleet_e, orders):
+        break_loop = should_it_break(fleet_p, fleet_e, orders)
+        buffs_clear(fleet_p, break_loop)
+        buffs_clear(fleet_e, break_loop)
+        if break_loop:
             break
     fleet_p = remove_destroyed(fleet_p)
     fleet_p.storage += loots
@@ -213,15 +215,24 @@ def make_it_happen(fleet_a: Fleet, fleet_b: Fleet, actions_a, actions_b, orders,
     return orders
 
 
-def buffs_decay(fleet, clear_buff=False):
+def buffs_clear(fleet, clear_buff=False):
     for ship_uid in fleet.ships:
-        buf_count = len(fleet.ships[ship_uid].buff_list)
-        for index in range(buf_count):
-            index = buf_count - index - 1
-            fleet.ships[ship_uid].buff_list[index]: Buff
-            fleet.ships[ship_uid].buff_list[index].decay()
+        buff_count = len(fleet.ships[ship_uid].buff_list)
+        for index in range(buff_count):
+            index = buff_count - index - 1
             if fleet.ships[ship_uid].buff_list[index].expired or clear_buff:
                 fleet.ships[ship_uid].buff_list.pop(index)
+
+
+def buffs_decay(fleet):
+    uid_list = list(fleet.ships.keys())
+    for ship_uid in uid_list:
+        if ship_uid in fleet.ships.keys():
+            buff_ship = fleet.ships[ship_uid]
+            buff_count = len(buff_ship.buff_list)
+            for index in range(buff_count):
+                index = buff_count - index - 1
+                buff_ship.buff_list[index].decay()
 
 
 def should_it_break(fleet_a, fleet_b, orders):
@@ -236,8 +247,6 @@ def should_it_break(fleet_a, fleet_b, orders):
         setattr(fleet_a, 'battle_result', 'win')
     else:
         return False
-    buffs_decay(fleet_a, clear_buff=True)
-    buffs_decay(fleet_b, clear_buff=True)
     return True
 
 
@@ -252,8 +261,19 @@ def remove_destroyed(fleet: Fleet):
 
 
 if __name__ == '__main__':
-    fa = generate_fleet(1, 1)
-    fa.ships[fa.flag_ship].override_enabled = True
-    fa.ships[fa.flag_ship].install_weapon(Drone(spawner=False, mother_ship=fa.ships[fa.flag_ship]))
-    fa.ships[fa.flag_ship].install_weapon(Weapon(p=10, t=2))
-    fa = battle_event(fa)
+    fa = generate_fleet(2, 2)
+
+    acting_ship_: Ship = [fa.ships[ship_uid] for ship_uid in fa.ships.keys() if ship_uid != fa.flag_ship][0]
+    acting_ship_.fire_control_system = 100
+    acting_ship_.maneuver = 100
+    acting_ship_.change_speed(amount=7, allow_exceed=True)
+    acting_ship_.install_weapon(Boarding(acting_ship=acting_ship_))
+
+    acting_ship_ = fa.ships[fa.flag_ship]
+    acting_ship_.fire_control_system = 100
+    acting_ship_.maneuver = 100
+    acting_ship_.change_speed(amount=7, allow_exceed=True)
+    acting_ship_.install_weapon(Salvage(acting_ship=acting_ship_))
+
+    fb = generate_fleet(2, 2)
+    fa = battle_event(fa, fb)

@@ -1,5 +1,4 @@
 from Classes.Buff import Buff
-from Classes.Ship import Ship
 
 
 class Stall(Buff):
@@ -27,7 +26,8 @@ class Parasite(Buff):
             Parasite.r_func,
             {
                 'parasite': parasite,
-                'new_damaged': self.damaged
+                'new_damaged': self.damaged,
+                'control': False
             }
         )
 
@@ -48,18 +48,40 @@ class Parasite(Buff):
             parasite['fleet_p'].join(parasite['ship_p'])
         elif parasite['type'] == 'external':
             parasite['ship_p'].damaged = params['old_damaged']
-        parasite['fleet_e'].leave(target.uid)
-        parasite['fleet_p'].join(target)
-
-    def decay(self, deactivate=False):
-        if deactivate or self.memorized_params['parasite']['ship_p'].is_destroyed():
-            self.decay_count = 0
-            self.expired = True
-            print('Buff:', str(self), 'Expired!')
+        if params['control']:
+            if parasite['fleet_e'].leave(target.uid):
+                parasite['fleet_p'].join(target)
+                print('{} has taken control of {}!'.format(params['parasite']['ship_p'].name, target.name))
+            else:
+                if target.uid == parasite['fleet_e'].flag_ship:
+                    print("Flag ship self-destructed when it's about to be controlled!!!")
+                    target.hit_points = 0
         else:
-            super().decay()
+            print('The executor was destroyed, boarding/salvaging has been aborted!!!')
+
+    def decay(self):
+        assert not self.expired
+        assert self.triggered
+        if not self.memorized_params['parasite']['ship_p'].is_destroyed():
+            self.memorized_params['control'] = True
+        super().decay()
+        if not self.memorized_params['parasite']['ship_p'].is_destroyed():
+            if not self.expired:
+                print(
+                    '{} will take control of {} in {} rounds!'.format(
+                        self.memorized_params['parasite']['ship_p'].name,
+                        self.effect_target.name,
+                        self.decay_count
+                    )
+                )
 
     def damaged(self, amount):
         amount = max(1, round(0.5 * amount))
-        Ship.damaged(self.memorized_params['parasite']['ship_p'], amount)
-        Ship.damaged(self.effect_target, amount)
+        type(self.memorized_params['parasite']['ship_p']).damaged(self.memorized_params['parasite']['ship_p'], amount)
+        type(self.effect_target).damaged(self.effect_target, amount)
+        print(
+            '{} was involved while {} is being attacked!!!'.format(
+                self.effect_target.name,
+                self.memorized_params['parasite']['ship_p'].name
+            )
+        )

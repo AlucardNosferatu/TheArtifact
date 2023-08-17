@@ -21,6 +21,7 @@ class Fleet:
             Fleet.ships.__setitem__(ship_uid, self.ships.pop(ship_uid))
             return True
         else:
+            print("The ship cannot leave fleet, maybe it's the flag ship, or it had left the fleet!")
             return False
 
     def reset_w2f(self):

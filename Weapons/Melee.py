@@ -10,12 +10,14 @@ def one_on_one_kamikaze(acting_fleet, acting_ship, target_ship, target_fleet):
     acting_ship.damaged(acting_ship.hit_points)
     old_hp = target_ship.hit_points
     target_ship.damaged(acting_ship.hit_points)
+    print('{} crashed into {}!!!'.format(acting_ship.name, target_ship.name))
     print('Target was hit! HP:{}->{}'.format(old_hp, target_ship.hit_points))
 
 
 def missed_kamikaze(acting_fleet, acting_ship, target_ship, target_fleet):
     _, _, _, _ = acting_fleet, acting_ship, target_ship, target_fleet
     print('Missed!')
+    print('{} failed at getting close to {}!!!'.format(acting_ship.name, target_ship.name))
 
 
 class Kamikaze(SpecialWeapon):
@@ -40,6 +42,11 @@ class Kamikaze(SpecialWeapon):
         target_fleet = fleets_and_actions[fleets_and_actions[order[2]][2]][0]
         acting_fleet = fleets_and_actions[order[2]][0]
         ship_uid_list = list(target_fleet.ships.keys())
+        if hasattr(self, 'target_excluded'):
+            ship_uid_list = [ship_uid for ship_uid in ship_uid_list if ship_uid not in self.target_excluded]
+            if len(ship_uid_list) <= 0:
+                print('No valid targets! Action aborted!')
+                return
         speeds = [target_fleet.ships[ship_uid].speed for ship_uid in ship_uid_list]
         slowest = min(speeds)
         slowest_count = speeds.count(slowest)
@@ -54,10 +61,12 @@ class Kamikaze(SpecialWeapon):
         maneuver = acting_ship.maneuver
         maneuver_target = unlucky_ship.maneuver
         if hit(self.basic_accuracy, maneuver, maneuver_target):
+            print('{} is approaching {}!!!'.format(acting_ship.name, unlucky_ship.name))
             self.damage_function(
                 acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
             )
         else:
+            print('{} evaded {}!!!'.format(unlucky_ship.name, acting_ship.name))
             self.miss_function(
                 acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
             )
@@ -68,6 +77,7 @@ def ranged_explosion(acting_fleet, acting_ship, target_ship, target_fleet):
     damaged_ships = [target_fleet.ships[ship_uid] for ship_uid in target_fleet.ships.keys()]
     damaged_ships = [ship for ship in damaged_ships if ship.speed < acting_ship.explosion_range]
     acting_ship.damaged(acting_ship.hit_points)
+    print('{} exploded!!!'.format(acting_ship.name, target_ship.name))
     acting_fleet.leave(acting_ship.uid)
     for damaged_ship in damaged_ships:
         old_hp = damaged_ship.hit_points
@@ -79,7 +89,7 @@ def miss_and_explode(acting_fleet, acting_ship, target_ship, target_fleet):
     _, _ = target_ship, target_fleet
     print('Missed!')
     acting_ship.damaged(acting_ship.hit_points)
-    print('The "projectile" missed the target and it exploded after a while.')
+    print('{} missed the target and it exploded after a while.'.format(acting_ship.name))
     acting_fleet.leave(acting_ship.uid)
 
 
@@ -94,21 +104,28 @@ class AllahAkbar(Kamikaze):
 
 
 def give_parasite_buff(p_dict):
-    p_buff = Parasite(effect_target=p_dict['ship_e'], parasite=p_dict)
+    target = p_dict['ship_e']
+    for buff in target.buff_list:
+        if type(buff) == Parasite:
+            print('The target is already parasitized! Action abort!')
+            return False
+    p_buff = Parasite(effect_target=target, parasite=p_dict)
     p_buff.trigger()
-    p_dict['ship_e'].buff_list.append(p_buff)
+    target.buff_list.append(p_buff)
+    return True
 
 
 def force_boarding_action(acting_fleet, acting_ship, target_ship, target_fleet):
     p_dict = {
-        'countdown': 5,
+        'countdown': 2,
         'type': 'internal',
         'fleet_p': acting_fleet,
         'ship_p': acting_ship,
         'fleet_e': target_fleet,
         'ship_e': target_ship
     }
-    give_parasite_buff(p_dict)
+    if give_parasite_buff(p_dict):
+        print('{} is boarding {}!!!'.format(acting_ship.name, target_ship.name))
 
 
 class Boarding(Kamikaze):
@@ -116,18 +133,27 @@ class Boarding(Kamikaze):
         super().__init__(
             acting_ship=acting_ship, damage_function=force_boarding_action, miss_function=missed_kamikaze
         )
+        self.target_excluded = []
+
+    def special_function(self, action, order, acting_ship, extra_params):
+        fleets_and_actions = extra_params[0]
+        # fleets_and_actions = {'FleetA': [fleet_a, actions_a, 'FleetB'], 'FleetB': [fleet_b, actions_b, 'FleetA']}
+        target_fleet = fleets_and_actions[fleets_and_actions[order[2]][2]][0]
+        self.target_excluded.append(target_fleet.flag_ship)
+        super().special_function(action, order, acting_ship, extra_params)
 
 
 def salvage_with_hiigara_style(acting_fleet, acting_ship, target_ship, target_fleet):
     p_dict = {
-        'countdown': 3,
+        'countdown': 1,
         'type': 'external',
         'fleet_p': acting_fleet,
         'ship_p': acting_ship,
         'fleet_e': target_fleet,
         'ship_e': target_ship
     }
-    give_parasite_buff(p_dict)
+    if give_parasite_buff(p_dict):
+        print('{} had docked on the surface of {}!!!'.format(acting_ship.name, target_ship.name))
 
 
 class Salvage(Kamikaze):
@@ -135,3 +161,11 @@ class Salvage(Kamikaze):
         super().__init__(
             acting_ship=acting_ship, damage_function=salvage_with_hiigara_style, miss_function=missed_kamikaze
         )
+        self.target_excluded = []
+
+    def special_function(self, action, order, acting_ship, extra_params):
+        fleets_and_actions = extra_params[0]
+        # fleets_and_actions = {'FleetA': [fleet_a, actions_a, 'FleetB'], 'FleetB': [fleet_b, actions_b, 'FleetA']}
+        target_fleet = fleets_and_actions[fleets_and_actions[order[2]][2]][0]
+        self.target_excluded.append(target_fleet.flag_ship)
+        super().special_function(action, order, acting_ship, extra_params)

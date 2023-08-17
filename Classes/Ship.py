@@ -116,12 +116,17 @@ class Ship:
                 self.buff_list.append(st)
                 st.trigger()
         else:
+            expired = []
             for buff in self.buff_list:
                 if type(buff) is Stall:
                     if buff.triggered and not buff.expired:
                         print('{} speed up, it has recovered from stalling.'.format(self.name))
                         while not buff.expired:
                             buff.decay()
+                            if buff.expired:
+                                expired.append(buff)
+            while len(expired) > 0:
+                self.buff_list.remove(expired.pop(0))
 
     @staticmethod
     def spawn(mh=None, mw=None, ms=None, wp=None, wt=None, armor=None, fcs=None, man=None, init_weapon=True):
