@@ -3,7 +3,7 @@ from Classes.Fleet import Fleet
 from Events.Area88 import Defection, Volunteers
 from Utils import Nothing
 from Weapons.Melee import AllahAkbar, Kamikaze
-from Weapons.Missile import Missile
+from Weapons.Drone import Missile
 from main import move_on_map
 
 
