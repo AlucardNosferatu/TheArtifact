@@ -16,4 +16,3 @@ default_altitude = {
     'terrain': terrain,
     'sea_level': sea_level
 }
-

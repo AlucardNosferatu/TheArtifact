@@ -2,8 +2,8 @@ from Battle.BattleEvent import BattleEvent
 from Classes.Fleet import Fleet
 from Events.Area88 import Defection, Volunteers
 from Utils import Nothing
-from Weapons.Melee import AllahAkbar, Kamikaze
 from Weapons.Drone import Missile
+from Weapons.Melee import AllahAkbar, Kamikaze
 from main import move_on_map
 
 
