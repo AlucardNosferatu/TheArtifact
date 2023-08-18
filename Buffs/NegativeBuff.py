@@ -146,6 +146,7 @@ class TimedBomb(Buff):
             params['fleet'].leave(target.uid)
 
 
+# todo: implement EMPStormed
 class EMPStormed(Buff):
     def __init__(self, effect_target):
         # todo: decay_count should be set to E-weapon count
