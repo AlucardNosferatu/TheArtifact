@@ -23,7 +23,7 @@ def missed_kamikaze(acting_fleet, acting_ship, target_ship, target_fleet):
 class Kamikaze(SpecialWeapon):
 
     def __init__(self, acting_ship, damage_function=None, miss_function=None, external_fcs=None):
-        super().__init__(m=None)
+        super().__init__(mass=None)
         self.acting_ship = acting_ship
         if damage_function is None:
             damage_function = one_on_one_kamikaze
@@ -47,6 +47,33 @@ class Kamikaze(SpecialWeapon):
             if len(ship_uid_list) <= 0:
                 print('No valid targets! Action aborted!')
                 return
+
+        unlucky_ship = self.pick_target(target_fleet)
+        basic_accuracy = self.basic_accuracy
+
+        hit_target = self.judge_hit(acting_ship, basic_accuracy, unlucky_ship)
+
+        if hit_target:
+            print('{} is approaching {}!!!'.format(acting_ship.name, unlucky_ship.name))
+            self.damage_function(
+                acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
+            )
+        else:
+            print('{} evaded {}!!!'.format(unlucky_ship.name, acting_ship.name))
+            self.miss_function(
+                acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
+            )
+
+    @staticmethod
+    def judge_hit(acting_ship, basic_accuracy, unlucky_ship):
+        maneuver = acting_ship.maneuver
+        maneuver_target = unlucky_ship.maneuver
+        hit_target = hit(basic_accuracy, maneuver, maneuver_target)
+        return hit_target
+
+    @staticmethod
+    def pick_target(target_fleet):
+        ship_uid_list = list(target_fleet.ships.keys())
         speeds = [target_fleet.ships[ship_uid].speed for ship_uid in ship_uid_list]
         slowest = min(speeds)
         slowest_count = speeds.count(slowest)
@@ -58,18 +85,7 @@ class Kamikaze(SpecialWeapon):
         unlucky_ship_index = random.choice(slowest_count_indices)
         unlucky_ship_uid = ship_uid_list[unlucky_ship_index]
         unlucky_ship = target_fleet.ships[unlucky_ship_uid]
-        maneuver = acting_ship.maneuver
-        maneuver_target = unlucky_ship.maneuver
-        if hit(self.basic_accuracy, maneuver, maneuver_target):
-            print('{} is approaching {}!!!'.format(acting_ship.name, unlucky_ship.name))
-            self.damage_function(
-                acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
-            )
-        else:
-            print('{} evaded {}!!!'.format(unlucky_ship.name, acting_ship.name))
-            self.miss_function(
-                acting_fleet=acting_fleet, acting_ship=acting_ship, target_ship=unlucky_ship, target_fleet=target_fleet
-            )
+        return unlucky_ship
 
 
 def ranged_explosion(acting_fleet, acting_ship, target_ship, target_fleet):

@@ -3,17 +3,17 @@ class Weapon:
     target = None
     mass = None
 
-    def __init__(self, p=None, t=None, m=None):
+    def __init__(self, p=None, t=None, mass=None):
         self.power = p
         self.target = t
-        if m is None and self.power is not None and self.target is not None:
-            m = self.power * self.target
-        self.mass = m
+        if mass is None and self.power is not None and self.target is not None:
+            mass = self.power * self.target
+        self.mass = mass
 
 
 class SpecialWeapon(Weapon):
-    def __init__(self, m):
-        super().__init__(m=m)
+    def __init__(self, mass):
+        super().__init__(mass=mass)
 
     def special_function(self, action, order, acting_ship, extra_params):
         # fleets_and_actions = extra_params[0]

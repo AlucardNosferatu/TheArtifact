@@ -88,3 +88,36 @@ class Parasite(Buff):
             )
         )
         type(self.memorized_params['parasite']['ship_p']).damaged(self.memorized_params['parasite']['ship_p'], amount)
+
+
+class Jammed(Buff):
+    def __init__(self, effect_target):
+        super().__init__(1, effect_target, Jammed.t_func, Jammed.r_func)
+
+    @staticmethod
+    def t_func(target, params: dict):
+        amount = max(1, int(0.25 * target.fire_control_system))
+        params['amount'] = amount
+        target.fire_control_system -= amount
+        print('{} was Jammed!'.format(target.name))
+
+    @staticmethod
+    def r_func(target, params: dict):
+        amount = params['amount']
+        target.fire_control_system += amount
+        print('{} was no longer Jammed!'.format(target.name))
+
+
+class TimedBomb(Buff):
+    def __init__(self, effect_target, life, fleet):
+        super().__init__(life, effect_target, TimedBomb.t_func, TimedBomb.r_func, {'fleet': fleet})
+
+    @staticmethod
+    def t_func(target, params: dict):
+        pass
+
+    @staticmethod
+    def r_func(target, params: dict):
+        target.hit_points = 0
+        if target.uid in params['fleet']:
+            params['fleet'].leave(target.uid)

@@ -164,8 +164,10 @@ def spawn_actions(fleet, orders):
                     cards[action_chance].append(['idle', 1])
                 else:
                     for _ in range(5):
-                        # card_type = random.choice(['attack', 'repair', 'idle', 'escape', 'evade', 'defend'])
-                        card_type = random.choice(['attack', 'idle'])
+                        if fleet.ships[ship_uid].dummy:
+                            card_type = random.choice(['evade', 'idle'])
+                        else:
+                            card_type = random.choice(['attack', 'repair', 'idle', 'escape', 'evade', 'defend'])
                         card_point = random.randint(1, 13)
                         cards[action_chance].append([card_type, card_point])
             cards_dict.__setitem__(ship_uid, cards.copy())

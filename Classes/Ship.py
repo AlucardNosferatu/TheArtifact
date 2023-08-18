@@ -50,6 +50,7 @@ class Ship:
         self.override_enabled = False
         self.override_actions = OverrideActions()
         self.parts = []
+        self.dummy = False
 
     def get_force(self, mass=None):
         if mass is None:
