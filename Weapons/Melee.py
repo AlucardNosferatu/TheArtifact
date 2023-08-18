@@ -135,7 +135,25 @@ def emp_storm_both_side(acting_fleet, acting_ship, target_ship, target_fleet):
 class EMP(Kamikaze):
     def __init__(self, acting_ship, explosion_range, external_fcs=None):
         super().__init__(
-            acting_ship=acting_ship, damage_function=ranged_explosion, miss_function=emp_storm_both_side,
+            acting_ship=acting_ship, damage_function=emp_storm_one_side, miss_function=emp_storm_both_side,
+            external_fcs=external_fcs
+        )
+        self.explosion_range = explosion_range
+        setattr(acting_ship, 'explosion_range', self.explosion_range)
+
+
+def nuclear_explosion(acting_fleet, acting_ship, target_ship, target_fleet):
+    pass
+
+
+def nuclear_explosion_far(acting_fleet, acting_ship, target_ship, target_fleet):
+    pass
+
+
+class Mushroom(Kamikaze):
+    def __init__(self, acting_ship, explosion_range, external_fcs=None):
+        super().__init__(
+            acting_ship=acting_ship, damage_function=nuclear_explosion, miss_function=nuclear_explosion_far,
             external_fcs=external_fcs
         )
         self.explosion_range = explosion_range
