@@ -61,8 +61,9 @@ class AntiRadarMissile(Missile):
                 weapon.judge_hit = self.judge_hit
 
     @staticmethod
-    def pick_target(target_fleet):
-        ship_uid_list = list(target_fleet.ships.keys())
+    def pick_target(target_fleet, ship_uid_list=None):
+        if ship_uid_list is None:
+            ship_uid_list = list(target_fleet.ships.keys())
         fcs = [target_fleet.ships[ship_uid].fire_control_system for ship_uid in ship_uid_list]
         loudest = min(fcs)
         loudest_count = fcs.count(loudest)

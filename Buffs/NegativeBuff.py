@@ -108,6 +108,29 @@ class Jammed(Buff):
         print('{} was no longer Jammed!'.format(target.name))
 
 
+class Hijacked(Buff):
+    def __init__(self, effect_target, fleet_from, fleet_to):
+        super().__init__(
+            2,
+            effect_target,
+            Hijacked.t_func,
+            Hijacked.r_func,
+            {'fleet_from': fleet_from, 'fleet_to': fleet_to}
+        )
+
+    @staticmethod
+    def t_func(target, params: dict):
+        params['fleet_from'].leave(target.uid)
+        params['fleet_to'].join(target)
+        print('{} was Hijacked!'.format(target.name))
+
+    @staticmethod
+    def r_func(target, params: dict):
+        params['fleet_to'].leave(target.uid)
+        params['fleet_from'].join(target)
+        print('{} was no longer Hijacked!'.format(target.name))
+
+
 class TimedBomb(Buff):
     def __init__(self, effect_target, life, fleet):
         super().__init__(life, effect_target, TimedBomb.t_func, TimedBomb.r_func, {'fleet': fleet})
@@ -121,3 +144,23 @@ class TimedBomb(Buff):
         target.hit_points = 0
         if target.uid in params['fleet']:
             params['fleet'].leave(target.uid)
+
+
+class EMPStormed(Buff):
+    def __init__(self, effect_target):
+        # todo: decay_count should be set to E-weapon count
+        super().__init__(1, effect_target, EMPStormed.t_func, EMPStormed.r_func)
+
+    @staticmethod
+    def t_func(target, params: dict):
+        # todo: fcs = 0
+        #  drone/missile.hp = 0
+        #  clear Jammed/Hijacked/TimedBomb
+        #  disable all E-weapons
+        pass
+
+    @staticmethod
+    def r_func(target, params: dict):
+        # todo: fcs back to normal
+        #  enable all E-weapon
+        pass

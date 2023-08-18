@@ -21,6 +21,7 @@ def missed_kamikaze(acting_fleet, acting_ship, target_ship, target_fleet):
 
 
 class Kamikaze(SpecialWeapon):
+    external_fcs = None
 
     def __init__(self, acting_ship, damage_function=None, miss_function=None, external_fcs=None):
         super().__init__(mass=None)
@@ -31,10 +32,7 @@ class Kamikaze(SpecialWeapon):
         if miss_function is None:
             miss_function = missed_kamikaze
         self.miss_function = miss_function
-        if external_fcs is None:
-            self.basic_accuracy = acting_ship.fire_control_system
-        else:
-            self.basic_accuracy = external_fcs
+        self.external_fcs = external_fcs
 
     def special_function(self, action, order, acting_ship, extra_params):
         fleets_and_actions = extra_params[0]
@@ -48,8 +46,12 @@ class Kamikaze(SpecialWeapon):
                 print('No valid targets! Action aborted!')
                 return
 
-        unlucky_ship = self.pick_target(target_fleet)
-        basic_accuracy = self.basic_accuracy
+        unlucky_ship = self.pick_target(target_fleet=target_fleet, ship_uid_list=ship_uid_list)
+
+        if self.external_fcs is None:
+            basic_accuracy = self.acting_ship.fire_control_system
+        else:
+            basic_accuracy = self.external_fcs
 
         hit_target = self.judge_hit(acting_ship, basic_accuracy, unlucky_ship)
 
@@ -72,8 +74,9 @@ class Kamikaze(SpecialWeapon):
         return hit_target
 
     @staticmethod
-    def pick_target(target_fleet):
-        ship_uid_list = list(target_fleet.ships.keys())
+    def pick_target(target_fleet, ship_uid_list=None):
+        if ship_uid_list is None:
+            ship_uid_list = list(target_fleet.ships.keys())
         speeds = [target_fleet.ships[ship_uid].speed for ship_uid in ship_uid_list]
         slowest = min(speeds)
         slowest_count = speeds.count(slowest)
@@ -113,6 +116,26 @@ class AllahAkbar(Kamikaze):
     def __init__(self, acting_ship, explosion_range, external_fcs=None):
         super().__init__(
             acting_ship=acting_ship, damage_function=ranged_explosion, miss_function=miss_and_explode,
+            external_fcs=external_fcs
+        )
+        self.explosion_range = explosion_range
+        setattr(acting_ship, 'explosion_range', self.explosion_range)
+
+
+def emp_storm_one_side(acting_fleet, acting_ship, target_ship, target_fleet):
+    # todo: implement one-side EMP storm
+    pass
+
+
+def emp_storm_both_side(acting_fleet, acting_ship, target_ship, target_fleet):
+    # todo: implement both-side EMP storm
+    pass
+
+
+class EMP(Kamikaze):
+    def __init__(self, acting_ship, explosion_range, external_fcs=None):
+        super().__init__(
+            acting_ship=acting_ship, damage_function=ranged_explosion, miss_function=emp_storm_both_side,
             external_fcs=external_fcs
         )
         self.explosion_range = explosion_range
