@@ -345,8 +345,8 @@ class Game:
                     if self.detected(i, j, distance):
                         loc_str = '!'
                     # for debug
-                    elif self.in_detect_range(distance):
-                        loc_str = '#'
+                    # elif self.in_detect_range(distance):
+                    #     loc_str = '#'
                 temp_str = loc_str
                 while len(temp_str) < digit_w:
                     temp_str += loc_str
