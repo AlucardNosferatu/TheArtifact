@@ -3,41 +3,198 @@ import pickle
 import random
 from math import sqrt
 
+import numpy as np
+
 from Battle.BattlePlan import clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Config import default_new_event_period, default_new_event_dist
 from Events.EventSystem import global_pools_dict, update_score_and_flags, gather_triggered_pools
+from Maps.Composer import compose_map
 from Utils import a_ship_joins
 
 clear = True
 
 
-def get_dst_coordinate(game_obj, direction, speed):
+def move_on_map(game_obj, direction, speed, move_go=True, filter_event=None, specified_player_fleet=None):
+    global clear
+    dx, dy, x0, x_final, y0, y_final = get_ideal_dst_coordinate(game_obj, direction, speed)
+
+    terrains = get_events_on_the_trail(game_obj, x0, y0, dx, dy, target='terrain')
+    terrains = sort_events_on_the_trail(events=terrains, x0=x0, y0=y0)
+
+    altitude = game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude
+    climbing = game_obj.fleet.ships[game_obj.fleet.flag_ship].maneuver
+    x_final, y_final = get_reachable_dst_coordinate(terrains, x_final, y_final, altitude, climbing)
+    dx, dy = x_final - x0, y_final - y0
+    events = get_events_on_the_trail(game_obj, x0, y0, dx, dy, target='event')
+    events = sort_events_on_the_trail(events=events, x0=x0, y0=y0)
+
+    game_over = False
+    game_over, x_final, y_final = play_events_on_the_trail(
+        events, filter_event, game_obj, game_over, specified_player_fleet, x0, x_final, y0,
+        y_final
+    )
+
+    if move_go and not game_over:
+        game_obj.coordinate = [x_final, y_final]
+        # noinspection PyTypeChecker
+        game_obj.map[game_obj.coordinate[1]][game_obj.coordinate[0]] = game_obj
+        current_altitude = game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude
+        dest_altitude = game_obj.terrain[y_final, x_final, :]
+        if dest_altitude[2] <= current_altitude:
+            game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude = game_obj.terrain[y_final, x_final, 2]
+        elif dest_altitude[1] <= current_altitude:
+            if hasattr(game_obj.fleet.ships[game_obj.fleet.flag_ship], 'burrow'):
+                game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude = game_obj.terrain[y_final, x_final, 1]
+            else:
+                game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude = game_obj.terrain[y_final, x_final, 2]
+        elif dest_altitude[0] <= current_altitude:
+            game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude = game_obj.terrain[y_final, x_final, 0]
+        else:
+            if hasattr(game_obj.fleet.ships[game_obj.fleet.flag_ship], 'burrow'):
+                game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude = game_obj.terrain[y_final, x_final, 1]
+            else:
+                game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude = game_obj.terrain[y_final, x_final, 0]
+        print(
+            'Move from {},{} to {},{} at speed:{}, altitude:{}, direction:{}'.format(
+                x0, y0, x_final, y_final, speed, game_obj.fleet.ships[game_obj.fleet.flag_ship].altitude, direction
+            )
+        )
+
+
+def get_ideal_dst_coordinate(game_obj, direction, speed):
     x, y = game_obj.coordinate[0], game_obj.coordinate[1]
     game_obj.map[y][x] = None
     dx, dy = int(direction.split(',')[0]), int(direction.split(',')[1])
     ds = max(1, round(sqrt(dx ** 2 + dy ** 2)))
     dx, dy = round(speed * dx / ds), round(speed * dy / ds)
-    x_final, y_final = min(max(0, x + dx), game_obj.map_width - 1), min(max(0, y + dy), game_obj.map_height - 1)
+    x_final = min(max(0, x + dx), game_obj.terrain.shape[1] - 1),
+    y_final = min(max(0, y + dy), game_obj.terrain.shape[0] - 1)
     return dx, dy, x, x_final, y, y_final
 
 
-def events_on_the_trail(game_obj, x0, y0, dx, dy, trigger_radius=2):
+def get_events_on_the_trail(game_obj, x0, y0, dx, dy, trigger_radius=2, target='event'):
     # todo: implement encounter logic
     events = []
-    for i in range(game_obj.map_height):
-        for j in range(game_obj.map_width):
+    for i in range(game_obj.terrain.shape[0]):
+        for j in range(game_obj.terrain.shape[1]):
             if dx != 0:
                 d = game_obj.p2l(x0, y0, dx, dy, i, j)
             else:
                 d = abs(j - x0)
             if d < trigger_radius:
-                if game_obj.map[i][j] is not None:
-                    event = game_obj.map[i][j]
-                    location = [j, i]
-                    events.append([event, location])
+                location = [j, i]
+                event_distance = sqrt((location[0] - x0) ** 2 + (location[1] - y0) ** 2)
+                event_direction = [(location[0] - x0), (location[1] - y0)]
+                moving_direction = [dx, dy]
+                same_direction = [moving_direction[i] * event_direction[i] for i in range(2)]
+                same_direction = [factor for factor in same_direction if factor >= 0]
+                if event_distance <= sqrt(dx ** 2 + dy ** 2) and len(same_direction) == 2:
+                    if target == 'event':
+                        if game_obj.map[i][j] is not None:
+                            event = game_obj.map[i][j]
+                            events.append([event, location])
+                    elif target == 'terrain':
+                        events.append([np.copy(game_obj.terrain[i, j, :]), location])
     return events
+
+
+def sort_events_on_the_trail(events, x0, y0):
+    def calc_dist(loc, x, y):
+        x_loc, y_loc = loc[0], loc[1]
+        return sqrt((y_loc - y) ** 2 + (x_loc - x) ** 2)
+
+    new_events = []
+    dist = [calc_dist(events[i][-1], x0, y0) for i in range(len(events))]
+    locations = {}
+    [locations.__setitem__(i, dist[i]) for i in range(len(events))]
+    locations = sorted(locations.items(), key=lambda d: d[1])
+    for location in locations:
+        event = events[location[0]]
+        new_events.append(event)
+    return new_events
+
+
+def get_reachable_dst_coordinate(terrains, x_final, y_final, altitude, climbing):
+    for i in range(len(terrains)):
+        if altitude >= terrains[i][0][2]:
+            floor_start = terrains[i][0][2]
+        elif altitude >= terrains[i][0][1]:
+            x_final, y_final = terrains[i][1][0], terrains[i][1][1]
+            break
+        elif altitude >= terrains[i][0][0]:
+            floor_start = terrains[i][0][0]
+        else:
+            x_final, y_final = terrains[i][1][0], terrains[i][1][1]
+            break
+        if i + 1 < len(terrains):
+            layer = 0
+            if terrains[i + 1][0][1] <= floor_start:
+                layer = 2
+            floor_end = terrains[i + 1][0][layer]
+            h_diff = floor_end - floor_start
+            if h_diff > climbing:
+                if i + 3 < len(terrains):
+                    e1 = terrains[i + 1][0][layer]
+                    e2 = terrains[i + 2][0][layer]
+                    e3 = terrains[i + 3][0][layer]
+                    if e2 - floor_start <= climbing:
+                        terrains[i + 1][0][layer] = e2
+                        terrains[i + 2][0][layer] = e1
+                    elif e3 - floor_start <= climbing:
+                        terrains[i + 1][0][layer] = e3
+                        terrains[i + 3][0][layer] = e1
+                    else:
+                        x_final, y_final = terrains[i][1][0], terrains[i][1][1]
+                        break
+                elif i + 2 < len(terrains):
+                    e1 = terrains[i + 1][0]
+                    e2 = terrains[i + 2][0]
+                    if e2 - floor_start <= climbing:
+                        terrains[i + 1][0] = e2
+                        terrains[i + 2][0] = e1
+                    else:
+                        x_final, y_final = terrains[i][1][0], terrains[i][1][1]
+                        break
+                else:
+                    x_final, y_final = terrains[i][1][0], terrains[i][1][1]
+                    break
+            else:
+                continue
+        else:
+            x_final, y_final = terrains[i][1][0], terrains[i][1][1]
+    return x_final, y_final
+
+
+def play_events_on_the_trail(
+        events, filter_event, game_obj, game_over, specified_player_fleet, x, x_final, y,
+        y_final
+):
+    while len(events) > 0:
+        event = events.pop(0)
+        if filter_event is not None:
+            if filter_event(event):
+                pass
+            else:
+                continue
+        location = event[-1]
+        print('Something happened on the route to destination!')
+        # noinspection PyTypeChecker
+        event_func: Event = event[0]
+        game_obj.random_event(event=event_func, specified_player_fleet=specified_player_fleet)
+        if event_func.end:
+            game_obj.map[location[1]][location[0]] = None
+        else:
+            x_final, y_final = get_evaded_location(game_obj, location, near_point=game_obj.coordinate)
+            if x_final < 0 or y_final < 0:
+                x_final, y_final = x, y
+                print('The fleet was blocked by other events!')
+            break
+        if game_obj.is_game_over():
+            game_over = True
+            break
+    return game_over, x_final, y_final
 
 
 def get_evaded_location(game_obj, center, near_point=None):
@@ -89,45 +246,6 @@ def get_evaded_location(game_obj, center, near_point=None):
     return x_final, y_final
 
 
-def move_on_map(game_obj, direction, speed, move_go=True, filter_event=None, specified_player_fleet=None):
-    global clear
-    dx, dy, x, x_final, y, y_final = get_dst_coordinate(game_obj, direction, speed)
-    events = events_on_the_trail(game_obj, x, y, dx, dy)
-    moving_direction = [dx, dy]
-    while len(events) > 0:
-        event = events.pop(0)
-        if filter_event is not None:
-            if filter_event(event):
-                pass
-            else:
-                continue
-        location = event[1]
-        event_distance = sqrt((location[0] - x) ** 2 + (location[1] - y) ** 2)
-        event_direction = [(location[0] - x), (location[1] - y)]
-        same_direction = [moving_direction[i] * event_direction[i] for i in range(2)]
-        same_direction = [factor for factor in same_direction if factor >= 0]
-        if event_distance <= speed and len(same_direction) == 2:
-            print('Something happened on the route to destination!')
-            # noinspection PyTypeChecker
-            event_func: Event = event[0]
-            game_obj.random_event(event=event_func, specified_player_fleet=specified_player_fleet)
-            if event_func.end:
-                game_obj.map[location[1]][location[0]] = None
-            else:
-                x_final, y_final = get_evaded_location(game_obj, location, near_point=game_obj.coordinate)
-                if x_final < 0 or y_final < 0:
-                    x_final, y_final = x, y
-                    print('The fleet was blocked by other events!')
-                break
-            if game_obj.is_game_over():
-                return
-    if move_go:
-        game_obj.coordinate = [x_final, y_final]
-        # noinspection PyTypeChecker
-        game_obj.map[game_obj.coordinate[1]][game_obj.coordinate[0]] = game_obj
-        print('Move from {},{} to {},{} at speed:{}, direction:{}'.format(x, y, x_final, y_final, speed, direction))
-
-
 class Game:
     fleet = None
     score = None
@@ -137,14 +255,12 @@ class Game:
     battles = None
     map = None
     coordinate = None
-    map_width = 512
-    map_height = 512
     events_pool = None
     new_event_countdown = None
     new_event_period = None
+    terrain = None
 
     def __init__(self):
-        # self.events_pool = events_pool_default
         self.reset_attributes()
 
     def reset_attributes(self):
@@ -155,13 +271,25 @@ class Game:
         self.flags = []
         self.killed = 0
         self.battles = 0
+        self.load_terrain_map()
+        self.init_event_map()
+
+    def load_terrain_map(self):
+        # todo: implement loading terrain
+        # for debug
+        terrain = compose_map()
+        self.terrain = terrain.astype(np.int16)
+
+    def init_event_map(self):
+        w = self.terrain.shape[1]
+        h = self.terrain.shape[0]
         self.map = []
         row = []
-        for _ in range(Game.map_width):
+        for _ in range(w):
             row.append(None)
-        for _ in range(Game.map_height):
+        for _ in range(h):
             self.map.append(row.copy())
-        self.coordinate = [int(0.5 * Game.map_width), int(0.5 * Game.map_height)]
+        self.coordinate = [int(0.5 * w), int(0.5 * h)]
         self.new_event_period = default_new_event_period
         self.new_event_countdown = len(self.new_event_period)
 
@@ -195,6 +323,8 @@ class Game:
         self.fleet = Fleet()
         self.fleet = a_ship_joins(self.fleet, show=True)
         self.fleet.flag_ship = list(self.fleet.ships.keys())[0]
+        x, y = self.coordinate[0], self.coordinate[1]
+        self.fleet.ships[self.fleet.flag_ship].altitude = self.terrain[y, x, -1]
 
     def load(self):
         if os.path.exists('save.pkl'):
@@ -234,7 +364,9 @@ class Game:
             cmd = ''
             while cmd not in ['1', '4', '5']:
                 clear = clear_screen(clear)
-                self.show_map()
+                self.show_event_map()
+                print('======================================')
+                self.show_terrain_map()
                 cmd = input('1.Hold Position\t2.Manage Fleet\t3.Move\t4.Save & Exit\t5.Exit\n')
                 if cmd == '2':
                     # todo: extend fleet management
@@ -312,12 +444,12 @@ class Game:
                 self.map[y_loc][x_loc] = event()
             surround_locations.remove(location)
 
-    def show_map(self):
+    def show_event_map(self):
         x, y = self.coordinate[0], self.coordinate[1]
         window_size_w = 15
         window_size_h = 10
-        digit_w = len(str(self.map_width))
-        digit_h = len(str(self.map_height))
+        digit_w = len(str(self.terrain.shape[1]))
+        digit_h = len(str(self.terrain.shape[0]))
         print(r'Y\X', end='  ')
         for j in range(max(0, x - window_size_w), min(len(self.map[0]), x + window_size_w + 1)):
             j_str = str(j)
@@ -351,6 +483,41 @@ class Game:
                 while len(temp_str) < digit_w:
                     temp_str += loc_str
                 print(temp_str, end='  ')
+            print()
+
+    def show_terrain_map(self):
+        x, y = self.coordinate[0], self.coordinate[1]
+        window_size_w = 5
+        window_size_h = 10
+        digit_w = len(str(self.terrain.shape[1]))
+        digit_h = len(str(self.terrain.shape[0]))
+        label = r'Y\X'
+        while len(label) < digit_h:
+            label = ' ' + label
+        print(label, end='  ')
+        for j in range(max(0, x - window_size_w), min(len(self.map[0]), x + window_size_w + 1)):
+            j_str = str(j)
+            while len(j_str) < max(digit_w, 11):
+                j_str = '0' + j_str
+            print(j_str, end='  ')
+        print()
+        for i in range(max(0, y - window_size_h), min(len(self.map), y + window_size_h + 1)):
+            i_str = str(i)
+            while len(i_str) < max(digit_h, len(label)):
+                i_str = '0' + i_str
+            print(i_str, end='  ')
+            for j in range(max(0, x - window_size_w), min(len(self.map[i]), x + window_size_w + 1)):
+                x, y = self.coordinate[0], self.coordinate[1]
+                if x == j and y == i:
+                    print('@@@/@@@/@@@', end='  ')
+                else:
+                    terrain = self.terrain[i, j, :]
+                    temp_str = [terrain[0], terrain[1], terrain[2]]
+                    temp_str = [str(element) for element in temp_str]
+                    for k in range(3):
+                        while len(list(temp_str[k])) < 3:
+                            temp_str[k] = '0' + temp_str[k]
+                    print('/'.join(temp_str), end='  ')
             print()
 
     def in_detect_range(self, distance):
