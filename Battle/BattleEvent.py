@@ -5,8 +5,6 @@ from Battle.BattleOverride import override_control, override_orders, override_in
 from Battle.BattlePlan import plan_actions_player, plan_actions, clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
-from Classes.Ship import Ship
-from Classes.Vehicles import Combine
 from Utils import generate_fleet
 
 clear = True
@@ -264,12 +262,15 @@ def remove_destroyed(fleet: Fleet):
 
 
 if __name__ == '__main__':
-    fa = generate_fleet(1, 1)
-    ship_a = Ship.spawn(init_weapon=False)
-    ship_a.install_weapon(Combine())
-    fa.join(ship_a)
-    ship_b = Ship.spawn(init_weapon=False)
-    ship_b.install_weapon(Combine())
-    fa.join(ship_b)
-    fb = generate_fleet(1, 1)
-    fa = battle_event(fa, fb)
+    # from Classes.Ship import Ship
+    # from Classes.Vehicles import Combine
+    # fa = generate_fleet(1, 1)
+    # ship_a = Ship.spawn(init_weapon=False)
+    # ship_a.install_weapon(Combine())
+    # fa.join(ship_a)
+    # ship_b = Ship.spawn(init_weapon=False)
+    # ship_b.install_weapon(Combine())
+    # fa.join(ship_b)
+    # fb = generate_fleet(1, 1)
+    # fa = battle_event(fa, fb)
+    print('Done')

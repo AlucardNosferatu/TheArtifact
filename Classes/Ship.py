@@ -3,7 +3,7 @@ import uuid
 
 from Battle.BattleOverride import OverrideActions
 from Buffs.NegativeBuff import Stall
-from Classes.Altitude import default_altitude, fixed_altitude
+from Classes.Altitude import default_altitude
 from Classes.Weapon import Weapon
 
 
@@ -39,7 +39,7 @@ class Ship:
         self.uid = str(uuid.uuid4())
         self.hit_points = self.max_hit_points
         self.weapons: list[Weapon] = []
-        self.speed = 0
+        self.speed = 1
         self.altitude = local_altitude['terrain']
         if name is None:
             name = random.choice(list(Ship.names.keys()))
@@ -151,7 +151,7 @@ class Ship:
         if init_weapon:
             ship.install_weapon(Weapon(p=wp, t=wt))
         ship.change_speed(amount=max(1, int(0.5 * ship.max_speed)))
-        ship.altitude = (fixed_altitude['atmosphere'] + default_altitude['terrain']) / 2
+        # ship.altitude = (fixed_altitude['atmosphere'] + default_altitude['terrain']) / 2
         return ship
 
     def show_ship(self):
