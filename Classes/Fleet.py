@@ -15,6 +15,8 @@ class Fleet:
 
     def join(self, ship):
         self.ships.__setitem__(ship.uid, ship)
+        if len(list(self.ships.keys())) == 1:
+            self.flag_ship = ship.uid
 
     def leave(self, ship_uid):
         if ship_uid in self.ships.keys() and ship_uid != self.flag_ship:

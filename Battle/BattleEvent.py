@@ -6,8 +6,8 @@ from Battle.BattlePlan import plan_actions_player, plan_actions, clear_screen
 from Classes.Event import Event
 from Classes.Fleet import Fleet
 from Classes.Ship import Ship
+from Classes.Vehicles import Combine
 from Utils import generate_fleet
-from Weapons.Melee import Boarding, Salvage
 
 clear = True
 
@@ -264,20 +264,12 @@ def remove_destroyed(fleet: Fleet):
 
 
 if __name__ == '__main__':
-    fa = generate_fleet(2, 2)
-
-    acting_ship_: Ship = [fa.ships[ship_uid] for ship_uid in fa.ships.keys() if ship_uid != fa.flag_ship][0]
-    acting_ship_.fire_control_system = 100
-    acting_ship_.maneuver = 100
-    acting_ship_.change_speed(amount=7, allow_exceed=True)
-    acting_ship_.install_weapon(Boarding(acting_ship=acting_ship_))
-
-    acting_ship_ = fa.ships[fa.flag_ship]
-    acting_ship_.fire_control_system = 100
-    acting_ship_.maneuver = 100
-    acting_ship_.change_speed(amount=7, allow_exceed=True)
-    acting_ship_.install_weapon(Salvage(acting_ship=acting_ship_))
-
-    fb = generate_fleet(2, 2)
-    fb.ships[fb.flag_ship].fire_control_system = 1000
+    fa = generate_fleet(1, 1)
+    ship_a = Ship.spawn(init_weapon=False)
+    ship_a.install_weapon(Combine())
+    fa.join(ship_a)
+    ship_b = Ship.spawn(init_weapon=False)
+    ship_b.install_weapon(Combine())
+    fa.join(ship_b)
+    fb = generate_fleet(1, 1)
     fa = battle_event(fa, fb)
