@@ -1,12 +1,13 @@
 import threading
 
+import pygame
+
 from Engine.Controller import EventController
 from Engine.Renderer import Renderer
 
 
 class Core:
-    def __init__(self, pygame, game_obj, screen_size=(1280, 720), fps=30, max_queue_size=1024, recent_amount=10):
-        self.pygame = pygame
+    def __init__(self, game_obj, screen_size=(1280, 720), fps=30, max_queue_size=1024, recent_amount=10):
         self.fps = fps
         self.screen_size = screen_size
         self.max_queue_size = max_queue_size
@@ -15,15 +16,15 @@ class Core:
         self.clock = pygame.time.Clock()
         self.params = {}  # 游戏机制的全局参数字典
         self.event_controller = None
-        self.renderer = Renderer(self.screen_size, self.pygame)  # 渲染器实例
-        self.event_controller = EventController(self.max_queue_size, self.pygame)
+        self.renderer = Renderer(self.screen_size)  # 渲染器实例
+        self.event_controller = EventController(self.max_queue_size)
         self.game_obj = game_obj
         self.game_obj.engine_ptr = self
         self.routine = []
         self.recent_input = []
 
     def engine_run(self):
-        self.pygame.init()
+        pygame.init()
         try:
             while True:
                 self.event_controller.handle_events()
@@ -32,12 +33,12 @@ class Core:
                 self.renderer.render_frame()
                 for event in self.recent_input:
                     e = event[0]
-                    if e.type == self.pygame.QUIT:
+                    if e.type == pygame.QUIT:
                         return
                 # 维持tick频率为30Hz
                 self.clock.tick(self.fps)
         finally:
-            self.pygame.quit()
+            pygame.quit()
 
     def execute_game(self):
         for routine_func in self.routine:

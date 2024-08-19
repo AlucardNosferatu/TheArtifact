@@ -1,9 +1,10 @@
 import time
 
+import pygame
+
 
 class EventController:
-    def __init__(self, max_queue_size, pygame):
-        self.pygame = pygame
+    def __init__(self, max_queue_size):
         self.max_queue_size = max_queue_size
         self.running = True
         self.event_queue = []
@@ -12,7 +13,7 @@ class EventController:
         # 获取当前时间戳
         timestamp = time.time()
         # 获取事件
-        event = self.pygame.event.poll()
+        event = pygame.event.poll()
         # 添加事件到队列
         print(event)
         # 将新事件和时间戳加入队列
