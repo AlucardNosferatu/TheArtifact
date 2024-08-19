@@ -15,7 +15,6 @@ class EventController:
         # 获取事件
         event = pygame.event.poll()
         # 添加事件到队列
-        print(event)
         # 将新事件和时间戳加入队列
         self.event_queue.append((event, timestamp))
         # 如果队列已满，丢弃队首的事件

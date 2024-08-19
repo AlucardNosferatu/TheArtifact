@@ -19,3 +19,9 @@ class Sprite:
         self.visible = True
         self.rotation = 0.0
         self.surface = pygame.image.load(self.image_path)
+
+    def render(self):
+        return self.surface, (self.x, self.y), self.visible, self.rotation, (self.scale_x, self.scale_y), [
+            self.flip_x,
+            self.flip_y
+        ]

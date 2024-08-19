@@ -42,7 +42,7 @@ class Core:
 
     def execute_game(self):
         for routine_func in self.routine:
-            spr_key, spr = routine_func(self.params, self.recent_input)
+            spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
             if spr_key is not None:
                 self.renderer.draw_dict[spr_key] = spr
 
