@@ -18,10 +18,11 @@ class Core:
         self.event_controller = None
         self.renderer = Renderer(self.screen_size)  # 渲染器实例
         self.event_controller = EventController(self.max_queue_size)
-        self.game_obj = game_obj
-        self.game_obj.engine_ptr = self
-        self.routine = []
+        self.world_routine = []
+        self.ui_routine = []
         self.recent_input = []
+        self.game_obj = game_obj
+        self.game_obj.load_engine(engine_ptr=self)
 
     def engine_run(self):
         pygame.init()
@@ -41,10 +42,14 @@ class Core:
             pygame.quit()
 
     def execute_game(self):
-        for routine_func in self.routine:
+        for routine_func in self.world_routine:
             spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
             if spr_key is not None:
-                self.renderer.draw_dict[spr_key] = spr
+                self.renderer.world_draw[spr_key] = spr
+        for routine_func in self.ui_routine:
+            spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
+            if spr_key is not None:
+                self.renderer.ui_draw[spr_key] = spr
 
     def get_recent_input(self):
         self.recent_input.clear()
