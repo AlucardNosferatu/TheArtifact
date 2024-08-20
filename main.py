@@ -1,8 +1,10 @@
+from math import sqrt
+
 import pygame
 
 from Engine.Core import Core
 from Mechanism.Game import Game
-from Mechanism.Graphic import Button, Camera, EntitySprite, KeyboardButton
+from Mechanism.UI import Button, Camera, EntitySprite, KeyboardButton, Mouse
 
 if __name__ == '__main__':
     game = Game()
@@ -19,50 +21,76 @@ if __name__ == '__main__':
 
 
     def btn_up(params, recent_input):
+        _, _ = params, recent_input
         print('up')
         cam.world_y -= 16
         return None, None
 
 
     def btn_down(params, recent_input):
+        _, _ = params, recent_input
         print('down')
         cam.world_y += 16
         return None, None
 
 
     def btn_left(params, recent_input):
+        _, _ = params, recent_input
         print('left')
         cam.world_x -= 16
         return None, None
 
 
     def btn_right(params, recent_input):
+        _, _ = params, recent_input
         print('right')
         cam.world_x += 16
         return None, None
 
 
     def btn_jet_up(params, recent_input):
+        _, _ = params, recent_input
         print('jet_up')
         jet.world_y -= 16
         return None, None
 
 
     def btn_jet_down(params, recent_input):
+        _, _ = params, recent_input
         print('jet_down')
         jet.world_y += 16
         return None, None
 
 
     def btn_jet_left(params, recent_input):
+        _, _ = params, recent_input
         print('jet_left')
         jet.world_x -= 16
         return None, None
 
 
     def btn_jet_right(params, recent_input):
+        _, _ = params, recent_input
         print('jet_right')
         jet.world_x += 16
+        return None, None
+
+
+    def mouse_click(params, recent_input):
+        _, _ = params, recent_input
+        (mx, my) = pygame.mouse.get_pos()
+        m_w_x = mx - round(cam.w / 2) + cam.world_x
+        m_w_y = my - round(cam.h / 2) + cam.world_y
+        d_w_x = m_w_x - jet.world_x
+        d_w_y = m_w_y - jet.world_y
+        dist = sqrt((d_w_x ** 2) + (d_w_y ** 2))
+        spd = 16
+        err = 2 * spd
+        if dist > err:
+            s_w_x = round(spd * d_w_x / dist)
+            s_w_y = round(spd * d_w_y / dist)
+            jet.world_x += s_w_x
+            jet.world_y += s_w_y
         return None, None
 
 
@@ -95,6 +123,8 @@ if __name__ == '__main__':
     arrow_left = KeyboardButton(name='arrow_left', game=game, trigger_key=pygame.K_LEFT)
     arrow_right = KeyboardButton(name='arrow_right', game=game, trigger_key=pygame.K_RIGHT)
 
+    mouse_cursor = Mouse(name='mouse_cursor', game=game, trigger_key=1)
+
     up.reg_callback(callback=btn_up)
     down.reg_callback(callback=btn_down)
     left.reg_callback(callback=btn_left)
@@ -114,5 +144,7 @@ if __name__ == '__main__':
     arrow_down.reg_callback(callback=btn_jet_down)
     arrow_left.reg_callback(callback=btn_jet_left)
     arrow_right.reg_callback(callback=btn_jet_right)
+
+    mouse_cursor.reg_callback(callback=mouse_click)
 
     core.engine_run()

@@ -7,7 +7,7 @@ from Engine.Renderer import Renderer
 
 
 class Core:
-    def __init__(self, game_obj, screen_size=(1280, 720), fps=30, max_queue_size=1024, recent_amount=10):
+    def __init__(self, game_obj, screen_size=(1280, 720), fps=60, max_queue_size=256, recent_amount=16):
         self.fps = fps
         self.screen_size = screen_size
         self.max_queue_size = max_queue_size
@@ -27,10 +27,10 @@ class Core:
     def engine_run(self):
         pygame.init()
         try:
+            self.game_obj.ignite()
             while True:
                 self.event_controller.handle_events()
                 self.get_recent_input()
-                self.execute_game()
                 self.renderer.render_frame()
                 for event in self.recent_input:
                     e = event[0]
@@ -40,16 +40,6 @@ class Core:
                 self.clock.tick(self.fps)
         finally:
             pygame.quit()
-
-    def execute_game(self):
-        for routine_func in self.world_routine:
-            spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
-            if spr_key is not None:
-                self.renderer.world_draw[spr_key] = spr
-        for routine_func in self.ui_routine:
-            spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
-            if spr_key is not None:
-                self.renderer.ui_draw[spr_key] = spr
 
     def get_recent_input(self):
         self.recent_input.clear()

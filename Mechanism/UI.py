@@ -5,6 +5,8 @@ from pygame import MOUSEBUTTONDOWN, Surface, MOUSEBUTTONUP, KEYDOWN, KEYUP
 
 from Mechanism.Game import Game
 
+buttons = []
+
 
 class Camera:
     def __init__(self, screen: Surface):
@@ -36,9 +38,10 @@ class Sprite:
         self.rotation = 0.0
         self.surface = pygame.image.load(self.image_path).convert_alpha()
         self.game = game
-        self.game.load_routine(func=self.render_routine, r_type='w')
+        self.game.append_routine(func=self.render_routine, r_type='w')
 
     def render_routine(self, params, recent_input):
+        _, _ = params, recent_input
         return self.render()
 
     def render(self):
@@ -85,22 +88,31 @@ class Button(Sprite):
     def __init__(self, name, image_path, x, y, game: Game):
         super().__init__(name=name, image_path=image_path, x=x, y=y, game=game)
         self.callback = None
+        self.reg_button()
         self.game.remove_routine(func=self.render_routine)
-        self.game.load_routine(func=self.check_click, r_type='u')
+        self.game.append_routine(func=self.check_click, r_type='u')
 
-    def check_click(self, params, recent_input):
+    def reg_button(self):
+        buttons.append(self)
+
+    def in_button(self):
         border = 0
         hh = self.surface.get_height() / 2
         hw = self.surface.get_width() / 2
+        (mx, my) = pygame.mouse.get_pos()
+        x_in_btn = (self.x - hw) + border < mx < (self.x + hw) - border
+        y_in_btn = (self.y - hh) + border < my < (self.y + hh) - border
+        return x_in_btn and y_in_btn
+
+    def check_click(self, params, recent_input):
         for event in recent_input:
             e = event[0]
             timestamp = event[1]
+            _ = timestamp
             if e.type == MOUSEBUTTONDOWN and e.button == 1:
-                (mx, my) = pygame.mouse.get_pos()
-                if (self.x - hw) + border < mx < (self.x + hw) - border and (self.y - hh) + border < my < (
-                        self.y + hh) - border:
+                if self.in_button():
                     if self.callback is not None:
-                        self.game.load_routine(func=self.callback, r_type='u')
+                        self.game.append_routine(func=self.callback, r_type='u')
             if e.type == MOUSEBUTTONUP and e.button == 1:
                 if self.callback is not None:
                     self.game.remove_routine(func=self.callback, r_type='u')
@@ -115,14 +127,46 @@ class KeyboardButton(Button):
         super().__init__(name, 'Assets/btn.png', 0, 0, game)
         self.trigger_key = trigger_key
 
+    def reg_button(self):
+        pass
+
+    def in_button(self):
+        return False
+
     def check_click(self, params, recent_input):
         for event in recent_input:
             e = event[0]
             timestamp = event[1]
+            _ = timestamp
             if e.type == KEYDOWN and e.key == self.trigger_key:
                 if self.callback is not None:
-                    self.game.load_routine(func=self.callback, r_type='u')
+                    self.game.append_routine(func=self.callback, r_type='u')
             if e.type == KEYUP and e.key == self.trigger_key:
+                if self.callback is not None:
+                    self.game.remove_routine(func=self.callback, r_type='u')
+        return None, None
+
+
+class Mouse(KeyboardButton):
+    def __init__(self, name, game: Game, trigger_key):
+        super().__init__(name, game, trigger_key)
+
+    def in_button(self):
+        for button in buttons:
+            if button.in_button():
+                return False
+        return True
+
+    def check_click(self, params, recent_input):
+        for event in recent_input:
+            e = event[0]
+            timestamp = event[1]
+            _ = timestamp
+            if e.type == MOUSEBUTTONDOWN and e.button == self.trigger_key:
+                if self.in_button():
+                    if self.callback is not None:
+                        self.game.append_routine(func=self.callback, r_type='u')
+            if e.type == MOUSEBUTTONUP and e.button == self.trigger_key:
                 if self.callback is not None:
                     self.game.remove_routine(func=self.callback, r_type='u')
         return None, None
