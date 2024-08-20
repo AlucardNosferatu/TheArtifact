@@ -3,8 +3,8 @@ from math import sqrt
 import pygame
 
 from Engine.Core import Core
-from Mechanism.Game import Game
-from Mechanism.UI import Button, Camera, EntitySprite, KeyboardButton, Mouse
+from Engine.Game import Game
+from Engine.UI import Button, Camera, EntitySprite, KeyboardButton, Mouse
 
 if __name__ == '__main__':
     game = Game()
@@ -13,11 +13,11 @@ if __name__ == '__main__':
     cam = Camera(screen=core.renderer.screen)
     cam.world_x = 960
     cam.world_y = 540
-    city = EntitySprite(name='city', image_path='Assets/city.png', cam=cam, world_x=960, world_y=540, game=game)
+    city = EntitySprite(name='city', image_path='../Assets/city.png', cam=cam, world_x=960, world_y=540, game=game)
     city.scale_x = 200.0
     city.scale_y = 200.0
     city.check_visibility = False
-    jet = EntitySprite(name='jet', image_path='Assets/F-5E.png', cam=cam, world_x=960, world_y=540, game=game)
+    jet = EntitySprite(name='jet', image_path='../Assets/F-5E.png', cam=cam, world_x=960, world_y=540, game=game)
 
 
     def btn_up(params, recent_input):
@@ -76,15 +76,15 @@ if __name__ == '__main__':
         return None, None
 
 
-    up = Button(name='up', image_path='Assets/btn.png', x=640, y=8, game=game)
-    down = Button(name='down', image_path='Assets/btn.png', x=640, y=712, game=game)
-    left = Button(name='left', image_path='Assets/btn.png', x=8, y=360, game=game)
-    right = Button(name='right', image_path='Assets/btn.png', x=1272, y=360, game=game)
+    up = Button(name='up', image_path='../Assets/btn.png', x=640, y=8, game=game)
+    down = Button(name='down', image_path='../Assets/btn.png', x=640, y=712, game=game)
+    left = Button(name='left', image_path='../Assets/btn.png', x=8, y=360, game=game)
+    right = Button(name='right', image_path='../Assets/btn.png', x=1272, y=360, game=game)
 
-    jet_up = Button(name='jet_up', image_path='Assets/btn.png', x=1212, y=612, game=game)
-    jet_down = Button(name='jet_down', image_path='Assets/btn.png', x=1212, y=692, game=game)
-    jet_left = Button(name='jet_left', image_path='Assets/btn.png', x=1172, y=652, game=game)
-    jet_right = Button(name='jet_right', image_path='Assets/btn.png', x=1252, y=652, game=game)
+    jet_up = Button(name='jet_up', image_path='../Assets/btn.png', x=1212, y=612, game=game)
+    jet_down = Button(name='jet_down', image_path='../Assets/btn.png', x=1212, y=692, game=game)
+    jet_left = Button(name='jet_left', image_path='../Assets/btn.png', x=1172, y=652, game=game)
+    jet_right = Button(name='jet_right', image_path='../Assets/btn.png', x=1252, y=652, game=game)
 
     jet_up.scale_x = 50.0
     jet_up.scale_y = 50.0

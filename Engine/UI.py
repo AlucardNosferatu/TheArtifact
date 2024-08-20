@@ -3,7 +3,7 @@ import pygame
 import pygame.mouse
 from pygame import MOUSEBUTTONDOWN, Surface, MOUSEBUTTONUP, KEYDOWN, KEYUP
 
-from Mechanism.Game import Game
+from Engine.Game import Game
 
 buttons = []
 
