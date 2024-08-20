@@ -1,7 +1,7 @@
 # (surface, (pos_x, pos_y), active, ang, (mag_x, mag_y), flip)
 import pygame
 import pygame.mouse
-from pygame import MOUSEBUTTONDOWN, Surface
+from pygame import MOUSEBUTTONDOWN, Surface, MOUSEBUTTONUP, KEYDOWN, KEYUP
 
 from Mechanism.Game import Game
 
@@ -34,7 +34,7 @@ class Sprite:
         self.scale_y = 100.0
         self.visible = True
         self.rotation = 0.0
-        self.surface = pygame.image.load(self.image_path)
+        self.surface = pygame.image.load(self.image_path).convert_alpha()
         self.game = game
         self.game.load_routine(func=self.render_routine, r_type='w')
 
@@ -62,12 +62,16 @@ class EntitySprite(Sprite):
         self.world_x = world_x
         self.world_y = world_y
         super().__init__(name=name, image_path=image_path, x=0, y=0, game=game)
+        self.check_visibility = True
         self.update()
 
     def update(self):
         self.x = self.world_x - self.cam.world_x + round(self.cam.w / 2)
         self.y = self.world_y - self.cam.world_y + round(self.cam.h / 2)
-        self.visible = self.in_sight()
+        if self.check_visibility:
+            self.visible = self.in_sight()
+        else:
+            self.visible = True
 
     def in_sight(self):
         return 0 < self.x < self.cam.w and 0 < self.y < self.cam.h
@@ -96,8 +100,29 @@ class Button(Sprite):
                 if (self.x - hw) + border < mx < (self.x + hw) - border and (self.y - hh) + border < my < (
                         self.y + hh) - border:
                     if self.callback is not None:
-                        self.game.load_routine(func=self.callback)
+                        self.game.load_routine(func=self.callback, r_type='u')
+            if e.type == MOUSEBUTTONUP and e.button == 1:
+                if self.callback is not None:
+                    self.game.remove_routine(func=self.callback, r_type='u')
         return self.render()
 
     def reg_callback(self, callback):
         self.callback = callback
+
+
+class KeyboardButton(Button):
+    def __init__(self, name, game: Game, trigger_key):
+        super().__init__(name, 'Assets/btn.png', 0, 0, game)
+        self.trigger_key = trigger_key
+
+    def check_click(self, params, recent_input):
+        for event in recent_input:
+            e = event[0]
+            timestamp = event[1]
+            if e.type == KEYDOWN and e.key == self.trigger_key:
+                if self.callback is not None:
+                    self.game.load_routine(func=self.callback, r_type='u')
+            if e.type == KEYUP and e.key == self.trigger_key:
+                if self.callback is not None:
+                    self.game.remove_routine(func=self.callback, r_type='u')
+        return None, None
