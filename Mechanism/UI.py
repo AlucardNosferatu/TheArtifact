@@ -148,8 +148,9 @@ class KeyboardButton(Button):
 
 
 class Mouse(KeyboardButton):
-    def __init__(self, name, game: Game, trigger_key):
+    def __init__(self, name, game: Game, trigger_key, r_type='u'):
         super().__init__(name, game, trigger_key)
+        self.r_type = r_type
 
     def in_button(self):
         for button in buttons:
@@ -165,8 +166,8 @@ class Mouse(KeyboardButton):
             if e.type == MOUSEBUTTONDOWN and e.button == self.trigger_key:
                 if self.in_button():
                     if self.callback is not None:
-                        self.game.append_routine(func=self.callback, r_type='u')
+                        self.game.append_routine(func=self.callback, r_type=self.r_type)
             if e.type == MOUSEBUTTONUP and e.button == self.trigger_key:
                 if self.callback is not None:
-                    self.game.remove_routine(func=self.callback, r_type='u')
+                    self.game.remove_routine(func=self.callback, r_type=self.r_type)
         return None, None
