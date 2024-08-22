@@ -15,25 +15,25 @@ if __name__ == '__main__':
 
     def cam_u(params, recent_input):
         _, _ = params, recent_input
-        world.camera.move(d_y=-16)
+        world.get_camera().move(d_y=-16)
         return None, None
 
 
     def cam_d(params, recent_input):
         _, _ = params, recent_input
-        world.camera.move(d_y=16)
+        world.get_camera().move(d_y=16)
         return None, None
 
 
     def cam_l(params, recent_input):
         _, _ = params, recent_input
-        world.camera.move(d_x=-16)
+        world.get_camera().move(d_x=-16)
         return None, None
 
 
     def cam_r(params, recent_input):
         _, _ = params, recent_input
-        world.camera.move(d_x=16)
+        world.get_camera().move(d_x=16)
         return None, None
 
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
     def jet_m(params, recent_input):
         _, _ = params, recent_input
-        m_w_x, m_w_y = world.camera.mouse_world_pos()
+        m_w_x, m_w_y = world.get_camera().mouse_world_pos()
         jet = world.get_entity(ent_id='1#jet')
         if jet is not None:
             d_w_x = m_w_x - jet.world_x
