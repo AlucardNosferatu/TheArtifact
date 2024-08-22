@@ -3,7 +3,7 @@ import pygame
 import pygame.mouse
 from pygame import MOUSEBUTTONDOWN, Surface, MOUSEBUTTONUP, KEYDOWN, KEYUP
 
-from Engine.Game import Game
+from Engine.Core import Core
 
 buttons = []
 
@@ -18,9 +18,23 @@ class Camera:
         self.w = screen.get_width()
         self.h = screen.get_height()
 
+    def focus(self, world_x, world_y):
+        self.world_x = world_x
+        self.world_y = world_y
+
+    def move(self, d_x=0, d_y=0):
+        self.world_x += d_x
+        self.world_y += d_y
+
+    def mouse_world_pos(self):
+        (mx, my) = pygame.mouse.get_pos()
+        m_w_x = mx - round(self.w / 2) + self.world_x
+        m_w_y = my - round(self.h / 2) + self.world_y
+        return m_w_x, m_w_y
+
 
 class Sprite:
-    def __init__(self, name, image_path, x, y, game: Game):
+    def __init__(self, name, image_path, x, y, core: Core):
         """
         初始化 Sprite 对象。
         :param x: Sprite 的 x 坐标，默认为 0。
@@ -37,8 +51,8 @@ class Sprite:
         self.visible = True
         self.rotation = 0.0
         self.surface = pygame.image.load(self.image_path).convert_alpha()
-        self.game = game
-        self.game.append_routine(func=self.render_routine, r_type='w')
+        self.core = core
+        self.core.append_routine(func=self.render_routine, r_type='w')
 
     def render_routine(self, params, recent_input):
         _, _ = params, recent_input
@@ -60,11 +74,11 @@ class Sprite:
 
 
 class EntitySprite(Sprite):
-    def __init__(self, name, image_path, cam: Camera, world_x, world_y, game):
+    def __init__(self, name, image_path, cam: Camera, world_x, world_y, core: Core):
         self.cam = cam
         self.world_x = world_x
         self.world_y = world_y
-        super().__init__(name=name, image_path=image_path, x=0, y=0, game=game)
+        super().__init__(name=name, image_path=image_path, x=0, y=0, core=core)
         self.check_visibility = True
         self.update()
 
@@ -85,12 +99,12 @@ class EntitySprite(Sprite):
 
 
 class Button(Sprite):
-    def __init__(self, name, image_path, x, y, game: Game):
-        super().__init__(name=name, image_path=image_path, x=x, y=y, game=game)
+    def __init__(self, name, image_path, x, y, core: Core):
+        super().__init__(name=name, image_path=image_path, x=x, y=y, core=core)
         self.callback = None
         self.reg_button()
-        self.game.remove_routine(func=self.render_routine)
-        self.game.append_routine(func=self.check_click, r_type='u')
+        self.core.remove_routine(func=self.render_routine)
+        self.core.append_routine(func=self.check_click, r_type='u')
 
     def reg_button(self):
         buttons.append(self)
@@ -112,10 +126,10 @@ class Button(Sprite):
             if e.type == MOUSEBUTTONDOWN and e.button == 1:
                 if self.in_button():
                     if self.callback is not None:
-                        self.game.append_routine(func=self.callback, r_type='u')
+                        self.core.append_routine(func=self.callback, r_type='u')
             if e.type == MOUSEBUTTONUP and e.button == 1:
                 if self.callback is not None:
-                    self.game.remove_routine(func=self.callback, r_type='u')
+                    self.core.remove_routine(func=self.callback, r_type='u')
         return self.render()
 
     def reg_callback(self, callback):
@@ -123,8 +137,8 @@ class Button(Sprite):
 
 
 class KeyboardButton(Button):
-    def __init__(self, name, game: Game, trigger_key):
-        super().__init__(name, 'Assets/btn.png', 0, 0, game)
+    def __init__(self, name, core: Core, trigger_key):
+        super().__init__(name=name, image_path='Assets/btn.png', x=0, y=0, core=core)
         self.trigger_key = trigger_key
 
     def reg_button(self):
@@ -140,16 +154,16 @@ class KeyboardButton(Button):
             _ = timestamp
             if e.type == KEYDOWN and e.key == self.trigger_key:
                 if self.callback is not None:
-                    self.game.append_routine(func=self.callback, r_type='u')
+                    self.core.append_routine(func=self.callback, r_type='u')
             if e.type == KEYUP and e.key == self.trigger_key:
                 if self.callback is not None:
-                    self.game.remove_routine(func=self.callback, r_type='u')
+                    self.core.remove_routine(func=self.callback, r_type='u')
         return None, None
 
 
 class Mouse(KeyboardButton):
-    def __init__(self, name, game: Game, trigger_key, r_type='u'):
-        super().__init__(name, game, trigger_key)
+    def __init__(self, name, core: Core, trigger_key, r_type='u'):
+        super().__init__(name=name, core=core, trigger_key=trigger_key)
         self.r_type = r_type
 
     def in_button(self):
@@ -166,8 +180,8 @@ class Mouse(KeyboardButton):
             if e.type == MOUSEBUTTONDOWN and e.button == self.trigger_key:
                 if self.in_button():
                     if self.callback is not None:
-                        self.game.append_routine(func=self.callback, r_type=self.r_type)
+                        self.core.append_routine(func=self.callback, r_type=self.r_type)
             if e.type == MOUSEBUTTONUP and e.button == self.trigger_key:
                 if self.callback is not None:
-                    self.game.remove_routine(func=self.callback, r_type=self.r_type)
+                    self.core.remove_routine(func=self.callback, r_type=self.r_type)
         return None, None

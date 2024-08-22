@@ -1,4 +1,5 @@
 import threading
+import time
 
 import pygame
 
@@ -7,7 +8,9 @@ from Engine.Renderer import Renderer
 
 
 class Core:
-    def __init__(self, game_obj, screen_size=(1280, 720), fps=60, max_queue_size=256, recent_amount=16):
+    eg_thread = None
+
+    def __init__(self, screen_size=(1280, 720), fps=60, max_queue_size=256, recent_amount=16):
         self.fps = fps
         self.screen_size = screen_size
         self.max_queue_size = max_queue_size
@@ -20,14 +23,49 @@ class Core:
         self.event_controller = EventController(self.max_queue_size)
         self.world_routine = []
         self.ui_routine = []
+        self.routines = {'w': self.world_routine, 'u': self.ui_routine}
         self.recent_input = []
-        self.game_obj = game_obj
-        self.game_obj.load_engine(engine_ptr=self)
+
+    def execute_game(self):
+        for routine_func in self.world_routine:
+            spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
+            if spr_key is not None:
+                self.renderer.world_draw[spr_key] = spr
+        for routine_func in self.ui_routine:
+            spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
+            if spr_key is not None:
+                self.renderer.ui_draw[spr_key] = spr
+        time.sleep(0.99 / self.fps)
+
+    def execute_game_loop(self):
+        while True:
+            self.execute_game()
+
+    def ignite(self):
+        self.eg_thread = threading.Thread(target=self.execute_game_loop)
+        self.eg_thread.start()
+
+    def append_routine(self, func, r_type='w', multi_inst=False):
+        if not self.has_routine(func=func, r_type=r_type) or multi_inst:
+            self.routines[r_type].append(func)
+
+    def insert_routine(self, func, r_type='w', multi_inst=False):
+        if not self.has_routine(func=func, r_type=r_type) or multi_inst:
+            self.routines[r_type].insert(0, func)
+
+    def has_routine(self, func, r_type='w'):
+        return func in self.routines[r_type]
+
+    def remove_routine(self, func, r_type='w', purge=True):
+        while self.has_routine(func=func, r_type=r_type):
+            self.routines[r_type].remove(func)
+            if not purge:
+                break
 
     def engine_run(self):
         pygame.init()
         try:
-            self.game_obj.ignite()
+            self.ignite()
             while True:
                 self.event_controller.handle_events()
                 self.get_recent_input()
