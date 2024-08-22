@@ -4,135 +4,123 @@ from math import sqrt
 import pygame
 
 from Engine.Core import Core
-from Engine.UI import Button, EntitySprite, KeyboardButton, Mouse
 from Mechanism.Game import World
 
 if __name__ == '__main__':
     core = Core()
 
     world = World(core=core, map_image='Assets/city.png')
-    jet = EntitySprite(name='jet', image_path='Assets/F-5E.png', cam=world.camera, world_x=960, world_y=540, core=core)
+    world.new_entity(ent_id='1#jet', image_path='Assets/F-5E.png', world_x=960, world_y=540)
 
 
-    def btn_up(params, recent_input):
+    def cam_u(params, recent_input):
         _, _ = params, recent_input
         world.camera.move(d_y=-16)
         return None, None
 
 
-    def btn_down(params, recent_input):
+    def cam_d(params, recent_input):
         _, _ = params, recent_input
         world.camera.move(d_y=16)
         return None, None
 
 
-    def btn_left(params, recent_input):
+    def cam_l(params, recent_input):
         _, _ = params, recent_input
         world.camera.move(d_x=-16)
         return None, None
 
 
-    def btn_right(params, recent_input):
+    def cam_r(params, recent_input):
         _, _ = params, recent_input
         world.camera.move(d_x=16)
         return None, None
 
 
-    def btn_jet_up(params, recent_input):
+    def jet_u(params, recent_input):
         _, _ = params, recent_input
-        jet.world_y -= 16
+        jet = world.get_entity(ent_id='1#jet')
+        if jet is not None:
+            jet.move(d_y=-16)
         return None, None
 
 
-    def btn_jet_down(params, recent_input):
+    def jet_d(params, recent_input):
         _, _ = params, recent_input
-        jet.world_y += 16
+        jet = world.get_entity(ent_id='1#jet')
+        if jet is not None:
+            jet.move(d_y=16)
         return None, None
 
 
-    def btn_jet_left(params, recent_input):
+    def jet_l(params, recent_input):
         _, _ = params, recent_input
-        jet.world_x -= 16
+        jet = world.get_entity(ent_id='1#jet')
+        if jet is not None:
+            jet.move(d_x=-16)
         return None, None
 
 
-    def btn_jet_right(params, recent_input):
+    def jet_r(params, recent_input):
         _, _ = params, recent_input
-        jet.world_x += 16
+        jet = world.get_entity(ent_id='1#jet')
+        if jet is not None:
+            jet.move(d_x=16)
         return None, None
 
 
-    up = Button(name='up', image_path='Assets/btn.png', x=640, y=8, core=core)
-    down = Button(name='down', image_path='Assets/btn.png', x=640, y=712, core=core)
-    left = Button(name='left', image_path='Assets/btn.png', x=8, y=360, core=core)
-    right = Button(name='right', image_path='Assets/btn.png', x=1272, y=360, core=core)
-
-    jet_up = Button(name='jet_up', image_path='Assets/btn.png', x=1212, y=612, core=core)
-    jet_down = Button(name='jet_down', image_path='Assets/btn.png', x=1212, y=692, core=core)
-    jet_left = Button(name='jet_left', image_path='Assets/btn.png', x=1172, y=652, core=core)
-    jet_right = Button(name='jet_right', image_path='Assets/btn.png', x=1252, y=652, core=core)
-
-    jet_up.scale_x = 50.0
-    jet_up.scale_y = 50.0
-    jet_down.scale_x = 50.0
-    jet_down.scale_y = 50.0
-    jet_left.scale_x = 50.0
-    jet_left.scale_y = 50.0
-    jet_right.scale_x = 50.0
-    jet_right.scale_y = 50.0
-
-    w = KeyboardButton(name='w', core=core, trigger_key=pygame.K_w)
-    s = KeyboardButton(name='s', core=core, trigger_key=pygame.K_s)
-    a = KeyboardButton(name='a', core=core, trigger_key=pygame.K_a)
-    d = KeyboardButton(name='d', core=core, trigger_key=pygame.K_d)
-
-    arrow_up = KeyboardButton(name='arrow_up', core=core, trigger_key=pygame.K_UP)
-    arrow_down = KeyboardButton(name='arrow_down', core=core, trigger_key=pygame.K_DOWN)
-    arrow_left = KeyboardButton(name='arrow_left', core=core, trigger_key=pygame.K_LEFT)
-    arrow_right = KeyboardButton(name='arrow_right', core=core, trigger_key=pygame.K_RIGHT)
-
-    mouse_cursor = Mouse(name='mouse_cursor', core=core, trigger_key=1, r_type='w')
-
-    up.reg_callback(callback=btn_up)
-    down.reg_callback(callback=btn_down)
-    left.reg_callback(callback=btn_left)
-    right.reg_callback(callback=btn_right)
-
-    w.reg_callback(callback=btn_up)
-    s.reg_callback(callback=btn_down)
-    a.reg_callback(callback=btn_left)
-    d.reg_callback(callback=btn_right)
-
-    jet_up.reg_callback(callback=btn_jet_up)
-    jet_down.reg_callback(callback=btn_jet_down)
-    jet_left.reg_callback(callback=btn_jet_left)
-    jet_right.reg_callback(callback=btn_jet_right)
-
-    arrow_up.reg_callback(callback=btn_jet_up)
-    arrow_down.reg_callback(callback=btn_jet_down)
-    arrow_left.reg_callback(callback=btn_jet_left)
-    arrow_right.reg_callback(callback=btn_jet_right)
-
-
-    def mouse_click(params, recent_input):
+    def jet_m(params, recent_input):
         _, _ = params, recent_input
-
         m_w_x, m_w_y = world.camera.mouse_world_pos()
-
-        d_w_x = m_w_x - jet.world_x
-        d_w_y = m_w_y - jet.world_y
-        dist = sqrt((d_w_x ** 2) + (d_w_y ** 2))
-        spd = 16
-        err = 2 * spd
-        if dist > err:
-            s_w_x = round(spd * d_w_x / dist)
-            s_w_y = round(spd * d_w_y / dist)
-            jet.world_x += s_w_x
-            jet.world_y += s_w_y
+        jet = world.get_entity(ent_id='1#jet')
+        if jet is not None:
+            d_w_x = m_w_x - jet.world_x
+            d_w_y = m_w_y - jet.world_y
+            dist = sqrt((d_w_x ** 2) + (d_w_y ** 2))
+            spd = 16
+            err = 2 * spd
+            if dist > err:
+                s_w_x = round(spd * d_w_x / dist)
+                s_w_y = round(spd * d_w_y / dist)
+                jet.move(d_x=s_w_x, d_y=s_w_y)
         return None, None
 
 
-    mouse_cursor.reg_callback(callback=mouse_click)
+    world.new_stimulation(sti_id='btn_cam_u', sti_type='button', image_path='Assets/btn.png', x=640, y=8)
+    world.new_stimulation(sti_id='btn_cam_d', sti_type='button', image_path='Assets/btn.png', x=640, y=712)
+    world.new_stimulation(sti_id='btn_cam_l', sti_type='button', image_path='Assets/btn.png', x=8, y=360)
+    world.new_stimulation(sti_id='btn_cam_r', sti_type='button', image_path='Assets/btn.png', x=1272, y=360)
+    world.new_stimulation(sti_id='btn_jet_u', sti_type='button', image_path='Assets/btn.png', x=1212, y=612)
+    world.new_stimulation(sti_id='btn_jet_d', sti_type='button', image_path='Assets/btn.png', x=1212, y=692)
+    world.new_stimulation(sti_id='btn_jet_l', sti_type='button', image_path='Assets/btn.png', x=1172, y=652)
+    world.new_stimulation(sti_id='btn_jet_r', sti_type='button', image_path='Assets/btn.png', x=1252, y=652)
+    world.new_stimulation(sti_id='w', sti_type='keyboard', trigger_key=pygame.K_w)
+    world.new_stimulation(sti_id='s', sti_type='keyboard', trigger_key=pygame.K_s)
+    world.new_stimulation(sti_id='a', sti_type='keyboard', trigger_key=pygame.K_a)
+    world.new_stimulation(sti_id='d', sti_type='keyboard', trigger_key=pygame.K_d)
+    world.new_stimulation(sti_id='arrow_u', sti_type='keyboard', trigger_key=pygame.K_UP)
+    world.new_stimulation(sti_id='arrow_d', sti_type='keyboard', trigger_key=pygame.K_DOWN)
+    world.new_stimulation(sti_id='arrow_l', sti_type='keyboard', trigger_key=pygame.K_LEFT)
+    world.new_stimulation(sti_id='arrow_r', sti_type='keyboard', trigger_key=pygame.K_RIGHT)
+    world.new_stimulation(sti_id='mouse', sti_type='mouse', trigger_key=1, mouse_r_type='w')
 
-    core.engine_run()
+    world.sti_add_callback(sti_id='btn_cam_u', callback=cam_u)
+    world.sti_add_callback(sti_id='btn_cam_d', callback=cam_d)
+    world.sti_add_callback(sti_id='btn_cam_l', callback=cam_l)
+    world.sti_add_callback(sti_id='btn_cam_r', callback=cam_r)
+    world.sti_add_callback(sti_id='w', callback=cam_u)
+    world.sti_add_callback(sti_id='s', callback=cam_d)
+    world.sti_add_callback(sti_id='a', callback=cam_l)
+    world.sti_add_callback(sti_id='d', callback=cam_r)
+    world.sti_add_callback(sti_id='btn_jet_u', callback=jet_u)
+    world.sti_add_callback(sti_id='btn_jet_d', callback=jet_d)
+    world.sti_add_callback(sti_id='btn_jet_l', callback=jet_l)
+    world.sti_add_callback(sti_id='btn_jet_r', callback=jet_r)
+    world.sti_add_callback(sti_id='arrow_u', callback=jet_u)
+    world.sti_add_callback(sti_id='arrow_d', callback=jet_d)
+    world.sti_add_callback(sti_id='arrow_l', callback=jet_l)
+    world.sti_add_callback(sti_id='arrow_r', callback=jet_r)
+    world.sti_add_callback(sti_id='mouse', callback=jet_m)
+
+    world.start()
     os.abort()

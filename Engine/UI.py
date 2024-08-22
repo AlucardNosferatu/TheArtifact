@@ -82,6 +82,16 @@ class EntitySprite(Sprite):
         self.check_visibility = True
         self.update()
 
+    def move(self, d_x=0, d_y=0):
+        self.world_x += d_x
+        self.world_y += d_y
+
+    def relocate(self, world_x=None, world_y=None):
+        if world_x is not None:
+            self.world_x = world_x
+        if world_y is not None:
+            self.world_y = world_y
+
     def update(self):
         self.x = self.world_x - self.cam.world_x + round(self.cam.w / 2)
         self.y = self.world_y - self.cam.world_y + round(self.cam.h / 2)
@@ -134,6 +144,20 @@ class Button(Sprite):
 
     def reg_callback(self, callback):
         self.callback = callback
+
+    def del_callback(self, r_type='u'):
+        if self.callback is not None:
+            if r_type not in ['u', 'w', 'both']:
+                raise ValueError('unrecognized r_type:{}'.format(r_type))
+            if r_type == 'both':
+                self.core.remove_routine(func=self.callback, r_type='u')
+                self.core.remove_routine(func=self.callback, r_type='w')
+            else:
+                self.core.remove_routine(func=self.callback, r_type=r_type)
+            self.callback = None
+            return True
+        else:
+            return False
 
 
 class KeyboardButton(Button):

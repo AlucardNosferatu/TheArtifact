@@ -10,7 +10,7 @@ from Engine.Renderer import Renderer
 class Core:
     eg_thread = None
 
-    def __init__(self, screen_size=(1280, 720), fps=60, max_queue_size=256, recent_amount=16):
+    def __init__(self, screen_size=(1280, 720), fps=30, max_queue_size=256, recent_amount=16):
         self.fps = fps
         self.screen_size = screen_size
         self.max_queue_size = max_queue_size
@@ -41,7 +41,7 @@ class Core:
         while True:
             self.execute_game()
 
-    def ignite(self):
+    def start_game_loop(self):
         self.eg_thread = threading.Thread(target=self.execute_game_loop)
         self.eg_thread.start()
 
@@ -65,7 +65,7 @@ class Core:
     def engine_run(self):
         pygame.init()
         try:
-            self.ignite()
+            self.start_game_loop()
             while True:
                 self.event_controller.handle_events()
                 self.get_recent_input()
