@@ -286,6 +286,32 @@ def jet_m(params, recent_input):
     return None, None
 
 
+def jet_f(params, recent_input):
+    _ = recent_input
+    world = params['world']
+    player = params['agents']['player']
+    jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
+    player.create_ent_inst(type_name='bullet', world_x=jet.world_x, world_y=jet.world_y - 64)
+    world.core.append_routine(func=bullet_f, r_type='w')
+    return None, None
+
+
+# noinspection PyUnresolvedReferences
+def bullet_f(params, recent_input):
+    _ = recent_input
+    player = params['agents']['player']
+    type_name = 'bullet'
+    for i in player.ent_inst[type_name]:
+        bullet: Entity = player.obtain_ent_inst(type_name=type_name, i=i)
+        bullet.move(d_y=-8)
+        if not hasattr(bullet, 'ttl'):
+            bullet.__setattr__('ttl', 64)
+        bullet.ttl -= 1
+        if bullet.ttl < 0:
+            player.remove_ent_inst(type_name=type_name, i=i)
+    return None, None
+
+
 def reach_target(trigger_ent, triggered_ent: Entity, world):
     _, _ = trigger_ent, world
     nature: Agent = triggered_ent.belong_agent
@@ -294,11 +320,37 @@ def reach_target(trigger_ent, triggered_ent: Entity, world):
 
 
 def world_changing(world):
-    player = Player(world=world)
-    nature = Nature(world=world)
-    player.update_ent_type(render_order=1, image_path='Assets/F-5E.png', type_name='jet')
-    nature.update_ent_type(render_order=1, image_path='Assets/target.png', type_name='target')
+    nature = init_nature(world)
 
+    player = init_player(world)
+
+    player.create_ent_inst(type_name='jet', world_x=960, world_y=540)
+    nature.create_ent_inst(type_name='target', world_x=560, world_y=540)
+    nature.create_ent_inst(type_name='target', world_x=1360, world_y=540)
+    nature.create_ent_inst(type_name='target', world_x=960, world_y=940)
+    nature.create_ent_inst(type_name='target', world_x=960, world_y=140)
+
+    event1 = Event(radius=32, trigger_ent_type=['bullet'], trigger_function=reach_target, world=nature.world)
+    event2 = Event(radius=32, trigger_ent_type=['bullet'], trigger_function=reach_target, world=nature.world)
+    event3 = Event(radius=32, trigger_ent_type=['bullet'], trigger_function=reach_target, world=nature.world)
+    event4 = Event(radius=32, trigger_ent_type=['bullet'], trigger_function=reach_target, world=nature.world)
+    nature.bind_ent_events(type_name='target', i=0, events=[event1])
+    nature.bind_ent_events(type_name='target', i=1, events=[event2])
+    nature.bind_ent_events(type_name='target', i=2, events=[event3])
+    nature.bind_ent_events(type_name='target', i=3, events=[event4])
+    agent_routines(world)
+
+
+def init_nature(world):
+    nature = Nature(world=world)
+    nature.update_ent_type(render_order=1, image_path='Assets/target.png', type_name='target')
+    return nature
+
+
+def init_player(world):
+    player = Player(world=world)
+    player.update_ent_type(render_order=1, image_path='Assets/F-5E.png', type_name='jet')
+    player.update_ent_type(render_order=1, image_path='Assets/bullet.png', type_name='bullet')
     player.add_sti(sti_id='btn_cam_u', sti_type='button', image_path='Assets/btn.png', x=640, y=8, callback=cam_u)
     player.add_sti(sti_id='btn_cam_d', sti_type='button', image_path='Assets/btn.png', x=640, y=712, callback=cam_d)
     player.add_sti(sti_id='btn_cam_l', sti_type='button', image_path='Assets/btn.png', x=8, y=360, callback=cam_l)
@@ -315,24 +367,15 @@ def world_changing(world):
     player.add_sti(sti_id='arrow_d', sti_type='keyboard', trigger_key=pygame.K_DOWN, callback=jet_d)
     player.add_sti(sti_id='arrow_l', sti_type='keyboard', trigger_key=pygame.K_LEFT, callback=jet_l)
     player.add_sti(sti_id='arrow_r', sti_type='keyboard', trigger_key=pygame.K_RIGHT, callback=jet_r)
+    player.add_sti(sti_id='space', sti_type='keyboard', trigger_key=pygame.K_SPACE, callback=jet_f)
     player.add_sti(sti_id='mouse', sti_type='mouse', trigger_key=1, mouse_r_type='w', callback=jet_m)
+    return player
 
-    player.create_ent_inst(type_name='jet', world_x=960, world_y=540)
-    nature.create_ent_inst(type_name='target', world_x=560, world_y=540)
-    nature.create_ent_inst(type_name='target', world_x=1360, world_y=540)
-    nature.create_ent_inst(type_name='target', world_x=960, world_y=940)
-    nature.create_ent_inst(type_name='target', world_x=960, world_y=140)
 
-    event1 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
-    event2 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
-    event3 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
-    event4 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
-    nature.bind_ent_events(type_name='target', i=0, events=[event1])
-    nature.bind_ent_events(type_name='target', i=1, events=[event2])
-    nature.bind_ent_events(type_name='target', i=2, events=[event3])
-    nature.bind_ent_events(type_name='target', i=3, events=[event4])
+def agent_routines(world):
     wait = 0.99 / world.core.fps
     while True:
-        nature.routine_check_events()
-        player.routine_check_events()
+        for key in world.core.params['agents'].keys():
+            agent = world.core.params['agents'][key]
+            agent.routine_check_events()
         pygame.time.wait(round(wait * 1000))
