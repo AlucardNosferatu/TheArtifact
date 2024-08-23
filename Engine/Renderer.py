@@ -13,8 +13,9 @@ class Renderer:
         # Clear the screen with a black background
         self.screen.fill((0, 0, 0))
         # Draw all objects from the global dictionary
+        wd = self.world_draw.copy()
         for i in range(0, 9):
-            for key, item in self.world_draw.items():
+            for key, item in wd.items():
                 # Blit the surface to the screen at the given position
                 if key is not None and key[0] == str(i):
                     (surface, position, visible, angle, new_size, flip) = item
@@ -29,7 +30,8 @@ class Renderer:
                                 position[1] - round(s.get_height() * 0.5)
                             )
                         )
-        for key, item in self.ui_draw.items():
+        ud = self.ui_draw.copy()
+        for key, item in ud.items():
             # Blit the surface to the screen at the given position
             if key is not None:
                 (surface, position, visible, angle, new_size, flip) = item
