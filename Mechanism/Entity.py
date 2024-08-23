@@ -16,6 +16,12 @@ class Entity:
         if camera is None:
             camera = Camera(screen=self.core.renderer.screen)
         self.camera = camera
+        self.belong_agent = None
+
+    def self_destruct(self):
+        if self.sprite is not None:
+            self.core.append_routine(self.sprite.delete_routine, r_type='w', multi_inst=False)
+        self.del_event(None, purge=True)
 
     def set_sprite(self, image_path, world_x, world_y):
         self.world_x = world_x
@@ -43,6 +49,7 @@ class Entity:
         if merge:
             for ev in events:
                 if ev not in self.events:
+                    ev.att_ent = self
                     self.events.append(ev)
         else:
             self.events = events
@@ -53,6 +60,7 @@ class Entity:
         else:
             for ev in events:
                 while ev in self.events:
+                    ev.att_ent = None
                     self.events.remove(ev)
 
     @staticmethod
@@ -88,10 +96,12 @@ class World(Entity):
         self.sprite.scale_x = scale_x
         self.sprite.scale_y = scale_y
 
-    def new_entity(self, ent_id, image_path=None, world_x=None, world_y=None):
+    def new_entity(self, ent_id, image_path=None, world_x=None, world_y=None, belong_agent=None):
         self.entities[ent_id] = Entity(core=self.core, ent_id=ent_id, camera=self.camera)
         if image_path is not None and world_x is not None and world_y is not None:
             self.entities[ent_id].set_sprite(image_path=image_path, world_x=world_x, world_y=world_y)
+        if belong_agent is not None:
+            self.entities[ent_id].belong_agent = belong_agent
 
     def get_entity(self, ent_id):
         if ent_id in self.entities.keys():
@@ -101,6 +111,7 @@ class World(Entity):
 
     def del_entity(self, ent_id):
         if ent_id in self.entities.keys():
+            self.entities[ent_id].self_destruct()
             del self.entities[ent_id]
             return True
         else:

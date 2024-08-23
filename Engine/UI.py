@@ -58,6 +58,11 @@ class Sprite:
         _, _ = params, recent_input
         return self.render()
 
+    def delete_routine(self, params, recent_input):
+        _, _ = params, recent_input
+        ret_tuple = (self.name, 'DELETE_THIS')
+        return ret_tuple
+
     def render(self):
         ret_tuple = (
             self.name,

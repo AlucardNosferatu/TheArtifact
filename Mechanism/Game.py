@@ -6,8 +6,8 @@ from Mechanism.Entity import Entity
 
 
 class Event:
-    def __init__(self, att_ent, radius, trigger_ent_type: list, trigger_function, world, priority=1):
-        self.att_ent = att_ent
+    def __init__(self, radius, trigger_ent_type: list, trigger_function, world, priority=1):
+        self.att_ent = None
         self.radius = radius
         self.trigger_ent_type: list = trigger_ent_type
         self.trigger_function = trigger_function
@@ -31,7 +31,7 @@ class Event:
     def triggered(self, trigger_ent, triggered_ent=None):
         if triggered_ent is None:
             triggered_ent = self.att_ent
-        self.trigger_function(trigger_ent, triggered_ent, self.world)
+        self.trigger_function(trigger_ent=trigger_ent, triggered_ent=triggered_ent, world=self.world)
         self.status = 'triggered'
 
 
@@ -79,18 +79,18 @@ class Agent:
         i = 0
         while i in self.ent_inst[type_name]:
             i += 1
-        self.ent_inst[type_name].append(i)
         ent_id = self.get_ent_id(type_name=type_name, i=i)
         self.world.new_entity(
-            ent_id=ent_id, image_path=self.ent_db[type_name].image_path, world_x=world_x, world_y=world_y
+            ent_id=ent_id, image_path=self.ent_db[type_name].image_path, world_x=world_x, world_y=world_y,
+            belong_agent=self
         )
+        self.ent_inst[type_name].append(i)
 
     def remove_ent_inst(self, type_name, i):
         if i in self.ent_inst[type_name]:
-            self.ent_inst[type_name].remove(i)
             ent_id = self.get_ent_id(type_name=type_name, i=i)
-            self.bind_ent_events(type_name=type_name, i=i, events=None)
             self.world.del_entity(ent_id=ent_id)
+            self.ent_inst[type_name].remove(i)
             return True
         else:
             return False
@@ -102,7 +102,10 @@ class Agent:
 
     def bind_ent_events(self, type_name, i, events: None | list[Event] = None, op=None):
         if op is None:
-            op = ['set', 'merge']
+            if events is None:
+                op = ['del', 'purge']
+            else:
+                op = ['set', 'merge']
         if i in self.ent_inst[type_name]:
             ent = self.obtain_ent_inst(type_name=type_name, i=i)
             if op[0] == 'set':
@@ -124,26 +127,26 @@ class Agent:
     ):
         results: list[Event] = []
         for type_name_db in self.ent_db.keys():
-            if type_name is not None and type_name == type_name_db:
+            if type_name is None or type_name == type_name_db:
                 pass
             else:
                 continue
             for i in self.ent_inst[type_name_db]:
-                ent = self.obtain_ent_inst(type_name=type_name, i=i)
+                ent = self.obtain_ent_inst(type_name=type_name_db, i=i)
                 for ev in ent.events:
-                    if trigger_ent_type is not None and trigger_ent_type == ev.trigger_ent_type:
+                    if trigger_ent_type is None or trigger_ent_type == ev.trigger_ent_type:
                         pass
                     else:
                         continue
-                    if trigger_function is not None and trigger_function == ev.trigger_function:
+                    if trigger_function is None or trigger_function == ev.trigger_function:
                         pass
                     else:
                         continue
-                    if priority is not None and priority == ev.priority:
+                    if priority is None or priority == ev.priority:
                         pass
                     else:
                         continue
-                    if status is not None and status == ev.status:
+                    if status is None or status == ev.status:
                         pass
                     else:
                         continue
@@ -158,10 +161,12 @@ class Agent:
                 if event.status == 'triggered':
                     pending_remove.append(event)
                 elif event.status == 'idle':
-                    for ent_id in self.world.entities.keys():
+                    ent_list = self.world.entities.copy()
+                    for ent_id in ent_list.keys():
                         trigger_ent = self.world.get_entity(ent_id=ent_id)
-                        if event.is_triggered(trigger_ent=trigger_ent):
-                            event.triggered(trigger_ent=trigger_ent)
+                        if trigger_ent is not None:
+                            if event.is_triggered(trigger_ent=trigger_ent):
+                                event.triggered(trigger_ent=trigger_ent)
                 else:
                     raise NotImplementedError('unrecognized event.status:{}'.format(event.status))
         for event in pending_remove:
@@ -281,6 +286,13 @@ def jet_m(params, recent_input):
     return None, None
 
 
+def reach_target(trigger_ent, triggered_ent: Entity, world):
+    _, _ = trigger_ent, world
+    nature: Agent = triggered_ent.belong_agent
+    ent_id_dict = Agent.dec_ent_id(ent_id=triggered_ent.ent_id)
+    nature.remove_ent_inst(type_name=ent_id_dict['type_name'], i=ent_id_dict['i'])
+
+
 def world_changing(world):
     player = Player(world=world)
     nature = Nature(world=world)
@@ -306,3 +318,21 @@ def world_changing(world):
     player.add_sti(sti_id='mouse', sti_type='mouse', trigger_key=1, mouse_r_type='w', callback=jet_m)
 
     player.create_ent_inst(type_name='jet', world_x=960, world_y=540)
+    nature.create_ent_inst(type_name='target', world_x=560, world_y=540)
+    nature.create_ent_inst(type_name='target', world_x=1360, world_y=540)
+    nature.create_ent_inst(type_name='target', world_x=960, world_y=940)
+    nature.create_ent_inst(type_name='target', world_x=960, world_y=140)
+
+    event1 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
+    event2 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
+    event3 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
+    event4 = Event(radius=32, trigger_ent_type=['jet'], trigger_function=reach_target, world=nature.world)
+    nature.bind_ent_events(type_name='target', i=0, events=[event1])
+    nature.bind_ent_events(type_name='target', i=1, events=[event2])
+    nature.bind_ent_events(type_name='target', i=2, events=[event3])
+    nature.bind_ent_events(type_name='target', i=3, events=[event4])
+    wait = 0.99 / world.core.fps
+    while True:
+        nature.routine_check_events()
+        player.routine_check_events()
+        pygame.time.wait(round(wait * 1000))

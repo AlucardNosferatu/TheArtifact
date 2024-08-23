@@ -1,5 +1,4 @@
 import threading
-import time
 
 import pygame
 
@@ -35,11 +34,12 @@ class Core:
             spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
             if spr_key is not None:
                 self.renderer.ui_draw[spr_key] = spr
-        time.sleep(0.99 / self.fps)
 
     def execute_game_loop(self):
+        wait = 0.99 / self.fps
         while True:
             self.execute_game()
+            pygame.time.wait(round(wait * 1000))
 
     def start_game_loop(self):
         self.eg_thread = threading.Thread(target=self.execute_game_loop)
