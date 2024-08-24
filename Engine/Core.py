@@ -18,7 +18,7 @@ class Core:
         self.clock = pygame.time.Clock()
         self.params = {}  # 游戏机制的全局参数字典
         self.event_controller = None
-        self.renderer = Renderer(self.screen_size)  # 渲染器实例
+        self.renderer = Renderer(screen_size=self.screen_size, core=self)  # 渲染器实例
         self.event_controller = EventController(self.max_queue_size)
         self.world_routine = []
         self.ui_routine = []

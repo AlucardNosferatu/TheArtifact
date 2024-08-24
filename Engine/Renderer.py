@@ -2,12 +2,13 @@ import pygame
 
 
 class Renderer:
-    def __init__(self, screen_size):
+    def __init__(self, screen_size, core):
         self.screen_size = screen_size
         self.screen = pygame.display.set_mode(screen_size)
         self.running = True
         self.world_draw = {}
         self.ui_draw = {}
+        self.core = core
 
     def render_frame(self):
         # Clear the screen with a black background
@@ -18,8 +19,9 @@ class Renderer:
             for key, item in wd.items():
                 # Blit the surface to the screen at the given position
                 if key is not None and key[0] == str(i):
-                    if type(item) is str and item == 'DELETE_THIS':
+                    if type(item) is list and item[0] == 'DELETE_THIS':
                         del self.world_draw[key]
+                        self.core.remove_routine(func=item[1], r_type='w')
                     else:
                         (surface, position, visible, angle, new_size, flip) = item
                         if visible:
@@ -37,8 +39,9 @@ class Renderer:
         for key, item in ud.items():
             # Blit the surface to the screen at the given position
             if key is not None:
-                if type(item) is str and item == 'DELETE_THIS':
+                if type(item) is list and item[0] == 'DELETE_THIS':
                     del self.ui_draw[key]
+                    self.core.remove_routine(func=item[1], r_type='u')
                 else:
                     (surface, position, visible, angle, new_size, flip) = item
                     if visible:

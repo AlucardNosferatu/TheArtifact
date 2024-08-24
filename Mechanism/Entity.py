@@ -1,6 +1,122 @@
-from math import sqrt
+import uuid
+from math import sqrt, ceil
 
 from Engine.UI import Camera, EntitySprite, Button, KeyboardButton, Mouse
+
+
+class Grid:
+    def __init__(self, world, edge_length=8):
+        self.world = world
+        self.elen = edge_length
+        self.center_x = self.world.world_x
+        self.center_y = self.world.world_y
+        # start from 0
+        self.center_grid_index_x = ceil((self.center_x - round(self.elen / 2)) / self.elen)
+        self.center_grid_index_y = ceil((self.center_y - round(self.elen / 2)) / self.elen)
+        self.event_reg = {}
+        self.grid2id = {}
+        self.id2grid = {}
+
+    def get_grid_by_point(self, world_x, world_y):
+        def process_by_dim(world_ent, center, center_grid_index):
+            d = world_ent - center
+            if abs(d) < round(self.elen / 2):
+                grid_index = center_grid_index
+            else:
+                if d > 0:
+                    d -= round(self.elen / 2)
+                    grid_index_d = ceil(abs(d) / self.elen)
+                else:
+                    d += round(self.elen / 2)
+                    grid_index_d = -ceil(abs(d) / self.elen)
+                grid_index = grid_index_d + center_grid_index
+            return grid_index
+
+        grid_index_x = process_by_dim(
+            world_ent=world_x, center=self.center_x, center_grid_index=self.center_grid_index_x
+        )
+        grid_index_y = process_by_dim(
+            world_ent=world_y, center=self.center_y, center_grid_index=self.center_grid_index_y
+        )
+        return grid_index_x, grid_index_y
+
+    def get_grids_by_ent(self, ent, ent_box_edge_len=0, reg=True):
+        x_l = ent.world_x - round(ent_box_edge_len / 2)
+        x_r = ent.world_x + round(ent_box_edge_len / 2)
+        y_t = ent.world_y - round(ent_box_edge_len / 2)
+        y_b = ent.world_y + round(ent_box_edge_len / 2)
+        gi_x_l, gi_y_t = self.get_grid_by_point(world_x=x_l, world_y=y_t)
+        gi_x_r, gi_y_b = self.get_grid_by_point(world_x=x_r, world_y=y_b)
+        if reg:
+            self.reg_ent(ent=ent, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
+        return gi_x_l, gi_x_r, gi_y_b, gi_y_t
+
+    def get_grids_by_event(self, event, reg=True):
+        ent = event.att_ent
+        event_diameter = event.radius * 2
+        gi_x_l, gi_x_r, gi_y_b, gi_y_t = self.get_grids_by_ent(ent, ent_box_edge_len=event_diameter, reg=False)
+        if reg:
+            self.reg_event(event=event, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
+        return gi_x_l, gi_x_r, gi_y_t, gi_y_b
+
+    def reg(self, reg_id, gi_x_l, gi_x_r, gi_y_b, gi_y_t):
+        if reg_id not in self.id2grid.keys():
+            self.id2grid[reg_id] = []
+        if len(self.id2grid[reg_id]) > 0:
+            gi_x_l_old = self.id2grid[reg_id][0]
+            gi_x_r_old = self.id2grid[reg_id][1]
+            gi_y_t_old = self.id2grid[reg_id][2]
+            gi_y_b_old = self.id2grid[reg_id][3]
+            for i in range(gi_x_l_old, gi_x_r_old + 1):
+                for j in range(gi_y_t_old, gi_y_b_old + 1):
+                    if reg_id in self.grid2id[i][j]:
+                        self.grid2id[i][j].remove(reg_id)
+            self.id2grid[reg_id].clear()
+        self.id2grid[reg_id].append(gi_x_l)
+        self.id2grid[reg_id].append(gi_x_r)
+        self.id2grid[reg_id].append(gi_y_t)
+        self.id2grid[reg_id].append(gi_y_b)
+        for i in range(gi_x_l, gi_x_r + 1):
+            if i not in self.grid2id.keys():
+                self.grid2id[i] = {}
+            for j in range(gi_y_t, gi_y_b + 1):
+                if j not in self.grid2id[i].keys():
+                    self.grid2id[i][j] = []
+                if reg_id not in self.grid2id[i][j]:
+                    self.grid2id[i][j].append(reg_id)
+
+    def clr(self, reg_id):
+        assert reg_id in self.id2grid.keys()
+        if len(self.id2grid[reg_id]) > 0:
+            gi_x_l_old = self.id2grid[reg_id][0]
+            gi_x_r_old = self.id2grid[reg_id][1]
+            gi_y_t_old = self.id2grid[reg_id][2]
+            gi_y_b_old = self.id2grid[reg_id][3]
+            for i in range(gi_x_l_old, gi_x_r_old + 1):
+                for j in range(gi_y_t_old, gi_y_b_old + 1):
+                    if reg_id in self.grid2id[i][j]:
+                        self.grid2id[i][j].remove(reg_id)
+            self.id2grid[reg_id].clear()
+        del self.id2grid[reg_id]
+
+    def reg_ent(self, ent, gi_x_l, gi_x_r, gi_y_t, gi_y_b):
+        self.reg(reg_id=ent.ent_id, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
+
+    def reg_event(self, event, gi_x_l, gi_x_r, gi_y_t, gi_y_b):
+        if event not in self.event_reg.values():
+            event_id = str(uuid.uuid4())
+            self.event_reg[event_id] = event
+
+        event_id = self.get_event_id(event)
+        assert event_id is not None
+        self.reg(reg_id=event_id, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
+
+    def get_event_id(self, event):
+        event_id = None
+        for event_id in self.event_reg.keys():
+            if self.event_reg[event_id] == event:
+                break
+        return event_id
 
 
 class Entity:
@@ -9,7 +125,7 @@ class Entity:
     world_x = None
     world_y = None
 
-    def __init__(self, core, ent_id, camera=None):
+    def __init__(self, core, ent_id, camera=None, grid=None):
         self.events = []
         self.core = core
         self.ent_id = ent_id
@@ -17,8 +133,10 @@ class Entity:
             camera = Camera(screen=self.core.renderer.screen)
         self.camera = camera
         self.belong_agent = None
+        self.grid: Grid = grid
 
     def self_destruct(self):
+        self.quit_grid_ent()
         if self.sprite is not None:
             self.core.append_routine(self.sprite.delete_routine, r_type='w', multi_inst=False)
         self.del_event(None, purge=True)
@@ -30,12 +148,14 @@ class Entity:
             name=self.ent_id, image_path=image_path, cam=self.camera, world_x=self.world_x, world_y=self.world_y,
             core=self.core
         )
+        self.sync_grid()
 
     def move(self, d_x=0, d_y=0):
         self.world_x += d_x
         self.world_y += d_y
         if self.sprite is not None:
             self.sprite.move(d_x=d_x, d_y=d_y)
+        self.sync_grid()
 
     def relocate(self, world_x=None, world_y=None):
         if world_x is not None:
@@ -44,6 +164,27 @@ class Entity:
             self.world_y = world_y
         if self.sprite is not None:
             self.sprite.relocate(world_x=self.world_x, world_y=self.world_y)
+        self.sync_grid()
+
+    def sync_grid(self):
+        if self.grid is not None:
+            res = self.grid.get_grids_by_ent(ent=self)
+            print(self.ent_id, res)
+            for event in self.events:
+                res = self.grid.get_grids_by_event(event=event)
+                print(self.grid.get_event_id(event=event), res)
+
+    def quit_grid_ent(self):
+        if self.grid is not None:
+            self.grid.clr(reg_id=self.ent_id)
+
+    def quit_grid_event(self, events, purge=False):
+        if self.grid is not None:
+            if purge:
+                events = self.events
+            for event in events:
+                event_id = self.grid.get_event_id(event=event)
+                self.grid.clr(reg_id=event_id)
 
     def set_event(self, events, merge=False):
         if merge:
@@ -53,8 +194,10 @@ class Entity:
                     self.events.append(ev)
         else:
             self.events = events
+        self.sync_grid()
 
     def del_event(self, events, purge=False):
+        self.quit_grid_event(events=events, purge=purge)
         if purge:
             self.events.clear()
         else:
@@ -83,6 +226,14 @@ class World(Entity):
             self.camera.focus(world_x=self.sprite.world_x, world_y=self.sprite.world_y)
         self.entities: dict[str, Entity] = {}
         self.stimulation = {}
+        self.set_grid()
+
+    def set_grid(self, grid: Grid = None, edge_length=None):
+        if grid is None:
+            if edge_length is None:
+                edge_length = 8
+            grid = Grid(world=self, edge_length=edge_length)
+        self.grid = grid
 
     def get_camera(self):
         return self.camera
@@ -97,7 +248,7 @@ class World(Entity):
         self.sprite.scale_y = scale_y
 
     def new_entity(self, ent_id, image_path=None, world_x=None, world_y=None, belong_agent=None):
-        self.entities[ent_id] = Entity(core=self.core, ent_id=ent_id, camera=self.camera)
+        self.entities[ent_id] = Entity(core=self.core, ent_id=ent_id, camera=self.camera, grid=self.grid)
         if image_path is not None and world_x is not None and world_y is not None:
             self.entities[ent_id].set_sprite(image_path=image_path, world_x=world_x, world_y=world_y)
         if belong_agent is not None:
