@@ -60,7 +60,6 @@ class Core:
                 break
 
     def engine_run(self):
-        pygame.init()
         try:
             self.start_game_loop()
             while True:

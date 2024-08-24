@@ -33,6 +33,8 @@ class Camera:
 
 
 class Sprite:
+    precached_surfaces = {}
+
     def __init__(self, name, image_path, x, y, core: Core):
         """
         初始化 Sprite 对象。
@@ -50,11 +52,18 @@ class Sprite:
         self.visible = True
         self.rotation = 0.0
         if image_path is not None:
-            self.surface = pygame.image.load(self.image_path).convert_alpha()
+            if image_path.startswith('#'):
+                self.surface = Sprite.precached_surfaces[image_path]
+            else:
+                self.surface = pygame.image.load(self.image_path).convert_alpha()
         else:
             self.surface = None
         self.core = core
         self.core.append_routine(func=self.render_routine, r_type='w')
+
+    @staticmethod
+    def precache_surfaces(key, image_path):
+        Sprite.precached_surfaces[key] = pygame.image.load(image_path).convert_alpha()
 
     def render_routine(self, params, recent_input):
         _, _ = params, recent_input
