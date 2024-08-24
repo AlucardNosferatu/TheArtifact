@@ -97,24 +97,25 @@ class Agent:
                 continue
             for i in self.ent_inst[type_name_db]:
                 ent = self.obtain_ent_inst(type_name=type_name_db, i=i)
-                for ev in ent.events:
-                    if trigger_ent_type is None or trigger_ent_type == ev.trigger_ent_type:
-                        pass
-                    else:
-                        continue
-                    if trigger_function is None or trigger_function == ev.trigger_function:
-                        pass
-                    else:
-                        continue
-                    if priority is None or priority == ev.priority:
-                        pass
-                    else:
-                        continue
-                    if status is None or status == ev.status:
-                        pass
-                    else:
-                        continue
-                    results.append(ev)
+                if ent is not None:
+                    for ev in ent.events:
+                        if trigger_ent_type is None or trigger_ent_type == ev.trigger_ent_type:
+                            pass
+                        else:
+                            continue
+                        if trigger_function is None or trigger_function == ev.trigger_function:
+                            pass
+                        else:
+                            continue
+                        if priority is None or priority == ev.priority:
+                            pass
+                        else:
+                            continue
+                        if status is None or status == ev.status:
+                            pass
+                        else:
+                            continue
+                        results.append(ev)
         return results
 
     def routine_check_events(self):

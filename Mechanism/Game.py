@@ -173,9 +173,8 @@ def init_player(world):
 
 
 def agent_routines(world):
-    wait = 0.99 / world.core.fps
     while True:
         for key in world.core.params['agents'].keys():
             agent = world.core.params['agents'][key]
             agent.routine_check_events()
-        pygame.time.wait(round(wait * 1000))
+        world.core.clock.tick(world.core.fps * 3)

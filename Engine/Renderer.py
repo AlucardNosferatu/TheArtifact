@@ -21,18 +21,19 @@ class Renderer:
                 if key is not None and key[0] == str(i):
                     if type(item) is list and item[0] == 'DELETE_THIS':
                         del self.world_draw[key]
-                        self.core.remove_routine(func=item[1], r_type='w')
+                        self.core.remove_routine(func=item[1].render_routine, r_type='w')
+                        self.core.remove_routine(func=item[1].delete_routine, r_type='w')
                     else:
                         (surface, position, visible, angle, new_size, flip) = item
                         if visible:
-                            s = pygame.transform.rotate(surface=surface, angle=angle)
-                            s = pygame.transform.scale(surface=s, size=new_size)
-                            s = pygame.transform.flip(surface=s, flip_x=flip[0], flip_y=flip[1])
+                            # s = pygame.transform.rotate(surface=surface, angle=angle)
+                            # s = pygame.transform.scale(surface=s, size=new_size)
+                            # s = pygame.transform.flip(surface=s, flip_x=flip[0], flip_y=flip[1])
                             self.screen.blit(
-                                s,
+                                surface,
                                 (
-                                    position[0] - round(s.get_width() * 0.5),
-                                    position[1] - round(s.get_height() * 0.5)
+                                    position[0] - round(surface.get_width() * 0.5),
+                                    position[1] - round(surface.get_height() * 0.5)
                                 )
                             )
         ud = self.ui_draw.copy()
@@ -41,18 +42,16 @@ class Renderer:
             if key is not None:
                 if type(item) is list and item[0] == 'DELETE_THIS':
                     del self.ui_draw[key]
-                    self.core.remove_routine(func=item[1], r_type='u')
+                    self.core.remove_routine(func=item[1].render_routine, r_type='u')
+                    self.core.remove_routine(func=item[1].delete_routine, r_type='u')
                 else:
                     (surface, position, visible, angle, new_size, flip) = item
                     if visible:
-                        s = pygame.transform.rotate(surface=surface, angle=angle)
-                        s = pygame.transform.scale(surface=s, size=new_size)
-                        s = pygame.transform.flip(surface=s, flip_x=flip[0], flip_y=flip[1])
                         self.screen.blit(
-                            s,
+                            surface,
                             (
-                                position[0] - round(s.get_width() * 0.5),
-                                position[1] - round(s.get_height() * 0.5)
+                                position[0] - round(surface.get_width() * 0.5),
+                                position[1] - round(surface.get_height() * 0.5)
                             )
                         )
             # Update the display

@@ -17,7 +17,11 @@ class Event:
         if triggered_ent is None:
             triggered_ent = self.att_ent
         if distance is None:
-            distance = Entity.distance_between(ent1=triggered_ent, ent2=trigger_ent)
+            try:
+                distance = Entity.distance_between(ent1=triggered_ent, ent2=trigger_ent)
+            except Exception as e:
+                print(repr(e))
+                return False
         if distance <= self.radius:
             ent_id = trigger_ent.ent_id
             ent_type_name = Agent.dec_ent_id(ent_id=ent_id)['type_name']

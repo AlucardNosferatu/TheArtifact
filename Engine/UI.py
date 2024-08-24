@@ -60,21 +60,18 @@ class Sprite:
 
     def delete_routine(self, params, recent_input):
         _, _ = params, recent_input
-        ret_tuple = (self.name, ['DELETE_THIS', self.delete_routine])
+        ret_tuple = (self.name, ['DELETE_THIS', self])
         return ret_tuple
 
     def render(self):
-        ret_tuple = (
-            self.name,
-            (
-                self.surface,
-                (self.x, self.y),
-                self.visible,
-                self.rotation,
-                (self.scale_x * self.surface.get_width() / 100, self.scale_y * self.surface.get_height() / 100),
-                [self.flip_x, self.flip_y]
+        s = pygame.transform.rotate(surface=self.surface, angle=self.rotation)
+        s = pygame.transform.scale(
+            surface=s, size=(
+                self.scale_x * self.surface.get_width() / 100, self.scale_y * self.surface.get_height() / 100
             )
         )
+        s = pygame.transform.flip(surface=s, flip_x=self.flip_x, flip_y=self.flip_y)
+        ret_tuple = (self.name, (s, (self.x, self.y), self.visible, None, None, None))
         return ret_tuple
 
 

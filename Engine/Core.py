@@ -36,10 +36,9 @@ class Core:
                 self.renderer.ui_draw[spr_key] = spr
 
     def execute_game_loop(self):
-        wait = 0.99 / self.fps
         while True:
             self.execute_game()
-            pygame.time.wait(round(wait * 1000))
+            self.clock.tick(self.fps * 3)
 
     def start_game_loop(self):
         self.eg_thread = threading.Thread(target=self.execute_game_loop)
@@ -75,7 +74,7 @@ class Core:
                     if e.type == pygame.QUIT:
                         return
                 # 维持tick频率为30Hz
-                self.clock.tick(self.fps)
+                self.clock.tick(self.fps * 3)
         finally:
             pygame.quit()
 

@@ -169,10 +169,8 @@ class Entity:
     def sync_grid(self):
         if self.grid is not None:
             res = self.grid.get_grids_by_ent(ent=self)
-            print(self.ent_id, res)
             for event in self.events:
                 res = self.grid.get_grids_by_event(event=event)
-                print(self.grid.get_event_id(event=event), res)
 
     def quit_grid_ent(self):
         if self.grid is not None:
