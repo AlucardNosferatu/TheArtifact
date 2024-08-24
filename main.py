@@ -31,6 +31,6 @@ if __name__ == '__main__':
     world_.start()
     profiler.disable()
     pstats.Stats(
-        profiler, stream=open('性能分析.txt', 'w')
+        profiler, stream=open('Performance.txt', 'w')
     ).sort_stats(pstats.SortKey.CUMULATIVE).print_stats(.3)
     os.abort()
