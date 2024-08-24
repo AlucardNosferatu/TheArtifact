@@ -1,4 +1,3 @@
-# (surface, (pos_x, pos_y), active, ang, (mag_x, mag_y), flip)
 import pygame
 import pygame.mouse
 from pygame import MOUSEBUTTONDOWN, Surface, MOUSEBUTTONUP, KEYDOWN, KEYUP
@@ -50,7 +49,10 @@ class Sprite:
         self.scale_y = 100.0
         self.visible = True
         self.rotation = 0.0
-        self.surface = pygame.image.load(self.image_path).convert_alpha()
+        if image_path is not None:
+            self.surface = pygame.image.load(self.image_path).convert_alpha()
+        else:
+            self.surface = None
         self.core = core
         self.core.append_routine(func=self.render_routine, r_type='w')
 
@@ -110,6 +112,27 @@ class EntitySprite(Sprite):
         return super().render()
 
 
+class EntityText(EntitySprite):
+    def __init__(self, name, text, core: Core, cam: Camera, world_x, world_y, font=None, color=None):
+        super().__init__(name=name, image_path=None, cam=cam, world_x=world_x, world_y=world_y, core=core)
+        if font is None:
+            self.font = pygame.font.Font('Assets/Roboto.ttf', 30)
+        if color is None:
+            self.color = (255, 0, 0)
+        if callable(text):
+            self.text_generator = text
+            self.surface = None
+        else:
+            self.text_generator = None
+            self.surface = self.font.render(text=text, antialias=True, color=pygame.Color(self.color))
+
+    def render(self):
+        if self.text_generator is not None:
+            text = str(self.text_generator())
+            self.surface = self.font.render(text.encode('utf-8'), True, pygame.Color(self.color))
+        return super().render()
+
+
 class Button(Sprite):
     def __init__(self, name, image_path, x, y, core: Core):
         super().__init__(name=name, image_path=image_path, x=x, y=y, core=core)
@@ -132,14 +155,11 @@ class Button(Sprite):
 
     def check_click(self, params, recent_input):
         for event in recent_input:
-            e = event[0]
-            timestamp = event[1]
-            _ = timestamp
-            if e.type == MOUSEBUTTONDOWN and e.button == 1:
+            if event[0].type == MOUSEBUTTONDOWN and event[0].button == 1:
                 if self.in_button():
                     if self.callback is not None:
                         self.core.append_routine(func=self.callback, r_type='u')
-            if e.type == MOUSEBUTTONUP and e.button == 1:
+            elif event[0].type == MOUSEBUTTONUP and event[0].button == 1:
                 if self.callback is not None:
                     self.core.remove_routine(func=self.callback, r_type='u')
         return self.render()
@@ -162,6 +182,27 @@ class Button(Sprite):
             return False
 
 
+class UIText(Button):
+    def __init__(self, name, text, core: Core, x, y, font=None, color=None):
+        super().__init__(name=name, image_path=None, x=x, y=y, core=core)
+        if font is None:
+            self.font = pygame.font.Font('Assets/Roboto.ttf', 30)
+        if color is None:
+            self.color = (255, 0, 0)
+        if callable(text):
+            self.text_generator = text
+            self.surface = None
+        else:
+            self.text_generator = None
+            self.surface = self.font.render(text=text, antialias=True, color=pygame.Color(self.color))
+
+    def render(self):
+        if self.text_generator is not None:
+            text = str(self.text_generator())
+            self.surface = self.font.render(text.encode('utf-8'), True, pygame.Color(self.color))
+        return super().render()
+
+
 class KeyboardButton(Button):
     def __init__(self, name, core: Core, trigger_key):
         super().__init__(name=name, image_path='Assets/btn.png', x=0, y=0, core=core)
@@ -174,14 +215,13 @@ class KeyboardButton(Button):
         return False
 
     def check_click(self, params, recent_input):
+        # if len(recent_input) > 0:
+        #     print('check thread', recent_input)
         for event in recent_input:
-            e = event[0]
-            timestamp = event[1]
-            _ = timestamp
-            if e.type == KEYDOWN and e.key == self.trigger_key:
+            if event[0].type == KEYDOWN and event[0].key == self.trigger_key:
                 if self.callback is not None:
                     self.core.append_routine(func=self.callback, r_type='u')
-            if e.type == KEYUP and e.key == self.trigger_key:
+            elif event[0].type == KEYUP and event[0].key == self.trigger_key:
                 if self.callback is not None:
                     self.core.remove_routine(func=self.callback, r_type='u')
         return None, None
@@ -200,14 +240,11 @@ class Mouse(KeyboardButton):
 
     def check_click(self, params, recent_input):
         for event in recent_input:
-            e = event[0]
-            timestamp = event[1]
-            _ = timestamp
-            if e.type == MOUSEBUTTONDOWN and e.button == self.trigger_key:
+            if event[0].type == MOUSEBUTTONDOWN and event[0].button == self.trigger_key:
                 if self.in_button():
                     if self.callback is not None:
                         self.core.append_routine(func=self.callback, r_type=self.r_type)
-            if e.type == MOUSEBUTTONUP and e.button == self.trigger_key:
+            elif event[0].type == MOUSEBUTTONUP and event[0].button == self.trigger_key:
                 if self.callback is not None:
                     self.core.remove_routine(func=self.callback, r_type=self.r_type)
         return None, None

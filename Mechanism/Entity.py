@@ -1,7 +1,7 @@
 import uuid
 from math import sqrt, ceil
 
-from Engine.UI import Camera, EntitySprite, Button, KeyboardButton, Mouse
+from Engine.UI import Camera, EntitySprite, Button, KeyboardButton, Mouse, UIText
 
 
 class Grid:
@@ -168,9 +168,9 @@ class Entity:
 
     def sync_grid(self):
         if self.grid is not None:
-            res = self.grid.get_grids_by_ent(ent=self)
+            self.grid.get_grids_by_ent(ent=self)
             for event in self.events:
-                res = self.grid.get_grids_by_event(event=event)
+                self.grid.get_grids_by_event(event=event)
 
     def quit_grid_ent(self):
         if self.grid is not None:
@@ -266,13 +266,17 @@ class World(Entity):
         else:
             return False
 
-    def new_stimulation(self, sti_id, sti_type, image_path=None, x=None, y=None, trigger_key=None, mouse_r_type='u'):
+    def new_stimulation(
+            self, sti_id, sti_type, image_path=None, x=None, y=None, trigger_key=None, mouse_r_type='u', text=None
+    ):
         if sti_type == 'button':
             self.stimulation[sti_id] = Button(name=sti_id, image_path=image_path, x=x, y=y, core=self.core)
         elif sti_type == 'keyboard':
             self.stimulation[sti_id] = KeyboardButton(name=sti_id, core=self.core, trigger_key=trigger_key)
         elif sti_type == 'mouse':
             self.stimulation[sti_id] = Mouse(name=sti_id, core=self.core, trigger_key=trigger_key, r_type=mouse_r_type)
+        elif sti_type == 'text':
+            self.stimulation[sti_id] = UIText(name=sti_id, text=text, core=self.core, x=x, y=y)
         else:
             raise ValueError('unrecognized sti_type:{}'.format(sti_type))
 

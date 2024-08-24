@@ -10,7 +10,7 @@ from Mechanism.Game import world_changing
 if __name__ == '__main__':
     profiler = cProfile.Profile()
     profiler.enable()
-    core = Core()
+    core = Core(screen_size=(1280, 720), fps=60, max_queue_size=32)
     world_ = World(core=core, map_image='Assets/city.png')
 
     wc_thread = threading.Thread(target=world_changing, args=(world_,))

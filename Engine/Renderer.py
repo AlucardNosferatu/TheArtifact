@@ -26,9 +26,6 @@ class Renderer:
                     else:
                         (surface, position, visible, angle, new_size, flip) = item
                         if visible:
-                            # s = pygame.transform.rotate(surface=surface, angle=angle)
-                            # s = pygame.transform.scale(surface=s, size=new_size)
-                            # s = pygame.transform.flip(surface=s, flip_x=flip[0], flip_y=flip[1])
                             self.screen.blit(
                                 surface,
                                 (

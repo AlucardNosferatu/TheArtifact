@@ -1,3 +1,4 @@
+import time
 from math import sqrt
 
 import pygame
@@ -148,6 +149,9 @@ def init_nature(world):
 
 
 def init_player(world):
+    def fps_int():
+        return int(world.core.clock.get_fps())
+
     player = Player(world=world)
     player.update_ent_type(render_order=1, image_path='Assets/F-5E.png', type_name='jet')
     player.update_ent_type(render_order=1, image_path='Assets/bullet.png', type_name='bullet')
@@ -169,6 +173,7 @@ def init_player(world):
     player.add_sti(sti_id='arrow_r', sti_type='keyboard', trigger_key=pygame.K_RIGHT, callback=jet_r)
     player.add_sti(sti_id='space', sti_type='keyboard', trigger_key=pygame.K_SPACE, callback=jet_f)
     player.add_sti(sti_id='mouse', sti_type='mouse', trigger_key=1, mouse_r_type='w', callback=jet_m)
+    player.add_sti(sti_id='fps', sti_type='text', text=fps_int, x=32, y=32)
     return player
 
 
@@ -177,4 +182,4 @@ def agent_routines(world):
         for key in world.core.params['agents'].keys():
             agent = world.core.params['agents'][key]
             agent.routine_check_events()
-        world.core.clock.tick(world.core.fps * 3)
+            time.sleep(0.01)

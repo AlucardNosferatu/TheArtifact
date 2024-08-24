@@ -127,6 +127,7 @@ class Agent:
                     pending_remove.append(event)
                 elif event.status == 'idle':
                     ent_list = self.world.entities.copy()
+                    # todo: use grid algorithm
                     for ent_id in ent_list.keys():
                         trigger_ent = self.world.get_entity(ent_id=ent_id)
                         if trigger_ent is not None:
@@ -148,10 +149,12 @@ class Player(Agent):
         super().__init__(world, 'player')
 
     def add_sti(
-            self, sti_id, sti_type, image_path=None, x=None, y=None, trigger_key=None, mouse_r_type='u', callback=None
+            self, sti_id, sti_type, image_path=None, x=None, y=None, trigger_key=None, mouse_r_type='u', text=None,
+            callback=None
     ):
         self.world.new_stimulation(
-            sti_id, sti_type, image_path=image_path, x=x, y=y, trigger_key=trigger_key, mouse_r_type=mouse_r_type
+            sti_id, sti_type, image_path=image_path, x=x, y=y, trigger_key=trigger_key, mouse_r_type=mouse_r_type,
+            text=text
         )
         if callback is not None:
             self.add_callback(sti_id=sti_id, callback=callback)

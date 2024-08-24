@@ -1,6 +1,7 @@
 import time
 
 import pygame
+from pygame import NOEVENT, MOUSEMOTION
 
 
 class EventController:
@@ -13,11 +14,11 @@ class EventController:
         # 获取当前时间戳
         timestamp = time.time()
         # 获取事件
-        events = pygame.event.get()
         # 添加事件到队列
         # 将新事件和时间戳加入队列
-        for event in events:
-            self.event_queue.append((event, timestamp))
-            # 如果队列已满，丢弃队首的事件
-            if len(self.event_queue) > self.max_queue_size:
-                self.event_queue.pop(0)
+        new_event = [
+            (event, timestamp) for event in pygame.event.get() if event.type != NOEVENT and event.type != MOUSEMOTION
+        ]
+        self.event_queue += new_event
+        # 如果队列已满，丢弃队首的事件
+        self.event_queue = self.event_queue[max(0, len(self.event_queue) - self.max_queue_size):]
