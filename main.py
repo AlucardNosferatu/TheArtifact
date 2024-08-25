@@ -14,7 +14,7 @@ if __name__ == '__main__':
     profiler = cProfile.Profile()
     profiler.enable()
     pygame.init()
-    core = Core(screen_size=(1280, 720), fps=60, max_queue_size=32)
+    core = Core(screen_size=(1280, 720), fps=30, max_queue_size=32)
 
     Sprite.precache_surfaces(key='#city', image_path='Assets/city.png')
     Sprite.precache_surfaces(key='#button', image_path='Assets/btn.png')

@@ -35,13 +35,8 @@ class Renderer:
                                     )
                                 )
                             )
-                            # self.screen.blit(
-                            #     surface,
-                            #     (
-                            #         position[0] - round(surface.get_width() * 0.5),
-                            #         position[1] - round(surface.get_height() * 0.5)
-                            #     )
-                            # )
+        self.screen.blits(blit_batch)
+        blit_batch.clear()
         ud = self.ui_draw.copy()
         for key, item in ud.items():
             # Blit the surface to the screen at the given position
@@ -61,13 +56,6 @@ class Renderer:
                                 )
                             )
                         )
-                        # self.screen.blit(
-                        #     surface,
-                        #     (
-                        #         position[0] - round(surface.get_width() * 0.5),
-                        #         position[1] - round(surface.get_height() * 0.5)
-                        #     )
-                        # )
             # Update the display
         self.screen.blits(blit_batch)
         pygame.display.flip()
