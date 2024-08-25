@@ -325,5 +325,5 @@ class World(Entity):
     def sti_del_callback(self, sti_id, r_type='u'):
         self.stimulation[sti_id].del_callback(r_type=r_type)
 
-    def start(self):
-        self.core.engine_run()
+    def io_module_loop(self):
+        self.core.io_module_loop()

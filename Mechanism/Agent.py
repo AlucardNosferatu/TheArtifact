@@ -17,6 +17,8 @@ class Agent:
         core.params['agents'][agent_id] = self
         self.ent_db: dict[str, EntTemplate] = {}
         self.ent_inst: dict[str, list[int]] = {}
+        self.world_modules = []
+        self.world_modules.append(self.module_check_events)
 
     def get_ent_id(self, type_name, i):
         ent_temp: EntTemplate = self.ent_db[type_name]
@@ -118,7 +120,8 @@ class Agent:
                         results.append(ev)
         return results
 
-    def routine_check_events(self):
+    def module_check_events(self, game):
+        _ = game
         pending_remove = []
         for i in range(0, 9):
             events = self.list_ent_events(priority=i)

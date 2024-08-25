@@ -8,9 +8,9 @@ from Engine.Renderer import Renderer
 
 
 class Core:
-    eg_thread = None
 
     def __init__(self, screen_size=(1280, 720), fps=60, max_queue_size=64):
+        self.icl_thread = None
         self.fps = fps
         self.screen_size = screen_size
         self.max_queue_size = max_queue_size
@@ -26,7 +26,7 @@ class Core:
         self.recent_input = []
         self.last_tick = None
 
-    def execute_game(self):
+    def io_schedule(self):
         for routine_func in self.world_routine:
             spr_key, spr = routine_func(params=self.params, recent_input=self.recent_input)
             if spr_key is not None:
@@ -36,17 +36,17 @@ class Core:
             if spr_key is not None:
                 self.renderer.ui_draw[spr_key] = spr
 
-    def execute_game_loop(self):
+    def io_schedule_loop(self):
         self.last_tick = time.time()
         while True:
-            self.execute_game()
+            self.io_schedule()
             current_tick = time.time()
             self.params['delta'] = current_tick - self.last_tick
             self.last_tick = current_tick
 
-    def start_game_loop(self):
-        self.eg_thread = threading.Thread(target=self.execute_game_loop)
-        self.eg_thread.start()
+    def start_io_schedule_loop(self):
+        self.icl_thread = threading.Thread(target=self.io_schedule_loop)
+        self.icl_thread.start()
 
     def append_routine(self, func, r_type='w', multi_inst=False):
         if not self.has_routine(func=func, r_type=r_type) or multi_inst:
@@ -65,21 +65,27 @@ class Core:
             if not purge:
                 break
 
-    def engine_run(self):
-        try:
-            self.start_game_loop()
-            while True:
-                self.event_controller.handle_events()
-                self.get_recent_input()
-                self.renderer.render_frame()
-                for event in self.recent_input:
-                    e = event[0]
-                    if e.type == pygame.QUIT:
-                        return
-                # 维持tick频率为30Hz
-                self.clock.tick(self.fps)
-        finally:
-            pygame.quit()
+    def io_module_loop(self):
+        self.start_io_schedule_loop()
+        self.io_execute_loop()
+
+    def io_execute_loop(self):
+        run = True
+        while run:
+            run = self.io_execute()
+            # 维持tick频率为30Hz
+            self.clock.tick(self.fps)
+
+    def io_execute(self):
+        self.event_controller.handle_events()
+        self.get_recent_input()
+        self.renderer.render_frame()
+        run = True
+        for event in self.recent_input:
+            e = event[0]
+            if e.type == pygame.QUIT:
+                run = False
+        return run
 
     def get_recent_input(self):
         self.recent_input = self.event_controller.event_queue.copy()

@@ -140,7 +140,7 @@ class EntityText(EntitySprite):
 
     def render(self):
         if self.text_generator is not None:
-            text = str(self.text_generator())
+            text = str(self.text_generator(sprite=self))
             self.surface = self.font.render(text.encode('utf-8'), True, pygame.Color(self.color))
         return super().render()
 
@@ -212,7 +212,7 @@ class UIText(Button):
 
     def render(self):
         if self.text_generator is not None:
-            text = str(self.text_generator())
+            text = str(self.text_generator(sprite=self))
             self.surface = self.font.render(text.encode('utf-8'), True, pygame.Color(self.color))
         return super().render()
 

@@ -1,38 +1,23 @@
 import cProfile
 import os
 import pstats
-import threading
 
 import pygame
 
-from Engine.Core import Core
-from Engine.UI import Sprite
-from Mechanism.Entity import World
-from Mechanism.Game import world_changing
+from Mechanism.Config import spr_key_path_pairs, agents_params, game_vars, routines
+from Mechanism.Game import Game
 
 if __name__ == '__main__':
     profiler = cProfile.Profile()
     profiler.enable()
     pygame.init()
-    core = Core(screen_size=(1280, 720), fps=30, max_queue_size=32)
-
-    Sprite.precache_surfaces(key='#city', image_path='Assets/city.png')
-    Sprite.precache_surfaces(key='#button', image_path='Assets/btn.png')
-    Sprite.precache_surfaces(key='#jet', image_path='Assets/F-5E.png')
-    # Sprite.precache_surfaces(key='#city', image_path='Assets/wifi.png')
-    # Sprite.precache_surfaces(key='#button', image_path='Assets/test.png')
-    # Sprite.precache_surfaces(key='#jet', image_path='Assets/testcases.png')
-
-    Sprite.precache_surfaces(key='#bullet', image_path='Assets/bullet.png')
-    Sprite.precache_surfaces(key='#missile', image_path='Assets/missile.png')
-    Sprite.precache_surfaces(key='#target', image_path='Assets/target.png')
-
-    world_ = World(core=core, map_image='#city')
-
-    wc_thread = threading.Thread(target=world_changing, args=(world_,))
-
-    wc_thread.start()
-    world_.start()
+    game = Game(spr_key_path_pairs=spr_key_path_pairs)
+    game.load_vars(game_vars=game_vars)
+    game.load_routines(routines=routines)
+    game.new_agent(agent_id='nature')
+    game.new_agent(agent_id='player')
+    game.init_agents(agents_params=agents_params)
+    game.run()
     profiler.disable()
     pstats.Stats(
         profiler, stream=open('Performance.txt', 'w')
