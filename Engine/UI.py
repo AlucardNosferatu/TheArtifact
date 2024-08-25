@@ -122,6 +122,8 @@ class EntitySprite(Sprite):
 
 
 class EntityText(EntitySprite):
+    text_generator = None
+
     def __init__(self, name, text, core: Core, cam: Camera, world_x, world_y, font=None, color=None):
         super().__init__(name=name, image_path=None, cam=cam, world_x=world_x, world_y=world_y, core=core)
         if font is None:
@@ -192,6 +194,8 @@ class Button(Sprite):
 
 
 class UIText(Button):
+    text_generator = None
+
     def __init__(self, name, text, core: Core, x, y, font=None, color=None):
         super().__init__(name=name, image_path=None, x=x, y=y, core=core)
         if font is None:

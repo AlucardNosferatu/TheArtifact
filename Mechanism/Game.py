@@ -201,7 +201,8 @@ def spawn_targets(world, trc, trc_max):
         x = xy_pair[0]
         y = xy_pair[1]
         destroyed = True
-        for ent in world.entities.values():
+        ent_list = list(world.entities.values()).copy()
+        for ent in ent_list:
             if ent.world_x == x and ent.world_y == y:
                 destroyed = False
                 break

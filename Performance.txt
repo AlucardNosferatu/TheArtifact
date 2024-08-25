@@ -1,69 +1,69 @@
-         54484 function calls (54478 primitive calls) in 8.167 seconds
+         683132 function calls (683126 primitive calls) in 52.499 seconds
 
    Ordered by: cumulative time
    List reduced from 202 to 61 due to restriction <0.3>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000    7.587    7.587 C:\Users\16413\Documents\GitHub\TheArtifact\Mechanism\Entity.py:303(start)
-        1    0.280    0.280    7.587    7.587 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:62(engine_run)
-      373    3.866    0.010    3.866    0.010 {method 'tick' of 'pygame.time.Clock' objects}
-      374    0.104    0.000    3.090    0.008 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Renderer.py:13(render_frame)
-      374    2.257    0.006    2.257    0.006 {built-in method pygame.display.flip}
-     8857    0.637    0.000    0.637    0.000 {method 'blit' of 'pygame.surface.Surface' objects}
-        1    0.257    0.257    0.264    0.264 {built-in method pygame.base.init}
-      374    0.024    0.000    0.256    0.001 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Controller.py:13(handle_events)
-        1    0.000    0.000    0.242    0.242 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:12(__init__)
-        1    0.000    0.000    0.241    0.241 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Renderer.py:5(__init__)
-        1    0.238    0.238    0.241    0.241 {built-in method pygame.display.set_mode}
-      374    0.227    0.001    0.227    0.001 {built-in method pygame.event.get}
-        1    0.093    0.093    0.093    0.093 {built-in method pygame.base.quit}
-      374    0.080    0.000    0.080    0.000 {method 'fill' of 'pygame.surface.Surface' objects}
-        5    0.001    0.000    0.070    0.014 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\UI.py:64(precache_surfaces)
-        5    0.065    0.013    0.065    0.013 {built-in method pygame.image.load}
+        1    0.000    0.000   51.766   51.766 C:\Users\16413\Documents\GitHub\TheArtifact\Mechanism\Entity.py:319(start)
+        1    1.424    1.424   51.766   51.766 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:62(engine_run)
+     2136    1.852    0.001   28.634    0.013 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Renderer.py:13(render_frame)
+     2136   22.937    0.011   22.937    0.011 {built-in method pygame.display.flip}
+     2135   20.713    0.010   20.713    0.010 {method 'tick' of 'pygame.time.Clock' objects}
+   125677    3.305    0.000    3.305    0.000 {method 'blit' of 'pygame.surface.Surface' objects}
+     2136    0.120    0.000    0.899    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Controller.py:13(handle_events)
+     2136    0.765    0.000    0.765    0.000 {built-in method pygame.event.get}
+     2136    0.396    0.000    0.396    0.000 {method 'fill' of 'pygame.surface.Surface' objects}
+        1    0.332    0.332    0.340    0.340 {built-in method pygame.base.init}
+        1    0.000    0.000    0.296    0.296 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:12(__init__)
+        1    0.000    0.000    0.296    0.296 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Renderer.py:5(__init__)
+        1    0.293    0.293    0.296    0.296 {built-in method pygame.display.set_mode}
+        6    0.001    0.000    0.095    0.016 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\UI.py:64(precache_surfaces)
+        1    0.090    0.090    0.090    0.090 {built-in method pygame.base.quit}
+        6    0.089    0.015    0.089    0.015 {built-in method pygame.image.load}
+   251360    0.067    0.000    0.067    0.000 {built-in method builtins.round}
+   125679    0.028    0.000    0.028    0.000 {method 'get_width' of 'pygame.surface.Surface' objects}
+     4272    0.018    0.000    0.018    0.000 {method 'copy' of 'dict' objects}
+   125679    0.016    0.000    0.016    0.000 {method 'get_height' of 'pygame.surface.Surface' objects}
+      616    0.004    0.000    0.009    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:56(remove_routine)
       2/1    0.000    0.000    0.007    0.007 <frozen importlib._bootstrap>:1165(_find_and_load)
       2/1    0.000    0.000    0.007    0.007 <frozen importlib._bootstrap>:1120(_find_and_load_unlocked)
       2/1    0.000    0.000    0.006    0.006 <frozen importlib._bootstrap>:666(_load_unlocked)
-    17720    0.006    0.000    0.006    0.000 {built-in method builtins.round}
         1    0.000    0.000    0.006    0.006 <frozen importlib._bootstrap_external>:934(exec_module)
+     2136    0.005    0.000    0.006    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:78(get_recent_input)
       5/2    0.000    0.000    0.005    0.003 <frozen importlib._bootstrap>:233(_call_with_frames_removed)
         1    0.001    0.001    0.005    0.005 {built-in method builtins.exec}
+    21360    0.005    0.000    0.005    0.000 {method 'items' of 'dict' objects}
+     2136    0.005    0.000    0.005    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Controller.py:19(<listcomp>)
+        6    0.005    0.001    0.005    0.001 {method 'convert_alpha' of 'pygame.surface.Surface' objects}
         1    0.000    0.000    0.005    0.005 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pygame\freetype.py:1(<module>)
         2    0.000    0.000    0.004    0.002 <frozen importlib._bootstrap>:566(module_from_spec)
         1    0.000    0.000    0.004    0.004 <frozen importlib._bootstrap_external>:1231(create_module)
         1    0.004    0.004    0.004    0.004 {built-in method _imp.create_dynamic}
-        5    0.004    0.001    0.004    0.001 {method 'convert_alpha' of 'pygame.surface.Surface' objects}
-        2    0.001    0.000    0.003    0.002 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:945(start)
+     2138    0.004    0.000    0.004    0.000 {built-in method builtins.max}
+     1233    0.004    0.000    0.004    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:53(has_routine)
         1    0.001    0.001    0.003    0.003 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pygame\pkgdata.py:45(getResource)
-     8859    0.003    0.000    0.003    0.000 {method 'get_width' of 'pygame.surface.Surface' objects}
-        2    0.000    0.000    0.002    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:611(wait)
-        2    0.000    0.000    0.002    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:295(wait)
-      748    0.002    0.000    0.002    0.000 {method 'copy' of 'dict' objects}
-        8    0.002    0.000    0.002    0.000 {method 'acquire' of '_thread.lock' objects}
-      374    0.002    0.000    0.002    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Controller.py:19(<listcomp>)
-        1    0.000    0.000    0.002    0.002 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1142(resource_exists)
-        2    0.001    0.001    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:856(__init__)
-      374    0.001    0.000    0.001    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:78(get_recent_input)
-        1    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1414(has_resource)
-     8859    0.001    0.000    0.001    0.000 {method 'get_height' of 'pygame.surface.Surface' objects}
+     2136    0.003    0.000    0.003    0.000 {built-in method time.time}
+     2206    0.002    0.000    0.002    0.000 {built-in method builtins.len}
+        2    0.000    0.000    0.002    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:945(start)
+        1    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1142(resource_exists)
+        2    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:611(wait)
         2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap>:1054(_find_spec)
-        6    0.001    0.000    0.001    0.000 {built-in method nt.stat}
-        2    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1496(_fn)
-        2    0.001    0.000    0.001    0.000 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1502(_validate_resource_path)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1499(find_spec)
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1467(_get_spec)
-     3740    0.001    0.000    0.001    0.000 {method 'items' of 'dict' objects}
-        2    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:1607(find_spec)
-        5    0.000    0.000    0.001    0.000 <frozen importlib._bootstrap_external>:140(_path_stat)
-      376    0.001    0.000    0.001    0.000 {built-in method builtins.max}
-        2    0.000    0.000    0.001    0.000 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:351(get_provider)
-        1    0.000    0.000    0.001    0.001 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:41(start_game_loop)
-      374    0.001    0.000    0.001    0.000 {built-in method time.time}
+      616    0.001    0.000    0.001    0.000 {method 'remove' of 'list' objects}
+        2    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:295(wait)
+        8    0.001    0.000    0.001    0.000 {method 'acquire' of '_thread.lock' objects}
         1    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1158(resource_stream)
+        2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1499(find_spec)
+        2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1467(_get_spec)
+        2    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:351(get_provider)
+        2    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1607(find_spec)
+     2136    0.001    0.000    0.001    0.000 {method 'copy' of 'list' objects}
+        2    0.001    0.000    0.001    0.000 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\threading.py:856(__init__)
         2    0.000    0.000    0.001    0.000 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1602(__init__)
         1    0.000    0.000    0.001    0.001 <frozen importlib._bootstrap_external>:1007(get_code)
-       52    0.000    0.000    0.001    0.000 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:56(remove_routine)
-      444    0.001    0.000    0.001    0.000 {built-in method builtins.len}
+        6    0.001    0.000    0.001    0.000 {built-in method nt.stat}
         2    0.000    0.000    0.001    0.000 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1606(_setup_prefix)
         2    0.000    0.000    0.001    0.000 {built-in method builtins.next}
+        1    0.000    0.000    0.001    0.001 C:\Users\16413\Documents\GitHub\TheArtifact\Engine\Core.py:41(start_game_loop)
+        1    0.000    0.000    0.001    0.001 C:\Users\16413\AppData\Local\Programs\Python\Python311\Lib\site-packages\pkg_resources\__init__.py:1414(has_resource)
 
 

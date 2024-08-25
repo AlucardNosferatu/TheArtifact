@@ -19,6 +19,10 @@ if __name__ == '__main__':
     Sprite.precache_surfaces(key='#city', image_path='Assets/city.png')
     Sprite.precache_surfaces(key='#button', image_path='Assets/btn.png')
     Sprite.precache_surfaces(key='#jet', image_path='Assets/F-5E.png')
+    # Sprite.precache_surfaces(key='#city', image_path='Assets/wifi.png')
+    # Sprite.precache_surfaces(key='#button', image_path='Assets/test.png')
+    # Sprite.precache_surfaces(key='#jet', image_path='Assets/testcases.png')
+
     Sprite.precache_surfaces(key='#bullet', image_path='Assets/bullet.png')
     Sprite.precache_surfaces(key='#missile', image_path='Assets/missile.png')
     Sprite.precache_surfaces(key='#target', image_path='Assets/target.png')

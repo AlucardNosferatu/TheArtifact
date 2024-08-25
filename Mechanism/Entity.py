@@ -1,3 +1,4 @@
+import threading
 import uuid
 from math import sqrt, ceil
 
@@ -6,6 +7,7 @@ from Engine.UI import Camera, EntitySprite, Button, KeyboardButton, Mouse, UITex
 
 class Grid:
     def __init__(self, world, edge_length=8):
+        self.lock = threading.Lock()
         self.world = world
         self.elen = edge_length
         self.center_x = self.world.world_x
@@ -77,11 +79,15 @@ class Grid:
         self.id2grid[reg_id].append(gi_y_t)
         self.id2grid[reg_id].append(gi_y_b)
         for i in range(gi_x_l, gi_x_r + 1):
+            self.lock.acquire()
             if i not in self.grid2id.keys():
                 self.grid2id[i] = {}
+            self.lock.release()
             for j in range(gi_y_t, gi_y_b + 1):
+                self.lock.acquire()
                 if j not in self.grid2id[i].keys():
                     self.grid2id[i][j] = []
+                self.lock.release()
                 if reg_id not in self.grid2id[i][j]:
                     self.grid2id[i][j].append(reg_id)
 
@@ -93,11 +99,21 @@ class Grid:
             gi_y_t_old = self.id2grid[reg_id][2]
             gi_y_b_old = self.id2grid[reg_id][3]
             for i in range(gi_x_l_old, gi_x_r_old + 1):
+                self.lock.acquire()
+                if i not in self.grid2id.keys():
+                    self.grid2id[i] = {}
+                self.lock.release()
                 for j in range(gi_y_t_old, gi_y_b_old + 1):
+                    self.lock.acquire()
+                    if j not in self.grid2id[i].keys():
+                        self.grid2id[i][j] = []
+                    self.lock.release()
                     if reg_id in self.grid2id[i][j]:
                         self.grid2id[i][j].remove(reg_id)
             self.id2grid[reg_id].clear()
         del self.id2grid[reg_id]
+        if reg_id in self.event_reg.keys():
+            del self.event_reg[reg_id]
 
     def reg_ent(self, ent, gi_x_l, gi_x_r, gi_y_t, gi_y_b):
         self.reg(reg_id=ent.ent_id, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
