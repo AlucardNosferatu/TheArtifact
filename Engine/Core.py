@@ -1,4 +1,5 @@
 import threading
+import time
 
 import pygame
 
@@ -23,6 +24,7 @@ class Core:
         self.ui_routine = []
         self.routines = {'w': self.world_routine, 'u': self.ui_routine}
         self.recent_input = []
+        self.last_tick = None
 
     def execute_game(self):
         for routine_func in self.world_routine:
@@ -35,8 +37,12 @@ class Core:
                 self.renderer.ui_draw[spr_key] = spr
 
     def execute_game_loop(self):
+        self.last_tick = time.time()
         while True:
             self.execute_game()
+            current_tick = time.time()
+            self.params['delta'] = current_tick - self.last_tick
+            self.last_tick = current_tick
 
     def start_game_loop(self):
         self.eg_thread = threading.Thread(target=self.execute_game_loop)

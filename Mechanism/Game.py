@@ -7,91 +7,118 @@ from Mechanism.Agent import Agent, Nature, Player
 from Mechanism.Entity import Entity
 from Mechanism.Event import Event
 
+jet_spd = 4
+bullet_spd = 2
+bullet_ttl = 64
+missile_spd = 2
+missile_ttl = 128
+
 
 def cam_u(params, recent_input):
     _ = recent_input
     world = params['world']
-    world.get_camera().move(d_y=-16)
+    delta_t_s = params['delta']
+    camera = world.get_camera()
+    displacement = round(camera.moving_speed * delta_t_s * 100)
+    camera.move(d_y=-displacement)
     return None, None
 
 
 def cam_d(params, recent_input):
     _ = recent_input
     world = params['world']
-    world.get_camera().move(d_y=16)
+    delta_t_s = params['delta']
+    camera = world.get_camera()
+    displacement = round(camera.moving_speed * delta_t_s * 100)
+    camera.move(d_y=displacement)
     return None, None
 
 
 def cam_l(params, recent_input):
     _ = recent_input
     world = params['world']
-    world.get_camera().move(d_x=-16)
+    delta_t_s = params['delta']
+    camera = world.get_camera()
+    displacement = round(camera.moving_speed * delta_t_s * 100)
+    camera.move(d_x=-displacement)
     return None, None
 
 
 def cam_r(params, recent_input):
     _ = recent_input
     world = params['world']
-    world.get_camera().move(d_x=16)
+    delta_t_s = params['delta']
+    camera = world.get_camera()
+    displacement = round(camera.moving_speed * delta_t_s * 100)
+    camera.move(d_x=displacement)
     return None, None
 
 
 def jet_u(params, recent_input):
     _ = recent_input
     player = params['agents']['player']
+    delta_t_s = params['delta']
     jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
     if jet is not None:
-        jet.move(d_y=-16)
+        displacement = round(jet_spd * delta_t_s * 100)
+        jet.move(d_y=-displacement)
     return None, None
 
 
 def jet_d(params, recent_input):
     _ = recent_input
     player = params['agents']['player']
+    delta_t_s = params['delta']
     jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
     if jet is not None:
-        jet.move(d_y=16)
+        displacement = round(jet_spd * delta_t_s * 100)
+        jet.move(d_y=displacement)
     return None, None
 
 
 def jet_l(params, recent_input):
     _ = recent_input
     player = params['agents']['player']
+    delta_t_s = params['delta']
     jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
     if jet is not None:
-        jet.move(d_x=-16)
+        displacement = round(jet_spd * delta_t_s * 100)
+        jet.move(d_x=-displacement)
     return None, None
 
 
 def jet_r(params, recent_input):
     _ = recent_input
     player = params['agents']['player']
+    delta_t_s = params['delta']
     jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
     if jet is not None:
-        jet.move(d_x=16)
+        displacement = round(jet_spd * delta_t_s * 100)
+        jet.move(d_x=displacement)
     return None, None
 
 
 def jet_m(params, recent_input):
     _ = recent_input
     world = params['world']
-    m_w_x, m_w_y = world.get_camera().mouse_world_pos()
     player = params['agents']['player']
+    delta_t_s = params['delta']
+    m_w_x, m_w_y = world.get_camera().mouse_world_pos()
     jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
     if jet is not None:
-        spd = 16
-        err = 2 * spd
-        fly_toward(tracker=jet, dest_x=m_w_x, dest_y=m_w_y, spd=spd, err=err)
+        err = 2 * jet_spd
+        displacement = round(jet_spd * delta_t_s * 100)
+        fly_toward(tracker=jet, dest_x=m_w_x, dest_y=m_w_y, displacement=displacement, err=err)
     return None, None
 
 
-def fly_toward(tracker, dest_x, dest_y, spd, err):
+def fly_toward(tracker, dest_x, dest_y, displacement, err):
     d_w_x = dest_x - tracker.world_x
     d_w_y = dest_y - tracker.world_y
     dist = sqrt((d_w_x ** 2) + (d_w_y ** 2))
     if dist > err:
-        s_w_x = round(spd * d_w_x / dist)
-        s_w_y = round(spd * d_w_y / dist)
+        s_w_x = round(displacement * d_w_x / dist)
+        s_w_y = round(displacement * d_w_y / dist)
         tracker.move(d_x=s_w_x, d_y=s_w_y)
 
 
@@ -102,7 +129,7 @@ def jet_f_b(params, recent_input):
     type_name = 'bullet'
     jet = player.obtain_ent_inst(type_name='jet', i=player.ent_inst['jet'][0])
     i = player.create_ent_inst(type_name=type_name, world_x=jet.world_x, world_y=jet.world_y - 64)
-    event = Event(radius=32, trigger_ent_type=['target'], trigger_function=reach_target, world=player.world)
+    event = Event(radius=32, trigger_ent_type=['target', 'missile'], trigger_function=reach_target, world=player.world)
     player.bind_ent_events(type_name=type_name, i=i, events=[event])
     world.core.append_routine(func=bullet_f, r_type='w')
     return None, None
@@ -124,19 +151,21 @@ def jet_f_m(params, recent_input):
 def bullet_f(params, recent_input):
     _ = recent_input
     player = params['agents']['player']
+    delta_t_s = params['delta']
     type_name = 'bullet'
     for i in player.ent_inst[type_name]:
         bullet = player.obtain_ent_inst(type_name=type_name, i=i)
-        bullet.move(d_y=-8)
+        displacement = round(bullet_spd * delta_t_s * 100)
+        bullet.move(d_y=-displacement)
         if not hasattr(bullet, 'ttl'):
-            bullet.__setattr__('ttl', 64)
+            bullet.__setattr__('ttl', bullet_ttl)
         bullet.ttl -= 1
         if bullet.ttl < 0:
             player.remove_ent_inst(type_name=type_name, i=i)
     return None, None
 
 
-def missile_t(missile, nature):
+def missile_t(missile, nature, delta_t_s):
     type_name = 'target'
     target_t = None
     dist_min = 999999
@@ -146,22 +175,27 @@ def missile_t(missile, nature):
         if dist < dist_min:
             dist_min = dist
             target_t = target
+    displacement = round(missile_spd * delta_t_s * 100)
     if target_t is None:
-        missile.move(d_y=-8)
+        missile.move(d_y=-displacement)
     else:
-        fly_toward(tracker=missile, dest_x=target_t.world_x, dest_y=target_t.world_y, spd=8, err=16)
+        err = 2 * missile_spd
+        fly_toward(
+            tracker=missile, dest_x=target_t.world_x, dest_y=target_t.world_y, displacement=displacement, err=err
+        )
 
 
 def missile_f(params, recent_input):
     _ = recent_input
     player = params['agents']['player']
     nature = params['agents']['nature']
+    delta_t_s = params['delta']
     type_name = 'missile'
     for i in player.ent_inst[type_name]:
         missile = player.obtain_ent_inst(type_name=type_name, i=i)
-        missile_t(missile=missile, nature=nature)
+        missile_t(missile=missile, nature=nature, delta_t_s=delta_t_s)
         if not hasattr(missile, 'ttl'):
-            missile.__setattr__('ttl', 64)
+            missile.__setattr__('ttl', missile_ttl)
         missile.ttl -= 1
         if missile.ttl < 0:
             player.remove_ent_inst(type_name=type_name, i=i)
@@ -179,17 +213,8 @@ def reach_target(trigger_ent, triggered_ent, world):
 
 
 def world_changing(world):
-    nature = init_nature(world)
-
-    player = init_player(world)
-
-    player.create_ent_inst(type_name='jet', world_x=960, world_y=540)
-
-    nature.create_ent_inst(type_name='target', world_x=560, world_y=540)
-    nature.create_ent_inst(type_name='target', world_x=1360, world_y=540)
-    nature.create_ent_inst(type_name='target', world_x=960, world_y=940)
-    nature.create_ent_inst(type_name='target', world_x=960, world_y=140)
-
+    init_nature(world)
+    init_player(world)
     agent_routines(world)
 
 
@@ -249,6 +274,7 @@ def init_player(world):
     player.add_sti(sti_id='c', sti_type='keyboard', trigger_key=pygame.K_c, callback=jet_f_m)
     player.add_sti(sti_id='mouse', sti_type='mouse', trigger_key=1, mouse_r_type='w', callback=jet_m)
     player.add_sti(sti_id='fps', sti_type='text', text=fps_int, x=32, y=32)
+    player.create_ent_inst(type_name='jet', world_x=960, world_y=540)
     return player
 
 

@@ -64,56 +64,44 @@ class Grid:
     def reg(self, reg_id, gi_x_l, gi_x_r, gi_y_b, gi_y_t):
         if reg_id not in self.id2grid.keys():
             self.id2grid[reg_id] = []
-        if len(self.id2grid[reg_id]) > 0:
-            gi_x_l_old = self.id2grid[reg_id][0]
-            gi_x_r_old = self.id2grid[reg_id][1]
-            gi_y_t_old = self.id2grid[reg_id][2]
-            gi_y_b_old = self.id2grid[reg_id][3]
-            for i in range(gi_x_l_old, gi_x_r_old + 1):
-                for j in range(gi_y_t_old, gi_y_b_old + 1):
-                    if reg_id in self.grid2id[i][j]:
-                        self.grid2id[i][j].remove(reg_id)
-            self.id2grid[reg_id].clear()
+        self.clr(reg_id=reg_id, del_id=False)
+        self.lock.acquire()
         self.id2grid[reg_id].append(gi_x_l)
         self.id2grid[reg_id].append(gi_x_r)
         self.id2grid[reg_id].append(gi_y_t)
         self.id2grid[reg_id].append(gi_y_b)
         for i in range(gi_x_l, gi_x_r + 1):
-            self.lock.acquire()
             if i not in self.grid2id.keys():
                 self.grid2id[i] = {}
-            self.lock.release()
             for j in range(gi_y_t, gi_y_b + 1):
-                self.lock.acquire()
                 if j not in self.grid2id[i].keys():
                     self.grid2id[i][j] = []
-                self.lock.release()
                 if reg_id not in self.grid2id[i][j]:
                     self.grid2id[i][j].append(reg_id)
+        self.lock.release()
 
-    def clr(self, reg_id):
+    def clr(self, reg_id, del_id=True):
         assert reg_id in self.id2grid.keys()
+        self.lock.acquire()
         if len(self.id2grid[reg_id]) > 0:
             gi_x_l_old = self.id2grid[reg_id][0]
             gi_x_r_old = self.id2grid[reg_id][1]
             gi_y_t_old = self.id2grid[reg_id][2]
             gi_y_b_old = self.id2grid[reg_id][3]
             for i in range(gi_x_l_old, gi_x_r_old + 1):
-                self.lock.acquire()
                 if i not in self.grid2id.keys():
                     self.grid2id[i] = {}
-                self.lock.release()
                 for j in range(gi_y_t_old, gi_y_b_old + 1):
-                    self.lock.acquire()
                     if j not in self.grid2id[i].keys():
                         self.grid2id[i][j] = []
-                    self.lock.release()
                     if reg_id in self.grid2id[i][j]:
                         self.grid2id[i][j].remove(reg_id)
             self.id2grid[reg_id].clear()
-        del self.id2grid[reg_id]
-        if reg_id in self.event_reg.keys():
-            del self.event_reg[reg_id]
+        if del_id:
+            del self.id2grid[reg_id]
+            if reg_id in self.event_reg.keys():
+                del self.event_reg[reg_id]
+        self.lock.release()
 
     def reg_ent(self, ent, gi_x_l, gi_x_r, gi_y_t, gi_y_b):
         self.reg(reg_id=ent.ent_id, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
@@ -129,18 +117,20 @@ class Grid:
 
     def event2id(self, event):
         event_id = None
-        for event_id in self.event_reg.keys():
+        event_reg = self.event_reg.copy()
+        for event_id in event_reg.keys():
             if self.event_reg[event_id] == event:
                 break
         return event_id
 
     def ids_in_grid(self, gi_x, gi_y, filter_type=None):
         results = self.grid2id[gi_x][gi_y]
+        event_reg = self.event_reg.copy()
         if filter_type is not None:
             if filter_type == 'event':
-                results = [result for result in results if result not in self.event_reg.keys()]
+                results = [result for result in results if result not in event_reg.keys()]
             elif filter_type == 'entity':
-                results = [result for result in results if result in self.event_reg.keys()]
+                results = [result for result in results if result in event_reg.keys()]
             else:
                 raise ValueError('unrecognized filter_type:{}'.format(filter_type))
         return results

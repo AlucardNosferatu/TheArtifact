@@ -8,7 +8,7 @@ buttons = []
 
 
 class Camera:
-    def __init__(self, screen: Surface):
+    def __init__(self, screen: Surface, moving_speed=8):
         """
         初始化 Camera 对象。
         """
@@ -16,6 +16,7 @@ class Camera:
         self.world_y = 0  # 摄像头的 y 坐标
         self.w = screen.get_width()
         self.h = screen.get_height()
+        self.moving_speed = moving_speed
 
     def focus(self, world_x, world_y):
         self.world_x = world_x

@@ -14,6 +14,7 @@ class Renderer:
         # Clear the screen with a black background
         self.screen.fill((0, 0, 0))
         # Draw all objects from the global dictionary
+        blit_batch = []
         wd = self.world_draw.copy()
         for i in range(0, 9):
             for key, item in wd.items():
@@ -26,13 +27,21 @@ class Renderer:
                     else:
                         (surface, position, visible, angle, new_size, flip) = item
                         if visible:
-                            self.screen.blit(
-                                surface,
+                            blit_batch.append(
                                 (
-                                    position[0] - round(surface.get_width() * 0.5),
-                                    position[1] - round(surface.get_height() * 0.5)
+                                    surface, (
+                                        position[0] - round(surface.get_width() * 0.5),
+                                        position[1] - round(surface.get_height() * 0.5)
+                                    )
                                 )
                             )
+                            # self.screen.blit(
+                            #     surface,
+                            #     (
+                            #         position[0] - round(surface.get_width() * 0.5),
+                            #         position[1] - round(surface.get_height() * 0.5)
+                            #     )
+                            # )
         ud = self.ui_draw.copy()
         for key, item in ud.items():
             # Blit the surface to the screen at the given position
@@ -44,12 +53,21 @@ class Renderer:
                 else:
                     (surface, position, visible, angle, new_size, flip) = item
                     if visible:
-                        self.screen.blit(
-                            surface,
+                        blit_batch.append(
                             (
-                                position[0] - round(surface.get_width() * 0.5),
-                                position[1] - round(surface.get_height() * 0.5)
+                                surface, (
+                                    position[0] - round(surface.get_width() * 0.5),
+                                    position[1] - round(surface.get_height() * 0.5)
+                                )
                             )
                         )
+                        # self.screen.blit(
+                        #     surface,
+                        #     (
+                        #         position[0] - round(surface.get_width() * 0.5),
+                        #         position[1] - round(surface.get_height() * 0.5)
+                        #     )
+                        # )
             # Update the display
+        self.screen.blits(blit_batch)
         pygame.display.flip()
