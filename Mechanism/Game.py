@@ -253,7 +253,7 @@ def init_player(world):
 
 
 def agent_routines(world):
-    trc_max = 128
+    trc_max = 64
     target_respawn_counter = [trc_max, trc_max, trc_max, trc_max]
     while True:
         for key in world.core.params['agents'].keys():

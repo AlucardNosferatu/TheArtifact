@@ -126,13 +126,18 @@ class Agent:
                 if event.status == 'triggered':
                     pending_remove.append(event)
                 elif event.status == 'idle':
-                    ent_list = self.world.entities.copy()
-                    # todo: use grid algorithm
-                    for ent_id in ent_list.keys():
+                    ent_check_count = 0
+                    # ent_list = self.world.entities.copy()
+                    # for ent_id in ent_list.keys():
+                    grid = self.world.grid
+                    ent_list = grid.ids_in_event(event=event, filter_type='event')
+                    for ent_id in ent_list:
+                        ent_check_count += 1
                         trigger_ent = self.world.get_entity(ent_id=ent_id)
                         if trigger_ent is not None:
                             if event.is_triggered(trigger_ent=trigger_ent):
                                 event.triggered(trigger_ent=trigger_ent)
+                    print('ent checked', ent_check_count)
                 else:
                     raise NotImplementedError('unrecognized event.status:{}'.format(event.status))
         for event in pending_remove:

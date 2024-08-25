@@ -123,16 +123,35 @@ class Grid:
             event_id = str(uuid.uuid4())
             self.event_reg[event_id] = event
 
-        event_id = self.get_event_id(event)
+        event_id = self.event2id(event)
         assert event_id is not None
         self.reg(reg_id=event_id, gi_x_l=gi_x_l, gi_x_r=gi_x_r, gi_y_t=gi_y_t, gi_y_b=gi_y_b)
 
-    def get_event_id(self, event):
+    def event2id(self, event):
         event_id = None
         for event_id in self.event_reg.keys():
             if self.event_reg[event_id] == event:
                 break
         return event_id
+
+    def ids_in_grid(self, gi_x, gi_y, filter_type=None):
+        results = self.grid2id[gi_x][gi_y]
+        if filter_type is not None:
+            if filter_type == 'event':
+                results = [result for result in results if result not in self.event_reg.keys()]
+            elif filter_type == 'entity':
+                results = [result for result in results if result in self.event_reg.keys()]
+            else:
+                raise ValueError('unrecognized filter_type:{}'.format(filter_type))
+        return results
+
+    def ids_in_event(self, event, filter_type=None):
+        results = []
+        gi_x_l, gi_x_r, gi_y_t, gi_y_b = self.get_grids_by_event(event=event)
+        for gi_x in range(gi_x_l, gi_x_r + 1):
+            for gi_y in range(gi_y_t, gi_y_b + 1):
+                results += self.ids_in_grid(gi_x=gi_x, gi_y=gi_y, filter_type=filter_type)
+        return results
 
 
 class Entity:
@@ -197,7 +216,7 @@ class Entity:
             if purge:
                 events = self.events
             for event in events:
-                event_id = self.grid.get_event_id(event=event)
+                event_id = self.grid.event2id(event=event)
                 self.grid.clr(reg_id=event_id)
 
     def set_event(self, events, merge=False):
