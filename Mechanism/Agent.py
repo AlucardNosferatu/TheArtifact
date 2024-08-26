@@ -128,7 +128,7 @@ class Agent:
             for event in events:
                 if event.status == 'triggered':
                     pending_remove.append(event)
-                elif event.status == 'idle':
+                elif event.status in ['idle', 'persist']:
                     grid = self.world.grid
                     ent_list = grid.ids_in_event(event=event, filter_type='event')
                     for ent_id in ent_list:

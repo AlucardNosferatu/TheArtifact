@@ -182,6 +182,13 @@ class Entity:
             self.sprite.move(d_x=d_x, d_y=d_y)
         self.sync_grid()
 
+    def move_vector(self, f_x=0, f_y=0, displacement=0):
+        mag = sqrt((f_x ** 2) + (f_y ** 2))
+        if mag != 0.0:
+            d_x = round(displacement * f_x / mag)
+            d_y = round(displacement * f_y / mag)
+            self.move(d_x=d_x, d_y=d_y)
+
     def relocate(self, world_x=None, world_y=None):
         if world_x is not None:
             self.world_x = world_x

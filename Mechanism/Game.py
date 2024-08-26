@@ -8,7 +8,7 @@ from Mechanism.Entity import World
 
 
 class Game:
-    def __init__(self, spr_key_path_pairs=None):
+    def __init__(self, world_map_image,spr_key_path_pairs=None):
         self.wml_thread = None
         self.vars = {}
         self.routines = {}
@@ -18,7 +18,7 @@ class Game:
         self.core.params['game_vars'] = self.vars
         if spr_key_path_pairs is not None:
             self.precache_sprites(key_path_pairs=spr_key_path_pairs)
-        self.world = World(core=self.core, map_image='#city')
+        self.world = World(core=self.core, map_image=world_map_image)
 
     def run(self):
         self.start_world_module_loop()

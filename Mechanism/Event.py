@@ -33,4 +33,5 @@ class Event:
         if triggered_ent is None:
             triggered_ent = self.att_ent
         self.trigger_function(trigger_ent=trigger_ent, triggered_ent=triggered_ent, world=self.world)
-        self.status = 'triggered'
+        if self.status == 'idle':
+            self.status = 'triggered'
