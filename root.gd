@@ -17,7 +17,7 @@ const BLOCK_SIZE = 20.0
 @onready var excel_parser = $ExcelParser # 挂载ExcelParser脚本的子节点
 @onready var outline_generator = $OutlineGenerator # 挂载OutlineGenerator的子节点
 @onready var vehicle_builder = $VehicleBuilder # 挂载VehicleBuilder的子节点
-@onready var player_input = $PlayerInput       # 挂载PlayerInput的子节点
+@onready var player_input = $PlayerInput # 挂载PlayerInput的子节点
 @onready var thruster_controller = $ThrusterController # 挂载ThrusterController的子节点
 
 func _ready():

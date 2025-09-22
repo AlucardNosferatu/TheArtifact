@@ -50,7 +50,7 @@ func build(root: Node2D) -> void:
 		])
 	
 	# 步骤5：挂载载具脚本（如果有）
-	var vehicle_script = load("res://vehicle.gd")
+	var vehicle_script = load("res://Vehicle.gd")
 	if vehicle_script:
 		rb_vehicle.script = vehicle_script
 	
