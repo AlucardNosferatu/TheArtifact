@@ -1,6 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://d1071rwop0ht5"]
+[gd_scene load_steps=8 format=3 uid="uid://d1071rwop0ht5"]
 
 [ext_resource type="Script" uid="uid://n61v8xyx431s" path="res://root.gd" id="1_pq8q7"]
+[ext_resource type="Script" uid="uid://bmup8mr5ttcms" path="res://ExcelParser.gd" id="2_pyidc"]
+[ext_resource type="Script" uid="uid://dbsh2s0kkeo0b" path="res://OutlineGenerator.gd" id="3_vvh5c"]
+[ext_resource type="Script" uid="uid://bctwtk83t2cxh" path="res://VehicleBuilder.gd" id="4_28aoi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vho56"]
 
@@ -31,3 +34,12 @@ position = Vector2(65, 40)
 
 [node name="BlockShape2" type="CollisionShape2D" parent="Block2"]
 shape = SubResource("RectangleShape2D_pq8q7")
+
+[node name="ExcelParser" type="Node2D" parent="."]
+script = ExtResource("2_pyidc")
+
+[node name="OutlineGenerator" type="Node2D" parent="."]
+script = ExtResource("3_vvh5c")
+
+[node name="VehicleBuilder" type="Node2D" parent="."]
+script = ExtResource("4_28aoi")
