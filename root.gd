@@ -37,7 +37,7 @@ func generate_outer_vertices() -> void:
 	outer_vertices.append(current_point) # 记录第一个顶点（终点）
 	var start_point = start_edge[0] # 起始边的起点（用于判断闭合）
 	# 4. 遍历所有外边缘形成闭合轮廓
-	while not remaining_edges.empty():
+	while remaining_edges.size() > 0:
 		var found = false
 		# 查找起点与当前点匹配的边
 		for i in range(remaining_edges.size()):
@@ -50,7 +50,7 @@ func generate_outer_vertices() -> void:
 				current_point = edge_end
 				outer_vertices.append(current_point)
 				# 移除已处理的边
-				remaining_edges.erase_at(i)
+				remaining_edges.remove_at(i)
 				found = true
 				break
 		# 如果找不到匹配的边，说明轮廓不闭合（处理异常）
