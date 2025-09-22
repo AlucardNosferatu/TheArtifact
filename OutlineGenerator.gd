@@ -16,10 +16,35 @@ func generate(root: Node2D, block_size: float) -> void:
 		var c3 = Vector2(x - offset, y + offset)  # 左下角
 		var c4 = Vector2(x + offset, y + offset)  # 右下角
 		
-		edges.append([c1, c2])
-		edges.append([c2, c3])
-		edges.append([c3, c4])
-		edges.append([c4, c1])
+		# 获取方块类型，判断是否为SLOPE斜坡块
+		var block_info = root.block_types.get(pos_str, "")
+		if "SLOPE" in block_info:
+			# 提取斜坡方向（格式"###SLOPE#↖"，最后1个字符是方向）
+			var slope_dir = block_info.right(1)
+			# 根据方向生成等腰直角三角形的3条有效边（直角边与方形边重合）
+			match slope_dir:
+				"↖":  # 斜面朝左上，直角边朝下(c2→c3)、朝右(c2→c1)，斜边c1→c3
+					edges.append([c1, c3]) 
+					edges.append([c3, c4]) 
+					edges.append([c4, c1]) 
+				"↗":  # 斜面朝右上，直角边朝下(c1→c4)、朝左(c1→c2)，斜边c2→c4
+					edges.append([c2, c3])
+					edges.append([c3, c4])
+					edges.append([c4, c2]) 
+				"↘":  # 斜面朝右下，直角边朝上(c4→c1)、朝左(c4→c3)，斜边c1→c3
+					edges.append([c1, c2]) 
+					edges.append([c2, c3]) 
+					edges.append([c3, c1]) 
+				"↙":  # 斜面朝左下，直角边朝上(c3→c2)、朝右(c3→c4)，斜边c2→c4
+					edges.append([c1, c2])
+					edges.append([c2, c4]) 
+					edges.append([c4, c1]) 
+				_:  # 未知方向，降级为普通方块（避免崩溃）
+					print("未知斜坡方向：", slope_dir, "，按普通方块处理")
+					_add_normal_block_edges(edges, c1, c2, c3, c4)
+		else:
+			# 普通方块：生成4条边
+			_add_normal_block_edges(edges, c1, c2, c3, c4)
 	
 	# 步骤2：边去重（筛选外边缘）
 	root.outer_edges = _filter_outer_edges(edges)
@@ -27,7 +52,13 @@ func generate(root: Node2D, block_size: float) -> void:
 	# 步骤3：遍历外边缘生成轮廓顶点
 	root.outer_vertices = _traverse_edges(root.outer_edges)
 	print("轮廓生成完成，顶点数：", root.outer_vertices.size())
-
+	
+# 辅助函数：添加普通方块的4条边
+func _add_normal_block_edges(edges: Array, c1: Vector2, c2: Vector2, c3: Vector2, c4: Vector2) -> void:
+	edges.append([c1, c2])  # 右上→左上
+	edges.append([c2, c3])  # 左上→左下
+	edges.append([c3, c4])  # 左下→右下
+	edges.append([c4, c1])  # 右下→右上
 # 子函数：筛选外边缘（去重）
 func _filter_outer_edges(all_edges: Array[Array]) -> Array[Array]:
 	var edge_counter: Dictionary = {}
