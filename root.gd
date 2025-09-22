@@ -64,7 +64,7 @@ func generate_collision_shape(root: Node2D, sorted_vertices: Array) -> void:
 	rb_vehicle = RigidBody2D.new()
 	rb_vehicle.name = 'Vehicle'
 	rb_vehicle.gravity_scale = 0
-	rb_vehicle.mass = 1.0
+	rb_vehicle.mass = 1.0 * block_positions.size()
 	rb_vehicle.collision_layer = 1
 	rb_vehicle.collision_mask = 1
 	var collision_shape = CollisionPolygon2D.new()
@@ -79,8 +79,8 @@ func generate_collision_shape(root: Node2D, sorted_vertices: Array) -> void:
 		var pos_parts = pos_str.split(",") # 分割为["x", "y"]
 		if pos_parts.size() != 2:
 			continue # 跳过格式错误的键
-		var x = pos_parts[0].to_float() - 10
-		var y = pos_parts[1].to_float() + 10
+		var x = pos_parts[0].to_float()
+		var y = pos_parts[1].to_float()
 		var thruster_pos: Vector2 = Vector2(x, y)
 		# 2. 解析朝向：从值字符串中提取最后一个字符（假设朝向是最后一位）
 		var block_info = block_types[pos_str]
@@ -95,7 +95,7 @@ func generate_collision_shape(root: Node2D, sorted_vertices: Array) -> void:
 				rb_vehicle, # 载具刚体
 				thruster_pos, # 推进器位置
 				thruster_face, # 推进器朝向
-				100.0, # 默认推力
+				200.0, # 默认推力
 				center_offset
 			]
 			all_thruster.append(thruster_params)
@@ -240,8 +240,8 @@ func parse_block_positions(json_data: Dictionary) -> void:
 			var col = int(col_str)
 			if cols[col_str].begins_with("###"):
 				# 转换行列到坐标（原点在左上角，行=Y，列=X）
-				var x = (col - 1) * block_size # 列从1开始，转换为0基准X坐标
-				var y = (row - 1) * block_size # 行从1开始，转换为0基准Y坐标
+				var x = (col - 0.5) * block_size # 列从1开始，转换为0基准X坐标
+				var y = (row - 0.5) * block_size # 行从1开始，转换为0基准Y坐标
 				# 用字符串拼接替代vstr()
 				block_positions[str(x) + "," + str(y)] = true
 				block_types[str(x) + "," + str(y)] = cols[col_str]
@@ -252,64 +252,10 @@ func detect_outer_edges() -> void:
 		var pos = []
 		for s in pos_str_array:
 			pos.append(int(s))
-		var x = pos[0]
-		var y = pos[1]
-		
-		# 定义当前方块的四条边和四个角落的位置检测键
-		var edges = {
-			"top": str(x) + "," + str(y - block_size),
-			"bottom": str(x) + "," + str(y + block_size),
-			"left": str(x - block_size) + "," + str(y),
-			"right": str(x + block_size) + "," + str(y)
-		}
-		var corners = {
-			"top_right": str(x + block_size) + "," + str(y),
-			"bottom_right": str(x + block_size) + "," + str(y + block_size),
-			"bottom_left": str(x) + "," + str(y + block_size),
-			"top_left": str(x) + "," + str(y)
-		}
-		
-		# 检测上边是否为外部边
-		if not block_positions.has(edges["top"]):
-			outer_vertices.append(Vector2(x, y))
-			outer_vertices.append(Vector2(x + block_size, y))
-		
-		# 检测下边是否为外部边
-		if not block_positions.has(edges["bottom"]):
-			outer_vertices.append(Vector2(x, y + block_size))
-			outer_vertices.append(Vector2(x + block_size, y + block_size))
-		
-		# 检测左边是否为外部边
-		if not block_positions.has(edges["left"]):
-			outer_vertices.append(Vector2(x, y))
-			outer_vertices.append(Vector2(x, y + block_size))
-		
-		# 检测右边是否为外部边
-		if not block_positions.has(edges["right"]):
-			outer_vertices.append(Vector2(x + block_size, y))
-			outer_vertices.append(Vector2(x + block_size, y + block_size))
-		
-		# 检测四个角落是否为外部顶点（无相邻方块时添加）
-		if not block_positions.has(corners["top_right"]):
-			outer_vertices.append(Vector2(x + block_size, y))
-		if not block_positions.has(corners["bottom_right"]):
-			outer_vertices.append(Vector2(x + block_size, y + block_size))
-		if not block_positions.has(corners["bottom_left"]):
-			outer_vertices.append(Vector2(x, y + block_size))
-		if not block_positions.has(corners["top_left"]):
-			outer_vertices.append(Vector2(x, y))
-	
-	# 去重顶点
-	outer_vertices = array_unique(outer_vertices)
-
-# 自定义数组去重方法（针对Vector2类型）
-func array_unique(arr: Array) -> Array:
-	var unique_arr = []
-	var seen = {} # 用Dictionary记录已出现的元素
-	for item in arr:
-		# 将Vector2转换为字符串作为键（如"x,y"）
-		var key = str(item.x) + "," + str(item.y)
-		if not seen.has(key):
-			seen[key] = true
-			unique_arr.append(item)
-	return unique_arr
+		var x = float(pos[0])
+		var y = float(pos[1])
+		var offset = float(block_size) / 2
+		outer_vertices.append(Vector2(x - offset, y - offset))
+		outer_vertices.append(Vector2(x - offset, y + offset))
+		outer_vertices.append(Vector2(x + offset, y - offset))
+		outer_vertices.append(Vector2(x + offset, y + offset))

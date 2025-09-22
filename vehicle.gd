@@ -5,12 +5,11 @@ func _draw():
 	for thruster in get_tree().root.get_child(0).all_thruster:
 		var rb: RigidBody2D = thruster[0]
 		var pos: Vector2 = thruster[1] # 发力点（局部坐标）
-		pos.x = pos.x + 20
 		var face: String = thruster[2]
 		var force: float = thruster[3]
 		# 1. 绘制发力点（红色小点）
 		rb.draw_circle(pos, 2, Color.RED)
-		# 2. 计算力的方向向量（复用之前的方向计算逻辑）
+		# 2. 计算力的方向向量（复用之前的方向计算逻辑） 
 		var angle = rb.global_rotation
 		var dir = Vector2.ZERO
 		match face:
