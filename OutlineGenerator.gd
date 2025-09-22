@@ -25,7 +25,7 @@ func generate(root: Node2D, block_size: float) -> void:
 	root.outer_edges = _filter_outer_edges(edges)
 	
 	# 步骤3：遍历外边缘生成轮廓顶点
-	root.outer_vertices = _traverse_edges(root.outer_edges, root)
+	root.outer_vertices = _traverse_edges(root.outer_edges)
 	print("轮廓生成完成，顶点数：", root.outer_vertices.size())
 
 # 子函数：筛选外边缘（去重）
@@ -65,7 +65,7 @@ func _standardize_edge(p1: Vector2, p2: Vector2) -> Array[Vector2]:
 			return [p2 as Vector2, p1 as Vector2]
 
 # 子函数：遍历边生成轮廓顶点
-func _traverse_edges(outer_edges: Array[Array], root: Node2D) -> Array:
+func _traverse_edges(outer_edges: Array[Array]) -> Array:
 	if outer_edges.size()<=0:
 		print("警告：外边缘为空")
 		return []
