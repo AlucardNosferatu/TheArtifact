@@ -13,50 +13,59 @@ func _ready():
 	parse_block_positions(sheet_data["data"])
 	# 3. 检测外部边缘并收集顶点
 	detect_outer_edges()
+	generate_outer_vertices()
 		# 4. 排序顶点并生成多边形碰撞体
 	if outer_vertices.size() >= 3:
-		var sorted_vertices = sort_vertices()
-		generate_collision_shape(self, sorted_vertices)
-		# 生成可视化方块（可选）
+		generate_collision_shape(self, outer_vertices)
 	else:
 		print("顶点数量不足，无法生成多边形")
 
-
-# 对顶点进行排序（按顺时针方向排列，确保多边形闭合）
-func sort_vertices() -> Array:
-	if outer_vertices.size() < 3:
-		return []
-	# 步骤1：找到最左侧的顶点（起始点）
-	var start_vertex = outer_vertices[0]
-	for v in outer_vertices:
-		if v.x < start_vertex.x or (v.x == start_vertex.x and v.y < start_vertex.y):
-			start_vertex = v
-	# 步骤2：按顺时针顺序遍历相邻顶点
-	var sorted = []
-	var current = start_vertex
-	var visited = {}
-	while current != null and not visited.has(str(current.x) + "," + str(current.y)):
-		sorted.append(current)
-		visited[str(current.x) + "," + str(current.y)] = true
-		# 寻找下一个相邻顶点（优先向右，其次向下、向左、向上）
-		var next_vertex = null
-		var directions = [
-			Vector2(1, 0), # 右
-			Vector2(0, 1), # 下
-			Vector2(-1, 0), # 左
-			Vector2(0, -1) # 上
-		]
-		for dir in directions:
-			var candidate = current + dir * block_size
-			for v in outer_vertices:
-				if v.distance_to(candidate) < 1e-6 and not visited.has(str(v.x) + "," + str(v.y)):
-					next_vertex = v
-					break
-			if next_vertex:
+# 遍历外边缘生成闭合轮廓顶点
+func generate_outer_vertices() -> void:
+	outer_vertices.clear()
+	# 检查外边缘是否为空
+	if outer_edges.size() <= 0:
+		print("警告：外边缘列表为空，无法生成顶点")
+		return
+	# 1. 复制外边缘列表（避免修改原始数据）
+	var remaining_edges = outer_edges.duplicate()
+	# 2. 随机选择起始边
+	var start_edge = remaining_edges[randi() % remaining_edges.size()]
+	remaining_edges.erase(start_edge) # 从剩余边中移除起始边
+	# 3. 初始化遍历变量
+	var current_point = start_edge[1] # 起始边的终点作为第一个当前点
+	outer_vertices.append(current_point) # 记录第一个顶点（终点）
+	var start_point = start_edge[0] # 起始边的起点（用于判断闭合）
+	# 4. 遍历所有外边缘形成闭合轮廓
+	while not remaining_edges.empty():
+		var found = false
+		# 查找起点与当前点匹配的边
+		for i in range(remaining_edges.size()):
+			var edge = remaining_edges[i]
+			var edge_start = edge[0]
+			var edge_end = edge[1]
+			# 浮点数比较需要容错（避免精度问题导致匹配失败）
+			if is_point_equal(edge_start, current_point):
+				# 找到匹配的边，记录其终点
+				current_point = edge_end
+				outer_vertices.append(current_point)
+				# 移除已处理的边
+				remaining_edges.erase_at(i)
+				found = true
 				break
-		current = next_vertex
-	return sorted
+		# 如果找不到匹配的边，说明轮廓不闭合（处理异常）
+		if not found:
+			print("警告：未找到匹配的边，轮廓可能不闭合")
+			break
+	# 5. 检查是否闭合（最后一个点应与起始边的起点重合）
+	if outer_vertices.size() > 0 and not is_point_equal(outer_vertices[-1], start_point):
+		print("警告：轮廓未闭合，手动补充起始点")
+		outer_vertices.append(start_point)
 
+# 辅助函数：比较两个点是否相等（处理浮点数精度问题）
+func is_point_equal(p1: Vector2, p2: Vector2, epsilon: float = 0.01) -> bool:
+	return abs(p1.x - p2.x) < epsilon and abs(p1.y - p2.y) < epsilon
+	
 # 生成多边形碰撞体
 func generate_collision_shape(root: Node2D, sorted_vertices: Array) -> void:
 	var rigid_body = RigidBody2D.new()
@@ -219,7 +228,6 @@ func _process(_delta: float) -> void:
 			
 		
 var block_size = 20 # 每个方块尺寸为20px
-var vertices = [] # 存储多边形顶点
 var rb_vehicle: RigidBody2D = null
 
 
@@ -229,6 +237,7 @@ var block_positions: Dictionary = {}
 var block_types: Dictionary = {}
 # 存储外部边缘顶点（去重后）
 var outer_vertices: Array = []
+
 
 # 解析JSON数据，记录所有方块的位置（行列转换为坐标）
 func parse_block_positions(json_data: Dictionary) -> void:
@@ -245,7 +254,10 @@ func parse_block_positions(json_data: Dictionary) -> void:
 				# 用字符串拼接替代vstr()
 				block_positions[str(x) + "," + str(y)] = true
 				block_types[str(x) + "," + str(y)] = cols[col_str]
-
+				
+# 模块的边，每个元素是[起点，终点]
+var edges: Array[Array] = []
+var outer_edges: Array[Array] = []
 func detect_outer_edges() -> void:
 	for pos_str in block_positions:
 		var pos_str_array = pos_str.split(",")
@@ -254,8 +266,61 @@ func detect_outer_edges() -> void:
 			pos.append(int(s))
 		var x = float(pos[0])
 		var y = float(pos[1])
+		#这里的x和y是模块的中心坐标（相对于载具整体的左上角）
 		var offset = float(block_size) / 2
-		outer_vertices.append(Vector2(x - offset, y - offset))
-		outer_vertices.append(Vector2(x - offset, y + offset))
-		outer_vertices.append(Vector2(x + offset, y - offset))
-		outer_vertices.append(Vector2(x + offset, y + offset))
+		var c1 = Vector2(x + offset, y - offset) # 右上角
+		var c2 = Vector2(x - offset, y - offset) # 左上角
+		var c3 = Vector2(x - offset, y + offset) # 左下角
+		var c4 = Vector2(x + offset, y + offset) # 右下角
+		edges.append([c1, c2])
+		edges.append([c2, c3])
+		edges.append([c3, c4])
+		edges.append([c4, c1])
+		#剩下的部分你来完成（去重，注意边是双向匹配）
+	# 2. 边去重处理（核心逻辑）
+	# 用字典统计边的出现次数（键：标准化的边字符串，值：出现次数）
+	var edge_counter: Dictionary = {}
+	for edge in edges:
+		var p1: Vector2 = edge[0]
+		var p2: Vector2 = edge[1]
+		
+		# 标准化边的表示：确保起点 <= 终点（按坐标排序，解决双向匹配问题）
+		var std_edge = standardize_edge(p1, p2)
+		var standard_p1 = std_edge[0]
+		var standard_p2 = std_edge[1]
+		
+		# 生成唯一键（将Vector2转换为字符串，精确到小数点后2位避免浮点数误差）
+		var edge_key: String = "{0},{1}|{2},{3}".format(
+			[standard_p1.x, standard_p1.y, standard_p2.x, standard_p2.y]
+			)
+		# 统计出现次数
+		edge_counter[edge_key] = edge_counter.get(edge_key, 0) + 1
+	# 3. 筛选外边缘（只出现一次的边）
+	for edge in edges:
+		var p1: Vector2 = edge[0]
+		var p2: Vector2 = edge[1]
+		# 标准化边的表示：确保起点 <= 终点（按坐标排序，解决双向匹配问题）
+		var std_edge = standardize_edge(p1, p2)
+		var standard_p1 = std_edge[0]
+		var standard_p2 = std_edge[1]
+		# 生成唯一键（将Vector2转换为字符串，精确到小数点后2位避免浮点数误差）
+		var edge_key: String = "{0},{1}|{2},{3}".format(
+			[standard_p1.x, standard_p1.y, standard_p2.x, standard_p2.y]
+			)
+		# 只保留出现次数为1的边（外边缘）
+		if edge_counter[edge_key] == 1:
+			outer_edges.append(edge)
+	
+# 辅助函数：标准化边的起点和终点顺序（确保p1 <= p2）
+func standardize_edge(p1: Vector2, p2: Vector2) -> Array[Vector2]:
+	# 排序规则：先比较x坐标，x相等则比较y坐标
+	if p1.x < p2.x:
+		return [p1, p2]
+	elif p1.x > p2.x:
+		return [p2, p1]
+	else:
+		# x相等时比较y坐标
+		if p1.y <= p2.y:
+			return [p1, p2]
+		else:
+			return [p2, p1]
