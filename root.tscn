@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://d1071rwop0ht5"]
+[gd_scene load_steps=10 format=3 uid="uid://d1071rwop0ht5"]
 
 [ext_resource type="Script" uid="uid://n61v8xyx431s" path="res://root.gd" id="1_pq8q7"]
 [ext_resource type="Script" uid="uid://bmup8mr5ttcms" path="res://ExcelParser.gd" id="2_pyidc"]
 [ext_resource type="Script" uid="uid://dbsh2s0kkeo0b" path="res://OutlineGenerator.gd" id="3_vvh5c"]
 [ext_resource type="Script" uid="uid://bctwtk83t2cxh" path="res://VehicleBuilder.gd" id="4_28aoi"]
+[ext_resource type="Script" uid="uid://dxcgocom7vu3v" path="res://PlayerInput.gd" id="5_jnlp7"]
+[ext_resource type="Script" uid="uid://bgf8o3agqjr0f" path="res://ThrusterController.gd" id="6_l8v81"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vho56"]
 
@@ -43,3 +45,9 @@ script = ExtResource("3_vvh5c")
 
 [node name="VehicleBuilder" type="Node2D" parent="."]
 script = ExtResource("4_28aoi")
+
+[node name="PlayerInput" type="Node2D" parent="."]
+script = ExtResource("5_jnlp7")
+
+[node name="ThrusterController" type="Node2D" parent="."]
+script = ExtResource("6_l8v81")
