@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var root = get_parent()  # 父节点是根节点（挂载Root.gd）
+@onready var root = get_parent() # 父节点是根节点（挂载Root.gd）
 
 func _process(_delta: float) -> void:
 	# 处理挂钩拉力
@@ -36,7 +36,7 @@ func _apply_hook_force() -> void:
 func _apply_thruster_force() -> void:
 	for thruster in root.all_thruster:
 		var vehicle_rb: RigidBody2D = thruster[0]
-		var local_pos: Vector2 = thruster[1]  # 推进器局部位置（方块中心）
+		var local_pos: Vector2 = thruster[1] # 推进器局部位置（方块中心）
 		var face: String = thruster[2]
 		var force_strength: float = thruster[3]
 		var center_offset: Vector2 = thruster[4]
@@ -48,9 +48,9 @@ func _apply_thruster_force() -> void:
 		var angle = vehicle_rb.global_rotation
 		var dir = Vector2.ZERO
 		match face:
-			'↑': dir = Vector2(cos(angle - PI/2), sin(angle - PI/2))
+			'↑': dir = Vector2(cos(angle - PI / 2), sin(angle - PI / 2))
 			'→': dir = Vector2(cos(angle), sin(angle))
-			'↓': dir = Vector2(cos(angle + PI/2), sin(angle + PI/2))
+			'↓': dir = Vector2(cos(angle + PI / 2), sin(angle + PI / 2))
 			'←': dir = Vector2(cos(angle + PI), sin(angle + PI))
 		
 		# 计算施力点的全局偏移（匹配apply_force的参数要求）
