@@ -6,17 +6,31 @@ func build(root: Node2D) -> void:
 	#var vehicles:Array[RigidBody2D]=[]
 	# 步骤4：初始化推进器参数（从block_types中筛选推进器）
 	root.all_thruster.clear()
+	var pivot_global_position: Vector2 = Vector2.ZERO
+	var pivot_vertices_center: Vector2 = Vector2.ZERO
+	var base_offset = Vector2.ZERO
 	for i in range(root.outer_vertices.size()):
 		var rb_vehicle = RigidBody2D.new()
 		rb_vehicle.name = "Vehicle_" + str(i)
 		rb_vehicle.gravity_scale = 0.0
 		rb_vehicle.collision_layer = 1
 		rb_vehicle.collision_mask = 1
-		rb_vehicle.global_position = Vector2(200.0, 200.0 - 50 * i)
-		
+		var relative_offset = Vector2.ZERO
+		var vertices_center = get_bounding_box_center(root.outer_vertices[i])
+		if pivot_global_position.length() <= 0:
+			rb_vehicle.global_position = Vector2(200.0, 200.0)
+			pivot_global_position = rb_vehicle.global_position
+			pivot_vertices_center = vertices_center
+			base_offset = get_min_xy(root.outer_vertices[i])
+		else:
+			relative_offset = vertices_center - pivot_vertices_center
+			rb_vehicle.global_position = relative_offset + pivot_global_position
 		# 步骤2：创建碰撞多边形（基于轮廓顶点）
 		var collision_shape = CollisionPolygon2D.new()
-		collision_shape.polygon = root.outer_vertices[i]
+		var centered_vertices = []
+		for v in root.outer_vertices[i]:
+			centered_vertices.append(v - base_offset - relative_offset)
+		collision_shape.polygon = centered_vertices
 		var area = calculate_polygon_area(collision_shape)
 		print(rb_vehicle.name, ' Area:', area)
 		rb_vehicle.mass = 0.001 * area # 质量与方块数量成正比
@@ -57,6 +71,52 @@ func build(root: Node2D) -> void:
 		root.add_child(rb_vehicle)
 		print("载具生成完成，推进器数量：", root.all_thruster.size())
 
+# 计算多边形外接矩形（轴对齐）的中心点坐标
+# 参数：vertices - 顶点数组（支持Vector2、(x,y)元组、[x,y]数组）
+# 返回：Vector2 - 外接矩形中心点；顶点为空时返回(0,0)
+func get_bounding_box_center(vertices: Array) -> Vector2:
+	if vertices.size() <= 0:
+		return Vector2.ZERO
+	# 初始化最值（取第一个顶点的坐标）
+	var min_x = vertices[0].x
+	var max_x = min_x
+	var min_y = vertices[0].y
+	var max_y = min_y
+	# 遍历所有顶点，更新最值
+	for v in vertices:
+		var x = v.x
+		var y = v.y
+		if x < min_x:
+			min_x = x
+		if x > max_x:
+			max_x = x
+		if y < min_y:
+			min_y = y
+		if y > max_y:
+			max_y = y
+	# 计算外接矩形中心点（(max+min)/2）
+	return Vector2(
+		(max_x + min_x) / 2.0,
+		(max_y + min_y) / 2.0
+	)
+
+# 辅助函数：获取顶点数组的min_x（最左）和min_y（最上）
+func get_min_xy(vertices: Array) -> Vector2:
+	if vertices.size() <= 0:
+		return Vector2.ZERO
+	# 初始化min_x和min_y（取第一个顶点）
+	var min_x = vertices[0].x
+	var min_y = vertices[0].y
+	# 遍历所有顶点，找到真正的min_x和min_y
+	for v in vertices:
+		var x = v.x
+		var y = v.y
+		if x < min_x:
+			min_x = x
+		if y < min_y:
+			min_y = y
+	return Vector2(min_x, min_y)
+	
 # 计算CollisionPolygon2D的面积
 func calculate_polygon_area(polygon: CollisionPolygon2D) -> float:
 	var vertices = polygon.polygon # 获取碰撞体的顶点数组（PoolVector2Array类型）
