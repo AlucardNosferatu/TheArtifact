@@ -48,12 +48,26 @@ func generate(root: Node2D, block_size: float) -> void:
 			var slope_dir = params[1]
 			var row_count = int(params[2])
 			var col_count = int(params[3])
-			#var row_index = int(params[4])
-			#var col_index = int(params[5])
-			var hypo_y_left = hypo_y(c2.x, col_count, row_count) # 左边界x=x_min处的斜边Y
-			var hypo_y_right = hypo_y(c1.x, col_count, row_count) # 右边界x=x_max处的斜边Y
-			var hypo_x_up = hypo_x(c1.y, col_count, row_count) # 左边界x=x_min处的斜边Y
-			var hypo_x_down = hypo_x(c4.y, col_count, row_count) # 右边界x=x_max处的斜边Y
+			var row_index = int(params[4])
+			var col_index = int(params[5])
+			var hypo_y_left = 0
+			var hypo_y_right = 0
+			var hypo_x_up = 0
+			var hypo_x_down = 0
+			var local_left_x = (row_index - 1) * block_size
+			var local_right_x = row_index * block_size
+			var local_up_y = (col_index - 1) * block_size
+			var local_down_y = col_index * block_size
+			if slope_dir in ['↙', '↗']:
+				hypo_y_left = hypo_y1(local_left_x, col_count, row_count) # 左边界x=x_min处的斜边Y
+				hypo_y_right = hypo_y1(local_right_x, col_count, row_count) # 右边界x=x_max处的斜边Y
+				hypo_x_up = hypo_x1(local_up_y, col_count, row_count) # 左边界x=x_min处的斜边Y
+				hypo_x_down = hypo_x1(local_down_y, col_count, row_count) # 右边界x=x_max处的斜边Y
+			else:
+				hypo_y_left = hypo_y2(local_left_x, col_count, row_count, block_size) # 左边界x=x_min处的斜边Y
+				hypo_y_right = hypo_y2(local_right_x, col_count, row_count, block_size) # 右边界x=x_max处的斜边Y
+				hypo_x_up = hypo_x2(local_up_y, col_count, row_count, block_size) # 左边界x=x_min处的斜边Y
+				hypo_x_down = hypo_x2(local_down_y, col_count, row_count, block_size) # 右边界x=x_max处的斜边Y
 			# 穿过判断：格子Y范围与斜边Y值有交集
 			var hypo_y_left_inrange = c3.y >= hypo_y_left and hypo_y_left >= c2.y
 			var hypo_y_right_inrange = c4.y >= hypo_y_right and hypo_y_right >= c1.y
@@ -123,6 +137,90 @@ func generate(root: Node2D, block_size: float) -> void:
 							edges.append([p_left, c3]) # 左下顶点→右下顶点
 							edges.append([c3, c4]) # 右下顶点→右边界交点
 							edges.append([c4, p_right]) # 右边界交点→左边界交点
+					"↖": # 斜边方向：左下→右上（斜率为负）
+						# 组合1：左边界 + 下边界 → 三角形
+						if hypo_y_right_inrange and hypo_x_down_inrange:
+							edges.append([p_right, p_down]) # 左下顶点→左边界交点
+							edges.append([p_down, c4]) # 左边界交点→下边界交点
+							edges.append([c4, p_right]) # 下边界交点→右下顶点
+						
+						# 组合2：上边界 + 右边界 → 五边形
+						elif hypo_x_up_inrange and hypo_y_left_inrange:
+							edges.append([c1, p_up]) # 左上顶点→上边界交点
+							edges.append([p_up, p_left]) # 上边界交点→右边界交点
+							edges.append([p_left, c3]) # 右边界交点→右下顶点
+							edges.append([c3, c4]) # 右下顶点→左下顶点
+							edges.append([c4, c1]) # 左下顶点→左上顶点
+						
+						# 组合3：上边界 + 下边界 → 梯形
+						elif hypo_x_up_inrange and hypo_x_down_inrange:
+							edges.append([p_up, p_down]) # 左上顶点→上边界交点
+							edges.append([p_down, c4]) # 上边界交点→下边界交点
+							edges.append([c4, c1]) # 下边界交点→左下顶点
+							edges.append([c1, p_up]) # 左下顶点→左上顶点
+						
+						# 组合4：左边界 + 右边界 → 梯形
+						elif hypo_y_left_inrange and hypo_y_right_inrange:
+							edges.append([p_right, p_left]) # 左边界交点→左下顶点
+							edges.append([p_left, c3]) # 左下顶点→右下顶点
+							edges.append([c3, c4]) # 右下顶点→右边界交点
+							edges.append([c4, p_right]) # 右边界交点→左边界交点
+					"↙": # 斜边方向：左下→右上（斜率为负）
+						# 组合1：左边界 + 下边界 → 三角形
+						if hypo_y_right_inrange and hypo_x_up_inrange:
+							edges.append([c1, p_up]) # 左下顶点→左边界交点
+							edges.append([p_up, p_right]) # 左边界交点→下边界交点
+							edges.append([p_right, c1]) # 下边界交点→右下顶点
+						
+						# 组合2：上边界 + 右边界 → 五边形
+						elif hypo_x_down_inrange and hypo_y_left_inrange:
+							edges.append([c1, c2]) # 左上顶点→上边界交点
+							edges.append([c2, p_left]) # 上边界交点→右边界交点
+							edges.append([p_left, p_down]) # 右边界交点→右下顶点
+							edges.append([p_down, c4]) # 右下顶点→左下顶点
+							edges.append([c4, c1]) # 左下顶点→左上顶点
+						
+						# 组合3：上边界 + 下边界 → 梯形
+						elif hypo_x_up_inrange and hypo_x_down_inrange:
+							edges.append([c1, p_up]) # 左上顶点→上边界交点
+							edges.append([p_up, p_down]) # 上边界交点→下边界交点
+							edges.append([p_down, c4]) # 下边界交点→左下顶点
+							edges.append([c4, c1]) # 左下顶点→左上顶点
+						
+						# 组合4：左边界 + 右边界 → 梯形
+						elif hypo_y_left_inrange and hypo_y_right_inrange:
+							edges.append([c1, c2]) # 左边界交点→左下顶点
+							edges.append([c2, p_left]) # 左下顶点→右下顶点
+							edges.append([p_left, p_right]) # 右下顶点→右边界交点
+							edges.append([p_right, c1]) # 右边界交点→左边界交点
+					"↘": # 斜边方向：左下→右上（斜率为负）
+						# 组合1：左边界 + 下边界 → 三角形
+						if hypo_y_left_inrange and hypo_x_up_inrange:
+							edges.append([p_up, c2]) # 左下顶点→左边界交点
+							edges.append([c2, p_left]) # 左边界交点→下边界交点
+							edges.append([p_left, p_up]) # 下边界交点→右下顶点
+						
+						# 组合2：上边界 + 右边界 → 五边形
+						elif hypo_x_down_inrange and hypo_y_right_inrange:
+							edges.append([c1, c2]) # 左上顶点→上边界交点
+							edges.append([c2, c3]) # 上边界交点→右边界交点
+							edges.append([c3, p_down]) # 右边界交点→右下顶点
+							edges.append([p_down, p_right]) # 右下顶点→左下顶点
+							edges.append([p_right, c1]) # 左下顶点→左上顶点
+						
+						# 组合3：上边界 + 下边界 → 梯形
+						elif hypo_x_up_inrange and hypo_x_down_inrange:
+							edges.append([p_up, c2]) # 左上顶点→上边界交点
+							edges.append([c2, c3]) # 上边界交点→下边界交点
+							edges.append([c3, p_down]) # 下边界交点→左下顶点
+							edges.append([p_down, p_up]) # 左下顶点→左上顶点
+						
+						# 组合4：左边界 + 右边界 → 梯形
+						elif hypo_y_left_inrange and hypo_y_right_inrange:
+							edges.append([c1, c2]) # 左边界交点→左下顶点
+							edges.append([c2, p_left]) # 左下顶点→右下顶点
+							edges.append([p_left, p_right]) # 右下顶点→右边界交点
+							edges.append([p_right, c1]) # 右边界交点→左边界交点
 					_:
 						print("未知斜坡方向：", slope_dir, "，按普通方块处理")
 						_add_normal_block_edges(edges, c1, c2, c3, c4)
@@ -137,9 +235,12 @@ func generate(root: Node2D, block_size: float) -> void:
 	# 步骤3：遍历外边缘生成轮廓顶点
 	root.outer_vertices = _traverse_edges(root.outer_edges)
 	print('顶点', '\n', root.outer_vertices)
-func hypo_y(x, X_total, Y_total): return float(Y_total) / float(X_total) * float(x)
-func hypo_x(y, X_total, Y_total): return float(X_total) / float(Y_total) * float(y)
-
+func hypo_y1(x, X_total, Y_total): return float(Y_total) / float(X_total) * float(x)
+func hypo_x1(y, X_total, Y_total): return float(X_total) / float(Y_total) * float(y)
+func hypo_y2(x, X_total, Y_total, block_size):
+	return (float(Y_total) * float(block_size)) - (float(Y_total) / float(X_total) * float(x))
+func hypo_x2(y, X_total, Y_total, block_size):
+	return (float(X_total) * float(block_size)) - (float(X_total) / float(Y_total) * float(y))
 # 辅助函数：添加普通方块的4条边
 func _add_normal_block_edges(edges: Array, c1: Vector2, c2: Vector2, c3: Vector2, c4: Vector2) -> void:
 	edges.append([c1, c2]) # 右上→左上
