@@ -58,6 +58,10 @@ func generate(root: Node2D, block_size: float) -> void:
 			var local_right_x = col_index * block_size
 			var local_up_y = (row_index - 1) * block_size
 			var local_down_y = row_index * block_size
+			
+			var R_x= c4.x - col_index * block_size
+			var R_y= c4.y - row_index * block_size
+			
 			if slope_dir in ['↙', '↗']:
 				hypo_y_left = hypo_y1(local_left_x, col_count, row_count) # 左边界x=x_min处的斜边Y
 				hypo_y_right = hypo_y1(local_right_x, col_count, row_count) # 右边界x=x_max处的斜边Y
@@ -93,19 +97,19 @@ func generate(root: Node2D, block_size: float) -> void:
 				# 1. 计算各边交点坐标（基于斜边方程）
 				var p_left = null # 左边界交点 (x=c2.x, y=hypo_y_left)
 				if hypo_y_left_inrange:
-					p_left = Vector2(c2.x, hypo_y_left)
+					p_left = Vector2(c2.x, hypo_y_left+R_y)
 				
 				var p_right = null # 右边界交点 (x=c1.x, y=hypo_y_right)
 				if hypo_y_right_inrange:
-					p_right = Vector2(c1.x, hypo_y_right)
+					p_right = Vector2(c1.x, hypo_y_right+R_y)
 				
 				var p_up = null # 上边界交点 (x=hypo_x_up, y=c1.y)
 				if hypo_x_up_inrange:
-					p_up = Vector2(hypo_x_up, c1.y)
+					p_up = Vector2(hypo_x_up+R_x, c1.y)
 				
 				var p_down = null # 下边界交点 (x=hypo_x_down, y=c4.y)
 				if hypo_x_down_inrange:
-					p_down = Vector2(hypo_x_down, c4.y)
+					p_down = Vector2(hypo_x_down+R_x, c4.y)
 				
 				# 2. 根据箭头方向和边组合生成有效边
 				match slope_dir:
@@ -229,6 +233,12 @@ func generate(root: Node2D, block_size: float) -> void:
 			_add_normal_block_edges(edges, c1, c2, c3, c4)
 	print('所有边', '\n', edges)
 	# 步骤2：边去重（筛选外边缘）
+	var tmp:Array[Array]=[]
+	for edge in edges:
+		var e_vec:Vector2=edge[1]-edge[0]
+		if e_vec.length()>0:
+			tmp.append(edge)
+	edges=tmp
 	root.outer_edges = _filter_outer_edges(edges)
 	print('外部边', '\n', root.outer_edges)
 	
