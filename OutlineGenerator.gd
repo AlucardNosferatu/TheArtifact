@@ -44,11 +44,12 @@ func generate(root: Node2D, block_size: float) -> void:
 					print("未知斜坡方向：", slope_dir, "，按普通方块处理")
 					_add_normal_block_edges(edges, c1, c2, c3, c4)
 		elif "CS" in block_info:
-			var slope_dir = block_info[6]
-			var row_count = int(block_info[8])
-			var col_count = int(block_info[10])
-			#var row_index = int(block_info[12])
-			#var col_index = int(block_info[14])
+			var params = block_info.rsplit("###", true)[1].rsplit("#", true)
+			var slope_dir = params[1]
+			var row_count = int(params[2])
+			var col_count = int(params[3])
+			#var row_index = int(params[4])
+			#var col_index = int(params[5])
 			var hypo_y_left = hypo_y(c2.x, col_count, row_count) # 左边界x=x_min处的斜边Y
 			var hypo_y_right = hypo_y(c1.x, col_count, row_count) # 右边界x=x_max处的斜边Y
 			var hypo_x_up = hypo_x(c1.y, col_count, row_count) # 左边界x=x_min处的斜边Y
@@ -128,13 +129,14 @@ func generate(root: Node2D, block_size: float) -> void:
 		else:
 			# 普通方块：生成4条边
 			_add_normal_block_edges(edges, c1, c2, c3, c4)
-	print(edges)
+	print('所有边', '\n', edges)
 	# 步骤2：边去重（筛选外边缘）
 	root.outer_edges = _filter_outer_edges(edges)
+	print('外部边', '\n', root.outer_edges)
 	
 	# 步骤3：遍历外边缘生成轮廓顶点
 	root.outer_vertices = _traverse_edges(root.outer_edges)
-	print("轮廓生成完成，顶点数：", root.outer_vertices.size())
+	print('顶点', '\n', root.outer_vertices)
 func hypo_y(x, X_total, Y_total): return float(Y_total) / float(X_total) * float(x)
 func hypo_x(y, X_total, Y_total): return float(X_total) / float(Y_total) * float(y)
 
