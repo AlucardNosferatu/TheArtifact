@@ -20,3 +20,4 @@ func _draw():
 				'←': dir = Vector2(cos(angle + PI), sin(angle + PI))
 			# 3. 绘制力的方向（蓝色线段，长度与力大小成正比）
 			draw_line(pos, pos + dir * force * 5, Color.BLUE, 2.0) # 0.1是缩放系数，避免线太长
+			break
