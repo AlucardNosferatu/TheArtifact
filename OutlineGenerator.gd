@@ -9,12 +9,13 @@ func generate(root: Node2D, block_size: float) -> void:
 		var x = float(pos_parts[0])
 		var y = float(pos_parts[1])
 		var offset = block_size / 2.0
-		
+		#if x==130.0 and y==70:
+			#print('Catch')
 		# 计算方块四个角（中心坐标x,y → 角坐标）
-		var c1 = Vector2(x + offset, y - offset)  # 右上角
-		var c2 = Vector2(x - offset, y - offset)  # 左上角
-		var c3 = Vector2(x - offset, y + offset)  # 左下角
-		var c4 = Vector2(x + offset, y + offset)  # 右下角
+		var c1 = Vector2(x + offset, y - offset) # 右上角
+		var c2 = Vector2(x - offset, y - offset) # 左上角
+		var c3 = Vector2(x - offset, y + offset) # 左下角
+		var c4 = Vector2(x + offset, y + offset) # 右下角
 		
 		# 获取方块类型，判断是否为SLOPE斜坡块
 		var block_info = root.block_types.get(pos_str, "")
@@ -23,42 +24,126 @@ func generate(root: Node2D, block_size: float) -> void:
 			var slope_dir = block_info.right(1)
 			# 根据方向生成等腰直角三角形的3条有效边（直角边与方形边重合）
 			match slope_dir:
-				"↖":  # 斜面朝左上，直角边朝下(c2→c3)、朝右(c2→c1)，斜边c1→c3
-					edges.append([c1, c3]) 
-					edges.append([c3, c4]) 
-					edges.append([c4, c1]) 
-				"↗":  # 斜面朝右上，直角边朝下(c1→c4)、朝左(c1→c2)，斜边c2→c4
+				"↖": # 斜面朝左上，直角边朝下(c2→c3)、朝右(c2→c1)，斜边c1→c3
+					edges.append([c1, c3])
+					edges.append([c3, c4])
+					edges.append([c4, c1])
+				"↗": # 斜面朝右上，直角边朝下(c1→c4)、朝左(c1→c2)，斜边c2→c4
 					edges.append([c2, c3])
 					edges.append([c3, c4])
-					edges.append([c4, c2]) 
-				"↘":  # 斜面朝右下，直角边朝上(c4→c1)、朝左(c4→c3)，斜边c1→c3
-					edges.append([c1, c2]) 
-					edges.append([c2, c3]) 
-					edges.append([c3, c1]) 
-				"↙":  # 斜面朝左下，直角边朝上(c3→c2)、朝右(c3→c4)，斜边c2→c4
+					edges.append([c4, c2])
+				"↘": # 斜面朝右下，直角边朝上(c4→c1)、朝左(c4→c3)，斜边c1→c3
 					edges.append([c1, c2])
-					edges.append([c2, c4]) 
-					edges.append([c4, c1]) 
-				_:  # 未知方向，降级为普通方块（避免崩溃）
+					edges.append([c2, c3])
+					edges.append([c3, c1])
+				"↙": # 斜面朝左下，直角边朝上(c3→c2)、朝右(c3→c4)，斜边c2→c4
+					edges.append([c1, c2])
+					edges.append([c2, c4])
+					edges.append([c4, c1])
+				_: # 未知方向，降级为普通方块（避免崩溃）
 					print("未知斜坡方向：", slope_dir, "，按普通方块处理")
 					_add_normal_block_edges(edges, c1, c2, c3, c4)
+		elif "CS" in block_info:
+			var slope_dir = block_info[6]
+			var row_count = int(block_info[8])
+			var col_count = int(block_info[10])
+			#var row_index = int(block_info[12])
+			#var col_index = int(block_info[14])
+			var hypo_y_left = hypo_y(c2.x, col_count, row_count) # 左边界x=x_min处的斜边Y
+			var hypo_y_right = hypo_y(c1.x, col_count, row_count) # 右边界x=x_max处的斜边Y
+			var hypo_x_up = hypo_x(c1.y, col_count, row_count) # 左边界x=x_min处的斜边Y
+			var hypo_x_down = hypo_x(c4.y, col_count, row_count) # 右边界x=x_max处的斜边Y
+			# 穿过判断：格子Y范围与斜边Y值有交集
+			var hypo_y_left_inrange = c3.y >= hypo_y_left and hypo_y_left >= c2.y
+			var hypo_y_right_inrange = c4.y >= hypo_y_right and hypo_y_right >= c1.y
+			var hypo_x_up_inrange = c2.x <= hypo_x_up and hypo_x_up <= c1.x
+			var hypo_x_down_inrange = c3.x <= hypo_x_down and hypo_x_down <= c4.x
+			var crossed = hypo_y_left_inrange or hypo_y_right_inrange or hypo_x_up_inrange or hypo_x_down_inrange
+			if not crossed:
+				if slope_dir in ['↖', '↗']:
+					if c1.y > hypo_y_right and c2.y > hypo_y_left:
+						# 普通方块：生成4条边
+						_add_normal_block_edges(edges, c1, c2, c3, c4)
+					else:
+						pass
+				else:
+					if c1.y > hypo_y_right and c2.y > hypo_y_left:
+						pass
+					else:
+						# 普通方块：生成4条边
+						_add_normal_block_edges(edges, c1, c2, c3, c4)
+			else:
+				#这部分你来写，注意利用hypo_y_left_inrange、hypo_y_right_inrange、hypo_x_up_inrange、hypo_x_down_inrange
+				# 被斜线穿过：根据穿过的边组合生成有效边
+				# 1. 计算各边交点坐标（基于斜边方程）
+				var p_left = null # 左边界交点 (x=c2.x, y=hypo_y_left)
+				if hypo_y_left_inrange:
+					p_left = Vector2(c2.x, hypo_y_left)
+				
+				var p_right = null # 右边界交点 (x=c1.x, y=hypo_y_right)
+				if hypo_y_right_inrange:
+					p_right = Vector2(c1.x, hypo_y_right)
+				
+				var p_up = null # 上边界交点 (x=hypo_x_up, y=c1.y)
+				if hypo_x_up_inrange:
+					p_up = Vector2(hypo_x_up, c1.y)
+				
+				var p_down = null # 下边界交点 (x=hypo_x_down, y=c4.y)
+				if hypo_x_down_inrange:
+					p_down = Vector2(hypo_x_down, c4.y)
+				
+				# 2. 根据箭头方向和边组合生成有效边
+				match slope_dir:
+					"↗": # 斜边方向：右下→左上（斜率为正）
+						# 组合1：左边界 + 下边界 → 三角形
+						if hypo_y_left_inrange and hypo_x_down_inrange:
+							edges.append([p_left, c3]) # 左下顶点→左边界交点
+							edges.append([c3, p_down]) # 左边界交点→下边界交点
+							edges.append([p_down, p_left]) # 下边界交点→右下顶点
+						
+						# 组合2：上边界 + 右边界 → 五边形
+						elif hypo_x_up_inrange and hypo_y_right_inrange:
+							edges.append([p_up, c2]) # 左上顶点→上边界交点
+							edges.append([c2, c3]) # 上边界交点→右边界交点
+							edges.append([c3, c4]) # 右边界交点→右下顶点
+							edges.append([c4, p_right]) # 右下顶点→左下顶点
+							edges.append([p_right, p_up]) # 左下顶点→左上顶点
+						
+						# 组合3：上边界 + 下边界 → 梯形
+						elif hypo_x_up_inrange and hypo_x_down_inrange:
+							edges.append([p_up, c2]) # 左上顶点→上边界交点
+							edges.append([c2, c3]) # 上边界交点→下边界交点
+							edges.append([c3, p_down]) # 下边界交点→左下顶点
+							edges.append([p_down, p_up]) # 左下顶点→左上顶点
+						
+						# 组合4：左边界 + 右边界 → 梯形
+						elif hypo_y_left_inrange and hypo_y_right_inrange:
+							edges.append([p_right, p_left]) # 左边界交点→左下顶点
+							edges.append([p_left, c3]) # 左下顶点→右下顶点
+							edges.append([c3, c4]) # 右下顶点→右边界交点
+							edges.append([c4, p_right]) # 右边界交点→左边界交点
+					_:
+						print("未知斜坡方向：", slope_dir, "，按普通方块处理")
+						_add_normal_block_edges(edges, c1, c2, c3, c4)
 		else:
 			# 普通方块：生成4条边
 			_add_normal_block_edges(edges, c1, c2, c3, c4)
-	
+	print(edges)
 	# 步骤2：边去重（筛选外边缘）
 	root.outer_edges = _filter_outer_edges(edges)
 	
 	# 步骤3：遍历外边缘生成轮廓顶点
 	root.outer_vertices = _traverse_edges(root.outer_edges)
 	print("轮廓生成完成，顶点数：", root.outer_vertices.size())
-	
+func hypo_y(x, X_total, Y_total): return float(Y_total) / float(X_total) * float(x)
+func hypo_x(y, X_total, Y_total): return float(X_total) / float(Y_total) * float(y)
+
 # 辅助函数：添加普通方块的4条边
 func _add_normal_block_edges(edges: Array, c1: Vector2, c2: Vector2, c3: Vector2, c4: Vector2) -> void:
-	edges.append([c1, c2])  # 右上→左上
-	edges.append([c2, c3])  # 左上→左下
-	edges.append([c3, c4])  # 左下→右下
-	edges.append([c4, c1])  # 右下→右上
+	edges.append([c1, c2]) # 右上→左上
+	edges.append([c2, c3]) # 左上→左下
+	edges.append([c3, c4]) # 左下→右下
+	edges.append([c4, c1]) # 右下→右上
 # 子函数：筛选外边缘（去重）
 func _filter_outer_edges(all_edges: Array[Array]) -> Array[Array]:
 	var edge_counter: Dictionary = {}
@@ -67,7 +152,7 @@ func _filter_outer_edges(all_edges: Array[Array]) -> Array[Array]:
 		var p1 = edge[0]
 		var p2 = edge[1]
 		var std_edge = _standardize_edge(p1, p2)
-		var edge_key = "{0},{1}|{2},{3}".format([std_edge[0].x, std_edge[0].y, std_edge[1].x, std_edge[1].y])
+		var edge_key = "{0},{1}|{2},{3}".format([int(std_edge[0].x), int(std_edge[0].y), int(std_edge[1].x), int(std_edge[1].y)])
 		edge_counter[edge_key] = edge_counter.get(edge_key, 0) + 1
 	
 	# 保留只出现一次的边（外边缘）
@@ -76,7 +161,7 @@ func _filter_outer_edges(all_edges: Array[Array]) -> Array[Array]:
 		var p1 = edge[0]
 		var p2 = edge[1]
 		var std_edge = _standardize_edge(p1, p2)
-		var edge_key = "{0},{1}|{2},{3}".format([std_edge[0].x, std_edge[0].y, std_edge[1].x, std_edge[1].y])
+		var edge_key = "{0},{1}|{2},{3}".format([int(std_edge[0].x), int(std_edge[0].y), int(std_edge[1].x), int(std_edge[1].y)])
 		if edge_counter[edge_key] == 1:
 			outer_edges.append(edge)
 	return outer_edges
@@ -97,7 +182,7 @@ func _standardize_edge(p1: Vector2, p2: Vector2) -> Array[Vector2]:
 
 # 子函数：遍历边生成轮廓顶点
 func _traverse_edges(outer_edges: Array[Array]) -> Array:
-	if outer_edges.size()<=0:
+	if outer_edges.size() <= 0:
 		print("警告：外边缘为空")
 		return []
 	
@@ -111,12 +196,13 @@ func _traverse_edges(outer_edges: Array[Array]) -> Array:
 	var start_point = start_edge[0]
 	
 	# 遍历匹配边
-	while not remaining_edges.size()<=0:
+	var edge_now = null
+	while not remaining_edges.size() <= 0:
 		var found = false
 		for i in range(remaining_edges.size()):
-			var edge = remaining_edges[i]
-			if is_point_equal(edge[0], current_point):
-				current_point = edge[1]
+			edge_now = remaining_edges[i]
+			if is_point_equal(edge_now[0], current_point):
+				current_point = edge_now[1]
 				vertices.append(current_point)
 				remaining_edges.remove_at(i)
 				found = true
