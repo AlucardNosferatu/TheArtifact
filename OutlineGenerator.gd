@@ -298,18 +298,17 @@ func _traverse_edges(outer_edges: Array[Array]) -> Array:
 	if outer_edges.size() <= 0:
 		print("警告：外边缘为空")
 		return []
+		
+	# 初始化遍历
+	var vertices_groups:Array[Array]=[]
+	var vertices:Array = []
 	
 	var remaining_edges = outer_edges.duplicate()
 	var start_edge = remaining_edges[randi() % remaining_edges.size()]
 	remaining_edges.erase(start_edge)
-	
-	# 初始化遍历
-	var vertices:Array = []
-	vertices.clear()
 	var current_point = start_edge[1]
-	vertices.append(current_point)
 	var start_point = start_edge[0]
-	var vertices_groups=[]
+	vertices.append(current_point)
 	# 遍历匹配边
 	var edge_now = null
 	while not remaining_edges.size() <= 0:
@@ -318,21 +317,27 @@ func _traverse_edges(outer_edges: Array[Array]) -> Array:
 			edge_now = remaining_edges[i]
 			if is_point_equal(edge_now[0], current_point):
 				current_point = edge_now[1]
-				vertices.append(current_point)
-				remaining_edges.remove_at(i)
-				found = true
-				break
+			elif is_point_equal(edge_now[1], current_point):
+				current_point = edge_now[0]
+			else:
+				continue
+			vertices.append(current_point)
+			remaining_edges.remove_at(i)
+			found = true
+			break
 		if not found:
 			print("检测到多个独立刚体轮廓")
+			# 确保闭合
 			if not is_point_equal(vertices[-1], start_point):
 				vertices.append(start_point)
-				# 确保闭合
 			vertices_groups.append(vertices.duplicate())
 			vertices.clear()
 			start_edge = remaining_edges[randi() % remaining_edges.size()]
 			remaining_edges.erase(start_edge)
 			current_point = start_edge[1]
-	
+			start_point = start_edge[0]
+			vertices.append(current_point)
+	vertices_groups.append(vertices.duplicate())
 	return vertices_groups
 
 # 辅助函数：比较两个点是否相等（处理浮点数精度问题）
