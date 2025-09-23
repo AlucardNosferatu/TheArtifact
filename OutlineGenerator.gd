@@ -228,6 +228,8 @@ func generate(root: Node2D, block_size: float) -> void:
 					_:
 						print("未知斜坡方向：", slope_dir, "，按普通方块处理")
 						_add_normal_block_edges(edges, c1, c2, c3, c4)
+		elif "JOINT" in block_info:
+			pass
 		else:
 			# 普通方块：生成4条边
 			_add_normal_block_edges(edges, c1, c2, c3, c4)

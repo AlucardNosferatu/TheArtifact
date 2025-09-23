@@ -1,5 +1,6 @@
 extends Node2D
 
+var vehicle_script = load("res://Vehicle.gd")
 # 生成载具刚体和碰撞体，填充Root的v_rb和all_thruster
 func build(root: Node2D) -> void:
 	# 步骤1：创建载具刚体
@@ -35,41 +36,60 @@ func build(root: Node2D) -> void:
 		print(rb_vehicle.name, ' Area:', area)
 		rb_vehicle.mass = 0.001 * area # 质量与方块数量成正比
 		rb_vehicle.add_child(collision_shape)
-		
+			
 		# 步骤3：计算中心偏移量（几何中心相对于左上角的偏移）
 		var center_offset = _calculate_center_offset(root.outer_vertices[i])
 		for pos_str in root.block_types:
-			var block_info = root.block_types[pos_str]
-			if "THRUSTER" not in block_info:
-				continue # 只处理推进器方块
-			# 解析推进器位置
 			var pos_parts = pos_str.split(",")
 			if pos_parts.size() != 2:
 				continue
 			var x = float(pos_parts[0])
 			var y = float(pos_parts[1])
-			var thruster_pos = Vector2(x, y)
-			# 解析推进器朝向
-			var thruster_face = block_info.right(1)
-			if thruster_face not in ["↑", "↓", "←", "→"]:
-				print("无效朝向：", thruster_face)
-				continue
-			# 构建推进器参数（[刚体, 位置, 朝向, 推力, 中心偏移]）
-			root.all_thruster.append([
-				rb_vehicle,
-				thruster_pos,
-				thruster_face,
-				200.0, # 默认推力
-				center_offset
-			])
-		# 步骤5：挂载载具脚本（如果有）
-		var vehicle_script = load("res://Vehicle.gd")
-		if vehicle_script:
-			rb_vehicle.script = vehicle_script
-		
+			var center_pos = Vector2(x, y)
+			if is_point_in_polygon(Vector2(x, y), root.outer_vertices[i]):
+				var block_info = root.block_types[pos_str]
+				if "THRUSTER" in block_info:
+				# 解析推进器朝向
+					var thruster_face = block_info.right(1)
+					if thruster_face not in ["↑", "↓", "←", "→"]:
+						print("无效朝向：", thruster_face)
+						continue
+					# 构建推进器参数（[刚体, 位置, 朝向, 推力, 中心偏移]）
+					root.all_thruster.append([
+						rb_vehicle,
+						center_pos - base_offset - relative_offset,
+						thruster_face,
+						200.0, # 默认推力
+						center_offset
+					])
 		# 步骤6：添加到场景并更新Root引用
+		rb_vehicle.set_script(vehicle_script)
 		root.add_child(rb_vehicle)
 		print("载具生成完成，推进器数量：", root.all_thruster.size())
+	
+# 射线法：判断点是否在多边形内（局部坐标）
+# 参数：point - 待检测点（刚体局部坐标）；polygon - 多边形顶点数组（刚体局部坐标）
+# 返回：bool - 点在多边形内返回true，否则false
+func is_point_in_polygon(point: Vector2, polygon: Array) -> bool:
+	var n = polygon.size()
+	if n < 3:
+		return false # 无效多边形
+	var inside = false
+	for i in range(n):
+		var j = (i + 1) % n # 下一个顶点索引
+		var vi = polygon[i]
+		var vj = polygon[j]
+		# 检测射线与边的交点
+		var vi_y_cond = (vi.y > point.y)
+		var vj_y_cond = (vj.y > point.y)
+		# 边的两端点在射线两侧（y方向）
+		if vi_y_cond != vj_y_cond:
+			# 计算交点的x坐标
+			var x_intersect = ((point.y - vi.y) * (vj.x - vi.x)) / (vj.y - vi.y) + vi.x
+			# 交点在点的右侧，计数+1
+			if point.x < x_intersect:
+				inside = !inside # 奇数次为内，偶数次为外
+	return inside
 
 # 计算多边形外接矩形（轴对齐）的中心点坐标
 # 参数：vertices - 顶点数组（支持Vector2、(x,y)元组、[x,y]数组）
