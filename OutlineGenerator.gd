@@ -304,10 +304,12 @@ func _traverse_edges(outer_edges: Array[Array]) -> Array:
 	remaining_edges.erase(start_edge)
 	
 	# 初始化遍历
+	var vertices:Array = []
+	vertices.clear()
 	var current_point = start_edge[1]
-	var vertices = [current_point]
+	vertices.append(current_point)
 	var start_point = start_edge[0]
-	
+	var vertices_groups=[]
 	# 遍历匹配边
 	var edge_now = null
 	while not remaining_edges.size() <= 0:
@@ -321,13 +323,17 @@ func _traverse_edges(outer_edges: Array[Array]) -> Array:
 				found = true
 				break
 		if not found:
-			print("警告：轮廓未闭合")
-			break
+			print("检测到多个独立刚体轮廓")
+			if not is_point_equal(vertices[-1], start_point):
+				vertices.append(start_point)
+				# 确保闭合
+			vertices_groups.append(vertices.duplicate())
+			vertices.clear()
+			start_edge = remaining_edges[randi() % remaining_edges.size()]
+			remaining_edges.erase(start_edge)
+			current_point = start_edge[1]
 	
-	# 确保闭合
-	if not is_point_equal(vertices[-1], start_point):
-		vertices.append(start_point)
-	return vertices
+	return vertices_groups
 
 # 辅助函数：比较两个点是否相等（处理浮点数精度问题）
 func is_point_equal(p1: Vector2, p2: Vector2, epsilon: float = 0.01) -> bool:
