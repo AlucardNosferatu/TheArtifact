@@ -7,6 +7,7 @@ func build(root: Node2D) -> void:
 	#var vehicles:Array[RigidBody2D]=[]
 	# 步骤4：初始化推进器参数（从block_types中筛选推进器）
 	root.all_thruster.clear()
+	var joints: Array = []
 	var pivot_global_position: Vector2 = Vector2.ZERO
 	var pivot_vertices_center: Vector2 = Vector2.ZERO
 	var base_offset = Vector2.ZERO
@@ -40,33 +41,49 @@ func build(root: Node2D) -> void:
 		# 步骤3：计算中心偏移量（几何中心相对于左上角的偏移）
 		var center_offset = _calculate_center_offset(root.outer_vertices[i])
 		for pos_str in root.block_types:
+			var block_info: String = root.block_types[pos_str]
 			var pos_parts = pos_str.split(",")
 			if pos_parts.size() != 2:
 				continue
 			var x = float(pos_parts[0])
 			var y = float(pos_parts[1])
 			var center_pos = Vector2(x, y)
-			if is_point_in_polygon(Vector2(x, y), root.outer_vertices[i]):
-				var block_info = root.block_types[pos_str]
-				if "THRUSTER" in block_info:
-				# 解析推进器朝向
-					var thruster_face = block_info.right(1)
-					if thruster_face not in ["↑", "↓", "←", "→"]:
-						print("无效朝向：", thruster_face)
-						continue
-					# 构建推进器参数（[刚体, 位置, 朝向, 推力, 中心偏移]）
-					root.all_thruster.append([
-						rb_vehicle,
-						center_pos - base_offset - relative_offset,
-						thruster_face,
-						200.0, # 默认推力
-						center_offset
-					])
+			if 'JOINT' in block_info or 'RAIL' in block_info:
+				#无归属block初始化，还没写，先用pass占个位
+				if 'JOINT' in block_info:
+					var params = block_info.rsplit('###', true)[1].rsplit('#')
+					joints.append([params, center_pos - pivot_vertices_center + pivot_global_position])
+			else:
+				if is_point_in_polygon(Vector2(x, y), root.outer_vertices[i]):
+					if "THRUSTER" in block_info:
+					# 解析推进器朝向
+						var thruster_face = block_info.right(1)
+						if thruster_face not in ["↑", "↓", "←", "→"]:
+							print("无效朝向：", thruster_face)
+							continue
+						# 构建推进器参数（[刚体, 位置, 朝向, 推力, 中心偏移]）
+						root.all_thruster.append([
+							rb_vehicle,
+							center_pos - base_offset - relative_offset,
+							thruster_face,
+							200.0, # 默认推力
+							center_offset
+						])
 		# 步骤6：添加到场景并更新Root引用
 		rb_vehicle.set_script(vehicle_script)
 		root.add_child(rb_vehicle)
 		print("载具生成完成，推进器数量：", root.all_thruster.size())
-	
+	for params in joints:
+		var part_pos = params[1]
+		var joint_params = params[0]
+		var node_a = joint_params[1]
+		var node_b = joint_params[2]
+		var j = PinJoint2D.new()
+		j.global_position = part_pos
+		j.node_a = NodePath(root.find_child(node_a, true, false).get_path())
+		j.node_b = NodePath(root.find_child(node_b, true, false).get_path())
+		
+		root.add_child(j)
 # 射线法：判断点是否在多边形内（局部坐标）
 # 参数：point - 待检测点（刚体局部坐标）；polygon - 多边形顶点数组（刚体局部坐标）
 # 返回：bool - 点在多边形内返回true，否则false
