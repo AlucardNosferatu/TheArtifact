@@ -54,10 +54,10 @@ func generate(root: Node2D, block_size: float) -> void:
 			var hypo_y_right = 0
 			var hypo_x_up = 0
 			var hypo_x_down = 0
-			var local_left_x = (row_index - 1) * block_size
-			var local_right_x = row_index * block_size
-			var local_up_y = (col_index - 1) * block_size
-			var local_down_y = col_index * block_size
+			var local_left_x = (col_index - 1) * block_size
+			var local_right_x = col_index * block_size
+			var local_up_y = (row_index - 1) * block_size
+			var local_down_y = row_index * block_size
 			if slope_dir in ['↙', '↗']:
 				hypo_y_left = hypo_y1(local_left_x, col_count, row_count) # 左边界x=x_min处的斜边Y
 				hypo_y_right = hypo_y1(local_right_x, col_count, row_count) # 右边界x=x_max处的斜边Y
@@ -69,20 +69,20 @@ func generate(root: Node2D, block_size: float) -> void:
 				hypo_x_up = hypo_x2(local_up_y, col_count, row_count, block_size) # 左边界x=x_min处的斜边Y
 				hypo_x_down = hypo_x2(local_down_y, col_count, row_count, block_size) # 右边界x=x_max处的斜边Y
 			# 穿过判断：格子Y范围与斜边Y值有交集
-			var hypo_y_left_inrange = c3.y >= hypo_y_left and hypo_y_left >= c2.y
-			var hypo_y_right_inrange = c4.y >= hypo_y_right and hypo_y_right >= c1.y
-			var hypo_x_up_inrange = c2.x <= hypo_x_up and hypo_x_up <= c1.x
-			var hypo_x_down_inrange = c3.x <= hypo_x_down and hypo_x_down <= c4.x
+			var hypo_y_left_inrange = local_down_y >= hypo_y_left and hypo_y_left >= local_up_y
+			var hypo_y_right_inrange = local_down_y >= hypo_y_right and hypo_y_right >= local_up_y
+			var hypo_x_up_inrange = local_left_x <= hypo_x_up and hypo_x_up <= local_right_x
+			var hypo_x_down_inrange = local_left_x <= hypo_x_down and hypo_x_down <= local_right_x
 			var crossed = hypo_y_left_inrange or hypo_y_right_inrange or hypo_x_up_inrange or hypo_x_down_inrange
 			if not crossed:
 				if slope_dir in ['↖', '↗']:
-					if c1.y > hypo_y_right and c2.y > hypo_y_left:
+					if local_up_y > hypo_y_right and local_up_y > hypo_y_left:
 						# 普通方块：生成4条边
 						_add_normal_block_edges(edges, c1, c2, c3, c4)
 					else:
 						pass
 				else:
-					if c1.y > hypo_y_right and c2.y > hypo_y_left:
+					if local_up_y > hypo_y_right and local_up_y > hypo_y_left:
 						pass
 					else:
 						# 普通方块：生成4条边
