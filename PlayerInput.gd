@@ -23,8 +23,9 @@ func _input(event: InputEvent) -> void:
 	
 	# 处理键盘输入（推进器开关）
 	elif event is InputEventKey:
-		if event.pressed and event.keycode == KEY_SPACE:
-			root.move = not root.move
+		if event.pressed:
+			if event.keycode == KEY_SPACE:
+				root.move = not root.move
 
 # 子函数：生成小方块刚体
 func _spawn_small_rigidbody(spawn_pos: Vector2) -> void:
