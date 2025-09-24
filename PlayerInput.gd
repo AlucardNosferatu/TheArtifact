@@ -30,7 +30,24 @@ func _input(event: InputEvent) -> void:
 					print('move now!')
 				else:
 					print('stop!')
-
+			elif event.keycode == KEY_Q:
+				root.rotate_1 = not root.rotate_1
+				root.rotate_2 = not root.rotate_1
+				if root.rotate_1:
+					print('rotate 1!')
+				else:
+					print('stop!')
+			elif event.keycode == KEY_E:
+				root.rotate_2 = not root.rotate_2
+				root.rotate_1 = not root.rotate_2
+				if root.rotate_1:
+					print('rotate 2!')
+				else:
+					print('stop!')
+			elif event.keycode == KEY_W:
+				root.rotate_1 = false
+				root.rotate_2 = root.rotate_1
+				print('stop!')
 # 子函数：生成小方块刚体
 func _spawn_small_rigidbody(spawn_pos: Vector2) -> void:
 	var rb = RigidBody2D.new()
