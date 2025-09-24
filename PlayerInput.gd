@@ -32,15 +32,13 @@ func _input(event: InputEvent) -> void:
 					print('stop!')
 			elif event.keycode == KEY_Q:
 				root.rotate_1 = not root.rotate_1
-				root.rotate_2 = not root.rotate_1
 				if root.rotate_1:
 					print('rotate 1!')
 				else:
 					print('stop!')
 			elif event.keycode == KEY_E:
 				root.rotate_2 = not root.rotate_2
-				root.rotate_1 = not root.rotate_2
-				if root.rotate_1:
+				if root.rotate_2:
 					print('rotate 2!')
 				else:
 					print('stop!')

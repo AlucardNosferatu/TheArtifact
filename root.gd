@@ -9,8 +9,8 @@ var all_thruster: Array[Array] = [] # 推进器参数（VehicleBuilder填充）
 var hooked: bool = false # 挂钩状态（PlayerInput修改）
 var hooked_rb: RigidBody2D = null # 被挂钩的刚体（PlayerInput修改）
 var move: bool = false # 推进器开关（PlayerInput修改）
-var rotate1: bool = false
-var rotate2: bool = false
+var rotate_1: bool = false
+var rotate_2: bool = false
 # ---------------------- 全局常量（统一管理） ----------------------
 const EXCEL_PATH = "res://DESIGN.xlsx"
 const BLOCK_SIZE = 20.0
