@@ -36,7 +36,7 @@ func build(root: Node2D) -> void:
 		collision_shape.polygon = centered_vertices
 		var area = calculate_polygon_area(collision_shape)
 		print(rb_vehicle.name, ' Area:', area)
-		rb_vehicle.mass = 0.01 * area # 质量与方块数量成正比
+		rb_vehicle.mass = 0.001 * area # 质量与方块数量成正比
 		rb_vehicle.add_child(collision_shape)
 			
 		# 步骤3：计算中心偏移量（几何中心相对于左上角的偏移）
@@ -58,8 +58,9 @@ func build(root: Node2D) -> void:
 							joints[params[1]] = {}
 						var global_pos = pivot_global_position + center_pos - base_offset
 						var joint_rb = RigidBody2D.new()
+						joint_rb.name = 'Joint_' + pos_str
 						joint_rb.gravity_scale = 0.0
-						joint_rb.mass = 0.1
+						joint_rb.mass = 1
 						joint_rb.collision_layer = 1
 						joint_rb.collision_mask = 1
 						joint_rb.global_position = global_pos
@@ -107,6 +108,10 @@ func build(root: Node2D) -> void:
 		var j_p_2 = PinJoint2D.new()
 		j_p_1.position = Vector2.ZERO
 		j_p_2.position = Vector2.ZERO
+		j_p_1.motor_enabled = true
+		j_p_1.motor_target_velocity = -1.0
+		j_p_2.motor_enabled = true
+		j_p_2.motor_target_velocity = 1.0
 		j_p_1.node_a = NodePath(joint_rb.get_path())
 		j_p_2.node_a = NodePath(joint_rb.get_path())
 		j_p_1.node_b = NodePath(node_a.get_path())
