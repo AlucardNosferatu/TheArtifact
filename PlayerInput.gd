@@ -26,6 +26,10 @@ func _input(event: InputEvent) -> void:
 		if event.pressed:
 			if event.keycode == KEY_SPACE:
 				root.move = not root.move
+				if root.move:
+					print('move now!')
+				else:
+					print('stop!')
 
 # 子函数：生成小方块刚体
 func _spawn_small_rigidbody(spawn_pos: Vector2) -> void:

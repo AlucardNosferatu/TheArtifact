@@ -4,6 +4,7 @@ extends Node2D
 
 func _process(_delta: float) -> void:
 	# 处理挂钩拉力
+	#print(get_global_mouse_position())
 	if root.hooked and root.hooked_rb:
 		_apply_hook_force()
 	

@@ -7,7 +7,8 @@ func build(root: Node2D) -> void:
 	#var vehicles:Array[RigidBody2D]=[]
 	# 步骤4：初始化推进器参数（从block_types中筛选推进器）
 	root.all_thruster.clear()
-	var joints: Array = []
+	var joints: Dictionary = {}
+	var joints_pos_str: Array = []
 	var pivot_global_position: Vector2 = Vector2.ZERO
 	var pivot_vertices_center: Vector2 = Vector2.ZERO
 	var base_offset = Vector2.ZERO
@@ -35,7 +36,7 @@ func build(root: Node2D) -> void:
 		collision_shape.polygon = centered_vertices
 		var area = calculate_polygon_area(collision_shape)
 		print(rb_vehicle.name, ' Area:', area)
-		rb_vehicle.mass = 0.001 * area # 质量与方块数量成正比
+		rb_vehicle.mass = 0.01 * area # 质量与方块数量成正比
 		rb_vehicle.add_child(collision_shape)
 			
 		# 步骤3：计算中心偏移量（几何中心相对于左上角的偏移）
@@ -51,8 +52,25 @@ func build(root: Node2D) -> void:
 			if 'JOINT' in block_info or 'RAIL' in block_info:
 				#无归属block初始化，还没写，先用pass占个位
 				if 'JOINT' in block_info:
-					var params = block_info.rsplit('###', true)[1].rsplit('#')
-					joints.append([params, center_pos - pivot_vertices_center + pivot_global_position])
+					if pos_str not in joints_pos_str:
+						var params = block_info.rsplit('###', true)[1].rsplit('#')
+						if params[1] not in joints.keys():
+							joints[params[1]] = {}
+						var global_pos = pivot_global_position + center_pos - base_offset
+						var joint_rb = RigidBody2D.new()
+						joint_rb.gravity_scale = 0.0
+						joint_rb.mass = 0.1
+						joint_rb.collision_layer = 1
+						joint_rb.collision_mask = 1
+						joint_rb.global_position = global_pos
+						var small_square_cs = CollisionShape2D.new()
+						var small_square_rs = RectangleShape2D.new()
+						small_square_rs.size = Vector2(root.BLOCK_SIZE, root.BLOCK_SIZE)
+						small_square_cs.shape = small_square_rs
+						joint_rb.add_child(small_square_cs)
+						root.add_child(joint_rb)
+						joints[params[1]]['joint_rb'] = joint_rb
+						joints_pos_str.append(pos_str)
 			else:
 				if is_point_in_polygon(Vector2(x, y), root.outer_vertices[i]):
 					if "THRUSTER" in block_info:
@@ -69,21 +87,34 @@ func build(root: Node2D) -> void:
 							200.0, # 默认推力
 							center_offset
 						])
+					elif "JBIND" in block_info:
+						var params = block_info.rsplit('###', true)[1].rsplit('#')
+						if params[1] not in joints.keys():
+							joints[params[1]] = {}
+						if 'node' not in joints[params[1]].keys():
+							joints[params[1]]['node'] = []
+						joints[params[1]]['node'].append(rb_vehicle)
 		# 步骤6：添加到场景并更新Root引用
 		rb_vehicle.set_script(vehicle_script)
 		root.add_child(rb_vehicle)
 		print("载具生成完成，推进器数量：", root.all_thruster.size())
-	for params in joints:
-		var part_pos = params[1]
-		var joint_params = params[0]
-		var node_a = joint_params[1]
-		var node_b = joint_params[2]
-		var j = PinJoint2D.new()
-		j.global_position = part_pos
-		j.node_a = NodePath(root.find_child(node_a, true, false).get_path())
-		j.node_b = NodePath(root.find_child(node_b, true, false).get_path())
-		
-		root.add_child(j)
+	for joint_id in joints.keys():
+		var params = joints[joint_id]
+		var joint_rb = params['joint_rb']
+		var node_a = params['node'][0]
+		var node_b = params['node'][1]
+		var j_p_1 = PinJoint2D.new()
+		var j_p_2 = PinJoint2D.new()
+		j_p_1.position = Vector2.ZERO
+		j_p_2.position = Vector2.ZERO
+		j_p_1.node_a = NodePath(joint_rb.get_path())
+		j_p_2.node_a = NodePath(joint_rb.get_path())
+		j_p_1.node_b = NodePath(node_a.get_path())
+		j_p_2.node_b = NodePath(node_b.get_path())
+		j_p_1.bias = 0.0
+		j_p_2.bias = 0.0
+		joint_rb.add_child(j_p_1)
+		joint_rb.add_child(j_p_2)
 # 射线法：判断点是否在多边形内（局部坐标）
 # 参数：point - 待检测点（刚体局部坐标）；polygon - 多边形顶点数组（刚体局部坐标）
 # 返回：bool - 点在多边形内返回true，否则false
