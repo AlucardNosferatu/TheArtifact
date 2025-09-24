@@ -46,10 +46,13 @@ func _input(event: InputEvent) -> void:
 				root.rotate_1 = false
 				root.rotate_2 = root.rotate_1
 				print('stop!')
+			elif event.keycode == KEY_F:
+				root.flip = true
+				print('flip!')
 # 子函数：生成小方块刚体
 func _spawn_small_rigidbody(spawn_pos: Vector2) -> void:
 	var rb = RigidBody2D.new()
-	rb.name = "SmallBlock"
+	rb.name = "Bullet_"
 	rb.gravity_scale = 1.0
 	rb.mass = 1.0
 	rb.collision_layer = 1

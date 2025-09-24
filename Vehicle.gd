@@ -32,7 +32,7 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 			var normal_vec = state.get_contact_local_normal(i)
 			var outer_normal = - normal_vec # (0, -1)，朝上
 			var body = state.get_contact_collider_object(i)
-			if body is RigidBody2D:
+			if body is RigidBody2D and body.name.begins_with('Bullet_'):
 				var bullet: RigidBody2D = body
 				var bullet_vec: Vector2 = state.get_contact_collider_velocity_at_position(i)
 				var incident_ang = 90.0 - abs(rad_to_deg(normal_vec.angle_to(bullet_vec)))
