@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var root = get_parent()  # 父节点是根节点（挂载Root.gd）
+@onready var root = get_parent() # 父节点是根节点（挂载Root.gd）
 
 func _input(event: InputEvent) -> void:
 	# 处理鼠标点击（生成物体、挂钩）
@@ -57,9 +57,9 @@ func _spawn_small_rigidbody(spawn_pos: Vector2) -> void:
 	
 	# 添加碰撞形状
 	var cs = CollisionShape2D.new()
-	var square = RectangleShape2D.new()
-	square.size = Vector2(20.0, 20.0)
-	cs.shape = square
+	var circle = CircleShape2D.new()
+	circle.radius = 2.0
+	cs.shape = circle
 	rb.add_child(cs)
 	
 	rb.global_position = spawn_pos
