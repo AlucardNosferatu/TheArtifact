@@ -1,6 +1,7 @@
 extends Node2D
 
 var vehicle_script = load("res://Vehicle.gd")
+var joint_script = load("res://PoweredMotor.gd")
 # 生成载具刚体和碰撞体，填充Root的v_rb和all_thruster
 func build(root: Node2D) -> void:
 	# 步骤1：创建载具刚体
@@ -69,6 +70,7 @@ func build(root: Node2D) -> void:
 						small_square_rs.size = Vector2(root.BLOCK_SIZE, root.BLOCK_SIZE)
 						small_square_cs.shape = small_square_rs
 						joint_rb.add_child(small_square_cs)
+						joint_rb.set_script(joint_script)
 						root.add_child(joint_rb)
 						joints[params[1]]['joint_rb'] = joint_rb
 						joints_pos_str.append(pos_str)
@@ -106,17 +108,18 @@ func build(root: Node2D) -> void:
 		var node_b = params['node'][1]
 		var j_p_1 = PinJoint2D.new()
 		var j_p_2 = PinJoint2D.new()
+		j_p_1.name = 'PJ_' + joint_id + '_A'
+		j_p_2.name = 'PJ_' + joint_id + '_B'
 		j_p_1.position = Vector2.ZERO
 		j_p_2.position = Vector2.ZERO
 		j_p_1.motor_enabled = true
-		j_p_1.motor_target_velocity = -1.0
+		j_p_1.motor_target_velocity = 0.0
 		j_p_2.motor_enabled = true
-		j_p_2.motor_target_velocity = 1.0
+		j_p_2.motor_target_velocity = 0.0
 		j_p_1.node_a = NodePath(joint_rb.get_path())
 		j_p_2.node_a = NodePath(joint_rb.get_path())
 		j_p_1.node_b = NodePath(node_a.get_path())
 		j_p_2.node_b = NodePath(node_b.get_path())
-		
 		joint_rb.add_child(j_p_1)
 		joint_rb.add_child(j_p_2)
 # 射线法：判断点是否在多边形内（局部坐标）
