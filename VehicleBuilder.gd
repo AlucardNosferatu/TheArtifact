@@ -111,8 +111,7 @@ func build(root: Node2D) -> void:
 		j_p_2.node_a = NodePath(joint_rb.get_path())
 		j_p_1.node_b = NodePath(node_a.get_path())
 		j_p_2.node_b = NodePath(node_b.get_path())
-		j_p_1.bias = 0.0
-		j_p_2.bias = 0.0
+		
 		joint_rb.add_child(j_p_1)
 		joint_rb.add_child(j_p_2)
 # 射线法：判断点是否在多边形内（局部坐标）
