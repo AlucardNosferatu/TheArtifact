@@ -4,3 +4,5 @@
 .vscode/
 *.tmp
 ~$*.xlsx
+addons/
+*.pyc
