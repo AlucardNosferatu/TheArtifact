@@ -1,0 +1,4 @@
+[
+null,
+{"id":1,"members":[{"enemyId":19,"x":475,"y":246,"hidden":false},{"enemyId":20,"x":385,"y":208,"hidden":false},{"enemyId":21,"x":281,"y":444,"hidden":false},{"enemyId":22,"x":607,"y":444,"hidden":false}],"name":"Lv6-战斗机, Lv6-攻击机, Lv6-拦截机, Lv6-侦察机","pages":[{"conditions":{"actorHp":50,"actorId":1,"actorValid":false,"enemyHp":50,"enemyIndex":0,"enemyValid":false,"switchId":1,"switchValid":false,"turnA":0,"turnB":0,"turnEnding":false,"turnValid":false},"list":[{"code":0,"indent":0,"parameters":[]}],"span":0}]}
+]

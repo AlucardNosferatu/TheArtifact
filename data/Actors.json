@@ -1,0 +1,5 @@
+[
+null,
+{"id":1,"battlerName":"Actor1_1","characterIndex":0,"characterName":"Actor1","classId":1,"equips":[1,11,8,16],"faceIndex":0,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"菲特","nickname":"","note":"","profile":""},
+{"id":2,"battlerName":"Actor1_2","characterIndex":1,"characterName":"Actor1","classId":2,"equips":[2,5,7,15,0],"faceIndex":1,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"阿特克","nickname":"","note":"","profile":""}
+]
