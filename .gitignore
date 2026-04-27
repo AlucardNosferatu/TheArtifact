@@ -1,8 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
-.vscode/
 *.tmp
-~$*.xlsx
-addons/
-*.pyc
