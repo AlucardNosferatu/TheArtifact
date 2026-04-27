@@ -1,0 +1,7 @@
+63f7b34db8d8cdea90c76aacccf841ec
+::res://::1777252471
+icon.svg::CompressedTexture2D::8800406279213123221::1777251328::1777251343::1::::<><><>0<>0<>61f573933670bf32a0554ee56eea3107<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
+minotaur-svgrepo-com.svg::CompressedTexture2D::7061199057324927663::1777252379::1777252392::1::::<><><>0<>0<>7a965cfdc5ec4677507e9e3b556bf5ed<>res://.godot/imported/minotaur-svgrepo-com.svg-f0e6f9de23dc897822b96ec257eae078.ctex::
+player.gd::GDScript::3261682369845446368::1777251810::0::1::::<>CharacterBody2D<><>0<>0<><>::
+world.gd::GDScript::399773157655782957::1777252132::0::1::::<>Node2D<><>0<>0<><>::
+world.tscn::PackedScene::257672014915074389::1777252132::0::1::::<><><>0<>0<><>::uid://dxm8n17gldwjd::::res://icon.svg<>uid://bmp8oxrah03o3::::res://player.gd<>uid://fxwg8s6yi550::::res://world.gd
