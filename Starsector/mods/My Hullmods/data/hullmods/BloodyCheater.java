@@ -17,6 +17,8 @@ public class BloodyCheater extends BaseHullMod {
     private static final float FLUX_DISSIPATION_BONUS = 600f; // Flux dissipation +300%
     private static final float CREW_LOSS_REDUCTION = 90f; // Crew loss reduced by 90%
     private static final float SHIELD_DAMAGE_REDUCTION = 90f; //
+    public static final float TURN_RATE_BONUS = 200f;       // 最大转向速度 +200%
+    public static final float TURN_ACCEL_BONUS = 200f;      // 转向加速度 +200%
 
     @Override
     public void applyEffectsBeforeShipCreation(HullSize hullSize,
@@ -50,6 +52,14 @@ public class BloodyCheater extends BaseHullMod {
         stats.getWeaponRangeThreshold().modifyFlat(id, 0f);                    // 阈值设为0（让加成从头开始生效）
         stats.getWeaponRangeMultPastThreshold().modifyPercent(id, WEAPON_RANGE_BONUS);
         stats.getBallisticRoFMult().modifyPercent(id, BALLISTIC_ROF_BONUS); // Ballistic rate of fire +200%
+
+        // 转向速度（船体本身）
+        stats.getMaxTurnRate().modifyPercent(id, TURN_RATE_BONUS);
+        stats.getTurnAcceleration().modifyPercent(id, TURN_ACCEL_BONUS);
+
+        // 武器炮塔转速（可选，也加上更“作弊”）
+        stats.getWeaponTurnRateBonus().modifyPercent(id, TURN_RATE_BONUS);
+        stats.getBeamWeaponTurnRateBonus().modifyPercent(id, TURN_RATE_BONUS);
     }
 
     // Description parameters (replaces %s in order)
