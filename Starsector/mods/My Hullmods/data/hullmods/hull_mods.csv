@@ -1,0 +1,2 @@
+name,id,tier,rarity,tech/manufacturer,tags,uiTags,base value,unlocked,hidden,hiddenEverywhere,cost_frigate,cost_dest,cost_cruiser,cost_capital,script,desc,short,sModDesc,sprite
+Cheater,bloodycheater,0,,,special,Special,0,TRUE,,,0,0,0,0,data.hullmods.BloodyCheater,I will kill you all.,I will kill you all.,,graphics/hullmods/operations_center.png
