@@ -1,8 +1,8 @@
 {
-  "id": "myhullmods",
-  "name": "My Hullmods",
-  "author": "Scrooge2029",
-  "version": "0.1",
-  "description": "Op Hullmods",
-  "gameVersion": "0.98a-RC8"
+    "id": "myhullmods",
+    "name": "My Hullmods",
+    "author": "Scrooge2029",
+    "version": "0.1",
+    "description": "Op Hullmods",
+    "gameVersion": "0.98a-RC8"
 }
