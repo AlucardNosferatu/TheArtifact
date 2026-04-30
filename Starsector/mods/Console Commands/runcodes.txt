@@ -1,0 +1,2 @@
+runcode for (Industry ind : Global.getSector().getEconomy().getMarket("your market").getIndustries()) { Console.showMessage(ind.getCurrentName() + " : " + (ind.isDisrupted() ? "disrupted" : "normal")); }
+runcode Console.showMessage(Global.getSector().getEconomy().getMarket("nortia").get(2));
