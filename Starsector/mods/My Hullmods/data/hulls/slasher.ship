@@ -119,50 +119,50 @@
   "weaponSlots": [
     {
       "angle": 0,
-      "arc": 5,
+      "arc": 270,
       "id": "WS 001",
       "locations": [
         11,
         27
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
       "angle": 0,
-      "arc": 5,
+      "arc": 270,
       "id": "WS 002",
       "locations": [
         24,
         16
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
       "angle": 0,
-      "arc": 5,
+      "arc": 270,
       "id": "WS 003",
       "locations": [
         24,
         -15
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
       "angle": 0,
-      "arc": 5,
+      "arc": 270,
       "id": "WS 004",
       "locations": [
         11,
         -27
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
@@ -174,7 +174,7 @@
         10
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
@@ -186,7 +186,7 @@
         -10
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
@@ -198,7 +198,7 @@
         0
       ],
       "mount": "TURRET",
-      "size": "MEDIUM",
+      "size": "LARGE",
       "type": "UNIVERSAL"
     },
     {
