@@ -1,0 +1,225 @@
+{
+	"archetype":	"ARTILLERY_WEAPON",
+	"sprite":	"assets/pickups/weapons/gun_rhino.json",
+	"mounts":	[],
+	"description":	"gun_6ga_rhino.description",
+	"ui_texture":	"assets/ui/inventory/render/inv_gun_rhinostopper.png",
+	"aim_bloom_penalty":	0.500000,
+	"camera_offset_bonus":	0,
+	"cooldown":	0,
+	"cooldown_deviation_max":	0,
+	"burst_cooldown":	0,
+	"per_click_cooldown":	0.400000,
+	"range":	40,
+	"min_elevation":	-49.999992,
+	"accuracy_cone_width":	1.100000,
+	"firing_aggro_radius":	15,
+	"pickup_reload_percentage":	0.120000,
+	"muzzle_velocity":	-1,
+	"ammo_capacity":	5,
+	"burst_count":	1,
+	"shot_count":	1,
+	"ammo_per_depot_replenish":	4,
+	"weapon_effects":	"assets/data/fx/wfx_6ga_rhino.json",
+	"ammo_item":	"assets/data/pickups/ammo/pkp_ammo_6ga_pellet.json",
+	"inventory_texture":	"assets/ui/inventory/render/inv_gun_rhinostopper.png",
+	"firing_event":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-706671786,
+			"Data2":	11466,
+			"Data3":	18137,
+			"Data4":	[166, 21, 208, 11, 161, 181, 190, 23]
+		}
+	},
+	"name":	"gun_6ga_rhino.name",
+	"max_accuracy_cone_width":	45,
+	"min_accuracy_cone_width":	1.100000,
+	"bloom_cone_width":	8.000000,
+	"bloom_per_firing":	0,
+	"bloom_per_burst":	1,
+	"bloom_growth_rate":	0,
+	"bloom_decay_rate":	1.100000,
+	"recoil_impulse":	7,
+	"fire_suppression":	0.500000,
+	"ui_texture_blends":	["MULTIPLY", "SCREEN"],
+	"ammo_type":	"AMMOTYPE_BULLET",
+	"fire_mode":	"SEMI-AUTO",
+	"engagement_distance":	5,
+	"cycling_sound_duration":	0.320000,
+	"cycling_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"empty_sound_duration":	0.500000,
+	"empty_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"price":	0,
+	"use_looping_sound":	false,
+	"looping_firing_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"looping_firing_stop_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"secret":	false,
+	"suppressed":	false,
+	"hot_loads":	false,
+	"terror_damage":	0,
+	"morale_damage":	0,
+	"firing_morale_damage":	0,
+	"spool_time":	0,
+	"spool_decay":	0,
+	"spool_decay_delay":	0,
+	"instability":	0,
+	"ammo_pool":	40,
+	"vehicle_ammo_pool":	0,
+	"auto_reload":	false,
+	"reloadable_on_foot":	true,
+	"refuse_mag_multiply":	true,
+	"reload_time":	1,
+	"reload_arm_in_time":	0.150000,
+	"reload_arm_out_time":	0.750000,
+	"reload_cancel_ready_delay":	0.400000,
+	"swap_time":	0.150000,
+	"reload_begin_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	606135825,
+			"Data2":	42618,
+			"Data3":	18552,
+			"Data4":	[148, 218, 105, 37, 194, 250, 222, 190]
+		}
+	},
+	"reload_mid_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"reload_ammo_in_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	473155621,
+			"Data2":	28116,
+			"Data3":	19643,
+			"Data4":	[171, 169, 8, 117, 4, 101, 25, 116]
+		}
+	},
+	"reload_finished_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"failed_reload_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"cold_reload_finished_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-955080987,
+			"Data2":	242,
+			"Data3":	17727,
+			"Data4":	[165, 117, 131, 79, 103, 53, 17, 241]
+		}
+	},
+	"pickup_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1377918081,
+			"Data2":	37263,
+			"Data3":	18696,
+			"Data4":	[158, 218, 66, 68, 206, 176, 115, 164]
+		}
+	},
+	"drop_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1423095803,
+			"Data2":	5973,
+			"Data3":	16695,
+			"Data4":	[135, 213, 49, 223, 248, 185, 213, 25]
+		}
+	},
+	"spooling_event":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"spooling_event_stop":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"size":	12,
+	"pickup_radius":	1,
+	"reload_animation":	"",
+	"shoot_animation":	"",
+	"no_soft_aimlock":	false,
+	"reload_class":	"SINGLE_ROUND",
+	"flags":	3,
+	"category":	"WEAPON",
+	"bullet":	"assets/data/pickups/weapons/bullets/b_6ga_pellet.json",
+	"delay_distance":	1,
+	"low_arc":	true
+}

@@ -1,0 +1,448 @@
+{
+	"archetype":	"MECH",
+	"description":	"",
+	"leg":	"assets/data/vics/lowers/foot_loy_bd_01_lo.json",
+	"hull":	"",
+	"chassis":	"assets/data/vics/uppers/foot_loy_bd_01_up.json",
+	"salvage":	"assets/data/salvage/slvg_foot_loy_bd_01.json",
+	"loyalty_data":	"assets/data/loyalties/fidelis_loyalist.json",
+	"trample_data":	"assets/data/vics/trample/trample_foot_01.json",
+	"horn":	"",
+	"scrap_recipe":	"",
+	"requires_pilot":	false,
+	"incognito":	false,
+	"swaps_weapons":	true,
+	"flee_exit":	false,
+	"snc_valued":	false,
+	"has_hands":	true,
+	"bleedout_causes_boost":	false,
+	"allow_brick_on_pedal":	false,
+	"undeployable":	false,
+	"reload_reposition_chance":	0.250000,
+	"flatfooted_retreat_chance":	0.250000,
+	"idle_cowardice_chance":	0.250000,
+	"cowardice_cooldown":	10,
+	"search_surprise_awareness_multiplier":	0.650000,
+	"goto_last_known_surprise_awareness_multiplier":	0.250000,
+	"occlusion_peek_height_offset":	0.325000,
+	"occlusion_peek_radius":	18,
+	"crouch_awareness_zoom":	2.400000,
+	"crouch_aim_bonus":	0,
+	"inventory_capacity":	0,
+	"freeze_on_seen_duration":	0,
+	"delay_before_shoot_duration":	3,
+	"sus_investigation_move_scale":	1,
+	"awareness_decay_per_second":	-3,
+	"awareness_los_gain_per_second":	4,
+	"flatfooted_time":	1.500000,
+	"chase_chance":	0.500000,
+	"suppression_speed_slowdown_factor":	0,
+	"suppression_turn_slowdown_factor":	0,
+	"pain_guarantee":	5,
+	"flinch_refresh_time":	2,
+	"prone_height":	0.425000,
+	"flinch_spin_min":	0,
+	"flinch_spin_max":	0,
+	"flinch_spin_cooldown":	0.500000,
+	"flinch_type":	1,
+	"flinch_timer_resets":	false,
+	"use_vehicle_filter":	false,
+	"exit_behavior":	0,
+	"bail_minimum_health":	0,
+	"death_explosion":	{
+		"delay":	0,
+		"deviation":	0,
+		"impulse":	0,
+		"prop_damage_multiplier":	0,
+		"hull_damage_multiplier":	1,
+		"shield_damage_multiplier":	0,
+		"falloff_begin_distance":	0,
+		"falloff_clamp":	0,
+		"falloff":	[0, 0, 0, 0, 0],
+		"near_ring":	{
+			"radius":	2,
+			"damage":	1,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	2
+		},
+		"mid_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		},
+		"far_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		}
+	},
+	"default_loadout":	"",
+	"morale":	10,
+	"morale_recovery":	1,
+	"morale_damage_multiplier":	1,
+	"morale_damage_threshold":	1,
+	"morale_reveal_damage":	0,
+	"reveal_radius":	0,
+	"death_morale_damage":	0,
+	"phys_damage_start":	-1,
+	"phys_damage_totaled":	-1,
+	"ejection_velocity_threshold":	-1,
+	"ejection_damping":	0,
+	"ejection_instant_acceleration_required":	0,
+	"ejection_cone_width":	360,
+	"ejection_cone_offset":	0,
+	"bleedout_threshold":	3,
+	"bleedout_damage_per_second":	0.050000,
+	"pain_threshold":	0.100000,
+	"pain_chance":	0.100000,
+	"flinch_duration":	1.500000,
+	"flinch_deviation":	0.350000,
+	"min_crouch_time":	0.250000,
+	"crouch_threshold":	1,
+	"stability":	5,
+	"moving_stability":	5,
+	"crouching_stability_modifier":	5,
+	"reverse_trample_modifier":	0,
+	"reverse_trample_threshold":	0,
+	"push_decay":	5,
+	"flop_threshold":	1000,
+	"flop_duration":	0,
+	"flop_deviation":	0,
+	"cockpit_type":	"NONE",
+	"default_inventory":	"",
+	"inventory_groups":	[{
+			"max_size":	0,
+			"name":	"WEAPONS",
+			"socket":	"",
+			"linked_door":	"",
+			"ejection_socket":	"",
+			"upper_anim":	"",
+			"lower_anim":	"",
+			"flags":	[true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	false
+		}, {
+			"max_size":	0,
+			"name":	"ITEMS",
+			"socket":	"",
+			"linked_door":	"",
+			"ejection_socket":	"",
+			"upper_anim":	"",
+			"lower_anim":	"",
+			"flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[true, false, true, false, false, false, true, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	false
+		}, {
+			"max_size":	0,
+			"name":	"AMMO",
+			"socket":	"",
+			"linked_door":	"",
+			"ejection_socket":	"",
+			"upper_anim":	"",
+			"lower_anim":	"",
+			"flags":	[false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[true, true, true, true, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	false
+		}],
+	"morale_thresholds":	{
+		"Normal":	10,
+		"Panic":	0,
+		"Flee":	0,
+		"Bail (disabled)":	0
+	},
+	"morale_thresholds_reroll_chance":	{
+		"Normal":	0,
+		"Panic":	0,
+		"Flee":	0,
+		"Bail (disabled)":	0
+	},
+	"weapon_groups":	[{
+			"primary_guns":	[{
+					"socket":	"small0",
+					"size":	500,
+					"min_elevation":	-1.308997,
+					"weapons":	[]
+				}, {
+					"socket":	"small0",
+					"size":	500,
+					"min_elevation":	-1.308997,
+					"weapons":	[]
+				}],
+			"secondary_guns":	[],
+			"always_draw":	false,
+			"require_ready":	true,
+			"droppable":	true,
+			"allow_reload_while_inactive":	false,
+			"flags":	0,
+			"mag_multiplier":	1,
+			"name":	"SLOT 1"
+		}, {
+			"primary_guns":	[{
+					"socket":	"small0",
+					"size":	500,
+					"min_elevation":	-1.308997,
+					"weapons":	[]
+				}, {
+					"socket":	"small0",
+					"size":	500,
+					"min_elevation":	-1.308997,
+					"weapons":	[]
+				}],
+			"secondary_guns":	[],
+			"always_draw":	false,
+			"require_ready":	true,
+			"droppable":	true,
+			"allow_reload_while_inactive":	false,
+			"flags":	0,
+			"mag_multiplier":	1,
+			"name":	"SLOT 2"
+		}, {
+			"primary_guns":	[{
+					"socket":	"small0",
+					"size":	500,
+					"min_elevation":	-1.308997,
+					"weapons":	[]
+				}],
+			"secondary_guns":	[{
+					"socket":	"small0",
+					"size":	500,
+					"min_elevation":	-1.309817,
+					"weapons":	[]
+				}],
+			"always_draw":	false,
+			"require_ready":	false,
+			"droppable":	true,
+			"allow_reload_while_inactive":	false,
+			"flags":	0,
+			"mag_multiplier":	1,
+			"name":	"SLOT 3"
+		}],
+	"guns":	[],
+	"lights":	[{
+			"light":	"assets/data/lights/vics/light_headlight_01_lens.json",
+			"socket":	"light_chest_0L"
+		}, {
+			"light":	"assets/data/lights/vics/light_headlight_01_standard.json",
+			"socket":	"light_chest_0L"
+		}],
+	"permanent_lights":	[],
+	"pilot_seat":	{
+		"socket":	"",
+		"linked_door":	"",
+		"ejection_socket":	"",
+		"upper_anim":	"",
+		"lower_anim":	"",
+		"flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+		"exclude_flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+		"seatbelt":	false,
+		"animate_with_parent":	false
+	},
+	"container_slots":	[{
+			"socket":	"backpack",
+			"linked_door":	"",
+			"ejection_socket":	"backpack",
+			"upper_anim":	"",
+			"lower_anim":	"",
+			"flags":	[false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	true,
+			"animate_with_parent":	true
+		}],
+	"overcharge":	1000,
+	"overcharge_decay":	0,
+	"health":	1000,
+	"armor":	1000,
+	"sight_radius":	12,
+	"use_leg_orientation":	false,
+	"is_boss":	false,
+	"shield_impact_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1555540470,
+			"Data2":	60396,
+			"Data3":	20437,
+			"Data4":	[154, 64, 74, 123, 2, 32, 169, 10]
+		}
+	},
+	"armor_deflect_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1555540470,
+			"Data2":	60396,
+			"Data3":	20437,
+			"Data4":	[154, 64, 74, 123, 2, 32, 169, 10]
+		}
+	},
+	"armor_critical_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1555540470,
+			"Data2":	60396,
+			"Data3":	20437,
+			"Data4":	[154, 64, 74, 123, 2, 32, 169, 10]
+		}
+	},
+	"death_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	272054409,
+			"Data2":	40654,
+			"Data3":	18788,
+			"Data4":	[137, 151, 3, 143, 184, 7, 180, 209]
+		}
+	},
+	"awareness_bark":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-311934870,
+			"Data2":	4770,
+			"Data3":	19940,
+			"Data4":	[148, 111, 61, 206, 137, 106, 160, 10]
+		}
+	},
+	"build_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"consume_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"repair_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"name":	"Loyalist",
+	"scrap_predicate":	"",
+	"repair_predicate":	"",
+	"mass":	5,
+	"knockback_push_scaling":	0.055000,
+	"knockback_turn_scaling":	0.055000,
+	"behavior":	"BEHAVIOR_INFANTRY_AIMSHOOT",
+	"penetration_resistance":	20,
+	"call_help_period":	2,
+	"call_help_radius":	15,
+	"can_radio":	false,
+	"stealth_on_spawn":	false,
+	"shield_ellipsoid":	{
+		"x":	0.250000,
+		"y":	0.250000,
+		"z":	0.500000
+	},
+	"disable_retreat":	false,
+	"monetary_value":	0,
+	"finesse_multiplier":	1,
+	"can_shoot_through_smoke":	false,
+	"is_concealed":	false,
+	"price":	0,
+	"crew":	1,
+	"secret":	false,
+	"full_vision_cone":	false,
+	"ignores_ground_damage":	false,
+	"zoom_override":	3,
+	"bail_threshold_vehicle_hp_percentage":	0.500000,
+	"bail_guarantee_vehicle_hp_percentage":	0.900000,
+	"unit_aistate_on_bail":	"BEHAVIOR_INFANTRY_AIMSHOOT",
+	"unit_morale_on_bail":	500,
+	"bail_when_vehicle_disabled":	false,
+	"bail_when_vehicle_burndown_active":	false,
+	"seconds_to_wait_before_burndown_bail":	2,
+	"use_override_bail_chance":	false,
+	"bail_from_vehicle_chance_override":	0.250000,
+	"unit_bail_from_vehicle_chance":	0.100000,
+	"bail_reset_timer_duration":	1,
+	"reset_bail_timer_on_damage":	false,
+	"damage_modifiers":	{
+		"front":	0,
+		"left":	0,
+		"rear":	0.250000,
+		"right":	0
+	},
+	"pierce_resistances":	{
+		"front":	2,
+		"left":	1,
+		"rear":	1,
+		"right":	1
+	},
+	"shield_pierce_resistances":	{
+		"front":	0,
+		"left":	0,
+		"rear":	0,
+		"right":	0
+	},
+	"flags":	[false, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+	"zoom_max":	3,
+	"zoom_min":	0.010000,
+	"craftable":	false,
+	"baselayer":	true,
+	"inventory_texture":	"",
+	"min_slavageable_part_chance":	0,
+	"max_salvageable_part_chance":	1
+}

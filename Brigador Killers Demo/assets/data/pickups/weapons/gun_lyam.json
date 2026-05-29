@@ -1,0 +1,225 @@
+{
+	"archetype":	"ARTILLERY_WEAPON",
+	"sprite":	"assets/pickups/weapons/gun_thumper.json",
+	"mounts":	[],
+	"description":	"gun_lyam.description",
+	"ui_texture":	"assets/ui/hud/HUD_sml_can_01.png",
+	"aim_bloom_penalty":	1,
+	"camera_offset_bonus":	10,
+	"cooldown":	0,
+	"cooldown_deviation_max":	0,
+	"burst_cooldown":	0,
+	"per_click_cooldown":	1,
+	"range":	200,
+	"min_elevation":	0,
+	"accuracy_cone_width":	1.000000,
+	"firing_aggro_radius":	0,
+	"pickup_reload_percentage":	0.120000,
+	"muzzle_velocity":	0,
+	"ammo_capacity":	1,
+	"burst_count":	1,
+	"shot_count":	1,
+	"ammo_per_depot_replenish":	4,
+	"weapon_effects":	"assets/data/fx/wfx_flame_small_01.json",
+	"ammo_item":	"",
+	"inventory_texture":	"assets/ui/hud/HUD_sml_can_01.png",
+	"firing_event":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-7653911,
+			"Data2":	54247,
+			"Data3":	18322,
+			"Data4":	[174, 20, 67, 100, 47, 65, 233, 28]
+		}
+	},
+	"name":	"gun_lyam.name",
+	"max_accuracy_cone_width":	5.393000,
+	"min_accuracy_cone_width":	2.697000,
+	"bloom_cone_width":	39.999985,
+	"bloom_per_firing":	0,
+	"bloom_per_burst":	0,
+	"bloom_growth_rate":	0,
+	"bloom_decay_rate":	0.025000,
+	"recoil_impulse":	0,
+	"fire_suppression":	0,
+	"ui_texture_blends":	["MULTIPLY", "SCREEN"],
+	"ammo_type":	"AMMOTYPE_ARTILLERY",
+	"fire_mode":	"BURST/AUTO",
+	"engagement_distance":	100,
+	"cycling_sound_duration":	0.500000,
+	"cycling_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"empty_sound_duration":	0.500000,
+	"empty_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"price":	0,
+	"use_looping_sound":	false,
+	"looping_firing_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"looping_firing_stop_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"secret":	false,
+	"suppressed":	false,
+	"hot_loads":	false,
+	"terror_damage":	0,
+	"morale_damage":	0,
+	"firing_morale_damage":	0,
+	"spool_time":	0,
+	"spool_decay":	0,
+	"spool_decay_delay":	0,
+	"instability":	0,
+	"ammo_pool":	1,
+	"vehicle_ammo_pool":	1,
+	"auto_reload":	false,
+	"reloadable_on_foot":	true,
+	"refuse_mag_multiply":	true,
+	"reload_time":	1,
+	"reload_arm_in_time":	0.100000,
+	"reload_arm_out_time":	0.900000,
+	"reload_cancel_ready_delay":	1,
+	"swap_time":	1,
+	"reload_begin_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"reload_mid_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"reload_ammo_in_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"reload_finished_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"failed_reload_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"cold_reload_finished_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"pickup_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1377918081,
+			"Data2":	37263,
+			"Data3":	18696,
+			"Data4":	[158, 218, 66, 68, 206, 176, 115, 164]
+		}
+	},
+	"drop_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1423095803,
+			"Data2":	5973,
+			"Data3":	16695,
+			"Data4":	[135, 213, 49, 223, 248, 185, 213, 25]
+		}
+	},
+	"spooling_event":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	920705152,
+			"Data2":	9882,
+			"Data3":	18610,
+			"Data4":	[144, 251, 17, 185, 166, 254, 114, 5]
+		}
+	},
+	"spooling_event_stop":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-190456828,
+			"Data2":	37681,
+			"Data3":	18645,
+			"Data4":	[177, 37, 116, 155, 238, 215, 162, 90]
+		}
+	},
+	"size":	30,
+	"pickup_radius":	1,
+	"reload_animation":	"",
+	"shoot_animation":	"",
+	"no_soft_aimlock":	false,
+	"reload_class":	"SINGLE_ROUND",
+	"flags":	3,
+	"category":	"WEAPON",
+	"bullet":	"assets/data/pickups/weapons/bullets/b_lyam.json",
+	"delay_distance":	1,
+	"low_arc":	false
+}

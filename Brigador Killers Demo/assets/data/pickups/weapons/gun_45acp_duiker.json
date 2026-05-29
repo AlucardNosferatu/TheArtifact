@@ -1,0 +1,225 @@
+{
+	"archetype":	"ARTILLERY_WEAPON",
+	"sprite":	"assets/pickups/weapons/gun_duiker.json",
+	"mounts":	[],
+	"description":	"gun_45acp_duiker.description",
+	"ui_texture":	"assets/ui/inventory/render/inv_gun_duiker.png",
+	"aim_bloom_penalty":	0.600000,
+	"camera_offset_bonus":	6,
+	"cooldown":	0,
+	"cooldown_deviation_max":	0,
+	"burst_cooldown":	0,
+	"per_click_cooldown":	0.660000,
+	"range":	40,
+	"min_elevation":	-49.999992,
+	"accuracy_cone_width":	0.500000,
+	"firing_aggro_radius":	1,
+	"pickup_reload_percentage":	0.120000,
+	"muzzle_velocity":	-1,
+	"ammo_capacity":	11,
+	"burst_count":	1,
+	"shot_count":	1,
+	"ammo_per_depot_replenish":	4,
+	"weapon_effects":	"assets/data/fx/wfx_45acp_duiker.json",
+	"ammo_item":	"assets/data/pickups/ammo/pkp_ammo_45acp_fmj.json",
+	"inventory_texture":	"assets/ui/inventory/render/inv_gun_duiker.png",
+	"firing_event":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	182800822,
+			"Data2":	56012,
+			"Data3":	17491,
+			"Data4":	[136, 149, 224, 51, 98, 253, 226, 22]
+		}
+	},
+	"name":	"gun_45acp_duiker.name",
+	"max_accuracy_cone_width":	45,
+	"min_accuracy_cone_width":	0,
+	"bloom_cone_width":	6,
+	"bloom_per_firing":	0,
+	"bloom_per_burst":	0.150000,
+	"bloom_growth_rate":	0,
+	"bloom_decay_rate":	0.650000,
+	"recoil_impulse":	0,
+	"fire_suppression":	0,
+	"ui_texture_blends":	["MULTIPLY", "SCREEN"],
+	"ammo_type":	"AMMOTYPE_BULLET",
+	"fire_mode":	"SEMI-AUTO",
+	"engagement_distance":	16,
+	"cycling_sound_duration":	0.750000,
+	"cycling_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1052014697,
+			"Data2":	36301,
+			"Data3":	17366,
+			"Data4":	[140, 176, 76, 221, 31, 87, 54, 79]
+		}
+	},
+	"empty_sound_duration":	0.500000,
+	"empty_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"price":	0,
+	"use_looping_sound":	false,
+	"looping_firing_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"looping_firing_stop_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"secret":	false,
+	"suppressed":	true,
+	"hot_loads":	true,
+	"terror_damage":	0,
+	"morale_damage":	0,
+	"firing_morale_damage":	0,
+	"spool_time":	0,
+	"spool_decay":	0,
+	"spool_decay_delay":	0,
+	"instability":	-1,
+	"ammo_pool":	100,
+	"vehicle_ammo_pool":	132,
+	"auto_reload":	false,
+	"reloadable_on_foot":	true,
+	"refuse_mag_multiply":	false,
+	"reload_time":	3,
+	"reload_arm_in_time":	0.250000,
+	"reload_arm_out_time":	1.750000,
+	"reload_cancel_ready_delay":	1.500000,
+	"swap_time":	0.330000,
+	"reload_begin_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	173657436,
+			"Data2":	42737,
+			"Data3":	18311,
+			"Data4":	[173, 125, 203, 83, 211, 158, 126, 116]
+		}
+	},
+	"reload_mid_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"reload_ammo_in_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-955080987,
+			"Data2":	242,
+			"Data3":	17727,
+			"Data4":	[165, 117, 131, 79, 103, 53, 17, 241]
+		}
+	},
+	"reload_finished_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-955080987,
+			"Data2":	242,
+			"Data3":	17727,
+			"Data4":	[165, 117, 131, 79, 103, 53, 17, 241]
+		}
+	},
+	"failed_reload_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"cold_reload_finished_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1052014697,
+			"Data2":	36301,
+			"Data3":	17366,
+			"Data4":	[140, 176, 76, 221, 31, 87, 54, 79]
+		}
+	},
+	"pickup_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1377918081,
+			"Data2":	37263,
+			"Data3":	18696,
+			"Data4":	[158, 218, 66, 68, 206, 176, 115, 164]
+		}
+	},
+	"drop_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1423095803,
+			"Data2":	5973,
+			"Data3":	16695,
+			"Data4":	[135, 213, 49, 223, 248, 185, 213, 25]
+		}
+	},
+	"spooling_event":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"spooling_event_stop":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"size":	9,
+	"pickup_radius":	1,
+	"reload_animation":	"",
+	"shoot_animation":	"",
+	"no_soft_aimlock":	false,
+	"reload_class":	"MAGAZINE",
+	"flags":	3,
+	"category":	"WEAPON",
+	"bullet":	"assets/data/pickups/weapons/bullets/b_45acp_fragmenting.json",
+	"delay_distance":	1,
+	"low_arc":	true
+}

@@ -1,0 +1,343 @@
+{
+	"archetype":	"LASER_WEAPON",
+	"sprite":	"assets/pickups/weapons/gun_concrifle.json",
+	"mounts":	[],
+	"description":	"gun_wip_cello.description",
+	"ui_texture":	"assets/ui/inventory/render/inv_gun_cello.png",
+	"aim_bloom_penalty":	0.100000,
+	"camera_offset_bonus":	0,
+	"cooldown":	0,
+	"cooldown_deviation_max":	0,
+	"burst_cooldown":	0,
+	"per_click_cooldown":	0.900000,
+	"range":	20,
+	"min_elevation":	-49.999992,
+	"accuracy_cone_width":	0,
+	"firing_aggro_radius":	5,
+	"pickup_reload_percentage":	0.120000,
+	"muzzle_velocity":	-1,
+	"ammo_capacity":	25,
+	"burst_count":	1,
+	"shot_count":	1,
+	"ammo_per_depot_replenish":	1,
+	"weapon_effects":	"assets/data/fx/wfx_laser_tur_02.json",
+	"ammo_item":	"assets/data/pickups/ammo/pkp_ammo_cell_lo.json",
+	"inventory_texture":	"assets/ui/inventory/render/inv_gun_cello.png",
+	"firing_event":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1782446905,
+			"Data2":	50902,
+			"Data3":	19515,
+			"Data4":	[178, 187, 155, 224, 86, 238, 90, 103]
+		}
+	},
+	"name":	"gun_wip_cello.name",
+	"max_accuracy_cone_width":	90,
+	"min_accuracy_cone_width":	0.200000,
+	"bloom_cone_width":	5.000000,
+	"bloom_per_firing":	0,
+	"bloom_per_burst":	0,
+	"bloom_growth_rate":	8,
+	"bloom_decay_rate":	0.150000,
+	"recoil_impulse":	0,
+	"fire_suppression":	0,
+	"ui_texture_blends":	["MULTIPLY", "SCREEN"],
+	"ammo_type":	"AMMOTYPE_LASER",
+	"fire_mode":	"BURST/AUTO",
+	"engagement_distance":	-1,
+	"cycling_sound_duration":	0.800000,
+	"cycling_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"empty_sound_duration":	0.500000,
+	"empty_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1656875244,
+			"Data2":	62096,
+			"Data3":	17218,
+			"Data4":	[153, 214, 110, 21, 210, 130, 100, 230]
+		}
+	},
+	"price":	0,
+	"use_looping_sound":	false,
+	"looping_firing_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"looping_firing_stop_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"secret":	false,
+	"suppressed":	false,
+	"hot_loads":	false,
+	"terror_damage":	0,
+	"morale_damage":	0,
+	"firing_morale_damage":	0,
+	"spool_time":	0,
+	"spool_decay":	0,
+	"spool_decay_delay":	0,
+	"instability":	-2,
+	"ammo_pool":	50,
+	"vehicle_ammo_pool":	100,
+	"auto_reload":	true,
+	"reloadable_on_foot":	true,
+	"refuse_mag_multiply":	false,
+	"reload_time":	2.500000,
+	"reload_arm_in_time":	0.100000,
+	"reload_arm_out_time":	0.350000,
+	"reload_cancel_ready_delay":	1,
+	"swap_time":	0,
+	"reload_begin_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	173657436,
+			"Data2":	42737,
+			"Data3":	18311,
+			"Data4":	[173, 125, 203, 83, 211, 158, 126, 116]
+		}
+	},
+	"reload_mid_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"reload_ammo_in_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	504380819,
+			"Data2":	46064,
+			"Data3":	16437,
+			"Data4":	[183, 171, 52, 139, 82, 124, 153, 143]
+		}
+	},
+	"reload_finished_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-754697557,
+			"Data2":	54215,
+			"Data3":	19615,
+			"Data4":	[183, 216, 131, 50, 40, 153, 127, 120]
+		}
+	},
+	"failed_reload_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"cold_reload_finished_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"pickup_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1377918081,
+			"Data2":	37263,
+			"Data3":	18696,
+			"Data4":	[158, 218, 66, 68, 206, 176, 115, 164]
+		}
+	},
+	"drop_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	1423095803,
+			"Data2":	5973,
+			"Data3":	16695,
+			"Data4":	[135, 213, 49, 223, 248, 185, 213, 25]
+		}
+	},
+	"spooling_event":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"spooling_event_stop":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"size":	5,
+	"pickup_radius":	1,
+	"reload_animation":	"",
+	"shoot_animation":	"",
+	"no_soft_aimlock":	false,
+	"reload_class":	"MAGAZINE",
+	"flags":	3,
+	"category":	"WEAPON",
+	"beam_params":	{
+		"properties":	{
+			"thickness":	9.046000,
+			"hue":	187.630005,
+			"saturation":	2.322000,
+			"lightness":	0.780000,
+			"textures":	[null, "assets/fx/beams/laser_multiply_05.png", null, null, "assets/fx/beams/laser_screen_05.png", null]
+		},
+		"opacity":	0.503000,
+		"source_opacity":	0,
+		"source_end":	0.102000,
+		"target_opacity":	0.015000,
+		"target_begin":	0.462000,
+		"fade_time":	0.030000,
+		"flash_time":	0.060000
+	},
+	"laser_damage":	500,
+	"laser_damage_health_multiplier":	2,
+	"laser_damage_armor_multiplier":	2,
+	"laser_damage_prop_multiplier":	2,
+	"impact_morale_damage":	0,
+	"impact_aggro_radius":	3,
+	"impact_impulse":	0,
+	"penetration":	100,
+	"pierce":	10,
+	"laser_daze":	{
+		"duration":	0,
+		"speed_modifier":	0,
+		"acceleration_modifier":	0,
+		"turning_modifier":	0
+	},
+	"damage_over_time":	{
+		"duration":	0,
+		"damage_per_second":	0,
+		"damage_health_multiplier":	1,
+		"damage_armor_multiplier":	1,
+		"pierce":	0
+	},
+	"explosion_pyro":	"",
+	"explosion":	{
+		"delay":	0,
+		"deviation":	0,
+		"impulse":	0,
+		"prop_damage_multiplier":	1,
+		"hull_damage_multiplier":	1,
+		"shield_damage_multiplier":	1,
+		"falloff_begin_distance":	0.100000,
+		"falloff_clamp":	0,
+		"falloff":	[0, 0, 1, 1, 0],
+		"near_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		},
+		"mid_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		},
+		"far_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		}
+	},
+	"explodes_at_end":	false,
+	"explosion_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	}
+}

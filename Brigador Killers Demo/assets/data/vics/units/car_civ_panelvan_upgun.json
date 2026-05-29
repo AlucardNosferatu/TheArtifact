@@ -1,0 +1,434 @@
+{
+	"archetype":	"MECH",
+	"description":	"car_civ_panelvan_upgun.description",
+	"leg":	"assets/data/vics/lowers/car_civ_panelvan_01_lo.json",
+	"hull":	"assets/data/vics/lowers/car_civ_panelvan_upgun_hull.json",
+	"chassis":	"assets/data/vics/uppers/vicmod_buddyuphead_up.json",
+	"salvage":	"assets/data/salvage/slvg_car_van_01.json",
+	"loyalty_data":	"assets/data/loyalties/fidelis_brigador.json",
+	"trample_data":	"assets/data/vics/trample/trample_car_mid.json",
+	"horn":	"",
+	"scrap_recipe":	"assets/data/recipes/recipe_car_civ_panelvan_upgun.json",
+	"requires_pilot":	true,
+	"incognito":	true,
+	"swaps_weapons":	false,
+	"flee_exit":	false,
+	"snc_valued":	false,
+	"has_hands":	true,
+	"bleedout_causes_boost":	false,
+	"allow_brick_on_pedal":	true,
+	"undeployable":	false,
+	"reload_reposition_chance":	0.250000,
+	"flatfooted_retreat_chance":	0.250000,
+	"idle_cowardice_chance":	0.250000,
+	"cowardice_cooldown":	10,
+	"search_surprise_awareness_multiplier":	0.650000,
+	"goto_last_known_surprise_awareness_multiplier":	0.250000,
+	"occlusion_peek_height_offset":	0.350000,
+	"occlusion_peek_radius":	42,
+	"crouch_awareness_zoom":	0,
+	"crouch_aim_bonus":	0,
+	"inventory_capacity":	100,
+	"freeze_on_seen_duration":	0,
+	"delay_before_shoot_duration":	3,
+	"sus_investigation_move_scale":	1,
+	"awareness_decay_per_second":	-3,
+	"awareness_los_gain_per_second":	4,
+	"flatfooted_time":	1.500000,
+	"chase_chance":	0.500000,
+	"suppression_speed_slowdown_factor":	0,
+	"suppression_turn_slowdown_factor":	0,
+	"pain_guarantee":	-1,
+	"flinch_refresh_time":	0,
+	"prone_height":	0,
+	"flinch_spin_min":	0,
+	"flinch_spin_max":	0,
+	"flinch_spin_cooldown":	0.500000,
+	"flinch_type":	0,
+	"flinch_timer_resets":	false,
+	"use_vehicle_filter":	false,
+	"exit_behavior":	0,
+	"bail_minimum_health":	0,
+	"death_explosion":	{
+		"delay":	1,
+		"deviation":	0.500000,
+		"impulse":	0,
+		"prop_damage_multiplier":	1,
+		"hull_damage_multiplier":	1,
+		"shield_damage_multiplier":	1,
+		"falloff_begin_distance":	0,
+		"falloff_clamp":	0,
+		"falloff":	[0, 0, 0, 0, 0],
+		"near_ring":	{
+			"radius":	1.250000,
+			"damage":	150,
+			"damage_deviation":	75,
+			"push":	100,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		},
+		"mid_ring":	{
+			"radius":	2.250000,
+			"damage":	75,
+			"damage_deviation":	35,
+			"push":	50,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		},
+		"far_ring":	{
+			"radius":	3.250000,
+			"damage":	4,
+			"damage_deviation":	4,
+			"push":	10,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	0
+		}
+	},
+	"default_loadout":	"",
+	"morale":	100,
+	"morale_recovery":	0,
+	"morale_damage_multiplier":	1,
+	"morale_damage_threshold":	1,
+	"morale_reveal_damage":	0,
+	"reveal_radius":	0,
+	"death_morale_damage":	0,
+	"phys_damage_start":	10,
+	"phys_damage_totaled":	100,
+	"ejection_velocity_threshold":	-1,
+	"ejection_damping":	0,
+	"ejection_instant_acceleration_required":	0,
+	"ejection_cone_width":	360,
+	"ejection_cone_offset":	0,
+	"bleedout_threshold":	45,
+	"bleedout_damage_per_second":	2.250000,
+	"pain_threshold":	20,
+	"pain_chance":	0.500000,
+	"flinch_duration":	0.500000,
+	"flinch_deviation":	0.150000,
+	"min_crouch_time":	1,
+	"crouch_threshold":	1,
+	"stability":	0.500000,
+	"moving_stability":	0.500000,
+	"crouching_stability_modifier":	0,
+	"reverse_trample_modifier":	1,
+	"reverse_trample_threshold":	0,
+	"push_decay":	5,
+	"flop_threshold":	0,
+	"flop_duration":	0,
+	"flop_deviation":	0,
+	"cockpit_type":	"NONE",
+	"default_inventory":	"",
+	"inventory_groups":	[{
+			"max_size":	300,
+			"name":	"STORAGE",
+			"socket":	"",
+			"linked_door":	"hinge_reardoor_1R",
+			"ejection_socket":	"",
+			"upper_anim":	"",
+			"lower_anim":	"",
+			"flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	false
+		}],
+	"morale_thresholds":	{
+		"Normal":	100,
+		"Panic":	95,
+		"Flee":	95,
+		"Bail (disabled)":	95
+	},
+	"morale_thresholds_reroll_chance":	{
+		"Normal":	0,
+		"Panic":	0,
+		"Flee":	0,
+		"Bail (disabled)":	0
+	},
+	"weapon_groups":	[{
+			"primary_guns":	[{
+					"socket":	"buddy_up_tie",
+					"size":	500,
+					"min_elevation":	-1.309974,
+					"weapons":	[]
+				}],
+			"secondary_guns":	[],
+			"always_draw":	true,
+			"require_ready":	false,
+			"droppable":	true,
+			"allow_reload_while_inactive":	false,
+			"flags":	0,
+			"mag_multiplier":	1,
+			"name":	""
+		}],
+	"guns":	[{
+			"socket":	"horn0",
+			"size":	0,
+			"weapons":	["assets/data/vics/horns/horn_corv_04.json"]
+		}],
+	"lights":	[{
+			"light":	"assets/data/lights/vics/light_cabin_panelvan_01.json",
+			"socket":	"light_cabin"
+		}, {
+			"light":	"assets/data/lights/vics/light_headlight_01_standard.json",
+			"socket":	"light_headlight_0L"
+		}, {
+			"light":	"assets/data/lights/vics/light_headlight_01_lens.json",
+			"socket":	"light_headlight_0L"
+		}, {
+			"light":	"assets/data/lights/vics/light_headlight_01_standard.json",
+			"socket":	"light_headlight_0R"
+		}, {
+			"light":	"assets/data/lights/vics/light_headlight_01_lens.json",
+			"socket":	"light_headlight_0R"
+		}, {
+			"light":	"assets/data/lights/vics/light_taillight_01_standard.json",
+			"socket":	"light_taillight_0L"
+		}, {
+			"light":	"assets/data/lights/vics/light_taillight_01_lens.json",
+			"socket":	"light_taillight_0L"
+		}, {
+			"light":	"assets/data/lights/vics/light_taillight_01_standard.json",
+			"socket":	"light_taillight_0R"
+		}, {
+			"light":	"assets/data/lights/vics/light_taillight_01_lens.json",
+			"socket":	"light_taillight_0R"
+		}, {
+			"light":	"",
+			"socket":	"light_highbeam_0L"
+		}, {
+			"light":	"",
+			"socket":	"light_highbeam_0R"
+		}, {
+			"light":	"",
+			"socket":	"light_turnsignal_0L"
+		}, {
+			"light":	"",
+			"socket":	"light_turnsignal_0R"
+		}, {
+			"light":	"",
+			"socket":	"light_turnsignal_1L"
+		}, {
+			"light":	"",
+			"socket":	"light_turnsignal_1R"
+		}],
+	"permanent_lights":	[],
+	"pilot_seat":	{
+		"socket":	"pilot",
+		"linked_door":	"hinge_1L",
+		"ejection_socket":	"exitFL",
+		"upper_anim":	"sitdrive",
+		"lower_anim":	"sitdrive",
+		"flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+		"exclude_flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+		"seatbelt":	true,
+		"animate_with_parent":	false
+	},
+	"container_slots":	[{
+			"socket":	"socket_passenger_0R",
+			"linked_door":	"hinge_1R",
+			"ejection_socket":	"exitFR",
+			"upper_anim":	"sit",
+			"lower_anim":	"sitdrive",
+			"flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	true,
+			"animate_with_parent":	false
+		}, {
+			"socket":	"payload_rear",
+			"linked_door":	"",
+			"ejection_socket":	"rbumper",
+			"upper_anim":	"",
+			"lower_anim":	"crouch",
+			"flags":	[true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"exclude_flags":	[false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+			"seatbelt":	true,
+			"animate_with_parent":	false
+		}],
+	"overcharge":	0,
+	"overcharge_decay":	1,
+	"health":	450,
+	"armor":	0,
+	"sight_radius":	45,
+	"use_leg_orientation":	true,
+	"is_boss":	false,
+	"shield_impact_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1555540470,
+			"Data2":	60396,
+			"Data3":	20437,
+			"Data4":	[154, 64, 74, 123, 2, 32, 169, 10]
+		}
+	},
+	"armor_deflect_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1555540470,
+			"Data2":	60396,
+			"Data3":	20437,
+			"Data4":	[154, 64, 74, 123, 2, 32, 169, 10]
+		}
+	},
+	"armor_critical_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1555540470,
+			"Data2":	60396,
+			"Data3":	20437,
+			"Data4":	[154, 64, 74, 123, 2, 32, 169, 10]
+		}
+	},
+	"death_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-316966822,
+			"Data2":	41819,
+			"Data3":	17727,
+			"Data4":	[163, 24, 45, 145, 187, 217, 61, 128]
+		}
+	},
+	"awareness_bark":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-311934870,
+			"Data2":	4770,
+			"Data3":	19940,
+			"Data4":	[148, 111, 61, 206, 137, 106, 160, 10]
+		}
+	},
+	"build_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"consume_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"repair_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"name":	"car_civ_panelvan_upgun.name",
+	"scrap_predicate":	"",
+	"repair_predicate":	"",
+	"mass":	1600,
+	"knockback_push_scaling":	2,
+	"knockback_turn_scaling":	1,
+	"behavior":	"BEHAVIOR_CIVILIAN",
+	"penetration_resistance":	15,
+	"call_help_period":	2,
+	"call_help_radius":	15,
+	"can_radio":	false,
+	"stealth_on_spawn":	false,
+	"shield_ellipsoid":	{
+		"x":	2.268000,
+		"y":	0.825000,
+		"z":	0.545886
+	},
+	"disable_retreat":	false,
+	"monetary_value":	1000,
+	"finesse_multiplier":	1,
+	"can_shoot_through_smoke":	false,
+	"is_concealed":	false,
+	"price":	100000,
+	"crew":	1,
+	"secret":	false,
+	"full_vision_cone":	false,
+	"ignores_ground_damage":	false,
+	"zoom_override":	2.250000,
+	"bail_threshold_vehicle_hp_percentage":	0.500000,
+	"bail_guarantee_vehicle_hp_percentage":	0.900000,
+	"unit_aistate_on_bail":	"BEHAVIOR_CIVILIAN",
+	"unit_morale_on_bail":	1,
+	"bail_when_vehicle_disabled":	false,
+	"bail_when_vehicle_burndown_active":	false,
+	"seconds_to_wait_before_burndown_bail":	2,
+	"use_override_bail_chance":	false,
+	"bail_from_vehicle_chance_override":	0.250000,
+	"unit_bail_from_vehicle_chance":	0.100000,
+	"bail_reset_timer_duration":	1,
+	"reset_bail_timer_on_damage":	false,
+	"damage_modifiers":	{
+		"front":	0,
+		"left":	0.250000,
+		"rear":	0.500000,
+		"right":	0.250000
+	},
+	"pierce_resistances":	{
+		"front":	2,
+		"left":	1,
+		"rear":	0,
+		"right":	1
+	},
+	"shield_pierce_resistances":	{
+		"front":	0,
+		"left":	0,
+		"rear":	0,
+		"right":	0
+	},
+	"flags":	[false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+	"zoom_max":	6,
+	"zoom_min":	2.250000,
+	"craftable":	true,
+	"baselayer":	false,
+	"inventory_texture":	"assets/ui/inventory/render/inv_vehicle_panelvan_loader_upgunned.png",
+	"min_slavageable_part_chance":	0,
+	"max_salvageable_part_chance":	1
+}

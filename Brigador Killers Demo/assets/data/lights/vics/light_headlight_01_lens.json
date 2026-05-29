@@ -1,0 +1,23 @@
+{
+	"archetype":	"LIGHT",
+	"color":	{
+		"r":	255,
+		"g":	255,
+		"b":	255,
+		"a":	255
+	},
+	"radius":	10,
+	"width":	15.056001,
+	"radial_falloff":	0.550000,
+	"conical_falloff":	14,
+	"volumetric_radial_falloff":	0.550000,
+	"volumetric_conical_falloff":	14,
+	"volumetric_intensity":	0.500000,
+	"flicker":	"m",
+	"interpolate":	false,
+	"frequency":	5,
+	"lightPreset":	0,
+	"flame":	false,
+	"flame_jump_radius":	1,
+	"flame_jump_interp_speed":	1
+}

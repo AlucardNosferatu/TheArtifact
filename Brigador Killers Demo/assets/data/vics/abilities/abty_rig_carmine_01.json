@@ -1,0 +1,215 @@
+{
+	"archetype":	"ABILITY",
+	"dive_stamina_cost":	1,
+	"stomp_pyro":	"",
+	"weak_stomp_pyro":	"",
+	"slide_damping":	3,
+	"height_delta":	0.200000,
+	"stomp_offset":	-0.400000,
+	"stomp_radius":	1,
+	"stomp_length":	1,
+	"mitigation_modifier":	0,
+	"accuracy_modifier":	0,
+	"stomp_reverse_framerate_factor":	1.250000,
+	"stomp_damage":	250,
+	"stomp_sound_radius":	0,
+	"stomp_pause":	0.100000,
+	"stomp_trigger_distance":	0,
+	"stomp_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"ai_stomp_interval":	3,
+	"stomp_with_upper":	false,
+	"stomp_orients_from_upper":	false,
+	"use_kick":	true,
+	"stomp_parameters":	{
+		"delay":	0,
+		"deviation":	0,
+		"impulse":	2500,
+		"prop_damage_multiplier":	2,
+		"hull_damage_multiplier":	1,
+		"shield_damage_multiplier":	1,
+		"falloff_begin_distance":	0,
+		"falloff_clamp":	0,
+		"falloff":	[0, 0, 0, 0, 0],
+		"near_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	1
+		},
+		"mid_ring":	{
+			"radius":	0,
+			"damage":	0,
+			"damage_deviation":	0,
+			"push":	0,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	1
+		},
+		"far_ring":	{
+			"radius":	0,
+			"damage":	35,
+			"damage_deviation":	10,
+			"push":	50,
+			"daze":	{
+				"duration":	0,
+				"speed_modifier":	0,
+				"acceleration_modifier":	0,
+				"turning_modifier":	0
+			},
+			"damage_over_time":	{
+				"duration":	0,
+				"damage_per_second":	0,
+				"damage_health_multiplier":	0,
+				"damage_armor_multiplier":	0,
+				"pierce":	0
+			},
+			"pierce":	1
+		}
+	},
+	"punch_muzzle":	"small0",
+	"punch_muzzle_hit_pyro":	"",
+	"punch_muzzle_whiff_pyro":	"",
+	"punch_offset":	0,
+	"punch_length":	0.625000,
+	"punch_framerate_factor":	0.800000,
+	"punch_damage":	22,
+	"punch_impulse":	900,
+	"punch_push":	30,
+	"punch_push_impulse":	10,
+	"punch_pierce":	1,
+	"punch_sound_radius":	3.200000,
+	"punch_start_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	234975931,
+			"Data2":	32623,
+			"Data3":	19890,
+			"Data4":	[182, 77, 237, 73, 228, 133, 149, 236]
+		}
+	},
+	"punch_hit_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	742528302,
+			"Data2":	63854,
+			"Data3":	19071,
+			"Data4":	[171, 67, 200, 59, 0, 205, 218, 3]
+		}
+	},
+	"punch_whiff_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"ai_sprint_multiplier":	1,
+	"recharge_rate":	5,
+	"boost_damage":	2,
+	"boost_accuracy_modifier":	0,
+	"boost_stability_addend":	0,
+	"duration":	5,
+	"cooldown":	0.200000,
+	"recharge_delay":	1,
+	"speed_bonus":	3,
+	"acceleration_bonus":	1,
+	"turn_bonus":	2,
+	"exhaustion_recharge_delay":	1.500000,
+	"exhaustion_speed_bonus":	1.750000,
+	"exhaustion_acceleration_bonus":	0.500000,
+	"exhaustion_turn_bonus":	1,
+	"exhaustion_stability_addend":	0,
+	"stamina_depleted_stability_addend":	5,
+	"dive_frictionless_period":	0.050000,
+	"dive_impulse":	1000,
+	"minimum_dive_interval":	1.500000,
+	"speed_penalty":	-0.250000,
+	"acceleration_penalty":	0,
+	"initial_amount":	5,
+	"charge_start_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	-1192864441,
+			"Data2":	343,
+			"Data3":	17832,
+			"Data4":	[156, 255, 174, 84, 234, 10, 248, 33]
+		}
+	},
+	"damage_ratio_floor":	0,
+	"damage_percentage_at_floor":	0,
+	"cap_damage_at_max_speed":	false,
+	"boost_pierce":	1,
+	"stomp_start_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"stomp_land_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"stomp_ascend_sound":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"ai_stomp_predict":	0.250000,
+	"ai_stomp_delay":	0.850000,
+	"ai_stomp_offset":	0.400000
+}

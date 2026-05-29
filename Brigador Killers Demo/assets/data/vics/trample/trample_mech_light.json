@@ -1,0 +1,25 @@
+{
+	"archetype":	"TRAMPLE",
+	"damage_per_impact":	100,
+	"damage_health_multiplier":	2,
+	"damage_armor_multiplier":	2,
+	"damage_prop_multiplier":	15,
+	"push":	200,
+	"offset":	0.200000,
+	"radius":	0.600000,
+	"does_affect_units":	true,
+	"sound_effect":	{
+		"override":	false,
+		"is_set":	false,
+		"guid":	{
+			"Data1":	0,
+			"Data2":	0,
+			"Data3":	0,
+			"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+		}
+	},
+	"damage_ratio_floor":	1.500000,
+	"damage_ratio_ceiling":	10,
+	"damage_percentage_at_floor":	0.100000,
+	"pierce":	10
+}

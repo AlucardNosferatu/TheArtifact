@@ -1,0 +1,129 @@
+{
+	"archetype":	"LEG",
+	"sprite":	"assets/vics/agrav/agrav_gvsd_pinball_lower.json",
+	"mounts":	[{
+			"angular_velocity":	0,
+			"rotation_width":	0,
+			"socket":	"upper",
+			"hidden_when_mounted":	false,
+			"hidden_when_occluded":	false,
+			"sprite":	"",
+			"free_floating":	false,
+			"weapon_group":	4
+		}],
+	"vehicle_data":	{
+		"move_type":	"HOVER",
+		"olock_disabled_by_default":	false,
+		"hover_height":	0.500000,
+		"hover_frequency":	0.350000,
+		"hover_amplitude":	0.100000,
+		"ascent_speed":	2,
+		"descent_speed":	50,
+		"lowfly_hover_multiplier":	0,
+		"lowfly_acceleration_multiplier":	0,
+		"lowfly_speed_multiplier":	0,
+		"max_forward_speed":	30,
+		"max_side_speed":	30,
+		"max_reverse_speed":	30,
+		"max_forward_acceleration":	30,
+		"max_side_acceleration":	30,
+		"max_reverse_acceleration":	30,
+		"linear_damping":	2.250000,
+		"min_angular_velocity":	720,
+		"max_angular_velocity":	720,
+		"idle_accel_scale":	0.400000,
+		"idle_speed_scale":	0.400000,
+		"forward_pref_ratio":	1,
+		"sound_radius":	20,
+		"angular_damping":	1.750000,
+		"boost_max_speed_decay_per_second":	2,
+		"minimum_play_speed":	0,
+		"anim_speed_coefficient":	1,
+		"restitution":	0,
+		"front_wheel_data":	{
+			"track":	1,
+			"offset_from_origin":	0.500000,
+			"friction_coefficient":	1,
+			"cornering_stiffness":	0.500000,
+			"handbrake_friction_coefficient":	1,
+			"handbrake_cornering_stiffness":	0.500000,
+			"size":	0.300000,
+			"powered":	false
+		},
+		"rear_wheel_data":	{
+			"track":	1,
+			"offset_from_origin":	-0.500000,
+			"friction_coefficient":	1,
+			"cornering_stiffness":	0.500000,
+			"handbrake_friction_coefficient":	1,
+			"handbrake_cornering_stiffness":	0.500000,
+			"size":	0.300000,
+			"powered":	false
+		},
+		"center_of_gravity_offset":	0,
+		"max_steering_angle":	39.999985,
+		"ackermann_steering":	true,
+		"box_height":	0.600000,
+		"cockpit_width":	0.500000,
+		"width":	0.500000,
+		"length":	1,
+		"use_rectangular_hitbox":	false,
+		"invert_steering":	false,
+		"glide_speed_modifier":	0.200000,
+		"glide_accel_modifier":	1,
+		"handbrake_strength":	0,
+		"soft_torso_rotation":	1,
+		"engine_pitch":	1,
+		"idlePercentage":	0.100000,
+		"maxPercentage":	0.800000,
+		"addedForwardPercentPerSecond":	0.050000,
+		"addedReversePercentPerSecond":	0.050000,
+		"decelRemovedPercentPerSecond":	0.100000,
+		"wheel_surface_sound":	{
+			"override":	false,
+			"is_set":	false,
+			"guid":	{
+				"Data1":	0,
+				"Data2":	0,
+				"Data3":	0,
+				"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+			}
+		},
+		"collision_weak_velocity_threshold":	0.100000,
+		"weak_collision":	{
+			"override":	false,
+			"is_set":	false,
+			"guid":	{
+				"Data1":	0,
+				"Data2":	0,
+				"Data3":	0,
+				"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+			}
+		},
+		"intense_collision":	{
+			"override":	false,
+			"is_set":	false,
+			"guid":	{
+				"Data1":	0,
+				"Data2":	0,
+				"Data3":	0,
+				"Data4":	[0, 0, 0, 0, 0, 0, 0, 0]
+			}
+		}
+	},
+	"size":	0.950000,
+	"height":	1.250000,
+	"path_radius":	1,
+	"destroyed_height":	1,
+	"ability_data":	"assets/data/vics/abilities/abty_agrav_pinball_01.json",
+	"engine_sound":	{
+		"override":	false,
+		"is_set":	true,
+		"guid":	{
+			"Data1":	833994050,
+			"Data2":	5042,
+			"Data3":	18259,
+			"Data4":	[152, 90, 228, 153, 222, 220, 207, 18]
+		}
+	}
+}
