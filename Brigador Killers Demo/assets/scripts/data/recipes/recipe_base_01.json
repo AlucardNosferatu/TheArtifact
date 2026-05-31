@@ -1,5 +1,1934 @@
 [
   {
+    "title": "WEAPONS_EXTRA",
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_12mm_galinha.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 999999,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_45acp_libertador.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_604ball_ryoken.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1337,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_8mm_edvenice.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_blackhand.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_bully.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_disco.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_kamikaze_seeker_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_kamikaze_vest_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_otomo.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_seeker_dive.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_temblor.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_thunderclap.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_wip_laser_shotgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_wip_talkback.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 2000000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/weapons/gun_wip_zweenie.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ]
+  },
+  {
+    "title": "AMMO_EXTRA",
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_100mm_chaff.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_105mm_heat.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_120mm_he.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_12ga_pellet.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_12ga_pellet_narrow.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_12ga_pellet_short.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_12ga_pellet_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_12ga_slug.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_132mm_he.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_132mm_tubarao.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_15mm_esd.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_aphe-t-auto.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_aphe-t.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_pellet.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_pellet_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_pellet_split_02.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_22lr_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_25mm_hei-t.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_25mm_hei-t_bh.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_27mm_ap.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_305mm_fae.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_305mm_fae_split_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_30mm_aphe-t.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_357mag.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_37mm_ap_rocket.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_37mm_ap_rocket_split_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_37mm_beanbag.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_37mm_he.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_40mm_he.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_40mm_hedp.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_44mm_beehive.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_44mm_beehive_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_45acp_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_45acp_fragmenting.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_4ga_pellet.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_4ga_pellet_narrow.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_4ga_pellet_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_50bmg-cut_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_50bmg_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_50mm_he.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket_split_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket_split_02.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket_split_03.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket_split_04.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket_split_05.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_51_rocket_split_06.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_556_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_57mm_he_rocket.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_60mm_he.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_60mm_vortex.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_6ga_pellet.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_6ga_pellet_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_762_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_76mm_canister.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_84mm_heat.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_84mm_heat_split_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_84mm_heat_split_02.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_84mm_heat_split_03.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_8mm_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_8mm_wildcat.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_8mm_wildcat_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_90mm_beehive.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_90mm_beehive_split_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_9mm_fmj.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_bottle.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_cell_concussion.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_cell_glove.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_cinderblock.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_g_flash.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_g_frag.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_g_smoke.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_g_smoke_split.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_g_thermobaric.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_law.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_lyam.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_null.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_punch.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_punch_zombie.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_rock.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_rpg_heat.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_template_ballistic.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_test_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_wip_geist.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_wip_vocc_coilgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ]
+  },
+  {
     "recipes": [
       {
         "auto_merge": false,
