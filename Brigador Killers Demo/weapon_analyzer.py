@@ -1,24 +1,10 @@
 import csv
-import json
 import os
 from datetime import datetime
 
 # CSV 文件路径
 CSV_PATH = 'weapons_with_bullets.csv'
 BASE_PATH = '.'
-
-def load_json(filepath):
-    """加载 JSON 文件"""
-    if not filepath:
-        return None
-    try:
-        full_path = os.path.join(BASE_PATH, filepath)
-        if not os.path.exists(full_path):
-            return None
-        with open(full_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception:
-        return None
 
 def get_float(value, default=0.0):
     """安全地转换为浮点数"""
@@ -29,74 +15,37 @@ def get_float(value, default=0.0):
     except (ValueError, TypeError):
         return default
 
-def calculate_score(weapon_csv, weapon_json, bullet_json):
-    """计算武器综合评分"""
-    # 优先从 JSON 中获取数据，如果没有则从 CSV 中获取
+def calculate_score(weapon_data):
+    """计算武器综合评分 - 完全从 CSV 数据读取"""
     
     # 伤害数据
-    bullet_damage = 0.0
-    laser_damage = 0.0
+    bullet_damage = get_float(weapon_data.get('bullet_damage', 0))
+    laser_damage = get_float(weapon_data.get('laser_damage', 0))
+    explosion_damage = get_float(weapon_data.get('explosion_far_ring_damage', 0))
     
-    if bullet_json:
-        bullet_damage = get_float(bullet_json.get('damage', 0))
-    if weapon_json:
-        laser_damage = get_float(weapon_json.get('laser_damage', 0))
-    
-    # 从 CSV 作为备选
-    if bullet_damage == 0:
-        bullet_damage = get_float(weapon_csv.get('bullet_damage', 0))
-    if laser_damage == 0:
-        laser_damage = get_float(weapon_csv.get('laser_damage', 0))
-    
-    # 使用有伤害的那个
+    # 使用有伤害的那个，优先使用子弹伤害或激光伤害，爆炸伤害作为补充
     damage = bullet_damage if bullet_damage > 0 else laser_damage
+    if damage == 0 and explosion_damage > 0:
+        damage = explosion_damage
     
     # 其他属性
-    cooldown = get_float(weapon_json.get('cooldown', 0)) if weapon_json else 0.0
-    if cooldown == 0:
-        cooldown = get_float(weapon_csv.get('cooldown', 1))
-    
-    range_val = get_float(weapon_json.get('range', 0)) if weapon_json else 0.0
-    if range_val == 0:
-        range_val = get_float(weapon_csv.get('range', 0))
-    
-    accuracy = get_float(weapon_json.get('accuracy_cone_width', 10)) if weapon_json else 10.0
-    if accuracy == 10:
-        accuracy = get_float(weapon_csv.get('accuracy_cone_width', 10))
-    
-    ammo_capacity = get_float(weapon_json.get('ammo_capacity', 0)) if weapon_json else 0.0
-    if ammo_capacity == 0:
-        ammo_capacity = get_float(weapon_csv.get('ammo_capacity', 0))
-    
-    bullet_speed = get_float(bullet_json.get('speed', 0)) if bullet_json else 0.0
-    if bullet_speed == 0:
-        bullet_speed = get_float(weapon_csv.get('bullet_speed', 0))
-    
-    bullet_penetration = get_float(bullet_json.get('penetration', 0)) if bullet_json else 0.0
-    if bullet_penetration == 0:
-        bullet_penetration = get_float(weapon_csv.get('bullet_penetration', 0))
-    
-    penetration = get_float(weapon_json.get('penetration', 0)) if weapon_json else 0.0
-    if penetration == 0:
-        penetration = get_float(weapon_csv.get('penetration', 0))
-    
-    final_penetration = bullet_penetration if bullet_penetration > 0 else penetration
-    
-    burst_count = get_float(weapon_json.get('burst_count', 1)) if weapon_json else 1.0
-    if burst_count == 1:
-        burst_count = get_float(weapon_csv.get('burst_count', 1))
-    
-    shot_count = get_float(weapon_json.get('shot_count', 1)) if weapon_json else 1.0
-    if shot_count == 1:
-        shot_count = get_float(weapon_csv.get('shot_count', 1))
-    
-    per_click_cooldown = get_float(weapon_json.get('per_click_cooldown', 0.1)) if weapon_json else 0.1
-    if per_click_cooldown == 0.1:
-        per_click_cooldown = get_float(weapon_csv.get('per_click_cooldown', 0.1))
+    cooldown = get_float(weapon_data.get('cooldown', 1))
+    per_click_cooldown = get_float(weapon_data.get('per_click_cooldown', 0.1))
     
     # 处理 cooldown 为 0 的情况
     if cooldown <= 0:
         cooldown = per_click_cooldown
+    
+    range_val = get_float(weapon_data.get('range', 0))
+    accuracy = get_float(weapon_data.get('accuracy_cone_width', 10))
+    ammo_capacity = get_float(weapon_data.get('ammo_capacity', 0))
+    bullet_speed = get_float(weapon_data.get('bullet_speed', 0))
+    bullet_penetration = get_float(weapon_data.get('bullet_penetration', 0))
+    penetration = get_float(weapon_data.get('penetration', 0))
+    final_penetration = bullet_penetration if bullet_penetration > 0 else penetration
+    
+    burst_count = get_float(weapon_data.get('burst_count', 1))
+    shot_count = get_float(weapon_data.get('shot_count', 1))
     
     # 计算每秒伤害 (DPS)
     dps = (damage * burst_count * shot_count) / max(cooldown, 0.01)
@@ -133,6 +82,7 @@ def calculate_score(weapon_csv, weapon_json, bullet_json):
         'damage': damage,
         'bullet_damage': bullet_damage,
         'laser_damage': laser_damage,
+        'explosion_damage': explosion_damage,
         'cooldown': cooldown,
         'range': range_val,
         'accuracy': accuracy,
@@ -144,52 +94,51 @@ def calculate_score(weapon_csv, weapon_json, bullet_json):
         'total_score': total_score
     }
 
+def load_weapons_csv():
+    """加载武器 CSV 数据到字典，以 filename 为键"""
+    weapons_dict = {}
+    weapons_by_name = {}
+    try:
+        with open(CSV_PATH, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                filename = row.get('filename', '')
+                name = row.get('name', '')
+                if filename:
+                    weapons_dict[filename] = row
+                    # 也存一下，用basename做键
+                    basename = os.path.basename(filename)
+                    weapons_dict[basename] = row
+                    # 用完整路径做键
+                    full_path = f'assets/data/pickups/weapons/{filename}'
+                    weapons_dict[full_path] = row
+                if name:
+                    weapons_by_name[name] = row
+    except Exception as e:
+        print(f"加载 CSV 失败: {e}")
+    return weapons_dict
+
 def main():
     print("正在加载武器数据...")
     
-    weapons = []
+    weapons_dict = load_weapons_csv()
+    print(f"成功加载 {len(weapons_dict)} 个武器数据")
     
-    # 读取 CSV
-    with open(CSV_PATH, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        headers = next(reader)
-        
-        # 清理表头（移除 BOM 和引号）
-        clean_headers = []
-        for h in headers:
-            clean_h = h.strip('\ufeff').strip('"')
-            clean_headers.append(clean_h)
-        
-        # 处理每一行数据
-        for row in reader:
-            weapon_info = {}
-            for i, h in enumerate(clean_headers):
-                if i < len(row):
-                    weapon_info[h] = row[i]
-            
-            weapons.append(weapon_info)
-    
-    print(f"成功加载 {len(weapons)} 个武器数据")
-    
-    print("\n正在加载 JSON 文件并计算武器评分...")
     scored_weapons = []
-    
-    for weapon_csv in weapons:
-        weapon_filename = weapon_csv.get('filename', '')
-        bullet_filename = weapon_csv.get('bullet', '')
+    # 避免重复，用filename作为唯一标识
+    processed = set()
+    for filename, weapon_data in weapons_dict.items():
+        # 只处理一次每个武器
+        key = weapon_data.get('filename', filename)
+        if key in processed:
+            continue
+        processed.add(key)
         
-        # 加载 JSON 文件
-        weapon_json = load_json(weapon_filename)
-        bullet_json = load_json(bullet_filename)
-        
-        # 计算评分
-        scores = calculate_score(weapon_csv, weapon_json, bullet_json)
-        
-        weapon_name = weapon_csv.get('name', 'Unknown')
-        
+        scores = calculate_score(weapon_data)
+        weapon_name = weapon_data.get('name', key)
         scored_weapons.append({
             'name': weapon_name,
-            'filename': weapon_filename,
+            'filename': weapon_data.get('filename', filename),
             **scores
         })
     
@@ -250,9 +199,8 @@ def main():
     print("Top 10 武器预览:")
     print("=" * 80)
     for i, weapon in enumerate(scored_weapons[:10], 1):
-        print(f"{i}. {weapon['name']} - 评分: {weapon['total_score']:.2f} - DPS: {weapon['dps']:.2f}")
+        print(f"{i}: {weapon['name']} - 评分: {weapon['total_score']:.2f} - DPS: {weapon['dps']:.2f}")
     
-    # 更新待办事项
     return scored_weapons
 
 if __name__ == "__main__":
