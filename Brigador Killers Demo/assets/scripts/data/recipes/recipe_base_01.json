@@ -1,0 +1,3129 @@
+[
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 10000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Vorverkhuhn Upper Build Kit",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_lmech_fork_01.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 15000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Loyalist Light-Leg Build Kit",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_lmech_fork_02.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 8000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Mongoose Build Kit",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_suit_loy_mongoose_01.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      }
+    ],
+    "title": "MECHS_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 10000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Betka Upper Build Kit",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_ltank_betka_01.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 15000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Loyalist Light-Tank Chassis Build Kit",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_ltank_betka_02.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      }
+    ],
+    "title": "TANKS_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 20000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_spc_cutter_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 50000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_spc_rounder_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "SPACER_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 10000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Heavy Guns Box",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_guns_vic_02.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0,
+            "count": 10000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "Light Guns Box",
+        "inventory": "",
+        "loadout": "assets/data/loadouts/ldt_merchant_guns_vic_01.json",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_gunheavy.json",
+        "requires_transport": true,
+        "scrappable": false
+      }
+    ],
+    "title": "GUN BOXES_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 250,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_parts_exotic.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 100,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_parts_complex.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 25,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_parts_simple.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "PARTS_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 1000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_engine_xlarge.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 500,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_engine_large.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 250,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_engine_mid.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 100,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_engine_small.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 1000,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_e-engine_large.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 250,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_e-engine_small.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 750,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_tread_mid.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 500,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_leg_lobo.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 500,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_impeller_small.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 1500,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_shield_large.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 500,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_shield_small.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 150,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_actuator_large.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 75,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_actuator_small.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "COMPONENTS_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 50,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_37mm_he_cannon.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 25,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_beehive.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 100,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_120mm_he.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 9,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_27mm_ap.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 25,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_25mm_hei-t.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 40,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_12mm_rail.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 6,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_20mm_aphe-t.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 80,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_60mm_vortex.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 30,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_57mm_he_rocket.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_14mm_he.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 100,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_105mm_heat.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 20,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_40mm_hedp.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 35,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_132mm_he.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 150,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_25mm_rail.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 350,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_305mm_fae.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 12,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_30mm_aphe-t.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 125,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_90mm_beehive.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 15,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/ammo/pkp_ammo_15mm_esd.json",
+        "requires_transport": true,
+        "scrappable": true
+      }
+    ],
+    "title": "AMMO_MERCHANT"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": true,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 25,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kipple/pkp_health_bandage.json",
+        "requires_transport": false,
+        "scrappable": false
+      },
+      {
+        "auto_merge": true,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 200,
+            "resource": "assets/data/pickups/kipple/pkp_credits.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kipple/pkp_health_medkit.json",
+        "requires_transport": false,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_backpack_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/misc_backpack_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_buddy.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_backpack_drum.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/misc_backpack_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_backpack_sling.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.5,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_sm_01.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_med_01.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 8,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/misc_lootbox_01.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_froggy.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 3,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_hp_small.json",
+        "requires_transport": false,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_buddy.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 6,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_hp_mid.json",
+        "requires_transport": false,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_cruiser.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 8,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_hp_large.json",
+        "requires_transport": false,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_tuktuk.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 6,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 12,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_hp_xlarge.json",
+        "requires_transport": false,
+        "scrappable": false
+      }
+    ],
+    "title": "ITEMS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/bike_chob_chibimoto_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/pmd_civ_mobility_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/pmd_civ_mobility_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 0.5,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/pmd_civ_mobility_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_cruiser.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/bike_civ_cruiser_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/bike_civ_cruiser_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/bike_civ_cruiser_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_teddyboy.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 15,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/bike_civ_teddyboy_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/bike_civ_teddyboy_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_battery_small.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/bike_civ_teddyboy_shield.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "BIKES"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_liliputter.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 25,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_liliputter_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_liliputter_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_liliputter_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_tuktuk.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 3,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 25,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-R.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01-R.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-F.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01-R.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-P.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 8,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-S.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_actuator_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-bed.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01-bed.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-T.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kipple/pkp_jerrycan.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-bomb1.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01-bomb1.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_40mm_he.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 7,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_50mm_he.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 4,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_60mm_he.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-bomb2.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_tuktuk_01-bomb2.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 12,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_60mm_he.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_37mm_he_cannon.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 4,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_57mm_he_rocket.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_tuktuk_01-bomb3.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_forklift.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_actuator_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 25,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/util_civ_forklift_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/util_civ_forklift_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/util_civ_forklift_02.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "MINI CARS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_rennpappe.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 30,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_rennpappe_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_rennpappe_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_rennpappe_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_lowboy.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 40,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_chob_lowboy_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_chob_lowboy_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 8,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_chob_lowboy_pigplow.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_chob_lowboy_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_buddy.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_chob_lowboy_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_copcar.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 40,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_cop_sedan_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_cop_sedan_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_cop_sedan_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_copcar_heavy.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.5,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 45,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 6,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_cop_heavy_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_ovo.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_large.json"
+          },
+          {
+            "conversion_rate": 4,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 30,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_ovo_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "CARS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_panelvan.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 60,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_panelvan_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_panelvan_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_actuator_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_panelvan_salvage.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_panelvan_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_actuator_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_panelvan_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_panelvan.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 3,
+            "resource": "assets/data/pickups/ammo/pkp_ammo_305mm_fae.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_panelvan_bomb.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_sprat.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 70,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_sprat_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_sprat_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_forklift.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_sprat_upguntur.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_civ_sprat_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_xlarge.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 10,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_civ_sprat_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_copapc.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_wheel_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 80,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_cop_apc_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/car_cop_apc_01.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/car_cop_apc_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "TRUCKS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_cruiser.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_leg_lobo.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 30,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suit_corv_coffin.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_mongoose.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_leg_loy_suit.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suit_loy_mongoose_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "POWERSUITS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_tuktuk.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_tread_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 50,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suba_corv_ltank_01.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_corv_ltank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_liliputter.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 30,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_corv_lili.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_corv_ltank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_panelvan.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_mid.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_actuator_small.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 50,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_corv_partyvan.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_loy_ltank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_tread_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suba_loy_ltank_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_loy_ltank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_betka.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_loy_betka_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "LIGHT TANKS"
+  },
+  {
+    "recipes": [],
+    "title": "HEAVY TANKS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_engine_xlarge.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_leg_loy_light.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suba_loy_lmech.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_loy_lmech.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_lowboy.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 50,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/lmech_corv_lowboy_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_loy_lmech.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_fork.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/lmech_loy_fork_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/lmech_loy_fork_01.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 15,
+            "resource": "assets/data/pickups/kit/pkp_parts_armor.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/lmech_loy_fork_upgun.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "LIGHT MECHS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_cruiser.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_teddyboy.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/pickups/kit/pkp_comp_body_skate.json",
+        "requires_transport": false,
+        "scrappable": false
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_skate.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_impeller_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_small.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_hp_mid.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_simple.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/agrav_corv_skate_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_arlo.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 3,
+            "resource": "assets/data/pickups/kit/pkp_comp_impeller_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_exotic.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/agrav_spc_arlo_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "AGRAVS"
+  },
+  {
+    "recipes": [
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_spc_ltank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_tread_ball.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_exotic.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suba_spc_ltank_01.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_spc_ltank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_cutter.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 2,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_parts_exotic.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_spc_cutter_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_spc_tank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 4,
+            "resource": "assets/data/pickups/kit/pkp_comp_e-engine_large.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 6,
+            "resource": "assets/data/pickups/kit/pkp_comp_tread_ball.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 30,
+            "resource": "assets/data/pickups/kit/pkp_parts_exotic.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 20,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/suba_spc_tank_01.json",
+        "requires_transport": true,
+        "scrappable": true
+      },
+      {
+        "auto_merge": false,
+        "blurb": "",
+        "components": [
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/vics/units/suba_spc_tank_01.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 1,
+            "resource": "assets/data/pickups/kit/pkp_comp_body_rounder.json"
+          },
+          {
+            "conversion_rate": 1,
+            "count": 5,
+            "resource": "assets/data/pickups/kit/pkp_comp_shield_large.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_exotic.json"
+          },
+          {
+            "conversion_rate": 0.69999998807907,
+            "count": 10,
+            "resource": "assets/data/pickups/kit/pkp_parts_complex.json"
+          }
+        ],
+        "custom_name": "",
+        "inventory": "",
+        "loadout": "",
+        "on_build": "",
+        "predicate": "",
+        "product": "assets/data/vics/units/tank_spc_rounder_01.json",
+        "requires_transport": false,
+        "scrappable": true
+      }
+    ],
+    "title": "BALL TREADERS"
+  }
+]
