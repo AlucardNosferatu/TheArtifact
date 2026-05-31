@@ -1,0 +1,384 @@
+{
+	"base_storage": {
+		"items": {
+			"assets/data/pickups/ammo/pkp_ammo_20mm_aphe-t.json": 14,
+			"assets/data/pickups/ammo/pkp_ammo_22lr_fmj.json": 262,
+			"assets/data/pickups/ammo/pkp_ammo_357mag.json": 42,
+			"assets/data/pickups/ammo/pkp_ammo_37mm_beanbag.json": 5,
+			"assets/data/pickups/ammo/pkp_ammo_40mm_he.json": 43,
+			"assets/data/pickups/ammo/pkp_ammo_44mm_beehive.json": 39,
+			"assets/data/pickups/ammo/pkp_ammo_45acp_fmj.json": 30,
+			"assets/data/pickups/ammo/pkp_ammo_4ga_pellet.json": 70,
+			"assets/data/pickups/ammo/pkp_ammo_50bmg_fmj.json": 383,
+			"assets/data/pickups/ammo/pkp_ammo_50mm_he.json": 13,
+			"assets/data/pickups/ammo/pkp_ammo_556_fmj.json": 394,
+			"assets/data/pickups/ammo/pkp_ammo_604_steel_ball.json": 214,
+			"assets/data/pickups/ammo/pkp_ammo_6ga_pellet.json": 122,
+			"assets/data/pickups/ammo/pkp_ammo_76mm_canister.json": 4,
+			"assets/data/pickups/ammo/pkp_ammo_84mm_heat.json": 4,
+			"assets/data/pickups/ammo/pkp_ammo_8mm_fmj.json": 230,
+			"assets/data/pickups/ammo/pkp_ammo_8mm_wildcat.json": 89,
+			"assets/data/pickups/ammo/pkp_ammo_9mm_fmj.json": 276,
+			"assets/data/pickups/ammo/pkp_ammo_alloy_rod.json": 1000,
+			"assets/data/pickups/ammo/pkp_ammo_cell_extreme.json": 17,
+			"assets/data/pickups/ammo/pkp_ammo_cell_hi.json": 248,
+			"assets/data/pickups/ammo/pkp_ammo_cell_lo.json": 169,
+			"assets/data/pickups/ammo/pkp_ammo_cell_med.json": 272,
+			"assets/data/pickups/ammo/pkp_ammo_rpg-7_heat.json": 9,
+			"assets/data/pickups/kipple/pkp_credits.json": 390,
+			"assets/data/pickups/kipple/pkp_health_bandage.json": 4,
+			"assets/data/pickups/kipple/pkp_health_chips.json": 5,
+			"assets/data/pickups/kipple/pkp_jerrycan.json": 14,
+			"assets/data/pickups/kit/pkp_comp_actuator_small.json": 2,
+			"assets/data/pickups/kit/pkp_comp_battery_small.json": 1,
+			"assets/data/pickups/kit/pkp_comp_body_froggy.json": 2,
+			"assets/data/pickups/kit/pkp_comp_e-engine_small.json": 1,
+			"assets/data/pickups/kit/pkp_comp_engine_small.json": 2,
+			"assets/data/pickups/kit/pkp_comp_gimbal_mid.json": 3,
+			"assets/data/pickups/kit/pkp_comp_gimbal_small.json": 2,
+			"assets/data/pickups/kit/pkp_comp_hp_small.json": 7,
+			"assets/data/pickups/kit/pkp_comp_wheel_small.json": 1,
+			"assets/data/pickups/kit/pkp_parts_complex.json": 10,
+			"assets/data/pickups/kit/pkp_parts_simple.json": 19,
+			"assets/data/pickups/weapons/gun_12ga_drummer.json": 1,
+			"assets/data/pickups/weapons/gun_357mag_hilfmir.json": 1,
+			"assets/data/pickups/weapons/gun_357mag_lodi.json": 1,
+			"assets/data/pickups/weapons/gun_37mm_sandbagger.json": 1,
+			"assets/data/pickups/weapons/gun_40mm_milkman.json": 1,
+			"assets/data/pickups/weapons/gun_40mm_thumper.json": 1,
+			"assets/data/pickups/weapons/gun_45acp_drobac.json": 1,
+			"assets/data/pickups/weapons/gun_45acp_graxa.json": 1,
+			"assets/data/pickups/weapons/gun_45acp_libertador.json": 1,
+			"assets/data/pickups/weapons/gun_556_nobrelitea18.json": 1,
+			"assets/data/pickups/weapons/gun_6ga_rhino.json": 1,
+			"assets/data/pickups/weapons/gun_762_porco.json": 1,
+			"assets/data/pickups/weapons/gun_8mm_bonesaw.json": 1,
+			"assets/data/pickups/weapons/gun_8mmw_obrez.json": 1,
+			"assets/data/pickups/weapons/gun_9mm_catfish.json": 1,
+			"assets/data/pickups/weapons/gun_9mm_handlebar.json": 2,
+			"assets/data/pickups/weapons/gun_alloy_frank.json": 1,
+			"assets/data/pickups/weapons/gun_binoculars.json": 1,
+			"assets/data/pickups/weapons/gun_s-u_flash.json": 3,
+			"assets/data/pickups/weapons/gun_s-u_frag.json": 1,
+			"assets/data/pickups/weapons/gun_s-u_smoke.json": 3,
+			"assets/data/pickups/weapons/gun_s-u_thermobaric.json": 2,
+			"assets/data/pickups/weapons/gun_wip_gollop.json": 1
+		},
+		"mechs": []
+	},
+	"character_state": [
+		{
+			"child": [
+				1
+			],
+			"greebles": [
+				{
+					"greeble": "assets/vics/foot/head_loy_01.json",
+					"socket": 516047865
+				},
+				{
+					"greeble": "assets/fx/null.json",
+					"socket": 701580632
+				},
+				{
+					"greeble": "assets/fx/null.json",
+					"socket": 4286118532
+				},
+				{
+					"greeble": "assets/fx/null.json",
+					"socket": 628847853
+				}
+			],
+			"nodes": [
+				{
+					"armor": 0,
+					"behavior": 6,
+					"childBegin": 0,
+					"childEnd": 1,
+					"damageMul": 0.75,
+					"data": "assets/data/vics/units/foot_loy_bd_01.json",
+					"greebleBegin": 0,
+					"greebleEnd": 4,
+					"gunBegin": 0,
+					"gunEnd": 3,
+					"health": 20,
+					"inventory": [
+						[],
+						[],
+						[]
+					],
+					"lightBegin": -1,
+					"lightEnd": -1,
+					"morale": -1,
+					"movStabAdd": 0,
+					"movStabMul": 1,
+					"parentIndex": -1,
+					"reloadSpeedMul": 1.3500000238419,
+					"stabAdd": 0,
+					"stabMul": 1,
+					"stunMul": 1,
+					"team": 0
+				},
+				{
+					"armor": -1,
+					"behavior": 8,
+					"childBegin": -1,
+					"childEnd": -1,
+					"damageMul": 1,
+					"greebleBegin": -1,
+					"greebleEnd": -1,
+					"gunBegin": -1,
+					"gunEnd": -1,
+					"health": -1,
+					"inventory": [],
+					"lightBegin": -1,
+					"lightEnd": -1,
+					"morale": -1,
+					"movStabAdd": 0,
+					"movStabMul": 1,
+					"parentIndex": -1,
+					"reloadSpeedMul": 1,
+					"stabAdd": 0,
+					"stabMul": 1,
+					"stunMul": 1,
+					"team": 2
+				}
+			],
+			"passenger_socket": [
+				84696351,
+				1500016785
+			],
+			"weapons": [
+				{
+					"group": 0,
+					"mag": -1,
+					"primary": true,
+					"slot": 0,
+					"socket": 1893857564
+				},
+				{
+					"group": 1,
+					"mag": -1,
+					"primary": true,
+					"slot": 0,
+					"socket": 1893857564
+				},
+				{
+					"group": 2,
+					"mag": -1,
+					"primary": true,
+					"slot": 0,
+					"socket": 1893857564
+				}
+			]
+		}
+	],
+	"current_character": 0,
+	"current_hub": 0,
+	"hubs": [
+		{
+			"gantry_data": [
+				{
+					"child": [
+						1,
+						2
+					],
+					"greebles": [
+						{
+							"greeble": "assets/vics/misc/lootbox_lid_01.json",
+							"socket": 2395784946
+						}
+					],
+					"nodes": [
+						{
+							"armor": 0,
+							"behavior": 8,
+							"childBegin": 0,
+							"childEnd": 2,
+							"damageMul": 0.75,
+							"data": "assets/data/vics/units/car_civ_tuktuk_01-bed.json",
+							"greebleBegin": 1,
+							"greebleEnd": 1,
+							"gunBegin": 0,
+							"gunEnd": 0,
+							"health": 250,
+							"inventory": [
+								[]
+							],
+							"lightBegin": -1,
+							"lightEnd": -1,
+							"morale": -1,
+							"movStabAdd": 0,
+							"movStabMul": 1,
+							"parentIndex": -1,
+							"reloadSpeedMul": 1.3500000238419,
+							"stabAdd": 0,
+							"stabMul": 1,
+							"stunMul": 1,
+							"team": 2
+						},
+						{
+							"armor": -1,
+							"behavior": 8,
+							"childBegin": -1,
+							"childEnd": -1,
+							"damageMul": 1,
+							"greebleBegin": -1,
+							"greebleEnd": -1,
+							"gunBegin": -1,
+							"gunEnd": -1,
+							"health": -1,
+							"inventory": [],
+							"lightBegin": -1,
+							"lightEnd": -1,
+							"morale": -1,
+							"movStabAdd": 0,
+							"movStabMul": 1,
+							"parentIndex": -1,
+							"reloadSpeedMul": 1,
+							"stabAdd": 0,
+							"stabMul": 1,
+							"stunMul": 1,
+							"team": 2
+						},
+						{
+							"armor": 0,
+							"behavior": 8,
+							"childBegin": 2,
+							"childEnd": 2,
+							"damageMul": 1,
+							"data": "assets/data/vics/units/misc_lootbox_01.json",
+							"greebleBegin": 0,
+							"greebleEnd": 1,
+							"gunBegin": 0,
+							"gunEnd": 0,
+							"health": 500,
+							"inventory": [
+								[]
+							],
+							"lightBegin": -1,
+							"lightEnd": -1,
+							"morale": -1,
+							"movStabAdd": 0,
+							"movStabMul": 1,
+							"parentIndex": -1,
+							"reloadSpeedMul": 1,
+							"stabAdd": 0,
+							"stabMul": 1,
+							"stunMul": 1,
+							"team": 2
+						}
+					],
+					"passenger_socket": [
+						84696351,
+						454705203,
+						4197815581
+					],
+					"weapons": []
+				},
+				{
+					"child": [],
+					"greebles": [],
+					"nodes": [],
+					"passenger_socket": [],
+					"weapons": []
+				},
+				{
+					"child": [],
+					"greebles": [],
+					"nodes": [],
+					"passenger_socket": [],
+					"weapons": []
+				},
+				{
+					"child": [],
+					"greebles": [],
+					"nodes": [],
+					"passenger_socket": [],
+					"weapons": []
+				},
+				{
+					"child": [],
+					"greebles": [],
+					"nodes": [],
+					"passenger_socket": [],
+					"weapons": []
+				}
+			],
+			"mission_data": [
+				{
+					"completed": true,
+					"played": true
+				},
+				{
+					"completed": true,
+					"played": true
+				},
+				{
+					"completed": true,
+					"played": true
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				},
+				{
+					"completed": false,
+					"played": false
+				}
+			]
+		}
+	]
+}
