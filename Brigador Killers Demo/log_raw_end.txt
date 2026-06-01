@@ -1,0 +1,2177 @@
+luaload explore.lua
+[LUA] === STARTING DATA STRUCTURE EXPLORATION ===
+[LUA] === GLOBAL ENVIRONMENT (_G) ===
+[LUA] _G
+[LUA]   TYPE: table
+[LUA]   AISTATE
+[LUA]     TYPE: table
+[LUA]     AISTATE_DELAYED_NEXT_STATE_OVERRIDE_BUG0
+[LUA]       TYPE: number
+[LUA]       VALUE: 26
+[LUA]     AISTATE_DELAYED_NEXT_STATE_OVERRIDE_BUG1
+[LUA]       TYPE: number
+[LUA]       VALUE: 27
+[LUA]     AISTATE_NULL
+[LUA]       TYPE: number
+[LUA]       VALUE: 28
+[LUA]     AISTATE_PLACEHOLDER
+[LUA]       TYPE: number
+[LUA]       VALUE: 29
+[LUA]     AMBUSH
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     BIKEJOUST_JOUST
+[LUA]       TYPE: number
+[LUA]       VALUE: 18
+[LUA]     FLANK
+[LUA]       TYPE: number
+[LUA]       VALUE: 9
+[LUA]     FLATFOOTED
+[LUA]       TYPE: number
+[LUA]       VALUE: 17
+[LUA]     FLEE
+[LUA]       TYPE: number
+[LUA]       VALUE: 4
+[LUA]     GOTO_LAST_KNOWN
+[LUA]       TYPE: number
+[LUA]       VALUE: 3
+[LUA]     IDLE
+[LUA]       TYPE: number
+[LUA]       VALUE: 5
+[LUA]     NORMAL_GOTO_FIRING_POSITION
+[LUA]       TYPE: number
+[LUA]       VALUE: 14
+[LUA]     NORMAL_INVESTIGATE_POSITION
+[LUA]       TYPE: number
+[LUA]       VALUE: 16
+[LUA]     NORMAL_SHOOT_TARGET
+[LUA]       TYPE: number
+[LUA]       VALUE: 15
+[LUA]     ORDERED_DELAY
+[LUA]       TYPE: number
+[LUA]       VALUE: 12
+[LUA]     ORDER_GETIN
+[LUA]       TYPE: number
+[LUA]       VALUE: 11
+[LUA]     ORDER_MOVETO
+[LUA]       TYPE: number
+[LUA]       VALUE: 10
+[LUA]     PLAYER
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     RETREAT
+[LUA]       TYPE: number
+[LUA]       VALUE: 7
+[LUA]     SEARCH
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]     SERPENTINE_GOTO_FIRING_POSITION
+[LUA]       TYPE: number
+[LUA]       VALUE: 19
+[LUA]     SERPENTINE_GOTO_FIRING_POSITION_ZAG
+[LUA]       TYPE: number
+[LUA]       VALUE: 21
+[LUA]     SERPENTINE_GOTO_FIRING_POSITION_ZIG
+[LUA]       TYPE: number
+[LUA]       VALUE: 20
+[LUA]     SERPENTINE_INVESTIGATE_POSITION
+[LUA]       TYPE: number
+[LUA]       VALUE: 25
+[LUA]     SERPENTINE_SHOOT_TARGET
+[LUA]       TYPE: number
+[LUA]       VALUE: 22
+[LUA]     SERPENTINE_SHOOT_TARGET_ZAG
+[LUA]       TYPE: number
+[LUA]       VALUE: 24
+[LUA]     SERPENTINE_SHOOT_TARGET_ZIG
+[LUA]       TYPE: number
+[LUA]       VALUE: 23
+[LUA]     STATIONARY_SHOOT
+[LUA]       TYPE: number
+[LUA]       VALUE: 6
+[LUA]     STUNNED
+[LUA]       TYPE: number
+[LUA]       VALUE: 8
+[LUA]     WAITING
+[LUA]       TYPE: number
+[LUA]       VALUE: 13
+[LUA]   AppendToHistory
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec788c8
+[LUA]   BEHAVIOR
+[LUA]     TYPE: table
+[LUA]     BEHAVIOR_BIKEJOUST
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]     BEHAVIOR_CIVILIAN
+[LUA]       TYPE: number
+[LUA]       VALUE: 4
+[LUA]     BEHAVIOR_DELAYED_NEXT_STATE_OVERRIDE_BUG
+[LUA]       TYPE: number
+[LUA]       VALUE: 9
+[LUA]     BEHAVIOR_INFANTRY_AIMSHOOT
+[LUA]       TYPE: number
+[LUA]       VALUE: 6
+[LUA]     BEHAVIOR_NORMAL
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     BEHAVIOR_NULL
+[LUA]       TYPE: number
+[LUA]       VALUE: 8
+[LUA]     BEHAVIOR_PLAYER
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     BEHAVIOR_SERPENTINE
+[LUA]       TYPE: number
+[LUA]       VALUE: 3
+[LUA]     BEHAVIOR_TANKDESTROYER
+[LUA]       TYPE: number
+[LUA]       VALUE: 5
+[LUA]     BEHAVIOR_WAIT
+[LUA]       TYPE: number
+[LUA]       VALUE: 7
+[LUA]   Canvas
+[LUA]     TYPE: table
+[LUA]     DrawCRT
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e8c0
+[LUA]     DrawPolygon
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e678
+[LUA]     DrawRectangle
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e640
+[LUA]     DrawText
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e5a0
+[LUA]     DrawTextAlign
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e5d8
+[LUA]     FontMetrics
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e7b8
+[LUA]     GetEmScaling
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e858
+[LUA]     GetLineSpacing
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e820
+[LUA]     PopClip
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e718
+[LUA]     PushClip
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e6e0
+[LUA]     ToScreen
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e750
+[LUA]   Color
+[LUA]     TYPE: table
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6b2f8
+[LUA]   DealerDied
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180546220
+[LUA]   DecrementGvar
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec74c80
+[LUA]   DefaultTrue
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6fdc8
+[LUA]   DelayedAction
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6e2c0
+[LUA]   ExtractMechName
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6fb68
+[LUA]   FadeToBlack
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718054f400
+[LUA]   FastMech
+[LUA]     TYPE: table
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6dad0
+[LUA]   Gun
+[LUA]     TYPE: table
+[LUA]   GunPickup
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7a578
+[LUA]   HandleItemUnlock
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718054ebf8
+[LUA]   Hughjection
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180545870
+[LUA]   HughjectionGeneric
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180546120
+[LUA]   INPUT_STATUS
+[LUA]     TYPE: table
+[LUA]     DOWN
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     MINUS
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]     PLUS
+[LUA]       TYPE: number
+[LUA]       VALUE: 3
+[LUA]   IdleMech
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180545670
+[LUA]   IncrementGvar
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec68ba8
+[LUA]   KeyItemCallback
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718053d198
+[LUA]   KeyItemIncrementCallback
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180544bc8
+[LUA]   KeyItemSetToFive
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180545168
+[LUA]   LoadPredicate
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec64930
+[LUA]   LoadPredicateTable
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec64ad8
+[LUA]   Mech
+[LUA]     TYPE: table
+[LUA]     Create
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6d558
+[LUA]     GetPlayer
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6d5b8
+[LUA]     GetPlayerHovered
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6d620
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6d520
+[LUA]   MergeGvars
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7f730
+[LUA]   MissionFail
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180546950
+[LUA]   MissionWin
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7c1f0
+[LUA]   OpenConsole
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718054d120
+[LUA]   PlaySound
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec77a90
+[LUA]   PredicateExists
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec64b40
+[LUA]   PredicateIfExists
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6f010
+[LUA]   PrintGvars
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec61d08
+[LUA]   PrintPredicates
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7f700
+[LUA]   RESOURCE_TYPE
+[LUA]     TYPE: table
+[LUA]     RESOURCE_ABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 33
+[LUA]     RESOURCE_ACTIVATION
+[LUA]       TYPE: number
+[LUA]       VALUE: 31
+[LUA]     RESOURCE_AMBIENTEMITTER
+[LUA]       TYPE: number
+[LUA]       VALUE: 63
+[LUA]     RESOURCE_AMMO_DEPOT_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 27
+[LUA]     RESOURCE_ARMOR_PICKUP
+[LUA]       TYPE: number
+[LUA]       VALUE: 20
+[LUA]     RESOURCE_ARTILLERY_WEAPON
+[LUA]       TYPE: number
+[LUA]       VALUE: 8
+[LUA]     RESOURCE_BULLET
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]     RESOURCE_CHASSIS
+[LUA]       TYPE: number
+[LUA]       VALUE: 12
+[LUA]     RESOURCE_COMBAT_VARS
+[LUA]       TYPE: number
+[LUA]       VALUE: 57
+[LUA]     RESOURCE_COMM_STATION_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 51
+[LUA]     RESOURCE_COMPRESSED_IMAGE
+[LUA]       TYPE: number
+[LUA]       VALUE: 53
+[LUA]     RESOURCE_DIALOGUE_THEME
+[LUA]       TYPE: number
+[LUA]       VALUE: 60
+[LUA]     RESOURCE_DOOR_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 49
+[LUA]     RESOURCE_EASING
+[LUA]       TYPE: number
+[LUA]       VALUE: 24
+[LUA]     RESOURCE_EMP_ABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 41
+[LUA]     RESOURCE_EMP_BULLET
+[LUA]       TYPE: number
+[LUA]       VALUE: 6
+[LUA]     RESOURCE_EXPLOSIVE_BULLET
+[LUA]       TYPE: number
+[LUA]       VALUE: 3
+[LUA]     RESOURCE_EXPLOSIVE_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 26
+[LUA]     RESOURCE_FIDELIS
+[LUA]       TYPE: number
+[LUA]       VALUE: 55
+[LUA]     RESOURCE_FLAME_BULLET
+[LUA]       TYPE: number
+[LUA]       VALUE: 4
+[LUA]     RESOURCE_GANG
+[LUA]       TYPE: number
+[LUA]       VALUE: 17
+[LUA]     RESOURCE_GATE
+[LUA]       TYPE: number
+[LUA]       VALUE: 40
+[LUA]     RESOURCE_GIB
+[LUA]       TYPE: number
+[LUA]       VALUE: 18
+[LUA]     RESOURCE_GLOBAL
+[LUA]       TYPE: number
+[LUA]       VALUE: 30
+[LUA]     RESOURCE_GUN_ABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 43
+[LUA]     RESOURCE_HORN_WEAPON
+[LUA]       TYPE: number
+[LUA]       VALUE: 10
+[LUA]     RESOURCE_HOVERABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 37
+[LUA]     RESOURCE_HULL
+[LUA]       TYPE: number
+[LUA]       VALUE: 13
+[LUA]     RESOURCE_INTEL
+[LUA]       TYPE: number
+[LUA]       VALUE: 54
+[LUA]     RESOURCE_ITEM_EXPLOSIVE
+[LUA]       TYPE: number
+[LUA]       VALUE: 65
+[LUA]     RESOURCE_ITEM_PICKUP
+[LUA]       TYPE: number
+[LUA]       VALUE: 61
+[LUA]     RESOURCE_LASER_WEAPON
+[LUA]       TYPE: number
+[LUA]       VALUE: 9
+[LUA]     RESOURCE_LEG
+[LUA]       TYPE: number
+[LUA]       VALUE: 11
+[LUA]     RESOURCE_LEVEL_EXIT
+[LUA]       TYPE: number
+[LUA]       VALUE: 38
+[LUA]     RESOURCE_LIGHT
+[LUA]       TYPE: number
+[LUA]       VALUE: 23
+[LUA]     RESOURCE_LIGHTING
+[LUA]       TYPE: number
+[LUA]       VALUE: 29
+[LUA]     RESOURCE_MATERIAL
+[LUA]       TYPE: number
+[LUA]       VALUE: 15
+[LUA]     RESOURCE_MECH
+[LUA]       TYPE: number
+[LUA]       VALUE: 14
+[LUA]     RESOURCE_MECHABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 34
+[LUA]     RESOURCE_MECH_LOADOUT
+[LUA]       TYPE: number
+[LUA]       VALUE: 56
+[LUA]     RESOURCE_MISSION
+[LUA]       TYPE: number
+[LUA]       VALUE: 47
+[LUA]     RESOURCE_MOD_APPENDAGE
+[LUA]       TYPE: number
+[LUA]       VALUE: 58
+[LUA]     RESOURCE_MOUSE_CURSOR
+[LUA]       TYPE: number
+[LUA]       VALUE: 39
+[LUA]     RESOURCE_OVERMAP
+[LUA]       TYPE: number
+[LUA]       VALUE: 46
+[LUA]     RESOURCE_PILOT
+[LUA]       TYPE: number
+[LUA]       VALUE: 52
+[LUA]     RESOURCE_PLAYLIST
+[LUA]       TYPE: number
+[LUA]       VALUE: 62
+[LUA]     RESOURCE_POWINF_ABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 36
+[LUA]     RESOURCE_PROJECTILE_WEAPON
+[LUA]       TYPE: number
+[LUA]       VALUE: 7
+[LUA]     RESOURCE_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 25
+[LUA]     RESOURCE_PYRO
+[LUA]       TYPE: number
+[LUA]       VALUE: 19
+[LUA]     RESOURCE_RAW
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     RESOURCE_RECIPE
+[LUA]       TYPE: number
+[LUA]       VALUE: 64
+[LUA]     RESOURCE_RUBBLE
+[LUA]       TYPE: number
+[LUA]       VALUE: 44
+[LUA]     RESOURCE_RUBBLE_LIST
+[LUA]       TYPE: number
+[LUA]       VALUE: 45
+[LUA]     RESOURCE_SALVAGE
+[LUA]       TYPE: number
+[LUA]       VALUE: 21
+[LUA]     RESOURCE_SCENERY
+[LUA]       TYPE: number
+[LUA]       VALUE: 28
+[LUA]     RESOURCE_SILENT_RUN_ABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 42
+[LUA]     RESOURCE_SMOKE_BULLET
+[LUA]       TYPE: number
+[LUA]       VALUE: 5
+[LUA]     RESOURCE_SPRITE
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     RESOURCE_STAT_MODIFIER
+[LUA]       TYPE: number
+[LUA]       VALUE: 59
+[LUA]     RESOURCE_SUBSTATION_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 50
+[LUA]     RESOURCE_TANKABILITY
+[LUA]       TYPE: number
+[LUA]       VALUE: 35
+[LUA]     RESOURCE_TRAMPLE
+[LUA]       TYPE: number
+[LUA]       VALUE: 22
+[LUA]     RESOURCE_TRAP
+[LUA]       TYPE: number
+[LUA]       VALUE: 32
+[LUA]     RESOURCE_TURRET_PROP
+[LUA]       TYPE: number
+[LUA]       VALUE: 48
+[LUA]     RESOURCE_WEAPON_EFFECTS
+[LUA]       TYPE: number
+[LUA]       VALUE: 16
+[LUA]   Rect2
+[LUA]     TYPE: table
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6b120
+[LUA]   ResetLoadedScripts
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec61df8
+[LUA]   Screen
+[LUA]     TYPE: table
+[LUA]     DrawRectangle
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e058
+[LUA]     DrawText
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6df80
+[LUA]     DrawTextOutlined
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6dfe8
+[LUA]     FromWorld
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e1f0
+[LUA]     GetLineSpacing
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e258
+[LUA]     PopClip
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e128
+[LUA]     PushClip
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e0c0
+[LUA]     ToCanvas
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6e188
+[LUA]   SetAllowEntryOff
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6d690
+[LUA]   SetAllowEntryOn
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec75018
+[LUA]   SetCivvieJean
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7c3b8
+[LUA]   SetFalse
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7ff20
+[LUA]   SetFortFab
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec686a8
+[LUA]   SetGvar0
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6fd58
+[LUA]   SetGvar1
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec70b58
+[LUA]   SetGvar2
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec623b8
+[LUA]   SetGvar3
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6f9d8
+[LUA]   SetGvar4
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec702f8
+[LUA]   SetGvar5
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec69a40
+[LUA]   SetMusic
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec77ac0
+[LUA]   SetTrue
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec63f30
+[LUA]   SpawnMechDialogueEnd
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec74b08
+[LUA]   Sprite
+[LUA]     TYPE: table
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6efd8
+[LUA]   StringStartsWith
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6ebb8
+[LUA]   TEAMS
+[LUA]     TYPE: table
+[LUA]     CIVILIAN_TEAM
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]     ENEMY_TEAM
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     PLAYER_TEAM
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]   TEXT_ALIGN
+[LUA]     TYPE: table
+[LUA]     CENTER
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     LEFT
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     RIGHT
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]   TableShallowCopy
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6dd60
+[LUA]   TableToString
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec72b70
+[LUA]   Texture
+[LUA]     TYPE: table
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6f308
+[LUA]   ToggleAllowEntry
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec79ea8
+[LUA]   UnlockItem
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718053b788
+[LUA]   UnlockTape
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec75db8
+[LUA]   UnlockVehicle
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec70150
+[LUA]   UnlockWeapon
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec70ba0
+[LUA]   Vec2
+[LUA]     TYPE: table
+[LUA]     New
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6a9e8
+[LUA]   World
+[LUA]     TYPE: table
+[LUA]     DrawLine
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6eae0
+[LUA]     DrawRectangle
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6eb48
+[LUA]     DrawText
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec6eb80
+[LUA]   _G
+[LUA]     TYPE: table
+[LUA]     [ALREADY VISITED]
+[LUA]   _VERSION
+[LUA]     TYPE: string
+[LUA]     VALUE: Lua 5.1
+[LUA]   __predicate_definition
+[LUA]     TYPE: table
+[LUA]     always_false
+[LUA]       TYPE: string
+[LUA]       VALUE: false
+[LUA]     always_true
+[LUA]       TYPE: string
+[LUA]       VALUE: true
+[LUA]     c01_h00_bulver_speaks
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.c01_h00_bulver_speaks == true
+[LUA]     c01_h00_intro_introcomplete
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.c01_h00_intro_completedintro == true
+[LUA]     c01_h00_unlock_barclaw
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.c01_h00_killed_archer == true and gvar.c01_h00_killed_bulver == true and gvar.c01_h00_killed...
+[LUA]     c01_h00_van_used
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.c01_h00_killed_ka == true
+[LUA]     carmine_chassis
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.has_chassis
+[LUA]     carmine_plating
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.has_plating
+[LUA]     carmine_servos
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.has_servos
+[LUA]     carmine_suit_unlocked
+[LUA]       TYPE: string
+[LUA]       VALUE: (gvar.has_plating) and (gvar.has_chassis) and (gvar.has_servos) 
+[LUA]     chob_gantry
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.chob_gantry_state == true
+[LUA]     chob_stages_0
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.chob_state_A == 0
+[LUA]     chob_stages_1
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.chob_state_A > 0
+[LUA]     chob_stages_2
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.chob_state_A > 1
+[LUA]     chob_stages_3
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.chob_state_A > 2
+[LUA]     chob_stages_4
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.chob_state_A > 3
+[LUA]     dev_explainer_notmet
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dev_explainer_met == false
+[LUA]     dungeon_floor_0
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor == 0
+[LUA]     dungeon_floor_1
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor == 1
+[LUA]     dungeon_floor_2
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor == 2
+[LUA]     dungeon_floor_3
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor == 3
+[LUA]     dungeon_floor_4
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor == 4
+[LUA]     dungeon_floor_final
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor > 4
+[LUA]     dungeon_floor_not_final
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.dungeon_floor < 5
+[LUA]     e01_h00_m01
+[LUA]       TYPE: string
+[LUA]       VALUE: mvar.current_mission == "Holger apartment" and (mvar.campaign_state == "INTRO" or mvar.campaign_s...
+[LUA]     e01_h00_m01_i_bathroomcleaned
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_i_bathroomcleaned == true
+[LUA]     e01_h00_m01_i_bathroomneedscleaning
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_i_bathroomneedscleaning == true
+[LUA]     e01_h00_m01_i_bathroomnotready
+[LUA]       TYPE: string
+[LUA]       VALUE: not (gvar.e01_h00_m01_i_bathroomneedscleaning == true) 
+[LUA]     e01_h00_m01_i_coplights_on
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_i_coplights == true
+[LUA]     e01_h00_m01_i_haswad
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_i_haswad == true
+[LUA]     e01_h00_m01_i_jovenotintroduced
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_i_joveintroduced == false
+[LUA]     e01_h00_m01_m_collider
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_collider == true
+[LUA]     e01_h00_m01_m_hasmoney
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_hasmoney == true
+[LUA]     e01_h00_m01_m_jovefound
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_jovefound == true
+[LUA]     e01_h00_m01_m_jovemounted
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_jovemounted == true
+[LUA]     e01_h00_m01_m_jovenotfound
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_jovefound == false
+[LUA]     e01_h00_m01_m_joveunmounted
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_jovemounted == false
+[LUA]     e01_h00_m01_m_lilrnfirstchat
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_spoketolilrn == false and gvar.e01_h00_m01_m_parkedathospital == true
+[LUA]     e01_h00_m01_m_moneytutorial
+[LUA]       TYPE: string
+[LUA]       VALUE: not (gvar.e01_h00_m01_m_hasmoney == true) and (gvar.e01_h00_m01_m_needmoney == true) and gvar.e01...
+[LUA]     e01_h00_m01_m_needmoney
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_needmoney == true
+[LUA]     e01_h00_m01_m_unburnedid
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h00_m01_m_holgerburnid == false and gvar.e01_h00_m01_m_spoketolilrn == true
+[LUA]     e01_h02_armory_loader
+[LUA]       TYPE: string
+[LUA]       VALUE: (gvar.e01_h02_gantrystatus >= 1) or (mvar.campaign_state == "NEWGAME") 
+[LUA]     e01_h02_gantry_01
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 1
+[LUA]     e01_h02_gantry_01_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 1
+[LUA]     e01_h02_gantry_02
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 2
+[LUA]     e01_h02_gantry_02_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 2
+[LUA]     e01_h02_gantry_03
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 3
+[LUA]     e01_h02_gantry_03_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 3
+[LUA]     e01_h02_gantry_04
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 4
+[LUA]     e01_h02_gantry_04_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 4
+[LUA]     e01_h02_gantry_05
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 5
+[LUA]     e01_h02_gantry_05_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 5
+[LUA]     e01_h02_gantry_06
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 6
+[LUA]     e01_h02_gantry_06_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 6
+[LUA]     e01_h02_gantry_07
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 7
+[LUA]     e01_h02_gantry_07_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 7
+[LUA]     e01_h02_gantry_08
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 8
+[LUA]     e01_h02_gantry_08_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 8
+[LUA]     e01_h02_gantry_09
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 9
+[LUA]     e01_h02_gantry_09_only
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus == 9
+[LUA]     e01_h02_has_gantry
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus >= 1
+[LUA]     e01_h02_m00_dead_corvids
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_m00_dead_corvids >= 5
+[LUA]     e01_h02_m00_should_hint
+[LUA]       TYPE: string
+[LUA]       VALUE: not gvar.e01_h02_m00_hint_disabled and gvar.e01_h02_m00_dead_corvids < 5
+[LUA]     e01_h02_no_gantry
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_gantrystatus < 1
+[LUA]     e01_h02_t_armory
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_t_armory == true
+[LUA]     e01_h02_t_exit
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_t_exit == true
+[LUA]     e01_h02_t_gantry
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_t_gantry == true
+[LUA]     e01_h02_t_mission
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_h02_t_mission == true
+[LUA]     e01_has_carmine
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_has_carmine
+[LUA]     e01_has_cinderblock
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_has_cinderblock
+[LUA]     e01_has_dromon
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_has_dromon
+[LUA]     e01_has_faber
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_has_faber
+[LUA]     e01_has_loyalist
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_has_loyalist
+[LUA]     e01_has_swat
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.e01_has_swat
+[LUA]     first_tape_delivered
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.tapes_delivered >= 1.0 and gvar.tapes_delivered < 2.0 and gvar.mendac_ack_tapes < 1.0
+[LUA]     fng_intronottriggered
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.fng_firstconvo == true
+[LUA]     hideout_carmine_01
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_carmine_01 == true
+[LUA]     hideout_guns_01
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_guns_01 == true
+[LUA]     hideout_guns_02
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_guns_02 == true
+[LUA]     hideout_guns_03
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_guns_03 == true
+[LUA]     hideout_guns_04
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_guns_04 == true
+[LUA]     hideout_guns_05
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_guns_05 == true
+[LUA]     hideout_mastertoggle_active
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.hideout_mastertoggle == true
+[LUA]     in_hub
+[LUA]       TYPE: string
+[LUA]       VALUE: mvar.campaign_state == "HUB"
+[LUA]     in_mission
+[LUA]       TYPE: string
+[LUA]       VALUE: mvar.campaign_state == "INTRO" or mvar.campaign_state == "MISSION" or mvar.campaign_state == "OUTRO"
+[LUA]     in_newgame
+[LUA]       TYPE: string
+[LUA]       VALUE: mvar.campaign_state == "NEWGAME"
+[LUA]     is_barclaw_intro
+[LUA]       TYPE: string
+[LUA]       VALUE: mvar.current_mission == "ASSAULT BARCLAW ESTATE"
+[LUA]     johnny
+[LUA]       TYPE: string
+[LUA]       VALUE: true
+[LUA]     johnny_guitar
+[LUA]       TYPE: string
+[LUA]       VALUE: (true) and gvar.guitar
+[LUA]     keybroker_hasntgiven_key
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.keybroker_has_key == true
+[LUA]     keybroker_intronottriggered
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.keybroker_firstconvo == true
+[LUA]     keybroker_is_killed
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.keybroker_is_dead == true
+[LUA]     keybroker_key_drop
+[LUA]       TYPE: string
+[LUA]       VALUE: (gvar.keybroker_is_dead == true) and (gvar.keybroker_has_key == true) == false
+[LUA]     meeting_mendac_peaceful
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.shot_mendac == false and gvar.met_mendac == false
+[LUA]     mendac_empty_handed
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.tapes_delivered < 1.0 and (gvar.met_mendac == true) and (gvar.empty_handed_visits > 1.0) == ...
+[LUA]     met_mendac_at_all
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.met_mendac == true
+[LUA]     metfoal_beenseen
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.metfoal_intro_beenseen == true
+[LUA]     metfoal_notseen
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.metfoal_intro_beenseen == false
+[LUA]     pipes_intro_unseen
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.pipes_introduced == false
+[LUA]     repeat_brief_tapes_prompt
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.empty_handed_visits > 2.0 and gvar.tapes_delivered < 1.0
+[LUA]     repeatedly_emptyhanded
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.empty_handed_visits > 1.0
+[LUA]     shot_stranger_mendac
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.shot_mendac == true and gvar.met_mendac == false
+[LUA]     toolkit_show
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.toolkit_bool == true
+[LUA]     vehicle_entry_enabled
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.can_enter_vehicles
+[LUA]     zzz_assembler_carmine_available
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_parts_carmine > 0 and (gvar.zzz_assembler_target == "carmine") 
+[LUA]     zzz_assembler_carmine_unavailable
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_parts_carmine < 1 and (gvar.zzz_assembler_target == "carmine") 
+[LUA]     zzz_assembler_fork_available
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_parts_fork > 0 and (gvar.zzz_assembler_target == "fork") 
+[LUA]     zzz_assembler_fork_unavailable
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_parts_fork < 1 and (gvar.zzz_assembler_target == "fork") 
+[LUA]     zzz_assembler_intro
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_needsintro == true
+[LUA]     zzz_assembler_power_off
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_haspower == false
+[LUA]     zzz_assembler_power_on
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_haspower == true
+[LUA]     zzz_assembler_restocker_full
+[LUA]       TYPE: string
+[LUA]       VALUE: (gvar.zzz_assembler_parts_fork > 0 and (gvar.zzz_assembler_target == "fork") ) or (gvar.zzz_assem...
+[LUA]     zzz_assembler_target_carmine
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_target == "carmine"
+[LUA]     zzz_assembler_target_fork
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_target == "fork"
+[LUA]     zzz_assembler_target_none
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_target == "none"
+[LUA]     zzz_assembler_target_wheelchair
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_target == "wheelchair"
+[LUA]     zzz_assembler_wheelchair_available
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_parts_wheelchair > 0 and (gvar.zzz_assembler_target == "wheelchair") 
+[LUA]     zzz_assembler_wheelchair_unavailable
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_assembler_parts_wheelchair < 1 and (gvar.zzz_assembler_target == "wheelchair") 
+[LUA]     zzz_hundo_firstmeet
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_hundo_firstconvo == true
+[LUA]     zzz_swatgate_is_down
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_swatgate_up == false
+[LUA]     zzz_swatgate_is_up
+[LUA]       TYPE: string
+[LUA]       VALUE: gvar.zzz_swatgate_up == true
+[LUA]   __predicates
+[LUA]     TYPE: table
+[LUA]     always_false
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180546810
+[LUA]     always_true
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180537248
+[LUA]     c01_h00_bulver_speaks
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053c8e8
+[LUA]     c01_h00_intro_introcomplete
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805401d0
+[LUA]     c01_h00_unlock_barclaw
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180546610
+[LUA]     c01_h00_van_used
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180541b88
+[LUA]     carmine_chassis
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180542a28
+[LUA]     carmine_plating
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180539958
+[LUA]     carmine_servos
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053c1e0
+[LUA]     carmine_suit_unlocked
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180544608
+[LUA]     chob_gantry
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805417a8
+[LUA]     chob_stages_0
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180544b98
+[LUA]     chob_stages_1
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180541310
+[LUA]     chob_stages_2
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543478
+[LUA]     chob_stages_3
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543098
+[LUA]     chob_stages_4
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180541f68
+[LUA]     dev_explainer_notmet
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805407c8
+[LUA]     dungeon_floor_0
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180542d70
+[LUA]     dungeon_floor_1
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec74c38
+[LUA]     dungeon_floor_2
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805456b8
+[LUA]     dungeon_floor_3
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180534e20
+[LUA]     dungeon_floor_4
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180534c28
+[LUA]     dungeon_floor_final
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805442d0
+[LUA]     dungeon_floor_not_final
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180545f20
+[LUA]     e01_h00_m01
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536630
+[LUA]     e01_h00_m01_i_bathroomcleaned
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053c0b0
+[LUA]     e01_h00_m01_i_bathroomneedscleaning
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053c7b8
+[LUA]     e01_h00_m01_i_bathroomnotready
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180545a40
+[LUA]     e01_h00_m01_i_coplights_on
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180546268
+[LUA]     e01_h00_m01_i_haswad
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053d3c0
+[LUA]     e01_h00_m01_i_jovenotintroduced
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180545c48
+[LUA]     e01_h00_m01_m_collider
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180540bb0
+[LUA]     e01_h00_m01_m_hasmoney
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180540090
+[LUA]     e01_h00_m01_m_jovefound
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180546ac8
+[LUA]     e01_h00_m01_m_jovemounted
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053af18
+[LUA]     e01_h00_m01_m_jovenotfound
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180540da0
+[LUA]     e01_h00_m01_m_joveunmounted
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543290
+[LUA]     e01_h00_m01_m_lilrnfirstchat
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805451b0
+[LUA]     e01_h00_m01_m_moneytutorial
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805439f8
+[LUA]     e01_h00_m01_m_needmoney
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053b118
+[LUA]     e01_h00_m01_m_unburnedid
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180544c10
+[LUA]     e01_h02_armory_loader
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180542440
+[LUA]     e01_h02_gantry_01
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543d40
+[LUA]     e01_h02_gantry_01_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536530
+[LUA]     e01_h02_gantry_02
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805356c0
+[LUA]     e01_h02_gantry_02_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180535408
+[LUA]     e01_h02_gantry_03
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180537690
+[LUA]     e01_h02_gantry_03_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180537880
+[LUA]     e01_h02_gantry_04
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805409b8
+[LUA]     e01_h02_gantry_04_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180546998
+[LUA]     e01_h02_gantry_05
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180537560
+[LUA]     e01_h02_gantry_05_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543a28
+[LUA]     e01_h02_gantry_06
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180535aa8
+[LUA]     e01_h02_gantry_06_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543668
+[LUA]     e01_h02_gantry_07
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536150
+[LUA]     e01_h02_gantry_07_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536340
+[LUA]     e01_h02_gantry_08
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536b68
+[LUA]     e01_h02_gantry_08_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec74b50
+[LUA]     e01_h02_gantry_09
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805358b8
+[LUA]     e01_h02_gantry_09_only
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180542838
+[LUA]     e01_h02_has_gantry
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180535258
+[LUA]     e01_h02_m00_dead_corvids
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053ebb8
+[LUA]     e01_h02_m00_should_hint
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180537b70
+[LUA]     e01_h02_no_gantry
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543f38
+[LUA]     e01_h02_t_armory
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180539d00
+[LUA]     e01_h02_t_exit
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053fc58
+[LUA]     e01_h02_t_gantry
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805405d8
+[LUA]     e01_h02_t_mission
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180539bd8
+[LUA]     e01_has_carmine
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053e190
+[LUA]     e01_has_cinderblock
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053e418
+[LUA]     e01_has_dromon
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053fe48
+[LUA]     e01_has_faber
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053be10
+[LUA]     e01_has_loyalist
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053e5e0
+[LUA]     e01_has_swat
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805398e0
+[LUA]     first_tape_delivered
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec648d0
+[LUA]     fng_intronottriggered
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053a0e0
+[LUA]     hideout_carmine_01
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180542ea0
+[LUA]     hideout_guns_01
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053ddb0
+[LUA]     hideout_guns_02
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180541998
+[LUA]     hideout_guns_03
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053dfa0
+[LUA]     hideout_guns_04
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180540300
+[LUA]     hideout_guns_05
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053cad8
+[LUA]     hideout_mastertoggle_active
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180542160
+[LUA]     in_hub
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180537df0
+[LUA]     in_mission
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180538758
+[LUA]     in_newgame
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805382a8
+[LUA]     is_barclaw_intro
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053e9c0
+[LUA]     johnny
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053b910
+[LUA]     johnny_guitar
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180535ec0
+[LUA]     keybroker_hasntgiven_key
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805372c0
+[LUA]     keybroker_intronottriggered
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180538788
+[LUA]     keybroker_is_killed
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805415b8
+[LUA]     keybroker_key_drop
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053e848
+[LUA]     meeting_mendac_peaceful
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053c538
+[LUA]     mendac_empty_handed
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec648d0
+[LUA]     met_mendac_at_all
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053d220
+[LUA]     metfoal_beenseen
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180535f68
+[LUA]     metfoal_notseen
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180541d80
+[LUA]     pipes_intro_unseen
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805426d0
+[LUA]     repeat_brief_tapes_prompt
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec648d0
+[LUA]     repeatedly_emptyhanded
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec648d0
+[LUA]     shot_stranger_mendac
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180539270
+[LUA]     toolkit_show
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180535c98
+[LUA]     vehicle_entry_enabled
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053b300
+[LUA]     zzz_assembler_carmine_available
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180538e28
+[LUA]     zzz_assembler_carmine_unavailable
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180539e58
+[LUA]     zzz_assembler_fork_available
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180543b70
+[LUA]     zzz_assembler_fork_unavailable
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180538020
+[LUA]     zzz_assembler_intro
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805385d8
+[LUA]     zzz_assembler_power_off
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180545738
+[LUA]     zzz_assembler_power_on
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805383d8
+[LUA]     zzz_assembler_restocker_full
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536858
+[LUA]     zzz_assembler_target_carmine
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053ade8
+[LUA]     zzz_assembler_target_fork
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053b658
+[LUA]     zzz_assembler_target_none
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718053bce0
+[LUA]     zzz_assembler_target_wheelchair
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180544138
+[LUA]     zzz_assembler_wheelchair_available
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180544638
+[LUA]     zzz_assembler_wheelchair_unavailable
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x0271805451e0
+[LUA]     zzz_hundo_firstmeet
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180536ad0
+[LUA]     zzz_swatgate_is_down
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180538f68
+[LUA]     zzz_swatgate_is_up
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x027180539498
+[LUA]   _gvar
+[LUA]     TYPE: table
+[LUA]     bktest_dungeon_console
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     c01_h00_bulver_speaks
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     c01_h00_intro_completedintro
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     c01_h00_killed_archer
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     c01_h00_killed_bulver
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     c01_h00_killed_ka
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     c01_h00_killed_wrightson
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     chob_always_false
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     chob_always_true
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     chob_gantry_state
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     chob_state_4
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     chob_state_A
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     chob_string
+[LUA]       TYPE: string
+[LUA]       VALUE: nothing
+[LUA]     dev_explainer_met
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     dungeon_floor
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     e01_h00_m01_i_bathroomcleaned
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_i_bathroomneedscleaning
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_i_coplights
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_i_haswad
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_i_joveintroduced
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_collider
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_hasmoney
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_holgerburnid
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_jovefound
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_jovemounted
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_needmoney
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_parkedathospital
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_m_spoketolilrn
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h00_m01_o_playerdied
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h02_gantrystatus
+[LUA]       TYPE: number
+[LUA]       VALUE: 5
+[LUA]     e01_h02_m00_dead_corvids
+[LUA]       TYPE: number
+[LUA]       VALUE: 5
+[LUA]     e01_h02_m00_hint_disabled
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h02_should_tutorialize
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     e01_h02_t_armory
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h02_t_exit
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     e01_h02_t_gantry
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_h02_t_mission
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_has_carmine
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     e01_has_cinderblock
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     e01_has_dromon
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     e01_has_faber
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     e01_has_loyalist
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     e01_has_swat
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_carmine_01
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_guns_01
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_guns_02
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_guns_03
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_guns_04
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_guns_05
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_guns_starter
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_mastertoggle
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     hideout_vics
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     metfoal_intro_beenseen
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     test_gvar
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     toolkit_bool
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     toolkit_number
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     toolkit_string
+[LUA]       TYPE: string
+[LUA]       VALUE: nothing
+[LUA]     zzz_assembler_haspower
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]     zzz_assembler_needsintro
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     zzz_assembler_parts_carmine
+[LUA]       TYPE: number
+[LUA]       VALUE: 2
+[LUA]     zzz_assembler_parts_fork
+[LUA]       TYPE: number
+[LUA]       VALUE: 1
+[LUA]     zzz_assembler_parts_wheelchair
+[LUA]       TYPE: number
+[LUA]       VALUE: 5
+[LUA]     zzz_assembler_target
+[LUA]       TYPE: string
+[LUA]       VALUE: none
+[LUA]     zzz_assembler_used
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     zzz_hundo_firstconvo
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     zzz_number
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     zzz_string
+[LUA]       TYPE: string
+[LUA]       VALUE: zzz test string
+[LUA]     zzz_swatgate_up
+[LUA]       TYPE: boolean
+[LUA]       VALUE: true
+[LUA]     zzz_toggle
+[LUA]       TYPE: boolean
+[LUA]       VALUE: false
+[LUA]   _mvar
+[LUA]     TYPE: table
+[LUA]     campaign_state
+[LUA]       TYPE: string
+[LUA]       VALUE: HUB
+[LUA]     dialogue_depth
+[LUA]       TYPE: number
+[LUA]       VALUE: 0
+[LUA]     spawned_loadout
+[LUA]       TYPE: table
+[LUA]     spawned_vehicle
+[LUA]       TYPE: string
+[LUA]       VALUE: 
+[LUA]   add_usable_item
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547700
+[LUA]   assert
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#2
+[LUA]   change_player_base
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7c0d0
+[LUA]   cmd
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec693c8
+[LUA]   collectgarbage
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#27
+[LUA]   complete_objective
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805473e8
+[LUA]   coroutine
+[LUA]     TYPE: table
+[LUA]     create
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#33
+[LUA]     isyieldable
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#32
+[LUA]     resume
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#35
+[LUA]     running
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#31
+[LUA]     status
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#30
+[LUA]     wrap
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#37
+[LUA]     yield
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#34
+[LUA]   create_explosive
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec69558
+[LUA]   create_mission_selector
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548768
+[LUA]   create_pickup
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805490b0
+[LUA]   create_rangefinder
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548b50
+[LUA]   create_scenery
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7a688
+[LUA]   create_uiconsole
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548bc0
+[LUA]   defeat
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548d70
+[LUA]   did_next_dialogue_action
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548b18
+[LUA]   dofile
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#25
+[LUA]   error
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#19
+[LUA]   extract
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7c070
+[LUA]   fail_objective
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547458
+[LUA]   freeze_player
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547768
+[LUA]   gcinfo
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#26
+[LUA]   get_all_resources_of_type
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec695c8
+[LUA]   get_bind_minus
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805487d8
+[LUA]   get_current_campaign
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548990
+[LUA]   get_current_mission
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548a00
+[LUA]   get_hub
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548c68
+[LUA]   get_killed_enemies
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547810
+[LUA]   get_level_exit_rects
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547880
+[LUA]   get_max_hub
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548ca0
+[LUA]   get_mech_resource_pilot_flags
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548e10
+[LUA]   get_mouse_position
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805488a8
+[LUA]   get_mouse_position_canvas
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548918
+[LUA]   get_time
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec69428
+[LUA]   get_total_enemies
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805477a0
+[LUA]   getfenv
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#10
+[LUA]   getmetatable
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#8
+[LUA]   gvar
+[LUA]     TYPE: table
+[LUA]   intern_string
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548e88
+[LUA]   ipairs
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#7
+[LUA]   load
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#23
+[LUA]   loadfile
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#22
+[LUA]   loadstring
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#24
+[LUA]   math
+[LUA]     TYPE: table
+[LUA]     abs
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#40
+[LUA]     acos
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#50
+[LUA]     asin
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#49
+[LUA]     atan
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#51
+[LUA]     atan2
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#58
+[LUA]     ceil
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#42
+[LUA]     cos
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#47
+[LUA]     cosh
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#53
+[LUA]     deg
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec675c0
+[LUA]     exp
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#45
+[LUA]     floor
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#41
+[LUA]     fmod
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#60
+[LUA]     frexp
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#55
+[LUA]     huge
+[LUA]       TYPE: number
+[LUA]       VALUE: inf
+[LUA]     ldexp
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#61
+[LUA]     log
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#57
+[LUA]     log10
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#44
+[LUA]     max
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#63
+[LUA]     min
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#62
+[LUA]     modf
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#56
+[LUA]     pi
+[LUA]       TYPE: number
+[LUA]       VALUE: 3.1415926535898
+[LUA]     pow
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#59
+[LUA]     rad
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec676a0
+[LUA]     random
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#64
+[LUA]     randomseed
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#65
+[LUA]     sin
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#46
+[LUA]     sinh
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#52
+[LUA]     sqrt
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#43
+[LUA]     tan
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#48
+[LUA]     tanh
+[LUA]       TYPE: function
+[LUA]       VALUE: function: builtin#54
+[LUA]   module
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec687e8
+[LUA]   mvar
+[LUA]     TYPE: table
+[LUA]   newproxy
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#28
+[LUA]   next
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#4
+[LUA]   opairs
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec6e920
+[LUA]   open_console
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7c140
+[LUA]   open_dialogue
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548d08
+[LUA]   open_mission_select
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548a70
+[LUA]   pack_read
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec69490
+[LUA]   package
+[LUA]     TYPE: table
+[LUA]     config
+[LUA]       TYPE: string
+[LUA]       VALUE: \
+;
+?
+!
+-
+
+[LUA]     cpath
+[LUA]       TYPE: string
+[LUA]       VALUE: .\?.dll;C:\Program Files (x86)\Steam\steamapps\common\Brigador Killers Demo\?.dll;C:\Program File...
+[LUA]     loaded
+[LUA]       TYPE: table
+[LUA]       _G
+[LUA]         TYPE: table
+[LUA]         [ALREADY VISITED]
+[LUA]       assets.scripts.lib.callbacks
+[LUA]         TYPE: boolean
+[LUA]         VALUE: true
+[LUA]       assets.scripts.lib.dialogue
+[LUA]         TYPE: table
+[LUA]         Active [DEPTH LIMIT]
+[LUA]         Close [DEPTH LIMIT]
+[LUA]         GetStorylet [DEPTH LIMIT]
+[LUA]         New [DEPTH LIMIT]
+[LUA]         Open [DEPTH LIMIT]
+[LUA]         Register [DEPTH LIMIT]
+[LUA]       assets.scripts.lib.fadetoblack
+[LUA]         TYPE: boolean
+[LUA]         VALUE: true
+[LUA]       assets.scripts.lib.keyitemtable
+[LUA]         TYPE: table
+[LUA]         assets/data/pickups/objectives/pkp_obj_gunbox_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_obj_gunbox_02.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_obj_gunbox_03.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_obj_gunbox_04.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_obj_gunbox_05.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_obj_kitbox_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_obj_moneybag_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_valet_carmine_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_valet_cinderblock_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_valet_dromon_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_valet_faber_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_valet_loyalist_01.json [DEPTH LIMIT]
+[LUA]         assets/data/pickups/objectives/pkp_valet_swat_01.json [DEPTH LIMIT]
+[LUA]       assets.scripts.lib.predicates
+[LUA]         TYPE: boolean
+[LUA]         VALUE: true
+[LUA]       assets.scripts.lib.util
+[LUA]         TYPE: boolean
+[LUA]         VALUE: true
+[LUA]       coroutine
+[LUA]         TYPE: table
+[LUA]         [ALREADY VISITED]
+[LUA]       debug
+[LUA]         TYPE: table
+[LUA]         debug [DEPTH LIMIT]
+[LUA]         getfenv [DEPTH LIMIT]
+[LUA]         gethook [DEPTH LIMIT]
+[LUA]         getinfo [DEPTH LIMIT]
+[LUA]         getlocal [DEPTH LIMIT]
+[LUA]         getmetatable [DEPTH LIMIT]
+[LUA]         getregistry [DEPTH LIMIT]
+[LUA]         getupvalue [DEPTH LIMIT]
+[LUA]         setfenv [DEPTH LIMIT]
+[LUA]         sethook [DEPTH LIMIT]
+[LUA]         setlocal [DEPTH LIMIT]
+[LUA]         setmetatable [DEPTH LIMIT]
+[LUA]         setupvalue [DEPTH LIMIT]
+[LUA]         traceback [DEPTH LIMIT]
+[LUA]         upvalueid [DEPTH LIMIT]
+[LUA]         upvaluejoin [DEPTH LIMIT]
+[LUA]       jit
+[LUA]         TYPE: table
+[LUA]         arch [DEPTH LIMIT]
+[LUA]         attach [DEPTH LIMIT]
+[LUA]         flush [DEPTH LIMIT]
+[LUA]         off [DEPTH LIMIT]
+[LUA]         on [DEPTH LIMIT]
+[LUA]         opt [DEPTH LIMIT]
+[LUA]         os [DEPTH LIMIT]
+[LUA]         prngstate [DEPTH LIMIT]
+[LUA]         security [DEPTH LIMIT]
+[LUA]         status [DEPTH LIMIT]
+[LUA]         version [DEPTH LIMIT]
+[LUA]         version_num [DEPTH LIMIT]
+[LUA]       jit.opt
+[LUA]         TYPE: table
+[LUA]         start [DEPTH LIMIT]
+[LUA]       math
+[LUA]         TYPE: table
+[LUA]         [ALREADY VISITED]
+[LUA]       package
+[LUA]         TYPE: table
+[LUA]         [ALREADY VISITED]
+[LUA]       string
+[LUA]         TYPE: table
+[LUA]         byte [DEPTH LIMIT]
+[LUA]         char [DEPTH LIMIT]
+[LUA]         dump [DEPTH LIMIT]
+[LUA]         find [DEPTH LIMIT]
+[LUA]         format [DEPTH LIMIT]
+[LUA]         gmatch [DEPTH LIMIT]
+[LUA]         gsub [DEPTH LIMIT]
+[LUA]         len [DEPTH LIMIT]
+[LUA]         lower [DEPTH LIMIT]
+[LUA]         match [DEPTH LIMIT]
+[LUA]         rep [DEPTH LIMIT]
+[LUA]         reverse [DEPTH LIMIT]
+[LUA]         sub [DEPTH LIMIT]
+[LUA]         upper [DEPTH LIMIT]
+[LUA]       table
+[LUA]         TYPE: table
+[LUA]         concat [DEPTH LIMIT]
+[LUA]         foreach [DEPTH LIMIT]
+[LUA]         foreachi [DEPTH LIMIT]
+[LUA]         getn [DEPTH LIMIT]
+[LUA]         insert [DEPTH LIMIT]
+[LUA]         maxn [DEPTH LIMIT]
+[LUA]         move [DEPTH LIMIT]
+[LUA]         remove [DEPTH LIMIT]
+[LUA]         sort [DEPTH LIMIT]
+[LUA]     loaders
+[LUA]       TYPE: table
+[LUA]       [1]
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec68570
+[LUA]       [2]
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec685a8
+[LUA]       [3]
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec685e0
+[LUA]       [4]
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec68618
+[LUA]     loadlib
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec683d8
+[LUA]     path
+[LUA]       TYPE: string
+[LUA]       VALUE: .\?.lua;C:\Program Files (x86)\Steam\steamapps\common\Brigador Killers Demo\lua\?.lua;C:\Program ...
+[LUA]     preload
+[LUA]       TYPE: table
+[LUA]       jit.profile
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec69190
+[LUA]       jit.util
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec691f8
+[LUA]       string.buffer
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec66910
+[LUA]       table.clear
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec66068
+[LUA]       table.clone
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec65e68
+[LUA]       table.isarray
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec65ed0
+[LUA]       table.isempty
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec66000
+[LUA]       table.new
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec65e00
+[LUA]       table.nkeys
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec64a08
+[LUA]       thread.exdata
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec65458
+[LUA]       thread.exdata2
+[LUA]         TYPE: function
+[LUA]         VALUE: function: 0x02718ec65490
+[LUA]     searchpath
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec68438
+[LUA]     seeall
+[LUA]       TYPE: function
+[LUA]       VALUE: function: 0x02718ec684a0
+[LUA]   pairs
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#5
+[LUA]   pause
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805478f0
+[LUA]   pcall
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#20
+[LUA]   play
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547960
+[LUA]   predicates
+[LUA]     TYPE: table
+[LUA]   print
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec69390
+[LUA]   queue_location_marker
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7bf98
+[LUA]   rawequal
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#14
+[LUA]   rawget
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#12
+[LUA]   rawset
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#13
+[LUA]   register_defeat_function
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547688
+[LUA]   register_draw_function
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547568
+[LUA]   register_init_function
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805474c0
+[LUA]   register_levelexit_function
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x0271805475a0
+[LUA]   register_objective
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180546c78
+[LUA]   register_update_function
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547530
+[LUA]   register_win_function
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547618
+[LUA]   request_next_dialogue_action
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548ae0
+[LUA]   require
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec68848
+[LUA]   reset_character
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7c008
+[LUA]   resource_unlocked
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547a00
+[LUA]   save_profile
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548700
+[LUA]   select
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#16
+[LUA]   set_character
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548da8
+[LUA]   set_console_disabled
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548ef0
+[LUA]   set_console_hidden
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548f60
+[LUA]   set_console_prompt
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548fd0
+[LUA]   set_console_sprite
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180549040
+[LUA]   set_door_state
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548840
+[LUA]   set_hub
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180548c30
+[LUA]   set_mission
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7bf30
+[LUA]   setfenv
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#11
+[LUA]   setmetatable
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#9
+[LUA]   string
+[LUA]     TYPE: table
+[LUA]     [ALREADY VISITED]
+[LUA]   table
+[LUA]     TYPE: table
+[LUA]     [ALREADY VISITED]
+[LUA]   time
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec694f8
+[LUA]   tonumber
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#17
+[LUA]   tostring
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#18
+[LUA]   translate_string
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec696b0
+[LUA]   type
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#3
+[LUA]   unlock_resource
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547a70
+[LUA]   unpack
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#15
+[LUA]   unpause
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547928
+[LUA]   unpause_play
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x027180547998
+[LUA]   win
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec7bef8
+[LUA]   write_back_resource
+[LUA]     TYPE: function
+[LUA]     VALUE: function: 0x02718ec69640
+[LUA]   xpcall
+[LUA]     TYPE: function
+[LUA]     VALUE: function: builtin#21
+[LUA] === EXPLORATION COMPLETE ===
