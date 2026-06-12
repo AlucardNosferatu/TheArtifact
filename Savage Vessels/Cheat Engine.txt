@@ -1,0 +1,77 @@
+Super easy to cheat:
+Ammo - just 4 bytes search minus what you have loaded in weapon. I.e. for example, simple chisel gun has 1 charge loaded and you see 40 charges in total, thus you must search for 40 - 1 and viola, you've found it.
+Items Amount - same 4 bytes search to look for item amount.
+Items IDs - the address you found for Items Amount minus 4 bytes offset.
+
+So far I've mapped these item IDs (in decimal), everything beyond this gives empty string:
+Item IDs (Decimal)
+Ship Weapons:
+0 - Sawgun
+1 - Saw MG FF
+2 - Chiselgun
+3 - Chisel MG
+4 - Chisel Railgun
+5 - Grenade Launcher
+6 - Shrapnel Launcher
+7 - Plasmoid Launcher
+8 - Flame Shotgun
+9 - Boltgun
+10 - Bolt MG
+11 - HV Boltgun
+12 - Ball-Lightning Gun
+13 - Net Launcher
+14 - Missile Launcher FF
+15 - Mine Launcher
+16 - Drone Launcher
+17 - Gatling Gun
+
+One-Time Use:
+18 - Barrelgun
+19 - Heavy Barrelgun
+20 - Barrelmine
+21 - Heavy Barrelmine
+22 - EMP
+
+Ship Devices:
+23 - Seismic Scanner
+24 - Tactical Scanner
+25 - Ram booster
+26 - Servo Drive
+27 - Emergency Kit
+28 - Shockwave Compensator
+29 - Rear Turret
+
+Consumables:
+30 - Oil Drum
+31 - Spare Parts
+32 - Brain Amp
+
+Crafting Materials:
+33 - Empty Barrel
+34 - ANFO
+35 - Rail
+36 - Chisels
+37 - Motor
+38 - Thruster
+39 - Saw Blades
+40 - Probe
+41 - AI Unit
+42 - Hollow Shaft
+43 - Coil
+44 - Bolts
+45 - Drill bits
+46 - Plasma Cell
+47 - Power Gel
+
+Weapon Ammunition:
+48 - Saw Ammo
+49 - Chisel Ammo
+50 - Grenades
+51 - Bolt Ammo
+52 - Shrapnel
+53 - Lightning Ammo
+54 - Net Ammo
+55 - Oil Ammo
+56 - Rockets
+57 - Plasmoids
+To ensure that everything works properly, I'd advice to fill inventory with crafting materials and consumables, and craft everything from it. I don't know how properly will game work with directly changed item IDs. And don't change IDs directly to ammo. Game might bug out.
